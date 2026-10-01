@@ -1,21 +1,16 @@
-const channels=[...document.querySelectorAll(".wd-channel")];
-const activeChannel=document.querySelector("#active-channel");
-channels.forEach(button=>button.addEventListener("click",()=>{
-  channels.forEach(x=>x.classList.remove("active"));
-  button.classList.add("active");
-  if(activeChannel) activeChannel.textContent=button.dataset.channel||"Canal";
-}));
-const themeButton=document.querySelector("[data-wd-theme]");
-function syncTheme(){
-  const light=document.documentElement.dataset.theme==="light";
-  if(themeButton) themeButton.textContent=light?"☾ Tema escuro":"☼ Tema claro";
-}
-themeButton?.addEventListener("click",()=>{
-  document.documentElement.dataset.theme=document.documentElement.dataset.theme==="light"?"":"light";
-  syncTheme();
-});
-syncTheme();
-document.querySelectorAll(".wd-nav a").forEach(link=>link.addEventListener("click",()=>{
-  document.querySelectorAll(".wd-nav a").forEach(x=>x.classList.remove("active"));
-  link.classList.add("active");
-}));
+import { AccountManager } from './worddark/core-central/account-manager.js';
+const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:localStorage.getItem('wd.account.name')||'Minha Conta'});
+const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
+const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'ACCOUNT_MANAGER'});
+for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
+const $=s=>document.querySelector(s);
+const safe=v=>String(v).replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
+function persist(){localStorage.setItem('wd.account.name',manager.name);localStorage.setItem('wd.account.profiles',JSON.stringify(manager.listProfiles()));}
+function render(){const profiles=manager.listProfiles();$('#account-name').textContent=manager.name;$('#account-id').textContent=manager.id;$('#profile-count').textContent=profiles.length+' PERFIS';
+$('#profiles').innerHTML=profiles.length?profiles.map(p=>{const g=manager.listManagers().find(m=>m.id===p.managerId);return '<article class="wd-profile"><div class="wd-profile-top"><span class="network">'+safe(p.networkName)+'</span><span class="wd-chip active">'+safe(p.status)+'</span></div><h3>'+safe(p.displayName)+'</h3><p>'+safe(p.handle)+'</p><div class="wd-profile-meta"><span>SETOR: <b>'+safe(p.displayName)+'</b></span><span>GESTOR: <b>'+safe(g?.name||'Sem gestor')+'</b></span></div><button class="wd-profile-action" data-auth="'+p.id+'">Preparar conexão</button></article>'}).join(''):'<div class="wd-empty">Nenhum perfil conectado ainda.<br><strong>O primeiro passo é conectar uma rede.</strong></div>';
+$('#managers').innerHTML=manager.listManagers().map(m=>'<article class="wd-manager"><span>GESTOR</span><h3>'+safe(m.name)+'</h3><p>'+safe(m.role)+'</p><strong>'+profiles.filter(p=>p.managerId===m.id).length+' perfil(is) gerenciado(s)</strong></article>').join('');
+document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>{const r=manager.createAuthorization(b.dataset.auth,location.origin+'/callback');$('#connect-note').textContent=r.network+': autorização preparada. Próxima camada: OAuth e callback seguro.';location.hash='conectar';});}
+$('#rename-account').onclick=()=>{const name=prompt('Nome da conta:',manager.name);if(name?.trim()){manager.rename(name);persist();render();}};
+$('#connect-form').onsubmit=e=>{e.preventDefault();const p=manager.connectProfile({network:$('#network').value,displayName:$('#displayName').value,handle:$('#handle').value});manager.assignManager(p.id,defaultManager.id);persist();e.target.reset();render();location.hash='perfis';};
+$('#open-connect').onclick=()=>location.hash='conectar';
+const themeButton=$('[data-wd-theme]');function syncTheme(){themeButton.textContent=document.documentElement.dataset.theme==='light'?'☾ Tema escuro':'☼ Tema claro'}themeButton.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='light'?'':'light';syncTheme()};syncTheme();render();
