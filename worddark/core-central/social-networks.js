@@ -25,19 +25,15 @@ export class YouTubeConnector extends SocialNetworkConnector{
         scope:YOUTUBE_SCOPES.join(' '),
         callback:async response=>{
           if(response?.error){reject(new Error(response.error));return;}
-          try{
-            const channel=await this.fetchChannel(response.access_token);
-            resolve({accessToken:response.access_token,expiresIn:Number(response.expires_in||0),channel});
-          }catch(error){reject(error);}
+          try{const channel=await this.fetchChannel(response.access_token);resolve({accessToken:response.access_token,expiresIn:Number(response.expires_in||0),channel});}
+          catch(error){reject(error);}
         }
       });
       tokenClient.requestAccessToken({prompt:'consent'});
     });
   }
   async fetchChannel(accessToken){
-    const response=await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true',{
-      headers:{Authorization:'Bearer '+accessToken}
-    });
+    const response=await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true',{headers:{Authorization:'Bearer '+accessToken}});
     const data=await response.json();
     if(!response.ok)throw new Error(data?.error?.message||'YOUTUBE_CHANNEL_REQUEST_FAILED');
     const item=data?.items?.[0];
