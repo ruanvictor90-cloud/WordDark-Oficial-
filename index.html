@@ -3,108 +3,169 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b14">
 <title>WordDark — Central de Operações</title>
 <link rel="stylesheet" href="./style.css">
 </head>
-<body class="wd-body">
-<div class="wd-shell">
+<body>
+<div class="wd-app">
   <aside class="wd-sidebar">
     <div class="wd-brand">
       <span class="wd-mark">◈</span>
-      <div><strong>WORDDARK</strong><small>Central de Operações</small></div>
+      <div><strong>WORDDARK</strong><small>linha oficial · 1.0</small></div>
     </div>
-    <nav class="wd-nav" aria-label="Navegação principal">
-      <a class="active" href="./">◈ Central</a>
-      <a href="#pais">🌎 País</a>
-      <a href="#canais">◉ Canais</a>
-      <a href="#operacao">◎ Operação</a>
-      <a href="#fluxo">↗ Rodovia</a>
+
+    <div class="wd-context">
+      <span>CONTEXTO ATIVO</span>
+      <strong>Central de Operações</strong>
+      <small>CHANNEL-OPERATION</small>
+    </div>
+
+    <nav class="wd-nav" aria-label="Navegação">
+      <div class="wd-nav-label">MUNDO</div>
+      <a class="active" href="#central"><span>◈</span> Central</a>
+      <a href="#mundo"><span>◇</span> Mundo</a>
+      <a href="#fluxo"><span>↗</span> Rodovia</a>
+
+      <div class="wd-nav-label">AMBIENTE</div>
+      <a href="#pais"><span>◎</span> País Suco</a>
+      <a href="#canais"><span>◉</span> Canais</a>
+
+      <div class="wd-nav-label">OPERAÇÃO</div>
+      <a href="#requerimento"><span>□</span> Requerimento</a>
+      <a href="#operacao"><span>▣</span> Operação</a>
+      <a href="#portao"><span>⌂</span> Portão</a>
     </nav>
-    <div class="wd-sidebar-state">
-      <span class="wd-badge ok">● MUNDO ONLINE</span>
-      <small>CHANNEL-OPERATION · v1.0.0</small>
+
+    <div class="wd-sidebar-bottom">
+      <span class="wd-status"><i></i> MUNDO ONLINE</span>
+      <button class="wd-sidebar-action" type="button" data-wd-theme>☼ Tema</button>
+      <button class="wd-sidebar-action danger" type="button">🚨 Socorro Deus</button>
     </div>
   </aside>
 
-  <main class="wd-main">
-    <div class="wd-top">
+  <main class="wd-main" id="central">
+    <header class="wd-header">
       <div>
-        <div class="wd-eyebrow">WordDark · Primeira estrutura</div>
-        <h1 class="wd-title">Central de<br><span>Operações.</span></h1>
-        <p class="wd-sub">O ponto onde um ambiente de canais organiza perfis, setores, requerimentos e operações antes de conversar com o Mundo.</p>
+        <div class="wd-breadcrumb">WORDDARK / CENTRAL / OPERAÇÕES</div>
+        <div class="wd-title-row">
+          <span class="wd-title-mark">◈</span>
+          <div>
+            <h1>Central de Operações</h1>
+            <p>Onde os ambientes transformam necessidades em operações controladas para o Mundo.</p>
+          </div>
+        </div>
       </div>
-      <div class="wd-actions">
-        <button class="wd-btn" data-wd-theme type="button">Modo claro</button>
-        <button class="wd-btn danger" type="button">🚨 Socorro Deus</button>
+      <div class="wd-header-state">
+        <span>ESTRUTURA</span><strong>CHANNEL-OPERATION</strong>
+        <b>v1.0.0</b>
       </div>
-    </div>
+    </header>
 
-    <section class="wd-grid" id="pais">
-      <article class="wd-card wide">
-        <div class="wd-eyebrow">Ambiente cliente</div>
-        <div class="wd-sector">
-          <div><h2>País Suco</h2><p class="wd-muted">Cliente/ecossistema que utiliza o WordDark como infraestrutura.</p></div>
-          <span class="wd-badge">PAÍS</span>
-        </div>
-        <div class="wd-list">
-          <div class="wd-item"><span>Perfis conectados</span><span class="wd-badge ok">2 ATIVOS</span></div>
-          <div class="wd-item"><span>Canais em operação</span><span class="wd-badge">4 ESTADOS</span></div>
-          <div class="wd-item"><span>Gestão operacional</span><span class="wd-badge">CIDADES</span></div>
-        </div>
-      </article>
-
-      <article class="wd-card">
-        <div class="wd-eyebrow">Identidade</div>
-        <h2>Perfis conectados</h2>
-        <div class="wd-list">
-          <div class="wd-item"><span>@sucocast</span><span class="wd-badge ok">IG</span></div>
-          <div class="wd-item"><span>@sucogeek</span><span class="wd-badge ok">TK</span></div>
-          <div class="wd-item"><span>+ Conectar perfil</span><span class="wd-badge">NOVO</span></div>
-        </div>
-      </article>
-
-      <article class="wd-card full" id="canais">
-        <div class="wd-sector">
-          <div><div class="wd-eyebrow">Estados</div><h2>Canais em operação</h2></div>
-          <span class="wd-badge">CANAL / MARCA</span>
-        </div>
-        <div class="wd-channel-grid">
-          <button class="wd-channel active" type="button"><span class="wd-index">01</span><span><strong>SucoCast</strong><small>Canal geral · piloto inicial</small></span><b>→</b></button>
-          <button class="wd-channel" type="button"><span class="wd-index">02</span><span><strong>SucoGeek</strong><small>Canal / marca</small></span><b>→</b></button>
-          <button class="wd-channel" type="button"><span class="wd-index">03</span><span><strong>SucoComed</strong><small>Canal / marca</small></span><b>→</b></button>
-          <button class="wd-channel" type="button"><span class="wd-index">04</span><span><strong>SucoEmpreendimento</strong><small>Canal / marca</small></span><b>→</b></button>
-        </div>
-      </article>
-
-      <article class="wd-card wide" id="operacao">
-        <div class="wd-eyebrow">Modelo operacional</div>
-        <h2>SucoCast → necessidade → Mundo</h2>
-        <p class="wd-muted">O setor identifica o que precisa. A Central transforma o requerimento em uma operação controlada. O Mundo executa sem o canal precisar conhecer sua implementação.</p>
-        <div class="wd-flow">
-          <span>PERFIL</span><i>→</i><span>CANAL</span><i>→</i><span>SETOR</span><i>→</i><span>REQUERIMENTO</span>
-        </div>
-      </article>
-
-      <article class="wd-card">
-        <div class="wd-eyebrow">Estado atual</div>
-        <h2>Primeiro circuito</h2>
-        <div class="wd-list">
-          <div class="wd-item"><span>Central</span><span class="wd-badge ok">ATIVA</span></div>
-          <div class="wd-item"><span>SucoCast</span><span class="wd-badge ok">ATIVO</span></div>
-          <div class="wd-item"><span>Operação</span><span class="wd-badge warn">EM CONSTRUÇÃO</span></div>
-        </div>
-      </article>
-
-      <article class="wd-card full" id="fluxo">
-        <div class="wd-eyebrow">Fluxo central</div>
-        <h2>Do canal ao Mundo</h2>
-        <div class="wd-flow wd-flow-main">
-          <span>PERFIL</span><i>→</i><span>CANAL</span><i>→</i><span>SETOR</span><i>→</i><span>REQUERIMENTO</span><i>→</i><span>OPERAÇÃO</span><i>→</i><span>PORTÃO</span><i>→</i><span>RODOVIA</span><i>→</i><span>MUNDO</span>
-        </div>
-      </article>
+    <section class="wd-hero">
+      <div>
+        <span class="wd-kicker">PRIMEIRO CIRCUITO</span>
+        <h2>SucoCast está entrando<br><em>no Mundo.</em></h2>
+        <p>O canal identifica uma necessidade, a Central formaliza o requerimento e a operação segue por Portão e Rodovia até a capacidade que irá executá-la.</p>
+      </div>
+      <div class="wd-hero-map" aria-hidden="true">
+        <span class="node n1">PERFIL</span><i></i><span class="node n2">CANAL</span><i></i><span class="node n3">SETOR</span>
+        <i></i><span class="node n4">CENTRAL</span>
+      </div>
     </section>
 
-    <footer class="wd-footer">WORDDARK OFICIAL · Central de Operações · v1.0.0 · A identidade visual vem do legado; a estrutura operacional é a nova linha oficial.</footer>
+    <section class="wd-section" id="pais">
+      <div class="wd-section-head">
+        <div><span class="wd-kicker">AMBIENTE CLIENTE</span><h2>País Suco</h2></div>
+        <span class="wd-chip active">ATIVO</span>
+      </div>
+      <div class="wd-environment">
+        <article class="wd-panel identity">
+          <div class="wd-panel-icon">◎</div>
+          <div><span>CLIENTE / ECOSSISTEMA</span><h3>País Suco</h3><p>Utiliza o WordDark como infraestrutura para operar seus canais.</p></div>
+        </article>
+        <article class="wd-panel metric"><span>PERFIS CONECTADOS</span><strong>2</strong><small>gerenciados pelo ambiente</small></article>
+        <article class="wd-panel metric"><span>CANAIS</span><strong>4</strong><small>estados registrados</small></article>
+        <article class="wd-panel metric"><span>SETOR ATIVO</span><strong>1</strong><small>SucoCast / Cidade</small></article>
+      </div>
+    </section>
+
+    <section class="wd-section" id="canais">
+      <div class="wd-section-head">
+        <div><span class="wd-kicker">ESTADOS / CANAIS</span><h2>Ambientes em operação</h2></div>
+        <span class="wd-chip">4 REGISTRADOS</span>
+      </div>
+      <div class="wd-channel-layout">
+        <div class="wd-channel-list">
+          <button class="wd-channel active" data-channel="SucoCast" type="button"><b>01</b><span><strong>SucoCast</strong><small>Canal geral · piloto inicial</small></span><em>ATIVO</em><i>→</i></button>
+          <button class="wd-channel" data-channel="SucoGeek" type="button"><b>02</b><span><strong>SucoGeek</strong><small>Canal / marca</small></span><em>REGISTRADO</em><i>→</i></button>
+          <button class="wd-channel" data-channel="SucoComed" type="button"><b>03</b><span><strong>SucoComed</strong><small>Canal / marca</small></span><em>REGISTRADO</em><i>→</i></button>
+          <button class="wd-channel" data-channel="SucoEmpreendimento" type="button"><b>04</b><span><strong>SucoEmpreendimento</strong><small>Canal / marca</small></span><em>REGISTRADO</em><i>→</i></button>
+        </div>
+        <div class="wd-channel-detail">
+          <span class="wd-kicker">SETOR OPERACIONAL</span>
+          <h3 id="active-channel">SucoCast</h3>
+          <div class="wd-detail-line"><span>Identidade</span><strong>PAIS-SUCO / SUCOCAST</strong></div>
+          <div class="wd-detail-line"><span>Cidade</span><strong>SUCOCAST-CIDADE</strong></div>
+          <div class="wd-detail-line"><span>Portão</span><strong>SUCOCAST-CIDADE-GATE</strong></div>
+          <div class="wd-detail-line"><span>Responsabilidade</span><strong>GESTÃO OPERACIONAL</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wd-section" id="requerimento">
+      <div class="wd-section-head">
+        <div><span class="wd-kicker">REQUERIMENTO</span><h2>O que o canal precisa?</h2></div>
+        <span class="wd-chip">ENTRADA DO SETOR</span>
+      </div>
+      <div class="wd-request">
+        <div class="wd-request-copy">
+          <span class="wd-request-number">01</span>
+          <div><h3>Necessidade identificada</h3><p>O setor do SucoCast pode declarar uma necessidade sem conhecer como o Mundo irá resolvê-la.</p></div>
+        </div>
+        <div class="wd-request-types">
+          <span>▧ IMAGEM</span><span>▶ REEL</span><span>▣ VÍDEO</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="wd-section" id="operacao">
+      <div class="wd-section-head">
+        <div><span class="wd-kicker">OPERAÇÃO</span><h2>Uma operação, vários módulos</h2></div>
+        <span class="wd-chip active">MODULAR</span>
+      </div>
+      <div class="wd-operation">
+        <div class="wd-operation-head"><span class="wd-operation-id">OP-EXEMPLO-001</span><span class="wd-chip active">EM FLUXO</span></div>
+        <div class="wd-pipeline">
+          <div class="step done"><b>01</b><span>Entrada</span><small>recebido</small></div>
+          <i>→</i>
+          <div class="step done"><b>02</b><span>Validação</span><small>aprovado</small></div>
+          <i>→</i>
+          <div class="step current"><b>03</b><span>Execução</span><small>módulo atual</small></div>
+          <i>→</i>
+          <div class="step"><b>04</b><span>Resultado</span><small>aguardando</small></div>
+        </div>
+        <div class="wd-operation-note"><strong>Regra modular</strong><span>Se apenas um módulo falhar, a operação retorna somente para ele e continua dali — não refaz o que já foi concluído.</span></div>
+      </div>
+    </section>
+
+    <section class="wd-section" id="portao">
+      <div class="wd-section-head">
+        <div><span class="wd-kicker">CONTROLE DE PASSAGEM</span><h2>Portão → Rodovia → Mundo</h2></div>
+      </div>
+      <div class="wd-route" id="fluxo">
+        <div class="route-card"><span>01</span><strong>PORTÃO</strong><small>recebe · identifica · registra</small></div>
+        <div class="route-arrow">→</div>
+        <div class="route-card"><span>02</span><strong>RODOVIA</strong><small>localiza a capacidade</small></div>
+        <div class="route-arrow">→</div>
+        <div class="route-card world" id="mundo"><span>03</span><strong>MUNDO</strong><small>executa a capacidade solicitada</small></div>
+      </div>
+    </section>
+
+    <footer class="wd-footer">
+      <div><strong>WORDDARK OFICIAL</strong><span>Central de Operações · CHANNEL-OPERATION · v1.0.0</span></div>
+      <span>Identidade inspirada no legado · arquitetura consolidada na linha oficial</span>
+    </footer>
   </main>
 </div>
 <script src="./app.js"></script>
