@@ -23,7 +23,7 @@ import { ChannelOperationContract } from "./core-central/channel-contract.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
- const channelContract=new ChannelOperationContract({id:"CHANNEL-OPERATION-CONTRACT",name:"Contrato de Operação de Canais"});
+ const channelContract=new ChannelOperationContract({id:"CHANNEL-OPERATION-CONTRACT",name:"Central de Operações"});
  const runtime=new WordDarkRuntime({central});
  const library=new CentralLibrary();
  const audit=new AuditLog();
