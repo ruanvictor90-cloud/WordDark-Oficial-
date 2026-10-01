@@ -22,7 +22,7 @@ export class Operation {
   }
   validate(){
     const e=[];
-    for(const [k,v] of Object.entries({origin:this.origin,destination:this.destination,service:this.service,gateId:this.gateId})) if(!v)e.push(k+" é obrigatório.");
+    for(const [k,v] of Object.entries({origin:this.origin,service:this.service,gateId:this.gateId})) if(!v)e.push(k+" é obrigatório.");
     return {valid:e.length===0,errors:e};
   }
   transition(status,data={}){
