@@ -1,36 +1,68 @@
 {
-  "version":"2.0.0",
-  "source":"WordDark antigo + financas-fn01",
-  "target":"WordDark-Oficial nova operação",
-  "policy":"legacy-runtime-reference-only",
-  "architecture":{
-    "main":["worddark","ceu","terra"],
-    "terraHierarchy":["pais","estado","cidade","bairro"],
-    "transport":["portoes","rodovia"],
-    "central":["central-do-mundo","criacao-do-mundo"],
-    "execution":["ceu/dark-factory"],
-    "requestManagement":["terra/*/bairro"],
-    "memory":["worddark/biblioteca"],
-    "security":["worddark/seguranca"],
-    "finance":["worddark/financeiro-central"]
+  "version": "2.0.0",
+  "source": "WordDark antigo + financas-fn01",
+  "target": "WordDark-Oficial nova operação",
+  "policy": "legacy-runtime-reference-only",
+  "architecture": {
+    "main": [
+      "worddark",
+      "ceu",
+      "terra"
+    ],
+    "terraHierarchy": [
+      "pais",
+      "estado",
+      "cidade",
+      "bairro"
+    ],
+    "transport": [
+      "portoes",
+      "rodovia"
+    ],
+    "central": [
+      "central-do-mundo",
+      "criacao-do-mundo"
+    ],
+    "execution": [
+      "ceu/dark-factory"
+    ],
+    "requestManagement": [
+      "terra/*/bairro"
+    ],
+    "memory": [
+      "worddark/biblioteca"
+    ],
+    "security": [
+      "worddark/seguranca"
+    ],
+    "finance": [
+      "worddark/financeiro-central"
+    ]
   },
-  "converted":{
-    "core-operation":"official",
-    "core-runtime":"official",
-    "modular-pipeline":"official",
-    "selective-reentry":"official",
-    "dark-factory":"official",
-    "marketing":"official",
-    "pais-suco-sucocast":"official",
-    "cidade-de-compras":"official",
-    "financeiro-central":"official-minimal",
-    "world-creation":"official-foundation"
+  "converted": {
+    "core-operation": "official",
+    "core-runtime": "official",
+    "modular-pipeline": "official",
+    "selective-reentry": "official",
+    "dark-factory": "official",
+    "marketing": "official",
+    "pais-suco-sucocast": "official",
+    "cidade-de-compras": "official",
+    "financeiro-central": "official-minimal",
+    "world-creation": "official-foundation",
+    "security-context": "official",
+    "local-central-library": "official",
+    "operation-registry": "official",
+    "communication-receipts": "official",
+    "integration-registry": "official"
   },
-  "still-reconciling":{
-    "legacy-ui":true,
-    "legacy-dark-factory-submodules":true,
-    "legacy-city-runtime-features":true,
-    "legacy-finance-ui":true
+  "still-reconciling": {
+    "legacy-ui": true,
+    "legacy-dark-factory-submodules": true,
+    "legacy-city-runtime-features": true,
+    "legacy-finance-ui": true,
+    "legacy-operation-engine": true,
+    "legacy-platform-adapters": true
   },
-  "principle":"comportamento útil é absorvido na arquitetura nova; estrutura antiga não define mais o runtime oficial."
+  "principle": "comportamento útil é absorvido na arquitetura nova; estrutura antiga não define mais o runtime oficial. Componentes do legado só entram após adaptação, integração e teste."
 }
