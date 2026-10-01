@@ -1,18 +1,54 @@
 # WordDark Oficial
 
-Base oficial do mundo.
+Este é o desenvolvimento oficial do mundo.
 
-## Arquitetura atual
+## Estrutura operacional
 
-MAIN
-├── WORDDARK — governança, segurança, permissões, auditoria, biblioteca, Central do Mundo, desenvolvimento, financeiro, jurídico e infraestrutura.
-├── CÉU — soluções globais, começando por Dark Factory e Marketing.
-└── TERRA — País → Estado → Cidade → Bairro.
+- **MAIN** organiza o mundo.
+- **WORDDARK** governa, protege, registra, autoriza e coordena.
+- **CÉU** concentra setores globais capazes de produzir soluções.
+- **TERRA** concentra os clientes/ecossistemas e suas operações territoriais.
 
-A implementação nova usa um único Core Central. Portões são entradas/saídas formais; a Rodovia encaminha por capacidade; módulos são independentes e podem receber reentrada isolada.
+### Terra
 
-O código legado foi usado como fonte de comportamento durante a conversão. O runtime legado em worddark/runtime/ permanece como referência histórica/testável até cada parte ser totalmente reconciliada e removida da função de referência.
+`País → Estado → Cidade → Bairro`
 
-## Regra de reentrada
+- País: organiza o ecossistema/cliente.
+- Estado: representa o setor.
+- Cidade: sistema operacional do Estado.
+- Bairro: identifica, administra e solicita o que o Estado precisa.
 
-Se uma operação passar por vários módulos e apenas um falhar, a correção pode retornar somente ao módulo responsável. Os checkpoints aprovados não precisam ser repetidos.
+### Infraestrutura transversal
+
+- **Portão:** entrada/saída, identificação, recebimento e rastreabilidade.
+- **Rodovia:** transporte e roteamento por capacidade.
+- **Central do Mundo:** acompanha capacidades e recebe demandas que não possuem executor.
+- **Criação do Mundo:** prepara propostas; estruturas novas só entram no mundo após autorização.
+
+## Regra de operação modular
+
+Uma operação pode ser composta por vários módulos independentes.
+
+Cada módulo gera seu próprio checkpoint. Se um módulo falhar, a operação pode retornar somente a esse módulo e continuar do ponto seguinte após a correção.
+
+Exemplo:
+
+`imagem ✅ → áudio ❌ → vídeo não executado`
+
+Depois:
+
+`reentrada no áudio → áudio ✅ → vídeo → conclusão`
+
+Não é necessário repetir a imagem.
+
+## Regra de responsabilidade
+
+A Cidade não vira fábrica. O Estado não conhece internamente outro setor. A Rodovia não executa trabalho. A Dark Factory executa produção do Céu. A Terra solicita e recebe resultados.
+
+O código legado em `worddark/runtime` permanece apenas como **referência histórica de migração** até que toda capacidade relevante esteja reconciliada e testada na estrutura oficial. O runtime oficial não depende dele.
+
+## Testes
+
+`npm test`
+
+A suíte oficial inclui testes do núcleo, fábrica, cidade de compras e integração da operação modular.
