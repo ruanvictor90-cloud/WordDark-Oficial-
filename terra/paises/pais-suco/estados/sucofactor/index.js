@@ -1,2 +1,0 @@
-import { createSucoState } from "../../state-factory.js";
-export class SucoFactorState {constructor({countryId="PAIS-SUCO"}={}){Object.assign(this,createSucoState({id:"SUCOFACTOR",countryId}));}}export function createSucoFactorState(options={}){return new SucoFactorState(options);}
