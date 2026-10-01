@@ -12,7 +12,7 @@ const CONFIGS={
   SUCOCAST:{name:"SucoCast",description:"Canal geral e piloto inicial.",identity:"PAIS-SUCO/SUCOCAST"},
   SUCOGEEK:{name:"SucoGeek",description:"Conteúdo geek, anime e jogos.",identity:"PAIS-SUCO/SUCOGEEK"},
   SUCOCOMED:{name:"SucoComed",description:"Conteúdo de humor e entretenimento.",identity:"PAIS-SUCO/SUCOCOMED"},
-  SUCOFACTOR:{name:"SucoFactor",description:"Conteúdo sobre indústria, fatos e conhecimento.",identity:"PAIS-SUCO/SUCOFACTOR"}
+  SUCOEMPREENDIMENTO:{name:"SucoEmpreendimento",description:"Conteúdo sobre empreendedorismo, negócios, gestão, dinheiro e construção de projetos.",identity:"PAIS-SUCO/SUCOEMPREENDIMENTO"}
 };
 
 export function createSucoState({id,name,countryId="PAIS-SUCO",description,identity}={}) {
