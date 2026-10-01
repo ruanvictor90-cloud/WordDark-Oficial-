@@ -3,7 +3,7 @@ import { CentralWorld } from "./core-central/central-do-mundo.js";
 import { DarkFactory } from "../ceu/dark-factory/factory.js";
 import { FactoryExecutors, registerDefaultContentExecutors } from "../ceu/dark-factory/executors.js";
 import { Marketing } from "../ceu/marketing/index.js";
-import { CentralLibrary } from "./biblioteca/index.js";
+import { CentralLibrary, LocalLibrary } from "./biblioteca/index.js";
 import { Security } from "./seguranca/index.js";
 import { CentralFinance } from "./financeiro-central/index.js";
 import { createWorldCreation } from "./criacao-do-mundo/index.js";
@@ -15,12 +15,15 @@ import { VersionHistory } from "./core-central/versioning.js";
 import { ErrorRecovery } from "./core-central/error-recovery.js";
 import { EmergencyStop } from "./core-central/emergency-stop.js";
 import { OperationDiagnostics } from "./core-central/diagnostics.js";
+import { OperationRegistry } from "./core-central/operation-registry.js";
+import { CommunicationBus } from "./core-central/communication.js";
+import { IntegrationRegistry } from "./core-central/integrations.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
  const runtime=new WordDarkRuntime({central});
  const library=new CentralLibrary();
- const security=new Security();
+ const security=new Security({audit});
  const finance=new CentralFinance();
  const audit=new AuditLog();
  const permissions=new PermissionManager();
@@ -30,6 +33,10 @@ export function createWordDarkWorld(){
  const errors=new ErrorRecovery();
  const emergencyStop=new EmergencyStop();
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
+ const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK"});
+ const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
+ const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry});
+ const integrations=new IntegrationRegistry({audit});
  const creation=createWorldCreation({runtime,library,security});
  central.creation=creation;
 
@@ -49,7 +56,8 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"MARKETING-GATE",ownerId:"MARKETING",layer:"CEU"});
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
-  runtime,central,creation,factory,marketing,library,security,finance,
+  runtime,central,creation,factory,marketing,library,localLibrary,security,finance,
+  operationRegistry,communication,integrations,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
