@@ -23,9 +23,9 @@ export function createWordDarkWorld(){
  const central=new CentralWorld();
  const runtime=new WordDarkRuntime({central});
  const library=new CentralLibrary();
+ const audit=new AuditLog();
  const security=new Security({audit});
  const finance=new CentralFinance();
- const audit=new AuditLog();
  const permissions=new PermissionManager();
  const rights=new ProductionRights();
  const persistence=new MemoryPersistence();
