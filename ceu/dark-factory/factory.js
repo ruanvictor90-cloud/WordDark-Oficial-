@@ -23,7 +23,8 @@ export class DarkFactory extends SkyDomain {
  }
  attachExecutors(executors){if(!executors||typeof executors.execute!=="function")throw new Error("EXECUTOR_REGISTRY_INVALID");this.executors=executors;return executors;}
  handle(operation){
-  const task=operation.payload?.taskType||operation.service;
+  const requestedTask=operation.payload?.taskType||operation.service;
+  const task=requestedTask==="REEL" ? "VIDEO" : requestedTask;
   if(!this.executors)return {success:false,reason:"EXECUTOR_REGISTRY_NOT_CONFIGURED"};
   const result=this.executors.execute(task,operation,{factory:this});
   this.logs.push({id:id("DFLOG"),operationId:operation.id,executor:task,result,at:new Date().toISOString()});
