@@ -20,10 +20,12 @@ import { CommunicationBus } from "./core-central/communication.js";
 import { IntegrationRegistry } from "./core-central/integrations.js";
 import { createTerra } from "../terra/index.js";
 import { ChannelOperationContract } from "./core-central/channel-contract.js";
+import { AccountManager } from "./core-central/account-manager.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
  const channelContract=new ChannelOperationContract({id:"CHANNEL-OPERATION-CONTRACT",name:"Central de Operações"});
+ const accountManager=new AccountManager({accountId:"ACCOUNT-LOCAL",accountName:"Minha Conta"});
  const runtime=new WordDarkRuntime({central});
  const library=new CentralLibrary();
  const audit=new AuditLog();
