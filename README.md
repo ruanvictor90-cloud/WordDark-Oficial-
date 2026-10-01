@@ -6,8 +6,18 @@ Este é o desenvolvimento oficial do mundo.
 
 - **MAIN** organiza o mundo.
 - **WORDDARK** governa, protege, registra, autoriza e coordena.
-- **CÉU** concentra setores globais capazes de produzir soluções.
+- **CÉU** concentra capacidades globais organizadas em Domínios autônomos. Cada Domínio segue `Domínio → Região → Núcleo → Distrito`.
 - **TERRA** concentra os clientes/ecossistemas e suas operações territoriais.
+
+### Céu
+
+O Céu usa a mesma lógica estrutural da Terra, mas com nomenclatura e finalidade próprias:
+
+`Domínio → Região → Núcleo → Distrito`
+
+Exemplo: `Dark Factory → Produção Audiovisual → Editor → Distrito de Montagem`.
+
+Marketing segue o mesmo princípio, com suas próprias Regiões e Núcleos.
 
 ### Terra
 
