@@ -1,5 +1,12 @@
 import { Estado, Cidade, Bairro } from "../../core/index.js";
-import { SucoCastPermissions } from "./estados/sucocast/cidade/permissions.js";
+
+class ChannelPermissions {
+  constructor(){this.map=new Map();}
+  grant(subject,capability){if(!subject||!capability)throw new Error("PERMISSION_INVALID");if(!this.map.has(subject))this.map.set(subject,new Set());this.map.get(subject).add(capability);return true;}
+  revoke(subject,capability){this.map.get(subject)?.delete(capability);}
+  can(subject,capability){return !!this.map.get(subject)?.has(capability);}
+  list(subject){return [...(this.map.get(subject)||[])];}
+}
 
 const CONFIGS={
   SUCOCAST:{name:"SucoCast",description:"Canal geral e piloto inicial.",identity:"PAIS-SUCO/SUCOCAST"},
@@ -11,11 +18,10 @@ const CONFIGS={
 export function createSucoState({id,name,countryId="PAIS-SUCO",description,identity}={}) {
   const key=id||name?.toUpperCase().replace(/[^A-Z0-9]+/g,"");
   const cfg=CONFIGS[key]||{name:name||key,description:description||"",identity:identity||key};
-  const stateId=key;
-  const cityId=`${stateId}-CIDADE`;
+  const stateId=key; const cityId=`${stateId}-CIDADE`;
   const bairro=new Bairro({id:`${stateId}-BAIRRO`,name:"Bairro",stateId,cityId});
   const city=new Cidade({id:cityId,name:`${cfg.name} Cidade`,countryId,stateId,bairro,gateId:`${cityId}-GATE`});
-  city.permissions=new SucoCastPermissions();
+  city.permissions=new ChannelPermissions();
   city.channel={id:stateId,name:cfg.name,identity:cfg.identity,description:description||cfg.description};
   return new Estado({id:stateId,name:cfg.name,countryId,city,identity:identity||cfg.identity,description:description||cfg.description});
 }
