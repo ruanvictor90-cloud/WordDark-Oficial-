@@ -1,0 +1,1 @@
+export class CentralLibrary {constructor(){this.records=[];}save(record){if(!record?.id)throw new Error("LIBRARY_RECORD_ID_REQUIRED");this.records.push({...record,savedAt:new Date().toISOString()});return record;}find(predicate){return this.records.filter(predicate);}list(){return [...this.records];}}

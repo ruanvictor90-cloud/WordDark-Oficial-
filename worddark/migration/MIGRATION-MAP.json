@@ -1,0 +1,22 @@
+{
+  "source": "WordDark/main + WordDark/develop + financas-fn01/main",
+  "target": "WordDark-Oficial- nova estrutura",
+  "principle": "comportamento preservado, arquitetura consolidada",
+  "mapping": {
+    "world/core": "worddark/core-central",
+    "world/contracts": "worddark/core-central",
+    "world/sky/darkfactory": "ceu/dark-factory",
+    "world/earth/juice-country/states/sucocast": "terra/paises/pais-suco/estados/sucocast",
+    "world/cidade-compras": "terra/cidades/cidade-de-compras",
+    "world/library": "worddark/biblioteca",
+    "world/security": "worddark/seguranca",
+    "financas-fn01": "worddark/financeiro-central"
+  },
+  "legacyRuntimePolicy": "reference-only",
+  "notes": [
+    "CommonJS e ESM antigos não continuam como núcleo oficial.",
+    "Cada capacidade nova é registrada na Central do Mundo.",
+    "Falha localizada pode usar reentry por módulo sem repetir módulos aprovados.",
+    "HTML e testes antigos permanecem como material histórico até serem convertidos individualmente."
+  ]
+}
