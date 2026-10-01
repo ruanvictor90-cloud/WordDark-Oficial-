@@ -8,7 +8,12 @@ export class Bairro {
   }
   addNeed(need={}) {
     if(!need.type) throw new Error("NEED_TYPE_REQUIRED");
-    const entry={id:id("NEED"),...structuredClone(need),status:"PENDING",createdAt:new Date().toISOString()};
+    if(!need.requester?.id) throw new Error("NEED_REQUESTER_REQUIRED");
+    if(need.requester.type!=="SOCIAL_CHANNEL") throw new Error("NEED_REQUESTER_TYPE_INVALID");
+    if(!need.requester.network) throw new Error("NEED_NETWORK_REQUIRED");
+    if(!["IMAGE","REEL","VIDEO"].includes(need.type)) throw new Error("NEED_CONTENT_TYPE_INVALID");
+    if(!need.description) throw new Error("NEED_DESCRIPTION_REQUIRED");
+    const entry={id:id("NEED"),type:need.type,status:"PENDING",createdAt:new Date().toISOString(),requester:structuredClone(need.requester),description:need.description,priority:need.priority||"NORMAL",data:structuredClone(need.data||{})};
     this.needs.push(entry); this.record("NEED_CREATED",entry); return entry;
   }
   manageNeed(needId, status, data={}) {
@@ -30,6 +35,30 @@ export class Cidade {
   }
   attachRuntime(runtime){this.runtime=runtime;return this;}
   receiveNeed(need){return this.bairro.addNeed(need);}
+
+  createOperationFromNeed(needId) {
+    const need=this.bairro.needs.find(x=>x.id===needId);
+    if(!need) throw new Error("NEED_NOT_FOUND");
+    if(!["PENDING","OPEN"].includes(need.status)) throw new Error("NEED_NOT_AVAILABLE");
+    const service=need.type==="IMAGE" ? "IMAGE" : "VIDEO";
+    const request=this.requestService(service,{
+      taskType:need.type,
+      contentType:need.type,
+      description:need.description,
+      priority:need.priority,
+      requester:structuredClone(need.requester),
+      data:structuredClone(need.data||{})
+    },{
+      needId:need.id,
+      requesterId:need.requester.id,
+      requesterType:need.requester.type,
+      network:need.requester.network,
+      channelId:need.requester.channelId||need.requester.id
+    });
+    this.bairro.manageNeed(need.id,"IN_OPERATION",{operationId:request.id});
+    return request;
+  }
+
   requestService(service,payload={},context={}) {
     if(!service) throw new Error("SERVICE_REQUIRED");
     const request={id:id("REQ"),origin:this.id,destination:null,service,payload:structuredClone(payload),context:{...context,territory:{countryId:this.countryId,stateId:this.stateId,cityId:this.id}},gateId:this.gateId,status:"REQUESTED",createdAt:new Date().toISOString()};
