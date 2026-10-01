@@ -45,6 +45,19 @@ for(const state of paisSuco.states.values()){
   assert.equal(city.bairro.needs.find(x=>x.id===need.id).status,"IN_OPERATION");
 }
 
+const sucoCast=paisSuco.getState("SUCOCAST").city;
+for(const type of ["REEL","VIDEO"]) {
+  const need=sucoCast.receiveNeed({
+    type,
+    requester:{type:"SOCIAL_CHANNEL",id:"SUCOCAST-CHANNEL",network:"INSTAGRAM",channelId:"SUCOCAST"},
+    description:`Preciso de um ${type} para o canal.`,
+    data:{duration:type==="REEL" ? "00:30" : "01:00"}
+  });
+  const request=sucoCast.createOperationFromNeed(need.id);
+  const result=sucoCast.submit(request);
+  assert.equal(result.status,"COMPLETED");
+}
+
 const status=terra.status();
 assert.equal(status.countries.length,1);
 assert.equal(status.countries[0].states.length,4);
