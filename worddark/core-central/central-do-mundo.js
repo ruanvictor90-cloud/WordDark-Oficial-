@@ -1,0 +1,1 @@
+export class CentralDoMundo {constructor(registry){this.registry=registry;}registerCapability(capability){return this.registry.register({id:capability.id,type:"CAPABILITY",layer:capability.layer,owner:capability.owner,metadata:capability.metadata||{}});}find(service){return this.registry.entities.get(service)||null;}list(){return this.registry.list();}}
