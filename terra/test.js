@@ -16,12 +16,33 @@ for(const state of paisSuco.states.values()){
   assert.equal(city.bairro.responsibility,"NEEDS_MANAGEMENT");
   assert.ok(runtime.gates.has(city.gateId));
 
-  const request=city.requestService("IMAGE",{taskType:"IMAGE",channel:state.id,test:true});
+  const need=city.receiveNeed({
+    type:"IMAGE",
+    requester:{
+      type:"SOCIAL_CHANNEL",
+      id:state.id+"-CHANNEL",
+      network:"INSTAGRAM",
+      channelId:state.id
+    },
+    description:"Preciso de uma imagem para uma publicação.",
+    data:{format:"16:9",theme:"anime"},
+    priority:"NORMAL"
+  });
+
+  assert.equal(need.status,"PENDING");
+  assert.equal(need.requester.type,"SOCIAL_CHANNEL");
+
+  const request=city.createOperationFromNeed(need.id);
+  assert.equal(request.context.needId,need.id);
+  assert.equal(request.context.network,"INSTAGRAM");
+  assert.equal(request.payload.contentType,"IMAGE");
+
   const result=city.submit(request);
 
   assert.equal(result.status,"COMPLETED");
   assert.equal(city.results.has(request.id),true);
   assert.equal(city.results.get(request.id).status,"COMPLETED");
+  assert.equal(city.bairro.needs.find(x=>x.id===need.id).status,"IN_OPERATION");
 }
 
 const status=terra.status();
