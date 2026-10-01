@@ -8,7 +8,7 @@ assert.equal(paisSuco.states.size,4);
 assert.ok(paisSuco.getState("SUCOCAST"));
 assert.ok(paisSuco.getState("SUCOGEEK"));
 assert.ok(paisSuco.getState("SUCOCOMED"));
-assert.ok(paisSuco.getState("SUCOFACTOR"));
+assert.ok(paisSuco.getState("SUCOEMPREENDIMENTO"));
 
 for(const state of paisSuco.states.values()){
   const city=state.city;
