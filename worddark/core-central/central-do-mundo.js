@@ -1,1 +1,19 @@
-export class CentralDoMundo {constructor(registry){this.registry=registry;}registerCapability(capability){return this.registry.register({id:capability.id,type:"CAPABILITY",layer:capability.layer,owner:capability.owner,metadata:capability.metadata||{}});}find(service){return this.registry.entities.get(service)||null;}list(){return this.registry.list();}}
+export class CentralWorld {
+  constructor({registry,capabilities,creation=null}={}) {
+    this.registry=registry;
+    this.capabilities=capabilities;
+    this.creation=creation;
+    this.requests=[];
+  }
+  resolve(service){
+    const capability=this.capabilities?.find(service);
+    if(capability) return {success:true,type:"CAPABILITY",capability};
+    return {success:false,type:"MISSING_CAPABILITY",service};
+  }
+  receiveRequest(operation,reason="CAPABILITY_NOT_FOUND"){
+    const request={id:operation.id,origin:operation.origin,destination:operation.destination,service:operation.service,reason,status:"PENDING",at:new Date().toISOString()};
+    this.requests.push(request);
+    return request;
+  }
+  listRequests(){return [...this.requests];}
+}
