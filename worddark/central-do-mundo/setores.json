@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "sectors": [
+    {
+      "id": "worddark",
+      "name": "WordDark",
+      "layer": "central",
+      "status": "active",
+      "capabilities": [
+        "governance",
+        "security",
+        "audit",
+        "permissions",
+        "memory",
+        "routing-coordination"
+      ]
+    },
+    {
+      "id": "ceu",
+      "name": "Céu",
+      "layer": "ceu",
+      "status": "active",
+      "capabilities": [
+        "solution-generation",
+        "global-analysis",
+        "solution-design"
+      ]
+    },
+    {
+      "id": "terra",
+      "name": "Terra",
+      "layer": "terra",
+      "status": "active",
+      "capabilities": [
+        "request-generation",
+        "operational-needs"
+      ]
+    }
+  ]
+}
