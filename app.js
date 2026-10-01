@@ -1,0 +1,1 @@
+document.querySelectorAll(".channel").forEach(card=>card.addEventListener("click",()=>{document.querySelectorAll(".channel").forEach(x=>x.classList.remove("active"));card.classList.add("active")}));
