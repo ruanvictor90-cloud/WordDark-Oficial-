@@ -55,12 +55,12 @@ export class Cidade {
 export class Estado {
   constructor({id:stateId,name="Estado",countryId,city,identity,description="",status="ACTIVE"}={}) {
     this.id=stateId||id("ESTADO"); this.name=name; this.type="ESTADO"; this.layer="TERRA";
-    this.countryId=countryId||null; this.identity=identity||this.id; this.description=description; this.status=status;
+    this.countryId=countryId||null; this.identity=identity||this.id; this.description=description; this.stateStatus=status;
     this.city=city||null; this.events=[];
   }
   registerCity(city){if(!city?.id) throw new Error("CITY_INVALID"); this.city=city; return city;}
   record(type,data={}){const event={id:id("STATE-EVT"),type,data:structuredClone(data),at:new Date().toISOString()};this.events.push(event);return event;}
-  statusData(){return {id:this.id,name:this.name,type:this.type,countryId:this.countryId,identity:this.identity,description:this.description,city:this.city?.status?.()||null,status:this.status};}
+  statusData(){return {id:this.id,name:this.name,type:this.type,countryId:this.countryId,identity:this.identity,description:this.description,city:this.city?.status?.()||null,status:this.stateStatus};}
   status(){return this.statusData();}
 }
 
