@@ -1,0 +1,16 @@
+const assert=require("assert");
+const Registry=require("./service-registry");
+const Pipeline=require("./production-pipeline");
+const Validator=require("./production-validator");
+const Factory=require("./factory");
+const registry=new Registry();
+const executor={execute:request=>({success:true,productionId:"PROD-TEST-001",contentId:request.payload.contentId})};
+registry.register({serviceId:"DF-SVC-CONTENT",name:"Content Production",type:"content.produce",executor,status:"READY"});
+const pipeline=new Pipeline({registry,validator:new Validator()});
+const factory=new Factory({registry,pipeline});
+const result=factory.process({taskType:"content.produce",payload:{contentId:"CONTENT-001"}});
+assert.strictEqual(result.success,true);
+assert.strictEqual(result.status,"COMPLETED");
+assert.strictEqual(result.result.contentId,"CONTENT-001");
+assert.strictEqual(factory.getStatus().serviceCount,1);
+console.log("DF-0.7 modular test: OK");

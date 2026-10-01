@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Finanças">
+<meta name="theme-color" content="#f5f5f7">
+<meta name="description" content="Finanças FN-01 Beta para iPhone">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Finanças FN-01</title>
+<style>
+:root{
+  --bg:#f5f5f7;--card:#fff;--text:#111827;--muted:#6b7280;
+  --border:#e5e7eb;--accent:#111827;--danger:#b91c1c;--success:#047857;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.app{width:100%;max-width:680px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.title{font-size:25px;font-weight:750;letter-spacing:-.4px}
+.sub{font-size:12px;color:var(--muted)}
+.badge{font-size:12px;padding:6px 9px;border-radius:999px;background:#e5e7eb}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px;margin:12px 0}
+.balance-label{font-size:13px;color:var(--muted)}
+.balance{font-size:34px;font-weight:800;letter-spacing:-1px;margin-top:3px;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#f9fafb;border-radius:15px;padding:12px}
+.stat .label{font-size:12px;color:var(--muted)}
+.stat .value{font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.btn{min-height:48px;border-radius:14px;border:0;padding:12px 15px;font-weight:650}
+.primary{background:var(--accent);color:white}
+.secondary{background:white;color:var(--text);border:1px solid #d1d5db}
+.form{display:grid;gap:10px}
+input,select,textarea{width:100%;min-height:48px;border:1px solid #d1d5db;border-radius:13px;background:white;color:var(--text);padding:12px 13px;font-size:16px}
+textarea{min-height:88px;resize:vertical}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions .btn{flex:1;min-width:100px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.section-title{font-size:17px;font-weight:700}
+.item{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border:1px solid var(--border);border-radius:15px;padding:12px;margin-top:8px}
+.item-main{min-width:0}.item-main b{display:block;overflow-wrap:anywhere}
+.meta{font-size:12px;color:var(--muted);margin-top:3px}
+.amount{font-weight:750;white-space:nowrap;font-variant-numeric:tabular-nums}
+.in{color:var(--success)}.out{color:var(--danger)}
+.small-btn{min-height:38px;padding:7px 10px;border-radius:10px;background:white;border:1px solid #d1d5db}
+.empty{text-align:center;color:var(--muted);font-size:14px;padding:20px 10px;border:1px dashed #d1d5db;border-radius:15px;margin-top:9px}
+.hidden{display:none!important}
+.notice{font-size:12px;color:var(--muted);line-height:1.45}
+@media(max-width:380px){
+ .app{padding-left:12px;padding-right:12px}
+ .grid2{grid-template-columns:1fr}
+ .balance{font-size:30px}
+ .card{padding:14px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="app" id="app">
+<header class="header">
+  <div><div class="sub">FN-01 • GATE</div><div class="title">💰 Finanças</div><div class="sub">Beta otimizada para iPhone</div></div>
+  <span class="badge">BETA</span>
+</header>
+
+<section class="card">
+  <div class="balance-label">Saldo atual</div>
+  <div id="saldo" class="balance">R$ 0,00</div>
+  <div class="grid2" style="margin-top:14px">
+    <div class="stat"><div class="label">Entradas</div><div id="entradas" class="value">R$ 0,00</div></div>
+    <div class="stat"><div class="label">Saídas</div><div id="saidas" class="value">R$ 0,00</div></div>
+  </div>
+</section>
+
+<section class="grid2">
+  <button class="btn primary" id="addIn">＋ Receita</button>
+  <button class="btn secondary" id="addOut">− Despesa</button>
+</section>
+
+<section class="card hidden" id="movBox">
+  <div class="section-title" id="movTitle">Novo lançamento</div>
+  <form class="form" id="movementForm" style="margin-top:12px">
+    <input id="movValue" type="number" inputmode="decimal" min="0.01" step="0.01" placeholder="Valor (R$)" required>
+    <input id="movDesc" maxlength="150" placeholder="Descrição do lançamento" required>
+    <div class="grid2">
+      <input id="movDate" type="date" required>
+      <select id="movCat">
+        <option>Geral</option><option>Moradia</option><option>Alimentação</option>
+        <option>Transporte</option><option>Trabalho</option><option>Lazer</option><option>Outros</option>
+      </select>
+    </div>
+    <div class="actions"><button class="btn primary" type="submit">Salvar</button><button class="btn secondary" type="button" id="cancelMov">Cancelar</button></div>
+  </form>
+</section>
+
+<section class="card">
+  <div class="row"><div class="section-title">⏰ Lembretes</div><button class="small-btn" id="newReminder">＋ Novo</button></div>
+  <div id="reminders"></div>
+</section>
+
+<section class="card hidden" id="remBox">
+  <div class="section-title">Novo lembrete</div>
+  <form class="form" id="reminderForm" style="margin-top:12px">
+    <input id="remTitle" maxlength="120" placeholder="Ex.: Pagar aluguel / Cobrar João" required>
+    <input id="remValue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Valor (opcional)">
+    <textarea id="remDesc" maxlength="250" placeholder="Descrição / observação"></textarea>
+    <div class="grid2">
+      <input id="remDate" type="date" required>
+      <select id="remType"><option value="pagamento">💸 Pagamento</option><option value="cobranca">💰 Cobrança</option></select>
+    </div>
+    <div class="actions"><button class="btn primary" type="submit">Salvar lembrete</button><button class="btn secondary" type="button" id="cancelRem">Cancelar</button></div>
+  </form>
+</section>
+
+<section class="card">
+  <div class="row"><div class="section-title">📋 Movimentações</div><span class="sub" id="count">0</span></div>
+  <div id="movements"></div>
+</section>
+
+<p class="notice">FN-01 Beta: os dados ficam neste navegador usando armazenamento local. O lembrete aparece dentro do aplicativo, mas esta versão ainda não envia notificações push. Não é um sistema bancário.</p>
+</main>
+
+<script>
+(() => {
+  const KEY="fn01_iphone_beta_v1";
+  let state;
+  try { state=JSON.parse(localStorage.getItem(KEY)||""); } catch(e) { state=null; }
+  if(!state || !Array.isArray(state.movements) || !Array.isArray(state.reminders)) state={movements:[],reminders:[]};
+
+  let currentType="receita";
+  const $=id=>document.getElementById(id);
+  const money=n=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(Number(n)||0);
+  const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+  const br=d=>{if(!d)return "";const p=d.split("-");return p.length===3?p[2]+"/"+p[1]+"/"+p[0]:""};
+  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+
+  function render(){
+    const ins=state.movements.filter(x=>x.type==="receita").reduce((a,x)=>a+x.value,0);
+    const outs=state.movements.filter(x=>x.type==="despesa").reduce((a,x)=>a+x.value,0);
+    $("entradas").textContent=money(ins); $("saidas").textContent=money(outs); $("saldo").textContent=money(ins-outs);
+    $("count").textContent=state.movements.length+" lançamento"+(state.movements.length===1?"":"s");
+
+    $("movements").innerHTML=state.movements.length
+      ? state.movements.slice().reverse().map((x,i)=>{
+          const idx=state.movements.length-1-i;
+          return `<div class="item"><div class="item-main"><b>${esc(x.desc)}</b><div class="meta">${br(x.date)} • ${esc(x.cat)}</div></div><div style="text-align:right"><div class="amount ${x.type==="receita"?"in":"out"}">${x.type==="receita"?"+":"−"} ${money(x.value)}</div><button class="small-btn" style="margin-top:6px" data-del="${idx}">Excluir</button></div></div>`;
+        }).join("")
+      : '<div class="empty">Nenhum lançamento ainda.</div>';
+
+    const t=today();
+    $("reminders").innerHTML=state.reminders.length
+      ? state.reminders.slice().sort((a,b)=>a.date.localeCompare(b.date)).map((x,i)=>{
+          const idx=state.reminders.length-1-i;
+          return `<div class="item" style="${x.done?"opacity:.5":""}"><div class="item-main"><b>${x.type==="pagamento"?"💸":"💰"} ${esc(x.title)}</b><div class="meta">${br(x.date)}${x.value?" • "+money(x.value):""}${x.date<t&&!x.done?" • vencido":""}</div>${x.desc?`<div style="margin-top:5px">${esc(x.desc)}</div>`:""}</div><div class="actions" style="flex:0 0 auto"><button class="small-btn" data-done="${idx}" aria-label="Concluir">✓</button><button class="small-btn" data-remdel="${idx}" aria-label="Excluir">×</button></div></div>`;
+        }).join("")
+      : '<div class="empty">Nenhum lembrete programado.</div>';
+  }
+
+  function openMov(type){
+    currentType=type;
+    $("movTitle").textContent=type==="receita"?"Nova receita":"Nova despesa";
+    $("movBox").classList.remove("hidden");
+    $("movValue").focus();
+  }
+
+  $("movDate").value=today(); $("remDate").value=today();
+  $("addIn").addEventListener("click",()=>openMov("receita"));
+  $("addOut").addEventListener("click",()=>openMov("despesa"));
+  $("cancelMov").addEventListener("click",()=>$("movBox").classList.add("hidden"));
+  $("newReminder").addEventListener("click",()=>{$("remBox").classList.remove("hidden");$("remTitle").focus()});
+  $("cancelRem").addEventListener("click",()=>$("remBox").classList.add("hidden"));
+
+  $("movementForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    const value=Number($("movValue").value);
+    if(!Number.isFinite(value)||value<=0)return;
+    state.movements.push({type:currentType,value,desc:$("movDesc").value.trim(),date:$("movDate").value||today(),cat:$("movCat").value});
+    save();e.target.reset();$("movDate").value=today();$("movBox").classList.add("hidden");render();
+  });
+
+  $("reminderForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    const title=$("remTitle").value.trim(); if(!title)return;
+    state.reminders.push({title,value:Number($("remValue").value)||0,desc:$("remDesc").value.trim(),date:$("remDate").value||today(),type:$("remType").value,done:false});
+    save();e.target.reset();$("remDate").value=today();$("remBox").classList.add("hidden");render();
+  });
+
+  document.addEventListener("click",e=>{
+    const del=e.target.closest("[data-del]");
+    if(del){state.movements.splice(Number(del.dataset.del),1);save();render();return}
+    const remdel=e.target.closest("[data-remdel]");
+    if(remdel){state.reminders.splice(Number(remdel.dataset.remdel),1);save();render();return}
+    const done=e.target.closest("[data-done]");
+    if(done){const r=state.reminders[Number(done.dataset.done)];if(r)r.done=!r.done;save();render();}
+  });
+
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));
+  }
+  render();
+})();
+</script>
+</body>
+</html>

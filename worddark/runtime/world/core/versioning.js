@@ -1,0 +1,3 @@
+/* WordDark Core — Immutable Version History */
+class WordDarkVersioning{constructor(){this.versions=new Map();}create(entityId,data){const list=this.versions.get(entityId)||[];const v={entityId,version:list.length+1,createdAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(data))};list.push(v);this.versions.set(entityId,list);return v;}list(entityId){return[...(this.versions.get(entityId)||[])];}latest(entityId){const l=this.list(entityId);return l[l.length-1]||null;}}
+if(typeof module!=="undefined")module.exports=WordDarkVersioning;if(typeof window!=="undefined")window.WordDarkVersioning=WordDarkVersioning;

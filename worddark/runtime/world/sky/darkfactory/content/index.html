@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Criação de Conteúdo — Dark Factory</title><link rel="stylesheet" href="../../../ui/worddark-ui.css"><style>.df-sector-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.df-sector{display:flex;flex-direction:column;gap:10px;min-height:190px}.df-sector .wd-actions{margin-top:auto}.df-icon{font-size:30px}.df-status{font-size:12px;letter-spacing:.08em}.df-contract{font-family:monospace;font-size:12px;line-height:1.55;white-space:pre-wrap}</style></head>
+<body class="wd-body"><div class="wd-shell"><aside class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div><nav class="wd-nav"><a href="../../../../">◈ WordDark</a><a href="../../">☁ Céu</a><a href="../">⚙ Dark Factory</a><a class="active" href="./">🎬 Criação</a></nav><div class="wd-footer">DF-CONTENT-0.2 · camada de setores</div></aside>
+<main class="wd-main"><div class="wd-top"><div><div class="wd-eyebrow">Dark Factory · setor especializado</div><h1 class="wd-title">🎬 Fábrica de Criação</h1><p class="wd-sub">Produção modular. Cada setor possui entrada, adapter, execução, teste e saída normalizada. O orquestrador conecta os setores sem retirar sua autonomia.</p></div></div>
+<section class="wd-card full"><div class="wd-eyebrow">Circuito</div><div class="wd-flow"><span>BRIEFING</span><i class="wd-arrow">→</i><span>INTELIGÊNCIA</span><i class="wd-arrow">→</i><span>ROTEIRO</span><i class="wd-arrow">→</i><span>IDENTIDADE</span><i class="wd-arrow">→</i><span>PRODUÇÃO</span><i class="wd-arrow">→</i><span>VALIDAÇÃO</span><i class="wd-arrow">→</i><span>ENTREGA</span></div></section>
+<section class="wd-card full"><div class="wd-eyebrow">Setores v0.2</div><div class="wd-actions" style="margin:12px 0 18px"><a class="wd-btn primary" href="./flow-test.html">🧪 Testar fluxo 01 → 04</a> <a class="wd-btn" href="./reentry-test.html">♻️ Testar reentrada</a></div><div class="df-sector-grid">
+<article class="wd-card df-sector"><div class="df-icon">🧠</div><div class="df-status wd-badge ok">BASE</div><h2>01 · Inteligência</h2><p class="wd-muted">Pesquisa, tendências e briefing.</p><div class="wd-actions"><a class="wd-btn primary" href="./intelligence/">Abrir setor</a></div></article>
+<article class="wd-card df-sector"><div class="df-icon">✍️</div><div class="df-status wd-badge ok">BASE</div><h2>02 · Roteiro</h2><p class="wd-muted">Hooks, estrutura e roteiro.</p><div class="wd-actions"><a class="wd-btn primary" href="./script/">Abrir setor</a></div></article>
+<article class="wd-card df-sector"><div class="df-icon">🎨</div><div class="df-status wd-badge ok">BASE</div><h2>03 · Identidade</h2><p class="wd-muted">Regras de marca, voz e ativos reutilizáveis.</p><div class="wd-actions"><a class="wd-btn primary" href="./identity/">Abrir setor</a></div></article>
+<article class="wd-card df-sector"><div class="df-icon">🖼️</div><div class="df-status wd-badge">PLANEJADO</div><h2>04 · Imagem</h2><p class="wd-muted">Direção visual, artes e variações.</p><div class="wd-actions"><a class="wd-btn primary" href="./image/">Abrir setor</a></div></article>
+<article class="wd-card df-sector"><div class="df-icon">🎬</div><div class="df-status wd-badge">PLANEJADO</div><h2>05 · Vídeo</h2><p class="wd-muted">Composição e renderização.</p><div class="wd-actions"><button class="wd-btn">Em construção</button></div></article>
+<article class="wd-card df-sector"><div class="df-icon">🎙️</div><div class="df-status wd-badge">PLANEJADO</div><h2>06 · Áudio</h2><p class="wd-muted">Voz, música e efeitos.</p><div class="wd-actions"><button class="wd-btn">Em construção</button></div></article>
+<article class="wd-card df-sector"><div class="df-icon">🧪</div><div class="df-status wd-badge">PLANEJADO</div><h2>07 · Testes</h2><p class="wd-muted">Variações e validação experimental.</p><div class="wd-actions"><button class="wd-btn">Em construção</button></div></article>
+<article class="wd-card df-sector"><div class="df-icon">🛡️</div><div class="df-status wd-badge ok">CORE</div><h2>08 · Controle</h2><p class="wd-muted">Copyright, políticas e aprovação.</p><div class="wd-actions"><button class="wd-btn">Core</button></div></article>
+<article class="wd-card df-sector"><div class="df-icon">📊</div><div class="df-status wd-badge">PLANEJADO</div><h2>09 · Aprendizado</h2><p class="wd-muted">Métricas e melhoria contínua.</p><div class="wd-actions"><button class="wd-btn">Em construção</button></div></article>
+</div></section>
+<section class="wd-card full"><div class="wd-eyebrow">Contrato de integração</div><pre class="df-contract">REQUEST
+  requesterId → originId → destinationId
+  operationType → environment
+  payload { brief, brand, content, toolPolicy }
+
+SECTOR
+  input → adapter → engine → normalized output
+
+RESULT
+  resultId → operationId → status
+  report → artifacts → metadata → audit
+
+ORCHESTRATOR
+  01 → 02 → 03 → 04
+  mesmo operationId · pacotes preservados
+  reentrada por módulo: erro no módulo X retorna ao módulo X
+  pacotes anteriores permanecem válidos · publicação fora da fábrica
+
+Regra: produção devolve resultado. Publicação permanece fora da fábrica.</pre></section>
+</main></div><script src="../../../ui/worddark-ui.js"></script></body></html>

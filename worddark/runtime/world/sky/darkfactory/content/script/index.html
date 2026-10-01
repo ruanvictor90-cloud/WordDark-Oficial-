@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>✍️ Roteiro — Dark Factory</title>
+<link rel="stylesheet" href="../../../../ui/worddark-ui.css">
+<style>
+.panel{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+textarea{width:100%;min-height:150px;box-sizing:border-box}
+pre{white-space:pre-wrap;line-height:1.5}
+@media(max-width:800px){.panel{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="wd-body"><div class="wd-shell">
+<aside class="wd-sidebar">
+<div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
+<nav class="wd-nav"><a href="../../../../../">◈ WordDark</a><a href="../../../">☁ Céu</a><a href="../../">⚙ Dark Factory</a><a class="active" href="../">🎬 Criação</a></nav>
+<div class="wd-footer">DF-CONTENT-SCRIPT-0.1 · Core preservado</div>
+</aside>
+<main class="wd-main">
+<div class="wd-top"><div><div class="wd-eyebrow">Dark Factory · 02</div><h1 class="wd-title">✍️ Roteiro</h1><p class="wd-sub">Transforma inteligência em uma estrutura narrativa pronta para os próximos setores.</p></div><div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button></div></div>
+
+<section class="wd-card full"><div class="wd-eyebrow">Circuito</div><div class="wd-flow"><span>INTELIGÊNCIA</span><i class="wd-arrow">→</i><span>ESTRUTURA</span><i class="wd-arrow">→</i><span>HOOK</span><i class="wd-arrow">→</i><span>ROTEIRO</span><i class="wd-arrow">→</i><span>ENTREGA</span></div></section>
+
+<section class="panel">
+<article class="wd-card"><div class="wd-eyebrow">Entrada de teste</div><h2>Briefing</h2><textarea id="brief">anime, games, cultura geek</textarea><label>Formato</label><select id="format"><option>SHORT</option><option>REEL</option><option>TIKTOK</option><option>YOUTUBE</option></select><div class="wd-actions"><button class="wd-btn primary" id="run" type="button">Gerar roteiro-base</button></div></article>
+<article class="wd-card"><div class="wd-eyebrow">Saída normalizada</div><h2 id="status">Aguardando</h2><pre id="output">Nenhuma execução.</pre></article>
+</section>
+
+<section class="wd-card full"><div class="wd-eyebrow">Política</div><div class="wd-list"><div class="wd-item"><span>Adapter</span><span class="wd-badge ok">ATIVO</span></div><div class="wd-item"><span>Ferramenta externa</span><span class="wd-badge">FUTURA</span></div><div class="wd-item"><span>Motor próprio</span><span class="wd-badge ok">BASE</span></div><div class="wd-item"><span>Publicação</span><span class="wd-badge">FORA DA FÁBRICA</span></div></div></section>
+</main></div>
+<script src="../../../../ui/worddark-ui.js"></script>
+<script src="./adapter.js"></script><script src="./sector.js"></script>
+<script>
+document.getElementById("run").addEventListener("click",()=>{
+  const r=WordDarkContentScript.run({
+    operationId:"OP-SCRIPT-UI",
+    brief:document.getElementById("brief").value,
+    format:document.getElementById("format").value,
+    audience:"público definido pela inteligência",
+    toolPolicy:"HYBRID"
+  });
+  document.getElementById("status").textContent=r.status;
+  document.getElementById("output").textContent=JSON.stringify(r,null,2);
+});
+</script></body></html>

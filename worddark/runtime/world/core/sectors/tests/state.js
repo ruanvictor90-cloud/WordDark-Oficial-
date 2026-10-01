@@ -1,0 +1,1 @@
+window.WordDarkTestSector={identityId:"WD-OPS-TEST-001",type:"SECTOR",name:"Central de Testes",parentId:"WD-SEC-OPS-001",status:"ONLINE",areas:{diagnostics:"WD-TEST-DIAG-001",components:"WD-TEST-COMP-001",connections:"WD-TEST-CON-001",flows:"WD-TEST-FLOW-001",emergency:"WD-TEST-EMG-001",results:"WD-TEST-RES-001",learning:"WD-TEST-LEARN-001"}};

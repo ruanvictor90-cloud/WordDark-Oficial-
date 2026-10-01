@@ -1,0 +1,8 @@
+{
+  "name": "worddark-cidade-compras",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node core/contracts.test.js && node sectors/contracts.test.js && node sectors/integration.test.js && node integration-matrix.test.js && node runtime.test.js && node core/service-request.test.js && node core/commerce-v1.test.js && node core/marketing-service-flow.test.js"
+  }
+}

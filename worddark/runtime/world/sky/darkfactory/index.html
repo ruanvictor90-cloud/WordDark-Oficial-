@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dark Factory — WordDark</title><link rel="stylesheet" href="../../ui/worddark-ui.css"></head>
+<body class="wd-body">
+<div class="wd-shell">
+<aside class="wd-sidebar">
+  <div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
+  <nav class="wd-nav" aria-label="Navegação">
+    <a href="../../../">◈ WordDark</a><a href="../">☁ Céu</a><a class="active" href="./">⚙ Dark Factory</a>
+    <a href="../../earth/">◉ Terra</a><a href="../../earth/juice-country/sucocast/">🧃 SucoCast</a><a href="../../core/">◎ Operações</a>
+  </nav>
+  <div class="wd-footer">DF-0.7 · serviço de produção<br>Operation Engine conectado</div>
+</aside>
+<main class="wd-main">
+<div class="wd-top">
+  <div><div class="wd-eyebrow">Céu · serviço compartilhado</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade e decide o destino. O circuito abaixo usa o núcleo operacional para transportar, executar, validar e registrar a produção.</p></div>
+  <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><button class="wd-btn danger" id="emergencyButton" type="button">🚨 Socorro Deus</button></div>
+</div>
+
+<section class="wd-card full">
+  <div class="wd-eyebrow">Circuito operacional</div>
+  <div class="wd-flow"><span>IDENTIFIED</span><i class="wd-arrow">→</i><span>AUTHORIZED</span><i class="wd-arrow">→</i><span>ROUTED</span><i class="wd-arrow">→</i><span>EXECUTING</span><i class="wd-arrow">→</i><span>VALIDATING</span><i class="wd-arrow">→</i><span>COMPLETED</span></div>
+</section>
+
+<section class="wd-grid">
+<article class="wd-card wide">
+  <div class="wd-eyebrow">Serviço · content.produce</div><h2>Solicitação de produção</h2>
+  <p class="wd-muted">Pedido originado na Terra. A fábrica não recebe destino de publicação.</p>
+  <div class="wd-form-grid">
+    <label class="wd-field">Solicitante<input class="wd-input" id="requester" value="SC-001"></label>
+    <label class="wd-field">Origem<input class="wd-input" id="origin" value="world/earth/juice-country/sucocast"></label>
+  </div>
+  <label class="wd-field" style="margin-top:12px">Requerimento<textarea class="wd-textarea" id="task">Produzir material de teste do circuito WordDark.</textarea></label>
+  <div class="wd-form-grid" style="margin-top:12px">
+    <label class="wd-field">ID do conteúdo<input class="wd-input" id="contentId" value="CONTENT-DEMO-001"></label>
+    <label class="wd-field">Título<input class="wd-input" id="contentTitle" value="WordDark — primeiro circuito operacional"></label>
+  </div>
+  <label class="wd-field" style="margin-top:12px">Especificações<textarea class="wd-textarea" id="requirements">Vídeo curto · vertical · teste estrutural</textarea></label>
+  <button class="wd-btn primary" id="runProduction" type="button" style="margin-top:14px">Enviar pela Rodovia e produzir</button>
+</article>
+
+<article class="wd-card">
+  <div class="wd-eyebrow">Estado do serviço</div><h2 id="factoryStatus">ONLINE</h2>
+  <div class="wd-list">
+    <div class="wd-item"><span>Serviços</span><span class="wd-badge ok" id="serviceCount">1</span></div>
+    <div class="wd-item"><span>Ambiente</span><span class="wd-badge ok">TEST</span></div>
+    <div class="wd-item"><span>Destino</span><span class="wd-badge">Terra</span></div>
+  </div>
+  <p id="runStatus" class="wd-muted">Aguardando operação.</p>
+</article>
+</section>
+
+<section class="wd-grid">
+<article class="wd-card wide"><div class="wd-eyebrow">Operação</div><h2 id="operationId">Nenhuma</h2><span id="operationState" class="wd-badge">AGUARDANDO</span><pre id="lastResult">Nenhuma operação executada.</pre></article>
+<article class="wd-card"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Receipts</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
+</section>
+
+<section class="wd-card full">
+<div class="wd-eyebrow">Segurança</div><h2>🚨 Socorro Deus</h2>
+<p class="wd-muted">A parada é global por operationId. Qualquer setor que acione o mecanismo impede a continuação nos checkpoints cooperativos do núcleo e da fábrica.</p>
+<div class="wd-actions"><button class="wd-btn danger" id="triggerStop" type="button">Acionar parada na operação atual</button><button class="wd-btn" id="releaseStop" type="button">Liberar operação atual</button></div>
+<pre id="emergencyResult">Nenhuma parada.</pre>
+</section>
+
+<section class="wd-card full">
+<div class="wd-eyebrow">Registro</div><h2>Biblioteca e auditoria</h2><pre id="auditResult">Aguardando operação.</pre>
+</section>
+</main></div>
+
+<script src="../../ui/worddark-ui.js"></script>
+<script src="../../contracts/identity.js"></script><script src="../../contracts/access.js"></script><script src="../../security/security-manager.js"></script>
+<script src="../../contracts/operation.js"></script><script src="../../contracts/message.js"></script><script src="../../contracts/request.js"></script><script src="../../contracts/receipt.js"></script><script src="../../contracts/route.js"></script><script src="../../contracts/environment.js"></script>
+<script src="../../core/operation-engine.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
+<script src="../../contracts/emergency-stop.js?v=20260930-2"></script><script src="../../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../../security/account-manager.js"></script><script src="../../core/world-runtime.js"></script>
+<script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script>
+<script src="core/request.js"></script><script src="core/service-registry.js"></script><script src="core/production-validator.js"></script><script src="core/production-pipeline.js"></script><script src="core/content-publication-executor.js"></script><script src="core/factory.js"></script><script src="core/operation-bridge.js"></script>
+<script>
+(() => {
+  const emergencyStop=new WordDarkEmergencyStopManager();
+  const serviceRegistry=new DarkFactoryServiceRegistry();
+  const contentExecutor=new DarkFactoryContentExecutor();
+  serviceRegistry.register({serviceId:"DF-SERVICE-CONTENT-PRODUCE",name:"Content Production",type:"content.produce",status:"READY",executor:contentExecutor});
+  const pipeline=new DarkFactoryProductionPipeline({registry:serviceRegistry,validator:new DarkFactoryProductionValidator(),emergencyStop});
+  const factory=new DarkFactory({registry:serviceRegistry,pipeline});
+
+  const security=new WordDarkSecurityManager();
+  security.registerIdentity(new WordDarkIdentity({identityId:"SC-001",type:"UNIT",parentId:"world/earth/juice-country",metadata:{name:"SucoCast"}}));
+  security.grant(new WordDarkAccessRule({identityId:"SC-001",capability:"content.produce",action:"request",environment:"TEST",scope:"world/sky/darkfactory"}));
+
+  const road=new WordDarkRoad();
+  const registerRoute=(routeId,origin,destination)=>road.registerRoute(new WordDarkRoute({routeId,origin,destination,service:"content.produce"}));
+  registerRoute("ROUTE-SUCOCAST-DF-PRODUCE","world/earth/juice-country/sucocast","world/sky/darkfactory");
+  registerRoute("ROUTE-DF-SUCOCAST-PRODUCE","world/sky/darkfactory","world/earth/juice-country/sucocast");
+  registerRoute("ROUTE-DEMO-DF-PRODUCE","world/earth/demo-city","world/sky/darkfactory");
+  registerRoute("ROUTE-DF-DEMO-PRODUCE","world/sky/darkfactory","world/earth/demo-city");
+
+  const localLibrary=new WordDarkLocalLibrary({libraryId:"LIB-DF-LOCAL",ownerId:"world/sky/darkfactory"});
+  const centralLibrary=new WordDarkCentralLibrary({libraryId:"WORDDARK-CENTRAL-LIBRARY"});
+  const registry=new WordDarkOperationRegistry({localLibrary,centralLibrary});
+  const guard=new WordDarkEnvironmentGuard({environments:{TEST:new WordDarkEnvironment({name:"TEST"}),PROD:new WordDarkEnvironment({name:"PROD"})}});
+  const communication=new WordDarkCommunication({road,registry});
+  const bridge=new DarkFactoryOperationBridge({factory,communication});
+  const engine=new WordDarkOperationEngine({
+    security,
+    environmentGuard:guard,
+    registry,
+    emergencyStop,
+    route:operation=>bridge.route(operation),
+    execute:operation=>bridge.execute(operation),
+    record:()=>{}
+  });
+  const accountManager=new WordDarkAccountManager({security});
+  const runtime=WordDarkWorldRuntime.compose({
+    accountManager,
+    security,
+    environmentGuard:guard,
+    road,
+    registry,
+    operationEngine:engine
+  });
+  runtime.assertReady();
+
+  let activeOperationId=null;
+  const $=id=>document.getElementById(id);
+  $("serviceCount").textContent=serviceRegistry.list().length;
+  $("factoryStatus").textContent=factory.getStatus().status;
+  $("runStatus").textContent="Runtime: "+runtime.getHealth().status+" · aguardando operação.";
+
+  function renderOperation(operation){
+    activeOperationId=operation&&operation.operationId||activeOperationId;
+    $("operationId").textContent=activeOperationId||"Nenhuma";
+    const state=operation&&operation.status||"AGUARDANDO";
+    $("operationState").textContent=state;
+    $("operationState").className="wd-badge "+(state==="COMPLETED"?"ok":state==="CANCELLED"||state==="FAILED"?"danger":"warn");
+  }
+  function renderBus(){
+    const s=communication.getStatus();
+    $("messageCount").textContent=s.messages;$("receiptCount").textContent=s.receipts;$("pendingCount").textContent=s.pending;
+  }
+  function renderAudit(){
+    $("auditResult").textContent=JSON.stringify({security:security.getAudit(),localRecords:localLibrary.list(),centralRecords:centralLibrary.list()},null,2);
+  }
+
+  $("runProduction").addEventListener("click",()=>{
+    try{
+      const operation=new WordDarkOperation({
+        requesterId:$("requester").value.trim(),
+        originId:$("origin").value.trim(),
+        destinationId:"world/sky/darkfactory",
+        operationType:"content.produce",
+        environment:"TEST",
+        payload:{
+          identityId:$("requester").value.trim(),
+          capability:"content.produce",
+          action:"request",
+          scope:"world/sky/darkfactory",
+          task:$("task").value.trim(),
+          contentId:$("contentId").value.trim(),
+          title:$("contentTitle").value.trim(),
+          type:"VIDEO",
+          requirements:$("requirements").value.trim()
+        }
+      });
+      renderOperation(operation);$("runStatus").textContent="Executando operação pelo núcleo...";
+      const result=runtime.runOperation(operation);
+      renderOperation(result);
+      $("runStatus").textContent=result.status==="COMPLETED"?"Produção concluída e devolvida pela Rodovia.":"Operação terminou em "+result.status+".";
+      $("lastResult").textContent=JSON.stringify(result.toJSON(),null,2);
+      renderBus();renderAudit();
+    }catch(error){
+      $("runStatus").textContent="Erro: "+error.message;
+      $("lastResult").textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);
+    }
+  });
+
+  $("triggerStop").addEventListener("click",()=>{
+    if(!activeOperationId){$("emergencyResult").textContent=JSON.stringify({success:false,reason:"NO_ACTIVE_OPERATION"},null,2);return;}
+    const result=emergencyStop.trigger({sectorId:"DARKFACTORY",operationId:activeOperationId,requesterId:"UI-DF",reason:"Parada acionada no setor Dark Factory"});
+    $("emergencyResult").textContent=JSON.stringify(result,null,2);
+  });
+  $("emergencyButton").addEventListener("click",()=> $("triggerStop").click());
+  $("releaseStop").addEventListener("click",()=>{
+    if(!activeOperationId){$("emergencyResult").textContent=JSON.stringify({success:false,reason:"NO_ACTIVE_OPERATION"},null,2);return;}
+    $("emergencyResult").textContent=JSON.stringify(emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Liberação manual de teste"}),null,2);
+  });
+})();
+</script>
+</body></html>

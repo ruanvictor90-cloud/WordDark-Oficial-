@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090b10">
+<meta name="description" content="FN-01 • Portão da Ilha Financeiro">
+<link rel="manifest" href="manifest.webmanifest">
+<title>FN-01 • Portão</title>
+<style>
+:root{--bg:#090b10;--card:#11151d;--card2:#171c26;--text:#f4f7fb;--muted:#9aa5b5;--line:#28303d;--blue:#4da3ff;--orange:#ff9f43;--green:#35d07f}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;background:var(--bg)}body{margin:0;background:radial-gradient(circle at top,#182131 0,#090b10 48%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,sans-serif}button{font:inherit;cursor:pointer}.app{max-width:680px;margin:auto;padding:calc(22px + env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom))}.eyebrow{font-size:11px;letter-spacing:1.5px;color:var(--blue);font-weight:800}.title{font-size:32px;font-weight:850;letter-spacing:-1px;margin:6px 0}.sub{color:var(--muted);font-size:14px;line-height:1.45}.gate{border:1px solid var(--line);background:linear-gradient(145deg,#121722,#0e1219);border-radius:24px;padding:20px;margin:20px 0}.gate-title{font-size:18px;font-weight:750}.routes{display:grid;gap:12px;margin-top:16px}.route{display:flex;align-items:center;gap:14px;width:100%;padding:16px;border:1px solid var(--line);border-radius:18px;background:var(--card);color:var(--text);text-align:left}.route:hover{border-color:#3b4657}.icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:var(--card2);font-size:23px}.route strong{display:block;font-size:17px}.route span{display:block;color:var(--muted);font-size:12px;margin-top:3px}.arrow{margin-left:auto;color:var(--muted);font-size:20px}.map{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.node{border:1px solid var(--line);border-radius:16px;padding:13px;background:#0f141c}.node b{font-size:13px}.node div{font-size:11px;color:var(--muted);margin-top:4px}.foot{font-size:11px;color:#7f8998;line-height:1.5;margin-top:18px}@media(max-width:380px){.app{padding-left:12px;padding-right:12px}.title{font-size:28px}}
+</style>
+</head>
+<body><main class="app">
+<div class="eyebrow">WORDDARK • TERRA • FN-01</div>
+<div class="title">🏝️ Ilha Financeiro</div>
+<div class="sub">Portão principal da ilha. Cada setor tem sua própria entrada e responsabilidade.</div>
+<section class="gate">
+<div class="gate-title">🚪 Portão de Entrada / Saída</div>
+<div class="sub">Escolha o setor. O portão apenas identifica e direciona o caminho.</div>
+<div class="routes">
+<button class="route" onclick="location.href='financeiro.html'"><div class="icon">💰</div><div><strong>Financeiro</strong><span>Operação financeira FN-01 já existente</span></div><div class="arrow">›</div></button>
+<button class="route" onclick="location.href='emprestimos.html'"><div class="icon">🤝</div><div><strong>Empréstimos</strong><span>Central de cálculos, dívidas e regras editáveis</span></div><div class="arrow">›</div></button>
+</div>
+</section>
+<section class="gate">
+<div class="gate-title">🗺️ Estrutura preparada</div>
+<div class="map">
+<div class="node"><b>💰 Financeiro</b><div>Movimentações e lembretes</div></div>
+<div class="node"><b>🤝 Empréstimos</b><div>Calculadora + dívidas</div></div>
+<div class="node"><b>🧮 Regras</b><div>Taxas configuráveis</div></div>
+<div class="node"><b>📚 Histórico</b><div>Base preparada para evolução</div></div>
+</div>
+</section>
+<p class="foot">FN-01 • protótipo local. Os módulos atuais armazenam dados no navegador. Regras de juros são configuráveis e não representam orientação jurídica ou financeira.</p>
+</main></body></html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#09090d">
+  <title>Cidade de Compras — WordDark</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="eclipse" aria-hidden="true">◐</span>
+      <div><strong>Cidade de Compras</strong><small>WORDDARK · TERRA · COMMERCE_CITY</small></div>
+    </div>
+    <button id="themeToggle" class="icon-btn" type="button" aria-label="Alternar tema">☀</button>
+  </header>
+  <main>
+    <section id="home" class="view active">
+      <div class="gate">
+        <div class="gate-symbol" aria-hidden="true">🚪</div>
+        <div><span class="eyebrow">PORTÃO</span><strong>Entrada da Cidade</strong><small>Identificação · Permissão · Destino</small></div>
+        <span class="gate-state">AUTORIZADO</span>
+      </div>
+      <section class="hero">
+        <div>
+          <span class="eyebrow">TERRA / CIDADE</span>
+          <h1>Central de Comércio</h1>
+          <p>Uma cidade multicanal para receber clientes, operar pedidos e solicitar serviços ao Céu.</p>
+        </div>
+        <div class="seal" aria-label="Selo WordDark">◉<small>WORD<br>DARK</small></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><span class="eyebrow">CENTRAL</span><h2>Painel operacional</h2></div><span class="status"><i></i> Desenvolvimento</span></div>
+        <div class="summary">
+          <div><b id="pendingOrders">0</b><span>Pedidos pendentes</span></div>
+          <div><b id="pendingComms">0</b><span>Comunicações</span></div>
+          <div><b id="openIncidents">0</b><span>Ocorrências</span></div>
+        </div>
+        <div class="section-label"><span>SETOR CIDADE</span><small>10 áreas conectadas</small></div>
+        <div class="sectors" id="sectorGrid"></div>
+      </section>
+      <div class="world-flow"><span>TERRA</span><b>→</b><span>RODOVIA</span><b>→</b><span>CÉU</span><small>Serviços externos: Marketing · Dark Factory</small></div>
+    </section>
+    <section id="sector" class="view">
+      <button class="back" id="backBtn" type="button">← Voltar ao painel</button>
+      <div class="sector-title"><span id="sectorIcon">◈</span><div><span class="eyebrow">SETOR DA CIDADE</span><h1 id="sectorName">Setor</h1><p id="sectorDescription"></p></div></div>
+      <div class="sector-body" id="sectorBody"></div>
+    </section>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

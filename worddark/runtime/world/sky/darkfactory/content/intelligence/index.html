@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inteligência — Dark Factory</title><link rel="stylesheet" href="../../../../ui/worddark-ui.css">
+</head><body class="wd-body"><div class="wd-shell">
+<aside class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
+<nav class="wd-nav"><a href="../../../../../">◈ WordDark</a><a href="../../../">☁ Céu</a><a href="../../">⚙ Dark Factory</a><a href="../">🎬 Criação</a><a class="active" href="./">🧠 Inteligência</a></nav>
+<div class="wd-footer">DF-INTEL-0.1 · adapter híbrido<br>Core operacional preservado</div></aside>
+<main class="wd-main">
+<div class="wd-top"><div><div class="wd-eyebrow">Fábrica de Criação · Setor 01</div><h1 class="wd-title">🧠 Inteligência</h1><p class="wd-sub">Recebe uma necessidade e prepara o pacote de inteligência que alimentará roteiro, imagem, vídeo e testes.</p></div><div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button></div></div>
+<section class="wd-grid">
+<article class="wd-card wide"><div class="wd-eyebrow">Entrada</div><h2>Briefing</h2>
+<label class="wd-field">Necessidade<textarea id="brief" class="wd-textarea">Criar conteúdo sobre anime e cultura geek para um público jovem.</textarea></label>
+<label class="wd-field" style="margin-top:12px">Público<input id="audience" class="wd-input" value="jovem adulto"></label>
+<button id="run" class="wd-btn primary" style="margin-top:14px">Preparar inteligência</button></article>
+<article class="wd-card"><div class="wd-eyebrow">Política</div><h2>Híbrida</h2><div class="wd-list">
+<div class="wd-item"><span>Adapter</span><span class="wd-badge ok">ATIVO</span></div>
+<div class="wd-item"><span>Externa</span><span class="wd-badge">FUTURA</span></div>
+<div class="wd-item"><span>Própria</span><span class="wd-badge ok">BASE</span></div>
+<div class="wd-item"><span>Aprendizado</span><span class="wd-badge ok">REGISTRADO</span></div></div></article>
+</section>
+<section class="wd-card full"><div class="wd-eyebrow">Resultado normalizado</div><h2 id="status">AGUARDANDO</h2><pre id="result">Nenhuma execução.</pre></section>
+<section class="wd-card full"><div class="wd-eyebrow">Próxima evolução</div><p class="wd-muted">Conectar uma fonte externa através de um novo adapter, mantendo o mesmo contrato de entrada/saída. A fonte poderá ser trocada sem alterar o setor ou o Core.</p></section>
+</main></div>
+<script src="../../../../ui/worddark-ui.js"></script>
+<script src="./adapter.js"></script><script src="./sector.js"></script>
+<script>
+document.getElementById("run").addEventListener("click",()=>{
+ const r=WordDarkContentIntelligence.run({operationId:"OP-INTEL-DEMO",brief:document.getElementById("brief").value,audience:document.getElementById("audience").value,toolPolicy:"HYBRID"});
+ document.getElementById("status").textContent=r.status||"FAILED";
+ document.getElementById("result").textContent=JSON.stringify(r,null,2);
+});
+</script></body></html>

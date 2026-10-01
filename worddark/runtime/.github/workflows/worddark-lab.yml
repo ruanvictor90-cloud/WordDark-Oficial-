@@ -1,0 +1,20 @@
+name: WordDark — lab tests
+
+on:
+  push:
+    branches: ["dev/worddark-lab"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Lab contracts
+        run: node world/lab/core/lab-contracts.test.js

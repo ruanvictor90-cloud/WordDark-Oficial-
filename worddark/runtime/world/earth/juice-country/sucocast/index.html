@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SucoCast — WordDark</title><link rel="stylesheet" href="../../../ui/worddark-ui.css"></head>
+<body class="wd-body">
+<div class="wd-shell">
+<aside class="wd-sidebar">
+  <div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Terra · SucoCast</small></div></div>
+  <nav class="wd-nav" aria-label="Navegação">
+    <a href="../../../../">◈ WordDark</a><a href="../../../">◉ Terra</a><a href="../">🧃 Juice Country</a><a class="active" href="./">🧃 SucoCast</a>
+    <a href="../../../sky/darkfactory/">⚙ Dark Factory</a><a href="../../../core/">◎ Núcleo</a>
+  </nav>
+  <div class="wd-footer">SC-001 · Estado<br>Produção e distribuição separadas</div>
+</aside>
+
+<main class="wd-main">
+<div class="wd-top">
+  <div><div class="wd-eyebrow">Terra · Estado</div><h1 class="wd-title">SucoCast</h1>
+  <p class="wd-sub">O Estado define a necessidade, recebe o material produzido e decide o destino. A Dark Factory produz; o SucoCast distribui.</p></div>
+  <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><a class="wd-btn danger" href="../../../core/sectors/tests/">🚨 Central de Testes</a></div>
+</div>
+
+<section class="wd-grid">
+  <article class="wd-card"><div class="wd-eyebrow">Identidade</div><h2>SucoCast</h2><span class="wd-badge ok">● ONLINE</span><p class="wd-muted">SC-001 · Juice Country</p></article>
+  <article class="wd-card"><div class="wd-eyebrow">Rodovia</div><h2 id="roadStatus">ONLINE</h2><p class="wd-muted">Entrada e saída preparadas para comunicação com o Céu.</p></article>
+  <article class="wd-card"><div class="wd-eyebrow">Dark Factory</div><h2 id="factoryStatus">DISPONÍVEL</h2><p class="wd-muted">Serviço compartilhado de produção do Céu.</p></article>
+</section>
+
+<section class="wd-card full" style="margin-top:22px">
+  <div class="wd-sector"><div><div class="wd-eyebrow">Setores</div><h2>Operação do Estado</h2></div><span class="wd-badge">6 setores</span></div>
+  <div class="wd-grid">
+    <article class="wd-card"><h3>Administração</h3><p class="wd-muted">Recebimento, autorização e registro.</p><span class="wd-badge ok">ONLINE</span></article>
+    <article class="wd-card"><h3>Conteúdo</h3><p class="wd-muted">Pauta e requerimento de produção.</p><span class="wd-badge ok">ONLINE</span></article>
+    <article class="wd-card"><h3>Produção</h3><p class="wd-muted">Solicitação, recebimento e validação.</p><span class="wd-badge ok">ONLINE</span></article>
+    <article class="wd-card"><h3>Distribuição</h3><p class="wd-muted">Escolha dos destinos e publicação.</p><span class="wd-badge ok">ONLINE</span></article>
+    <article class="wd-card"><h3>Inteligência</h3><p class="wd-muted">Métricas e geração de aprendizado.</p><span class="wd-badge ok">ONLINE</span></article>
+    <article class="wd-card"><h3>Segurança</h3><p class="wd-muted">Identidade, acesso e auditoria.</p><span class="wd-badge ok">ONLINE</span></article>
+  </div>
+</section>
+
+<section class="wd-grid">
+<article class="wd-card wide">
+  <div class="wd-eyebrow">Produção · Terra → Céu → Terra</div><h2>Requerimento de produção</h2>
+  <p class="wd-muted">O SucoCast informa <strong>o que precisa</strong>. O destino de publicação não é enviado para a fábrica.</p>
+  <div class="wd-form-grid">
+    <label class="wd-field">Título<input class="wd-input" id="title" value="Teste SucoCast"></label>
+    <label class="wd-field">Tipo<select class="wd-select" id="type"><option>VIDEO</option><option>IMAGE</option><option>TEXT</option></select></label>
+  </div>
+  <label class="wd-field" style="margin-top:12px">Especificações<textarea class="wd-textarea" id="requirements">Vídeo curto, formato vertical, edição simples e legenda.</textarea></label>
+  <button class="wd-btn primary" id="request" type="button" style="margin-top:14px">Enviar solicitação para a Dark Factory</button>
+  <pre id="result">Aguardando solicitação.</pre>
+</article>
+
+<article class="wd-card">
+  <div class="wd-eyebrow">Estado da operação</div><h2 id="operationState">AGUARDANDO</h2>
+  <div class="wd-list">
+    <div class="wd-item"><span>Runtime</span><span class="wd-badge ok" id="runtimeStatus">—</span></div>
+    <div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div>
+    <div class="wd-item"><span>Receipts</span><strong id="receiptCount">0</strong></div>
+    <div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div>
+  </div>
+  <p id="operationId" class="wd-muted">Nenhuma operação executada.</p>
+</article>
+</section>
+
+<section class="wd-card full">
+  <div class="wd-eyebrow">Resultado da produção</div><h2 id="resultTitle">Aguardando produção</h2>
+  <pre id="operationResult">Nenhum resultado.</pre>
+</section>
+
+<section class="wd-card full">
+  <div class="wd-eyebrow">Distribuição</div><h2>Destinos ficam no SucoCast</h2>
+  <p class="wd-muted">YouTube, Instagram, TikTok, site e outras aplicações pertencem ao setor de Distribuição. A Dark Factory não recebe essas escolhas.</p>
+  <div class="wd-flow"><span>YouTube</span><i class="wd-arrow">·</i><span>Instagram</span><i class="wd-arrow">·</i><span>TikTok</span><i class="wd-arrow">·</i><span>Site</span><i class="wd-arrow">·</i><span>Externo</span></div>
+</section>
+
+<section class="wd-card full">
+  <div class="wd-eyebrow">Circuito</div><h2>Arquitetura atual</h2>
+  <div class="wd-flow"><span>SucoCast</span><i class="wd-arrow">→</i><span>Rodovia</span><i class="wd-arrow">→</i><span>Dark Factory</span><i class="wd-arrow">→</i><span>Rodovia</span><i class="wd-arrow">→</i><span>SucoCast</span></div>
+  <p class="wd-muted">Runtime: <strong>composição central</strong>. Operação: <strong>content.produce</strong>. Publicação permanece fora da fábrica.</p>
+</section>
+</main></div>
+
+<script src="../../../ui/worddark-ui.js"></script>
+<script src="../../../contracts/identity.js"></script><script src="../../../contracts/access.js"></script><script src="../../../security/security-manager.js"></script>
+<script src="../../../contracts/operation.js"></script><script src="../../../contracts/message.js"></script><script src="../../../contracts/request.js"></script><script src="../../../contracts/receipt.js"></script><script src="../../../contracts/route.js"></script><script src="../../../contracts/environment.js"></script>
+<script src="../../../core/operation-engine.js?v=20260930-2"></script><script src="../../../core/environment-guard.js"></script><script src="../../../core/road.js"></script><script src="../../../core/communication.js?v=20260930-3"></script><script src="../../../core/operation-registry.js?v=20260930-2"></script>
+<script src="../../../security/account-manager.js"></script><script src="../../../core/world-runtime.js?v=20260930-2"></script>
+<script src="../../../library/local-library.js"></script><script src="../../../library/central-library.js"></script>
+<script src="../../../sky/darkfactory/core/request.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/service-registry.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/production-validator.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/production-pipeline.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/content-publication-executor.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/factory.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/operation-bridge.js?v=20260929-2"></script>
+
+<script>
+(() => {
+  const $=id=>document.getElementById(id);
+  try {
+    const serviceRegistry=new DarkFactoryServiceRegistry();
+    const contentExecutor=new DarkFactoryContentExecutor();
+    serviceRegistry.register({serviceId:"DF-SERVICE-CONTENT-PRODUCE",name:"Content Production",type:"content.produce",status:"READY",executor:contentExecutor});
+    const pipeline=new DarkFactoryProductionPipeline({registry:serviceRegistry,validator:new DarkFactoryProductionValidator()});
+    const factory=new DarkFactory({registry:serviceRegistry,pipeline});
+
+    const security=new WordDarkSecurityManager();
+    security.registerIdentity(new WordDarkIdentity({identityId:"SC-001",type:"UNIT",parentId:"world/earth/juice-country",metadata:{name:"SucoCast"}}));
+    security.grant(new WordDarkAccessRule({identityId:"SC-001",capability:"content.produce",action:"request",environment:"TEST",scope:"world/sky/darkfactory"}));
+
+    const road=new WordDarkRoad();
+    road.registerRoute(new WordDarkRoute({routeId:"ROUTE-SUCOCAST-DF-PRODUCE",origin:"world/earth/juice-country/sucocast",destination:"world/sky/darkfactory",service:"content.produce"}));
+    road.registerRoute(new WordDarkRoute({routeId:"ROUTE-DF-SUCOCAST-PRODUCE",origin:"world/sky/darkfactory",destination:"world/earth/juice-country/sucocast",service:"content.produce"}));
+
+    const localLibrary=new WordDarkLocalLibrary({libraryId:"LIB-SC-LOCAL",ownerId:"world/earth/juice-country/sucocast"});
+    const centralLibrary=new WordDarkCentralLibrary({libraryId:"WORDDARK-CENTRAL-LIBRARY"});
+    const registry=new WordDarkOperationRegistry({localLibrary,centralLibrary});
+    const guard=new WordDarkEnvironmentGuard({environments:{TEST:new WordDarkEnvironment({name:"TEST"}),PROD:new WordDarkEnvironment({name:"PROD"})}});
+    const communication=new WordDarkCommunication({road,registry});
+    const bridge=new DarkFactoryOperationBridge({factory,communication});
+    const engine=new WordDarkOperationEngine({
+      security,environmentGuard:guard,registry,
+      route:operation=>bridge.route(operation),
+      execute:operation=>bridge.execute(operation),
+      record:()=>{}
+    });
+    const accountManager=new WordDarkAccountManager({security});
+    const runtime=WordDarkWorldRuntime.compose({accountManager,security,environmentGuard:guard,road,registry,operationEngine:engine});
+    runtime.assertReady();
+
+    $("runtimeStatus").textContent=runtime.getHealth().status;
+    $("factoryStatus").textContent=factory.getStatus().status;
+
+    $("request").addEventListener("click",()=>{
+      try {
+        const title=$("title").value.trim(), type=$("type").value, requirements=$("requirements").value.trim();
+        if(!title || !requirements) throw new Error("Título e especificações são obrigatórios.");
+        const operation=runtime.createOperation({
+          requesterId:"SC-001",
+          originId:"world/earth/juice-country/sucocast",
+          destinationId:"world/sky/darkfactory",
+          operationType:"content.produce",
+          environment:"TEST",
+          payload:{
+            identityId:"SC-001",capability:"content.produce",action:"request",scope:"world/sky/darkfactory",
+            task:"Produzir conteúdo solicitado pelo SucoCast.",
+            contentId:"CONTENT-SC-"+Date.now().toString(36).toUpperCase(),
+            title,type,requirements
+          }
+        });
+        $("operationId").textContent=operation.operationId;
+        $("operationState").textContent="EXECUTANDO";
+        $("resultTitle").textContent="Processando solicitação…";
+        const result=runtime.runOperation(operation);
+        $("operationState").textContent=result.status;
+        $("resultTitle").textContent=result.status==="COMPLETED" ? "Produção aceita" : "Operação encerrada: "+result.status;
+        $("operationResult").textContent=JSON.stringify(result.toJSON(),null,2);
+        const status=communication.getStatus();
+        $("messageCount").textContent=status.messages;
+        $("receiptCount").textContent=status.receipts;
+        $("pendingCount").textContent=status.pending;
+        $("result").textContent=JSON.stringify({
+          status:result.status,
+          operationId:result.operationId,
+          origin:result.originId,
+          destination:result.destinationId,
+          service:result.operationType,
+          title,type,requirements,
+          note:"Execução integrada pelo Runtime/Operation Engine. Destino de publicação permanece responsabilidade do SucoCast."
+        },null,2);
+      } catch(error) {
+        $("operationState").textContent="FAILED";
+        $("resultTitle").textContent="Falha na operação";
+        $("operationResult").textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);
+        $("result").textContent=JSON.stringify({status:"FAILED",error:error.message},null,2);
+      }
+    });
+  } catch(error) {
+    $("runtimeStatus").textContent="DEGRADED";
+    $("runtimeStatus").className="wd-badge danger";
+    $("operationState").textContent="ERRO DE INICIALIZAÇÃO";
+    $("operationResult").textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);
+  }
+})();
+</script>
+</body></html>

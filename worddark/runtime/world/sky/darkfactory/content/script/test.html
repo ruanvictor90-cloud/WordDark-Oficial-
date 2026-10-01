@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🧪 Teste 02 · Roteiro — Dark Factory</title>
+<link rel="stylesheet" href="../../../../ui/worddark-ui.css">
+<style>
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+textarea{width:100%;min-height:130px;box-sizing:border-box}
+pre{white-space:pre-wrap;line-height:1.45;max-height:520px;overflow:auto}
+.test{border-left:4px solid;padding:12px;margin:10px 0}
+.pass{border-color:#2e7d32}.fail{border-color:#c62828}.pending{border-color:#777}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="wd-body">
+<div class="wd-shell">
+<aside class="wd-sidebar">
+<div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
+<nav class="wd-nav">
+<a href="../../../../../">◈ WordDark</a><a href="../../../">☁ Céu</a><a href="../../">⚙ Dark Factory</a><a href="./">✍️ Roteiro</a>
+</nav>
+<div class="wd-footer">DF-TEST-SCRIPT-0.1 · Bancada isolada</div>
+</aside>
+<main class="wd-main">
+<div class="wd-top">
+<div><div class="wd-eyebrow">Dark Factory · 02 · Bancada</div><h1 class="wd-title">🧪 Teste de Roteiro</h1>
+<p class="wd-sub">Ambiente de teste do setor 02. Nada aqui publica conteúdo.</p></div>
+</div>
+
+<section class="wd-card full">
+<div class="wd-eyebrow">Fluxo de teste</div>
+<div class="wd-flow"><span>ENTRADA</span><i class="wd-arrow">→</i><span>ADAPTER</span><i class="wd-arrow">→</i><span>ROTEIRO</span><i class="wd-arrow">→</i><span>RESULTADO</span><i class="wd-arrow">→</i><span>LEARNING</span></div>
+</section>
+
+<section class="grid">
+<article class="wd-card">
+<div class="wd-eyebrow">Teste manual</div>
+<h2>Entrada</h2>
+<label>Briefing</label>
+<textarea id="brief">anime, games, cultura geek</textarea>
+<label>Formato</label>
+<select id="format"><option>SHORT</option><option>REEL</option><option>TIKTOK</option><option>YOUTUBE</option></select>
+<div class="wd-actions">
+<button class="wd-btn primary" id="run">Executar teste</button>
+<button class="wd-btn" id="clear">Limpar</button>
+</div>
+</article>
+<article class="wd-card">
+<div class="wd-eyebrow">Resultado</div><h2 id="status">AGUARDANDO</h2>
+<pre id="output">Nenhum teste executado.</pre>
+</article>
+</section>
+
+<section class="wd-card full">
+<div class="wd-eyebrow">Casos rápidos</div>
+<div id="cases"></div>
+</section>
+
+<section class="wd-card full">
+<div class="wd-eyebrow">Critérios da bancada</div>
+<div class="wd-list">
+<div class="wd-item"><span>Briefing válido</span><span class="wd-badge ok">READY</span></div>
+<div class="wd-item"><span>Briefing vazio</span><span class="wd-badge">FAILED</span></div>
+<div class="wd-item"><span>Formatos</span><span class="wd-badge ok">4</span></div>
+<div class="wd-item"><span>Ferramenta externa</span><span class="wd-badge">NÃO CONECTADA</span></div>
+<div class="wd-item"><span>Publicação</span><span class="wd-badge">FORA DA FÁBRICA</span></div>
+</div>
+</section>
+</main></div>
+
+<script src="../../../../ui/worddark-ui.js"></script>
+<script src="./adapter.js"></script>
+<script src="./sector.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function execute(brief,format,label){
+ const r=WordDarkContentScript.run({operationId:"OP-SCRIPT-TEST-"+Date.now(),brief,format,audience:"público de teste",brand:"SucoGeek",toolPolicy:"HYBRID"});
+ $("status").textContent=r.status;
+ $("output").textContent=JSON.stringify(r,null,2);
+ return r;
+}
+$("run").onclick=()=>execute($("brief").value,$("format").value,"manual");
+$("clear").onclick=()=>{$("status").textContent="AGUARDANDO";$("output").textContent="Nenhum teste executado.";};
+
+const cases=[
+ {name:"01 · Sucesso básico",brief:"anime, games, cultura geek",format:"SHORT",expect:r=>r.success&&r.status==="READY"},
+ {name:"02 · Formato REEL",brief:"curiosidades sobre jogos clássicos",format:"REEL",expect:r=>r.success&&r.result.metadata.format==="REEL"},
+ {name:"03 · Formato YOUTUBE",brief:"história e evolução dos animes",format:"YOUTUBE",expect:r=>r.success&&r.result.metadata.format==="YOUTUBE"},
+ {name:"04 · Entrada inválida",brief:"",format:"SHORT",expect:r=>!r.success&&r.reason==="INTELLIGENCE_OR_BRIEF_REQUIRED"}
+];
+const box=$("cases");
+cases.forEach(c=>{
+ const row=document.createElement("div"); row.className="test pending";
+ row.innerHTML="<strong>"+c.name+"</strong><div id='case-"+c.name.slice(0,2)+"'>Aguardando</div>";
+ const btn=document.createElement("button"); btn.className="wd-btn"; btn.textContent="Executar";
+ btn.onclick=()=>{
+   const r=execute(c.brief,c.format,c.name);
+   const ok=c.expect(r);
+   row.className="test "+(ok?"pass":"fail");
+   row.querySelector("div").textContent=ok?"PASS · comportamento esperado":"FAIL · comportamento inesperado";
+ };
+ row.appendChild(btn); box.appendChild(row);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordDark — Mundo</title>
+<link rel="stylesheet" href="world/ui/worddark-ui.css">
+</head>
+<body class="wd-body">
+<div class="wd-shell">
+  <aside class="wd-sidebar">
+    <div class="wd-brand">
+      <div class="wd-mark">◈</div>
+      <div><strong>WORDDARK</strong><small>Conectando mundos</small></div>
+    </div>
+    <nav class="wd-nav" aria-label="Navegação principal">
+      <a class="active" href="./">◈ Visão geral</a>
+      <a href="world/sky/">☁ Céu</a>
+      <a href="world/earth/">◉ Terra</a>
+      <a href="world/sky/darkfactory/">⚙ Dark Factory</a>
+      <a href="world/earth/juice-country/sucocast/">🧃 SucoCast</a>
+      <a href="world/core/">◎ Operações</a>
+    </nav>
+    <div class="wd-footer">Marco Zero · UI Core v0.1</div>
+  </aside>
+
+  <main class="wd-main">
+    <div class="wd-top">
+      <div>
+        <div class="wd-eyebrow">WordDark · Mundo</div>
+        <h1 class="wd-title">Conectando mundos.</h1>
+        <p class="wd-sub">Uma interface única para visualizar o ecossistema, acompanhar operações e acessar cada setor sem perder a identidade do mundo.</p>
+      </div>
+      <div class="wd-actions">
+        <button class="wd-btn" data-wd-theme type="button">Modo claro</button>
+        <button class="wd-btn danger" type="button" title="Ação visual de teste — ainda não aciona operações reais">🚨 Socorro Deus</button>
+      </div>
+    </div>
+
+    <section class="wd-grid" aria-label="Visão geral do WordDark">
+      <article class="wd-card">
+        <div class="wd-eyebrow">Camada</div><h2>☁ Céu</h2>
+        <p class="wd-muted">Infraestrutura, serviços e execução compartilhada.</p>
+        <a class="wd-btn primary" href="world/sky/" style="display:inline-block;text-decoration:none;margin-top:10px">Entrar no Céu →</a>
+      </article>
+      <article class="wd-card">
+        <div class="wd-eyebrow">Camada</div><h2>◉ Terra</h2>
+        <p class="wd-muted">Países, estados, cidades e operações que geram necessidades.</p>
+        <a class="wd-btn primary" href="world/earth/" style="display:inline-block;text-decoration:none;margin-top:10px">Entrar na Terra →</a>
+      </article>
+      <article class="wd-card">
+        <div class="wd-eyebrow">Sistema</div><h2>Online</h2>
+        <div class="wd-stat">Marco Zero</div>
+        <span class="wd-badge ok">● Interface ativa</span>
+      </article>
+
+      <article class="wd-card wide">
+        <div class="wd-eyebrow">Arquitetura visual</div>
+        <h2>Um fluxo, várias funções.</h2>
+        <div class="wd-flow" aria-label="Fluxo operacional">
+          <span>Identidade</span><i class="wd-arrow">→</i><span>Acesso</span><i class="wd-arrow">→</i>
+          <span>Operação</span><i class="wd-arrow">→</i><span>Rodovia</span><i class="wd-arrow">→</i>
+          <span>Execução</span><i class="wd-arrow">→</i><span>Resultado</span>
+        </div>
+      </article>
+      <article class="wd-card">
+        <div class="wd-eyebrow">Estado</div>
+        <div class="wd-list">
+          <div class="wd-item"><span>Céu</span><span class="wd-badge ok">ONLINE</span></div>
+          <div class="wd-item"><span>Terra</span><span class="wd-badge ok">ONLINE</span></div>
+          <div class="wd-item"><span>Rodovia</span><span class="wd-badge warn">MVP</span></div>
+        </div>
+      </article>
+
+      <article class="wd-card full">
+        <div class="wd-sector">
+          <div><div class="wd-eyebrow">Setores</div><h2>Interfaces em construção</h2></div>
+          <span class="wd-badge">mesma identidade · funções específicas</span>
+        </div>
+        <div class="wd-grid" style="margin-top:14px">
+          <a class="wd-card" href="world/sky/darkfactory/" style="grid-column:span 4;text-decoration:none;color:inherit">
+            <h3>🏭 Dark Factory</h3><small class="wd-muted">Produção · Validação · Execução</small>
+          </a>
+          <a class="wd-card" href="world/earth/juice-country/sucocast/" style="grid-column:span 4;text-decoration:none;color:inherit">
+            <h3>🧃 SucoCast</h3><small class="wd-muted">Conteúdo · Produção · Distribuição</small>
+          </a>
+          <a class="wd-card" href="world/core/" style="grid-column:span 4;text-decoration:none;color:inherit">
+            <h3>◎ Operações</h3><small class="wd-muted">Identidade · Acesso · Registro</small>
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <footer class="wd-footer">WORDDARK · “Disciplina é o que transforma tecnologia em liberdade.” · Dark/Light compartilham a mesma identidade.</footer>
+  </main>
+</div>
+<script src="world/ui/worddark-ui.js"></script>
+</body>
+</html>

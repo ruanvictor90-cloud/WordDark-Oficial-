@@ -1,0 +1,11 @@
+{
+  "name":"Finanças FN-01",
+  "short_name":"Finanças",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#090b10",
+  "theme_color":"#090b10",
+  "lang":"pt-BR",
+  "description":"Ilha Financeiro FN-01 • WordDark"
+}

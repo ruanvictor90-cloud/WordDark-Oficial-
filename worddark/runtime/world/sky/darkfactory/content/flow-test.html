@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fluxo Modular — Fábrica de Criação</title>
+<link rel="stylesheet" href="../../../ui/worddark-ui.css">
+<style>body{font-family:system-ui,sans-serif}.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.flow span{padding:8px 10px;border:1px solid currentColor;border-radius:8px;font-size:12px}pre{white-space:pre-wrap;word-break:break-word}</style>
+</head>
+<body class="wd-body"><div class="wd-shell">
+<aside class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
+<nav class="wd-nav"><a href="./">🎬 Criação</a><a class="active" href="./flow-test.html">🧪 Fluxo base</a></nav>
+<div class="wd-footer">CONTENT-FLOW-0.1</div></aside>
+<main class="wd-main"><div class="wd-eyebrow">Dark Factory · integração</div><h1 class="wd-title">🧪 Fluxo 01 → 04 + Reentrada</h1><p class="wd-sub">Teste do circuito encadeado com um único operationId, pacotes preservados e reentrada pelo módulo que falhar.</p>
+<section class="wd-card full"><div class="wd-eyebrow">Circuito</div><div class="flow"><span>BRIEFING</span>→<span>🧠 INTELIGÊNCIA</span>→<span>✍️ ROTEIRO</span>→<span>🎨 IDENTIDADE</span>→<span>🖼️ IMAGEM</span>→<span>REENTRADA: módulo com falha</span></div></section>
+<section class="wd-card full"><label class="wd-eyebrow" for="brief">Briefing</label><textarea id="brief" class="wd-input" rows="4">Criar conteúdo sobre anime, games e cultura geek para jovens adultos.</textarea><div class="wd-actions"><button id="run" class="wd-btn primary">Executar fluxo completo</button><button id="clear" class="wd-btn">Limpar</button></div></section>
+<section class="wd-card full"><div class="wd-eyebrow">Resultado</div><div id="status" class="wd-badge">AGUARDANDO</div><pre id="output">Nenhuma execução realizada.</pre></section>
+</main></div>
+<script src="../../../ui/worddark-ui.js"></script>
+<script src="./intelligence/adapter.js"></script><script src="./intelligence/sector.js"></script>
+<script src="./script/adapter.js"></script><script src="./script/sector.js"></script>
+<script src="./identity/adapter.js"></script><script src="./identity/sector.js"></script>
+<script src="./image/adapter.js"></script><script src="./image/sector.js"></script>
+<script src="./orchestrator.js"></script>
+<script>
+(function(){const $=id=>document.getElementById(id);function run(){const result=window.WordDarkContentFactoryOrchestrator.run({operationId:"OP-CONTENT-UI-"+Date.now().toString(36).toUpperCase(),brief:$("brief").value,brand:"SucoGeek",audience:"jovem adulto",format:"SHORT",toolPolicy:"HYBRID"});$("status").textContent=result.status;$("output").textContent=JSON.stringify(result,null,2)}$("run").addEventListener("click",run);$("clear").addEventListener("click",function(){$("status").textContent="AGUARDANDO";$("output").textContent="Nenhuma execução realizada."})})();
+</script></body></html>
