@@ -31,10 +31,13 @@ export class Cidade {
     this.id=cityId||id("CIDADE"); this.name=name; this.type="CIDADE"; this.layer="TERRA";
     this.countryId=countryId||null; this.stateId=stateId||null; this.responsibility=responsibility;
     this.gateId=gateId||`${this.id}-GATE`; this.bairro=bairro||new Bairro({id:`${this.id}-BAIRRO`,name:"Bairro",stateId:this.stateId,cityId:this.id});
-    this.operations=new Map(); this.results=new Map(); this.events=[]; this.runtime=null;
+    this.operations=new Map(); this.results=new Map(); this.managedProfiles=new Set(); this.events=[]; this.runtime=null;
   }
   attachRuntime(runtime){this.runtime=runtime;return this;}
+  attachProfile(profileId){if(!profileId) throw new Error("PROFILE_ID_REQUIRED");this.managedProfiles.add(profileId);return profileId;}
+  listManagedProfiles(){return [...this.managedProfiles];}
   receiveNeed(need){return this.bairro.addNeed(need);}
+  createRequirement(requirement){return this.receiveNeed(requirement);}
 
   createOperationFromNeed(needId) {
     const need=this.bairro.needs.find(x=>x.id===needId);
@@ -78,27 +81,52 @@ export class Cidade {
     return result;
   }
   record(type,data={}){const event={id:id("CITY-EVT"),type,data:structuredClone(data),at:new Date().toISOString()};this.events.push(event);return event;}
-  status(){return {id:this.id,name:this.name,type:this.type,layer:this.layer,countryId:this.countryId,stateId:this.stateId,gateId:this.gateId,bairro:this.bairro.status(),operations:this.operations.size,results:this.results.size,events:this.events.length};}
+  status(){return {id:this.id,name:this.name,type:this.type,layer:this.layer,countryId:this.countryId,stateId:this.stateId,gateId:this.gateId,managedProfiles:this.managedProfiles.size,bairro:this.bairro.status(),operations:this.operations.size,results:this.results.size,events:this.events.length};}
 }
 
 export class Estado {
   constructor({id:stateId,name="Estado",countryId,city,identity,description="",status="ACTIVE"}={}) {
     this.id=stateId||id("ESTADO"); this.name=name; this.type="ESTADO"; this.layer="TERRA";
-    this.countryId=countryId||null; this.identity=identity||this.id; this.description=description; this.stateStatus=status;
+    this.countryId=countryId||null; this.identity=identity||this.id; this.description=description; this.stateStatus=status; this.contractType="CHANNEL";
     this.city=city||null; this.events=[];
   }
   registerCity(city){if(!city?.id) throw new Error("CITY_INVALID"); this.city=city; return city;}
   record(type,data={}){const event={id:id("STATE-EVT"),type,data:structuredClone(data),at:new Date().toISOString()};this.events.push(event);return event;}
-  statusData(){return {id:this.id,name:this.name,type:this.type,countryId:this.countryId,identity:this.identity,description:this.description,city:this.city?.status?.()||null,status:this.stateStatus};}
+  statusData(){return {id:this.id,name:this.name,type:this.type,countryId:this.countryId,identity:this.identity,description:this.description,contractType:this.contractType,city:this.city?.status?.()||null,status:this.stateStatus};}
   status(){return this.statusData();}
 }
 
 export class Pais {
-  constructor({id:countryId,name="País",description=""}={}) {this.id=countryId||id("PAIS");this.name=name;this.type="PAIS";this.layer="TERRA";this.description=description;this.states=new Map();this.events=[];}
+  constructor({id:countryId,name="País",description=""}={}) {this.id=countryId||id("PAIS");this.name=name;this.type="PAIS";this.layer="TERRA";this.description=description;this.states=new Map();this.profiles=new Map();this.events=[];}
   registerState(state){if(!state?.id) throw new Error("STATE_INVALID");if(state.countryId!==this.id) state.countryId=this.id;this.states.set(state.id,state);return state;}
   getState(stateId){return this.states.get(stateId)||null;}
+  registerProfile(profile={}) {
+    if(!profile.id) throw new Error("PROFILE_ID_REQUIRED");
+    if(!profile.network) throw new Error("PROFILE_NETWORK_REQUIRED");
+    if(profile.countryId && profile.countryId!==this.id) throw new Error("PROFILE_COUNTRY_INVALID");
+    const state=this.getState(profile.stateId);
+    if(!state) throw new Error("PROFILE_STATE_NOT_FOUND");
+    if(profile.managerCityId && profile.managerCityId!==state.city?.id) throw new Error("PROFILE_MANAGER_CITY_INVALID");
+    const entry={
+      id:profile.id,
+      network:profile.network,
+      handle:profile.handle||null,
+      displayName:profile.displayName||profile.handle||profile.id,
+      status:profile.status||"CONNECTED",
+      countryId:this.id,
+      stateId:state.id,
+      managerCityId:profile.managerCityId||state.city?.id||null,
+      config:structuredClone(profile.config||{})
+    };
+    this.profiles.set(entry.id,entry);
+    state.city?.attachProfile?.(entry.id);
+    this.record("PROFILE_CONNECTED",entry);
+    return entry;
+  }
+  getProfile(profileId){return this.profiles.get(profileId)||null;}
+  listProfiles(){return [...this.profiles.values()].map(structuredClone);}
   record(type,data={}){const event={id:id("COUNTRY-EVT"),type,data:structuredClone(data),at:new Date().toISOString()};this.events.push(event);return event;}
-  status(){return {id:this.id,name:this.name,type:this.type,layer:this.layer,states:[...this.states.values()].map(x=>x.status())};}
+  status(){return {id:this.id,name:this.name,type:this.type,layer:this.layer,states:[...this.states.values()].map(x=>x.status()),profiles:this.profiles.size};}
 }
 
 export class Terra {
