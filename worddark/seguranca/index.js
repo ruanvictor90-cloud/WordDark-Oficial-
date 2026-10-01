@@ -1,1 +1,90 @@
-export class Security {constructor(){this.identities=new Map();this.permissions=new Map();}register(identity){if(!identity?.id)throw new Error("IDENTITY_REQUIRED");this.identities.set(identity.id,identity);return identity;}grant(subject,capability){if(!this.permissions.has(subject))this.permissions.set(subject,new Set());this.permissions.get(subject).add(capability);}authorize(subject,capability){return !!this.permissions.get(subject)?.has(capability);}}
+export class Security {
+  constructor({ audit = null } = {}) {
+    this.identities = new Map();
+    this.rules = [];
+    this.audit = audit;
+  }
+
+  register(identity) {
+    if (!identity?.id) throw new Error("IDENTITY_REQUIRED");
+    if (this.identities.has(identity.id)) throw new Error("IDENTITY_ALREADY_REGISTERED");
+    this.identities.set(identity.id, structuredClone(identity));
+    this._audit("IDENTITY_REGISTERED", { id: identity.id });
+    return structuredClone(identity);
+  }
+
+  grant(subjectId, capability, {
+    action = "REQUEST",
+    resourceId = "*",
+    environment = "TEST"
+  } = {}) {
+    if (!subjectId || !capability) throw new Error("SECURITY_RULE_FIELDS_REQUIRED");
+    if (!["TEST", "PROD", "*"].includes(environment)) throw new Error("INVALID_ENVIRONMENT");
+
+    const rule = {
+      subjectId, capability, action, resourceId, environment,
+      createdAt: new Date().toISOString()
+    };
+    this.rules.push(rule);
+    this._audit("PERMISSION_GRANTED", rule);
+    return structuredClone(rule);
+  }
+
+  revoke({ subjectId, capability, action = "REQUEST", resourceId = "*" } = {}) {
+    const before = this.rules.length;
+    this.rules = this.rules.filter(rule =>
+      !(rule.subjectId === subjectId &&
+        rule.capability === capability &&
+        rule.action === action &&
+        rule.resourceId === resourceId)
+    );
+    const changed = before !== this.rules.length;
+    if (changed) this._audit("PERMISSION_REVOKED", { subjectId, capability, action, resourceId });
+    return changed;
+  }
+
+  authorize({
+    subjectId,
+    capability,
+    action = "REQUEST",
+    resourceId = "*",
+    environment = "TEST"
+  } = {}) {
+    const identity = this.identities.get(subjectId);
+    let allowed = false;
+    let reason = "ACCESS_DENIED";
+
+    if (!identity) reason = "IDENTITY_NOT_FOUND";
+    else if (identity.status && identity.status !== "ACTIVE") reason = "IDENTITY_NOT_ACTIVE";
+    else if (!["TEST", "PROD"].includes(environment)) reason = "INVALID_ENVIRONMENT";
+    else {
+      allowed = this.rules.some(rule =>
+        rule.subjectId === subjectId &&
+        rule.capability === capability &&
+        rule.action === action &&
+        (rule.resourceId === "*" || rule.resourceId === resourceId) &&
+        (rule.environment === environment || rule.environment === "*")
+      );
+      reason = allowed ? "AUTHORIZED" : "ACCESS_DENIED";
+    }
+
+    const decision = {
+      allowed,
+      reason,
+      reference: "AUTH-" + Date.now().toString(36).toUpperCase() + "-" +
+        Math.random().toString(36).slice(2, 6).toUpperCase()
+    };
+    this._audit("AUTHORIZATION_DECISION", {
+      subjectId, capability, action, resourceId, environment, ...decision
+    });
+    return decision;
+  }
+
+  listIdentities() { return [...this.identities.values()].map(structuredClone); }
+  listRules() { return this.rules.map(structuredClone); }
+  getAudit() { return this.audit ? this.audit.list() : []; }
+
+  _audit(type, data) {
+    if (this.audit?.record) this.audit.record(type, data);
+  }
+}
