@@ -1,0 +1,1 @@
+import assert from "node:assert/strict";import {DarkFactory} from "./factory.js";const f=new DarkFactory();f.registerExecutor({id:"TEST",handler:()=>({success:true,result:"ok"})});const r=f.handle({id:"OP",service:"TEST",payload:{}});assert.equal(r.success,true);console.log("dark-factory OK");
