@@ -18,6 +18,7 @@ import { OperationDiagnostics } from "./core-central/diagnostics.js";
 import { OperationRegistry } from "./core-central/operation-registry.js";
 import { CommunicationBus } from "./core-central/communication.js";
 import { IntegrationRegistry } from "./core-central/integrations.js";
+import { createTerra } from "../terra/index.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -37,6 +38,7 @@ export function createWordDarkWorld(){
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry});
  const integrations=new IntegrationRegistry({audit});
+ const {terra,paisSuco}=createTerra({runtime});
  const creation=createWorldCreation({runtime,library,security});
  central.creation=creation;
 
@@ -56,9 +58,9 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"MARKETING-GATE",ownerId:"MARKETING",layer:"CEU"});
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
-  runtime,central,creation,factory,marketing,library,localLibrary,security,finance,
+  runtime,central,creation,factory,marketing,terra,paisSuco,library,localLibrary,security,finance,
   operationRegistry,communication,integrations,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
-export function worldStatus(world){return {runtime:world.runtime.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status()};}
+export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status()};}
