@@ -61,7 +61,7 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
   runtime,central,creation,factory,marketing,terra,paisSuco,channelContract,library,localLibrary,security,finance,
-  operationRegistry,communication,integrations,
+  operationRegistry,communication,integrations,accountManager,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
