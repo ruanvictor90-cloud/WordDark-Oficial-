@@ -1,4 +1,5 @@
 import { id } from "../../worddark/core-central/id.js";
+import { REQUIREMENT_TYPES, PROFILE_STATUS } from "../../worddark/core-central/channel-contract.js";
 
 export class Bairro {
   constructor({id: bairroId, name="Bairro", stateId, cityId, responsibility="NEEDS_MANAGEMENT"}={}) {
@@ -11,7 +12,7 @@ export class Bairro {
     if(!need.requester?.id) throw new Error("NEED_REQUESTER_REQUIRED");
     if(need.requester.type!=="SOCIAL_CHANNEL") throw new Error("NEED_REQUESTER_TYPE_INVALID");
     if(!need.requester.network) throw new Error("NEED_NETWORK_REQUIRED");
-    if(!["IMAGE","REEL","VIDEO"].includes(need.type)) throw new Error("NEED_CONTENT_TYPE_INVALID");
+    if(!REQUIREMENT_TYPES.includes(need.type)) throw new Error("NEED_CONTENT_TYPE_INVALID");
     if(!need.description) throw new Error("NEED_DESCRIPTION_REQUIRED");
     const entry={id:id("NEED"),type:need.type,status:"PENDING",createdAt:new Date().toISOString(),requester:structuredClone(need.requester),description:need.description,priority:need.priority||"NORMAL",data:structuredClone(need.data||{})};
     this.needs.push(entry); this.record("NEED_CREATED",entry); return entry;
