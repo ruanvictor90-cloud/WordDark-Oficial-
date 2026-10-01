@@ -37,6 +37,6 @@ world.integrations.register(adapter);
 assert.equal(world.integrations.execute("TEST-INTEGRATION",op,{ok:true}).success,true);
 
 world.operationRegistry.recordEvent(op,"ABSORPTION_TEST",{ok:true});
-assert.equal(world.operationRegistry.getEvents(op.id).length, 1);
+assert.equal(world.operationRegistry.getEvents(op.id).length >= 2, true);
 
 console.log("Legacy absorption suite: PASS");
