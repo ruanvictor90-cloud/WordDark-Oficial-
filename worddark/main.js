@@ -19,9 +19,11 @@ import { OperationRegistry } from "./core-central/operation-registry.js";
 import { CommunicationBus } from "./core-central/communication.js";
 import { IntegrationRegistry } from "./core-central/integrations.js";
 import { createTerra } from "../terra/index.js";
+import { ChannelOperationContract } from "./core-central/channel-contract.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
+ const channelContract=new ChannelOperationContract({id:"CHANNEL-OPERATION-CONTRACT",name:"Contrato de Operação de Canais"});
  const runtime=new WordDarkRuntime({central});
  const library=new CentralLibrary();
  const audit=new AuditLog();
@@ -58,7 +60,7 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"MARKETING-GATE",ownerId:"MARKETING",layer:"CEU"});
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
-  runtime,central,creation,factory,marketing,terra,paisSuco,library,localLibrary,security,finance,
+  runtime,central,creation,factory,marketing,terra,paisSuco,channelContract,library,localLibrary,security,finance,
   operationRegistry,communication,integrations,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
