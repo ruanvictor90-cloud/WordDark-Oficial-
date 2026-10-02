@@ -65,6 +65,14 @@ export class ContentLifecycle {
     return structuredClone(item);
   }
 
+  routeToFactory(operationId,{reason=null,mode="EDIT"}={}) {
+    const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    const route=mode==="RESTRUCTURE"?"FACTORY_RESTRUCTURE":mode==="REDO"?"FACTORY_REDO":"FACTORY_EDIT";
+    item.history.push({id:id("CONTENT-FACTORY-ROUTE"),type:route,reason,at:new Date().toISOString()});
+    item.outcome=mode==="REDO"?CONTENT_OUTCOME.REDO:mode==="RESTRUCTURE"?CONTENT_OUTCOME.NEEDS_RESTRUCTURE:CONTENT_OUTCOME.NEEDS_EDIT;
+    this.audit?.record?.("CONTENT_RETURNED_TO_FACTORY",{operationId,route,reason});return structuredClone(item);
+  }
+
   redo(operationId,{reason=null}={}) {
     const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
     item.revision+=1;item.outcome=CONTENT_OUTCOME.REDO;
