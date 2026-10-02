@@ -5,6 +5,11 @@ const world=createWordDarkWorld();
 assert.equal(world.centralControl.id,"CENTRAL-CONTROL");
 assert.equal(world.centralControl.school.id,"WORLD-SCHOOL");
 assert.equal(world.council.inspectWorldMemory().scope,"WORLD_MEMORY");
+world.council.registerLaw({id:"LAW-001",name:"Lei de Direitos e Segurança",rules:["RESPECT_RIGHTS","NO_HARM"]});
+world.council.registerTerm({id:"TERM-001",name:"Termos Gerais",text:"Termos do mundo"});
+world.council.registerContract({id:"CONTRACT-001",name:"Contrato de Operação",parties:["WORDDARK","SECTOR"]});
+const judgment=world.council.judge({subjectId:"CONTENT-001",lawIds:["LAW-001"],contractIds:["CONTRACT-001"],facts:{type:"CONTENT"}});
+assert.equal(judgment.scope,"JUDICIARY");
 
 // Conselho: observa recorrência e pode propor realocação de setor.
 world.council.addMember({id:"COUNCIL-001",name:"Conselheiro Operacional"});
@@ -22,6 +27,10 @@ assert.equal(analysis.sectorId,"DF-KNOWLEDGE");
 assert.equal(analysis.analyzed.length,1);
 const learned=world.school.learnFromWorld({subject:"TREND",reason:"acontecimento relevante"});
 assert.equal(learned.source,"WORLD_EVENT");
+assert.equal(world.school.externalSources.size,2);
+assert.equal(world.school.searchExternal("WORLD-WEB","tendências",{context:{platform:"TEST"}}).success,false);
+world.school.registerPlatformGuidelines({platform:"TEST",rules:["RULE-1"],evaluationSignals:["RETENTION","POLICY"]});
+assert.equal(world.school.getPlatformGuidelines("TEST").platform,"TEST");
 
 const ready=world.school.prepareContent({title:"Conteúdo pronto",body:"Teste"},{sectorId:"DF-KNOWLEDGE"});
 assert.equal(ready.status,"READY_FOR_HUMAN_AUTHORIZATION");
@@ -57,3 +66,7 @@ const routed=world.contentLifecycle.routeAfterEvaluation("OP-CONTENT-001",{metri
 assert.equal(routed.route,"RESTRUCTURE");
 const release=world.contentLifecycle.routeAfterEvaluation("OP-CONTENT-001",{rightsOk:true,safetyOk:true,metricsOk:true});
 assert.equal(release.route,"WORLD_RELEASE_GATE");
+
+// Resultado parcial = apenas parte dos alvos concluiu; não é o mesmo que resultado mediano.
+const partial=world.contentLifecycle.markPartial("OP-CONTENT-001",{completedTargets:["YOUTUBE"],pendingTargets:["INSTAGRAM"],failedTargets:[],reason:"alvos em estados diferentes"});
+assert.equal(partial.outcome,"PARTIAL");
