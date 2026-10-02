@@ -102,7 +102,13 @@ export class AccountOperationsManager{
     return dispatched;
   }
 
-  listSchedules(){return this.schedules.map(structuredClone);}\n\n  queueStatus(){const slots=this.schedules.flatMap(s=>s.slots);const targets=slots.flatMap(s=>s.targets);return {schedules:this.schedules.length,slots:slots.length,targets:targets.length,completed:targets.filter(x=>x.status==="COMPLETED").length,failed:targets.filter(x=>x.status==="FAILED").length,blocked:targets.filter(x=>x.status==="BLOCKED").length,pending:targets.filter(x=>!["COMPLETED","FAILED","BLOCKED"].includes(x.status)).length};}
+  listSchedules(){return this.schedules.map(structuredClone);}
+
+  queueStatus(){
+    const slots=this.schedules.flatMap(s=>s.slots);
+    const targets=slots.flatMap(s=>s.targets);
+    return {schedules:this.schedules.length,slots:slots.length,targets:targets.length,completed:targets.filter(x=>x.status==="COMPLETED").length,failed:targets.filter(x=>x.status==="FAILED").length,blocked:targets.filter(x=>x.status==="BLOCKED").length,pending:targets.filter(x=>!["COMPLETED","FAILED","BLOCKED"].includes(x.status)).length};
+  }
 
   status(){
     return {id:this.id,name:this.name,role:'ACCOUNT_OPERATIONS_MANAGER',status:this.status,
