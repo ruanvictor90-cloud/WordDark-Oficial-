@@ -46,7 +46,7 @@ export class SectorLibraryManager {
 
   list(sectorId) {
     const library=this.getSector(sectorId);
-    return library?[...library.records.values()].map(structuredClone):[];
+    return library?[...library.records.values()].map(x=>structuredClone(x)):[];
   }
 
   filter(sectorId,{predicate=null,classify=null}={}) {
@@ -78,7 +78,7 @@ export class SectorLibraryManager {
       if(current) library.records.set(record.id,{...current,centralizedAt:new Date().toISOString(),centralRecordId:result.id});
       this.audit?.record?.("LIBRARY_KNOWLEDGE_CONSOLIDATED",{sectorId,recordId:record.id,centralRecordId:result.id});
     }
-    return promoted.map(structuredClone);
+    return promoted.map(x=>structuredClone(x));
   }
 
   status() {
