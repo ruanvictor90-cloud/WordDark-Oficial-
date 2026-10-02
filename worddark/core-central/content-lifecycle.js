@@ -6,7 +6,8 @@ export const CONTENT_OUTCOME=Object.freeze({
   NEEDS_RESTRUCTURE:"NEEDS_RESTRUCTURE",
   FAILED:"FAILED",
   BLOCKED:"BLOCKED",
-  WAITING_HUMAN:"WAITING_HUMAN"
+  WAITING_HUMAN:"WAITING_HUMAN",
+  REDO:"REDO"
 });
 
 export class ContentLifecycle {
@@ -16,11 +17,12 @@ export class ContentLifecycle {
     this.items.set(operationId,item);
     return structuredClone(item);
   }
-  evaluate(operationId,{rightsOk=true,safetyOk=true,metricsOk=true,needsEdit=false,needsRestructure=false,reason=null}={}) {
+  evaluate(operationId,{rightsOk=true,safetyOk=true,metricsOk=true,needsEdit=false,needsRestructure=false,unresolved=false,reason=null}={}) {
     const item=this.items.get(operationId);
     if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
     let outcome="COMPLETED";
-    if(!rightsOk||!safetyOk) outcome=CONTENT_OUTCOME.NEEDS_EDIT;
+    if(unresolved) outcome=CONTENT_OUTCOME.REDO;
+    else if(!rightsOk||!safetyOk) outcome=CONTENT_OUTCOME.NEEDS_EDIT;
     else if(needsRestructure) outcome=CONTENT_OUTCOME.NEEDS_RESTRUCTURE;
     else if(!metricsOk||needsEdit) outcome=CONTENT_OUTCOME.NEEDS_EDIT;
     const entry={id:id("CONTENT-OUTCOME"),outcome,reason,at:new Date().toISOString()};
@@ -42,6 +44,14 @@ export class ContentLifecycle {
     item.outcome=CONTENT_OUTCOME.NEEDS_EDIT;
     item.history.push({id:id("CONTENT-REVISION"),type:"EDIT",revision:item.revision,reason,at:new Date().toISOString()});
     this.audit?.record?.("CONTENT_EDIT_REQUESTED",{operationId,revision:item.revision,reason});
+    return structuredClone(item);
+  }
+  redo(operationId,{reason=null}={}) {
+    const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    item.revision+=1;
+    item.outcome=CONTENT_OUTCOME.REDO;
+    item.history.push({id:id("CONTENT-REVISION"),type:"REDO",revision:item.revision,reason,at:new Date().toISOString()});
+    this.audit?.record?.("CONTENT_REDO_REQUESTED",{operationId,revision:item.revision,reason});
     return structuredClone(item);
   }
   get(operationId){return structuredClone(this.items.get(operationId)||null);}
