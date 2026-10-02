@@ -67,8 +67,10 @@ export function createWordDarkWorld(){
  const governance=new GovernanceSector({audit,sectorLibraries,centralLibrary:library});
  const council=governance.council;
  const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
- school.registerExternalSource({id:"WORLD-WEB",name:"Conhecimento Externo",type:"WEB_SEARCH",status:"AUTHORIZATION_REQUIRED"});
- school.registerExternalSource({id:"WORLD-TRENDS",name:"Sinais de Tendência",type:"TREND_MONITOR",status:"AUTHORIZATION_REQUIRED"});
+ school.registerExternalSource({id:"GOOGLE-SEARCH",name:"Google Search",type:"WEB_SEARCH",providerId:"GOOGLE-SEARCH",status:"AUTHORIZATION_REQUIRED"});
+ school.registerExternalSource({id:"WORLD-TRENDS",name:"Sinais de Tendência",type:"TREND_MONITOR",providerId:"YOUTUBE-DATA",status:"AUTHORIZATION_REQUIRED"});
+ school.registerExternalSource({id:"PLATFORM-RESEARCH",name:"Pesquisa de Plataformas",type:"PLATFORM_RESEARCH",providerId:"TIKTOK-RESEARCH",status:"AUTHORIZATION_REQUIRED"});
+ school.registerExternalSource({id:"NEWS-RSS",name:"Notícias e RSS",type:"NEWS",providerId:"NEWS-RSS",status:"READY"});
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
  const centralControl=new CentralControl({council:governance.council,school,postingLine,automation,audit});
@@ -79,6 +81,15 @@ export function createWordDarkWorld(){
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
  const integrations=new IntegrationRegistry({audit});
  const externalConnections=createExternalConnectionHub({integrationRegistry:integrations,audit});
+ for(const source of [
+  {id:"GOOGLE-SEARCH",name:"Google Search",type:"KNOWLEDGE_SEARCH",status:"AUTHORIZATION_REQUIRED",capabilities:["SEARCH"]},
+  {id:"YOUTUBE-DATA",name:"YouTube Data",type:"PLATFORM_KNOWLEDGE",status:"AUTHORIZATION_REQUIRED",capabilities:["SEARCH","PUBLIC_CONTENT"]},
+  {id:"YOUTUBE-ANALYTICS",name:"YouTube Analytics",type:"WORLD_METRICS",status:"AUTHORIZATION_REQUIRED",capabilities:["METRICS"]},
+  {id:"TIKTOK-RESEARCH",name:"TikTok Research",type:"PLATFORM_KNOWLEDGE",status:"AUTHORIZATION_REQUIRED",capabilities:["SEARCH","PUBLIC_CONTENT"]},
+  {id:"META-GRAPH",name:"Meta Graph",type:"PLATFORM_KNOWLEDGE",status:"AUTHORIZATION_REQUIRED",capabilities:["PUBLIC_CONTENT","METRICS"]},
+  {id:"REDDIT-API",name:"Reddit API",type:"KNOWLEDGE_SEARCH",status:"AUTHORIZATION_REQUIRED",capabilities:["SEARCH","PUBLIC_CONTENT"]},
+  {id:"NEWS-RSS",name:"News / RSS",type:"KNOWLEDGE_SEARCH",status:"READY",capabilities:["SEARCH","PUBLIC_CONTENT"]}
+ ]) externalConnections.registerProvider(source);
  const {terra}=createTerra({runtime});
  const creation=createWorldCreation({runtime,library,security});
  central.creation=creation;
