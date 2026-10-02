@@ -44,7 +44,7 @@ export function createWordDarkWorld(){
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry});
  const integrations=new IntegrationRegistry({audit});
- const {terra,paisSuco}=createTerra({runtime});
+ const {terra}=createTerra({runtime});
  const creation=createWorldCreation({runtime,library,security});
  central.creation=creation;
 
@@ -64,7 +64,7 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"MARKETING-GATE",ownerId:"MARKETING",layer:"CEU"});
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
-  runtime,central,creation,factory,marketing,terra,paisSuco,channelContract,library,localLibrary,security,finance,
+  runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,security,finance,
   operationRegistry,communication,integrations,accountManager,structureClassifier,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
