@@ -48,7 +48,7 @@ assert.equal(world.library.find(x=>x.sourceSector==="TEST-SECTOR").length,1);
 assert.equal(sectorLibraries.list("TEST-SECTOR")[0].centralizedAt!==undefined,true);
 // Ciclo operacional mínimo: Terra -> Rodovia -> Content.Produce -> módulos -> reentrada.
 const productionInput={
-  id:"OP-PRODUCTION-001", type:"CONTENT.PRODUCE", requesterId:"TERRA-TEST", origin:"TERRA-TEST",
+  id:"OP-PRODUCTION-001", type:"REQUEST", requesterId:"TERRA-TEST", origin:"TERRA-TEST",
   destination:"DARK-FACTORY", service:"DARK-FACTORY", gateId:"DARK-FACTORY-GATE",
   payload:{taskType:"CONTENT.PRODUCE",contentId:"CONTENT-TEST-001",title:"Teste de fogo WordDark",requirements:"Vídeo curto"}
 };
@@ -66,7 +66,7 @@ world.runtime.registerCapability({id:"AUDIO",name:"AUDIO",owner:"DARK-FACTORY",l
   return {success:true,result:{executor:"AUDIO",recovered:true}};
 },metadata:{type:"FACTORY_EXECUTOR",factory:"DARK-FACTORY"}});
 const failed=world.runtime.request({
-  id:"OP-PRODUCTION-002", type:"CONTENT.PRODUCE", requesterId:"TERRA-TEST", origin:"TERRA-TEST",
+  id:"OP-PRODUCTION-002", type:"REQUEST", requesterId:"TERRA-TEST", origin:"TERRA-TEST",
   destination:"DARK-FACTORY", service:"DARK-FACTORY", gateId:"DARK-FACTORY-GATE",
   payload:{taskType:"CONTENT.PRODUCE",contentId:"CONTENT-TEST-002",title:"Teste de reentrada",requirements:"Áudio com falha controlada"}
 });
