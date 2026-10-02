@@ -24,7 +24,13 @@ export class WordDarkRuntime {
   const module=this.modules.get(moduleId)||this.capabilities.find(moduleId);
   if(!module)return {success:false,reason:"MODULE_NOT_FOUND",moduleId};
   const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
-  try{return module.handle(operation,{runtime:this,...context})||{success:false,reason:"MODULE_NO_RESULT"};}
+  const owner=module.owner||module.id;
+  const contractId=context.contractId||`EXCHANGE:${operation.origin}:${owner}`;
+  if(!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:owner,operations:[operation.type],capability:moduleId,reversible:true,metadata:{generated:true,module:moduleId}});
+  const contract=this.contractRegistry.validate(operation,{contractId});
+  if(!contract.valid)return {success:false,reason:"MODULE_CONTRACT_INVALID",contract,moduleId};
+  operation.context={...(operation.context||{}),contractId};
+  try{return module.handle(operation,{runtime:this,contractId,...context})||{success:false,reason:"MODULE_NO_RESULT"};}
   catch(error){return {success:false,reason:error.message,moduleId};}
  }
  request(input){
