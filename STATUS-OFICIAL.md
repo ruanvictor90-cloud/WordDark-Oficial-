@@ -7,7 +7,28 @@ Este é o repositório oficial e único de desenvolvimento do mundo WordDark.
 - Legado: preservado separadamente e desativado para desenvolvimento.
 - Financeiro: permanece separado até ser incorporado ao mundo oficial.
 
-## Regra estrutural oficial
+## Regra estrutural oficial — infraestrutura antes da conta
+
+O WordDark não cria País, Estado, Cidade ou Bairro apenas porque uma interface existe. Essas camadas surgem conforme contas, grupos, operações, ambientes e setores realmente conectados exigirem.
+
+A infraestrutura atual é de gestores, portões, rodovias, setores e operações. Contas e operações reais ocupam essa infraestrutura depois da conexão.
+
+### Regra de nascimento
+
+1. Nenhuma conta conectada → somente infraestrutura de conexão.
+2. Uma conta conectada → estrutura mínima; não criar País artificialmente.
+3. Múltiplas contas ou grupo explicitamente criado → País representa o grupo.
+4. Estado representa uma operação.
+5. Cidade representa ambiente/perfil/rede sob gestão.
+6. Bairro representa setor executor.
+
+Exemplo de uma única conta: CONTA → ESTADO/conta conectada → CIDADE/Instagram.
+
+Exemplo após Instagram + YouTube: PAÍS/Ruan → ESTADO/Gestão das Contas → CIDADE/Gestão das Operações → setores correspondentes.
+
+Suco, SucoCast e derivados não são instanciados automaticamente. Só aparecem quando uma conta/grupo conectado criar ou receber essa operação.
+
+## Regra estrutural anterior (referência consolidada)
 
 A estrutura territorial também funciona como classificador de pertencimento. Antes de criar uma nova estrutura, o WordDark deve verificar se a solução já cabe em uma estrutura existente.
 
