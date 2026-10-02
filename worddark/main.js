@@ -67,6 +67,8 @@ export function createWordDarkWorld(){
  const sectorLibraries=new SectorLibraryManager({centralLibrary:library,audit});
  const council=new WorldCouncil({audit,sectorLibraries,centralLibrary:library});
  const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
+ school.registerExternalSource({id:"WORLD-WEB",name:"Conhecimento Externo",type:"WEB_SEARCH",status:"AUTHORIZATION_REQUIRED"});
+ school.registerExternalSource({id:"WORLD-TRENDS",name:"Sinais de Tendência",type:"TREND_MONITOR",status:"AUTHORIZATION_REQUIRED"});
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
  const centralControl=new CentralControl({council,school,postingLine,automation,audit});
