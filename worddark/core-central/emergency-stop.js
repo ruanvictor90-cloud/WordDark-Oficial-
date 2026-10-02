@@ -6,7 +6,7 @@ export class EmergencyStop {
   trigger({operationId,sectorId,requesterId,reason}={}){
     if(!operationId) return this.triggerGlobal({sectorId,requesterId,reason});
     const current=this.stops.get(operationId);
-    if(current?.status!=="RELEASED") return {success:true,status:"ALREADY_STOPPED",stop:structuredClone(current)};
+    if(current?.status==="ACTIVE") return {success:true,status:"ALREADY_STOPPED",stop:structuredClone(current)};
     const stop={id:id("STOP"),operationId,sectorId:sectorId||null,requesterId:requesterId||null,
       reason:reason||"Parada de emergência solicitada.",status:"ACTIVE",createdAt:new Date().toISOString()};
     this.stops.set(operationId,stop); this.audit.push({event:"TRIGGERED",...structuredClone(stop)});
