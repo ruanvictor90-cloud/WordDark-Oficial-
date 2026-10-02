@@ -1,65 +1,61 @@
 import assert from "node:assert/strict";
 import { createWordDarkWorld } from "../worddark/main.js";
+import { Pais, Estado, Cidade, Bairro } from "./core/index.js";
 
 const world=createWordDarkWorld();
-const {paisSuco,terra,runtime}=world;
+const {terra,runtime}=world;
 
-assert.equal(paisSuco.states.size,4);
-assert.ok(paisSuco.getState("SUCOCAST"));
-assert.ok(paisSuco.getState("SUCOGEEK"));
-assert.ok(paisSuco.getState("SUCOCOMED"));
-assert.ok(paisSuco.getState("SUCOEMPREENDIMENTO"));
+// Terra oficial começa dinâmica: não depende de País/SucoCast pré-criados.
+assert.equal(terra.countries.size,0);
 
-for(const state of paisSuco.states.values()){
-  const city=state.city;
-  assert.equal(city.layer,"TERRA");
-  assert.equal(city.bairro.responsibility,"NEEDS_MANAGEMENT");
-  assert.ok(runtime.gates.has(city.gateId));
+// Criamos somente a estrutura necessária para este teste.
+const country=new Pais({id:"TERRA-TEST-COUNTRY",name:"Grupo de Teste"});
+const city=new Cidade({
+  id:"TERRA-TEST-CITY",
+  name:"Ambiente de Teste",
+  countryId:country.id,
+  stateId:"TERRA-TEST-STATE",
+  bairro:new Bairro({id:"TERRA-TEST-BARRIO",stateId:"TERRA-TEST-STATE",cityId:"TERRA-TEST-CITY"})
+});
+const state=new Estado({
+  id:"TERRA-TEST-STATE",
+  name:"Operação de Teste",
+  countryId:country.id,
+  city
+});
+country.registerState(state);
+terra.registerCountry(country);
 
-  const need=city.receiveNeed({
-    type:"IMAGE",
-    requester:{
-      type:"SOCIAL_CHANNEL",
-      id:state.id+"-CHANNEL",
-      network:"INSTAGRAM",
-      channelId:state.id
-    },
-    description:"Preciso de uma imagem para uma publicação.",
-    data:{format:"16:9",theme:"anime"},
-    priority:"NORMAL"
-  });
+assert.equal(terra.countries.size,1);
+assert.ok(country.getState(state.id));
+assert.equal(city.layer,"TERRA");
+assert.ok(runtime.gates.has(city.gateId));
 
-  assert.equal(need.status,"PENDING");
-  assert.equal(need.requester.type,"SOCIAL_CHANNEL");
+const need=city.receiveNeed({
+  type:"IMAGE",
+  requester:{
+    type:"SOCIAL_CHANNEL",
+    id:"TEST-CHANNEL",
+    network:"INSTAGRAM",
+    channelId:"TEST-CHANNEL"
+  },
+  description:"Preciso de uma imagem para uma publicação.",
+  data:{format:"16:9",theme:"teste"},
+  priority:"NORMAL"
+});
 
-  const request=city.createOperationFromNeed(need.id);
-  assert.equal(request.context.needId,need.id);
-  assert.equal(request.context.network,"INSTAGRAM");
-  assert.equal(request.payload.contentType,"IMAGE");
+assert.equal(need.status,"PENDING");
+const request=city.createOperationFromNeed(need.id);
+assert.equal(request.context.needId,need.id);
+assert.equal(request.payload.contentType,"IMAGE");
 
-  const result=city.submit(request);
-
-  assert.equal(result.status,"COMPLETED");
-  assert.equal(city.results.has(request.id),true);
-  assert.equal(city.results.get(request.id).status,"COMPLETED");
-  assert.equal(city.bairro.needs.find(x=>x.id===need.id).status,"IN_OPERATION");
-}
-
-const sucoCast=paisSuco.getState("SUCOCAST").city;
-for(const type of ["REEL","VIDEO"]) {
-  const need=sucoCast.receiveNeed({
-    type,
-    requester:{type:"SOCIAL_CHANNEL",id:"SUCOCAST-CHANNEL",network:"INSTAGRAM",channelId:"SUCOCAST"},
-    description:`Preciso de um ${type} para o canal.`,
-    data:{duration:type==="REEL" ? "00:30" : "01:00"}
-  });
-  const request=sucoCast.createOperationFromNeed(need.id);
-  const result=sucoCast.submit(request);
-  assert.equal(result.status,"COMPLETED");
-}
+const result=city.submit(request);
+assert.equal(result.status,"COMPLETED");
+assert.equal(city.results.has(request.id),true);
+assert.equal(city.results.get(request.id).status,"COMPLETED");
 
 const status=terra.status();
 assert.equal(status.countries.length,1);
-assert.equal(status.countries[0].states.length,4);
+assert.equal(status.countries[0].states.length,1);
 
-console.log("Terra test: OK");
+console.log("Terra dynamic structure test: OK");
