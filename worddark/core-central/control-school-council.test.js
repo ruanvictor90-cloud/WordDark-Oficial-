@@ -40,5 +40,7 @@ const revision=world.contentLifecycle.restructure("OP-CONTENT-001",{reason:"melh
 assert.equal(revision.revision,1);
 const edit=world.contentLifecycle.evaluate("OP-CONTENT-001",{rightsOk:false,reason:"direito precisa revisão"});
 assert.equal(edit.outcome,"NEEDS_EDIT");
+const redo=world.contentLifecycle.evaluate("OP-CONTENT-001",{unresolved:true,reason:"não foi possível solucionar"});
+assert.equal(redo.outcome,"REDO");
 
 console.log("Control + School + Council suite: PASS");
