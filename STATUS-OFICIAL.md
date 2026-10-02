@@ -15,46 +15,16 @@ A infraestrutura atual é de gestores, portões, rodovias, setores e operações
 
 ### Regra de nascimento
 
-1. Nenhuma conta conectada → somente infraestrutura de conexão.
-2. Uma conta conectada → estrutura mínima; não criar País artificialmente.
-3. Múltiplas contas ou grupo explicitamente criado → País representa o grupo.
-4. Estado representa uma operação.
-5. Cidade representa ambiente/perfil/rede sob gestão.
-6. Bairro representa setor executor.
-
-Exemplo de uma única conta: CONTA → ESTADO/conta conectada → CIDADE/Instagram.
-
-Exemplo após Instagram + YouTube: PAÍS/Ruan → ESTADO/Gestão das Contas → CIDADE/Gestão das Operações → setores correspondentes.
+- Nenhuma conta conectada → somente infraestrutura de conexão.
+- Uma conta conectada → estrutura mínima; não criar País artificialmente.
+- Múltiplas contas ou grupo explicitamente criado → País representa o grupo.
+- Estado representa uma operação.
+- Cidade representa ambiente/perfil/rede sob gestão.
+- Bairro representa setor executor.
 
 Suco, SucoCast e derivados não são instanciados automaticamente. Só aparecem quando uma conta/grupo conectado criar ou receber essa operação.
 
-## Regra estrutural anterior (referência consolidada)
-
-A estrutura territorial também funciona como classificador de pertencimento. Antes de criar uma nova estrutura, o WordDark deve verificar se a solução já cabe em uma estrutura existente.
-
-### Terra
-
-```
-PAÍS   → Grupo / Organização
-ESTADO → Operação / Marca
-CIDADE → Rede social / Perfil / Ambiente operacional
-BAIRRO → Setor executor
-```
-
-Exemplo atual:
-
-```
-PAÍS: SUCO
-└── ESTADO: SUCOCAST
-    └── CIDADE: YOUTUBE
-        ├── BAIRRO: ROTEIRO
-        ├── BAIRRO: IMAGEM
-        ├── BAIRRO: ÁUDIO
-        ├── BAIRRO: VÍDEO
-        └── BAIRRO: PUBLICAÇÃO
-```
-
-### Céu
+## Céu
 
 O Céu mantém a mesma lógica estrutural, adaptada à sua natureza global:
 
@@ -116,10 +86,10 @@ O núcleo oficial já contempla, entre outras bases:
 - Gestor Central da Conta;
 - perfis sociais conectáveis;
 - estrutura País → Estado → Cidade → Bairro;
-- primeira operação em desenvolvimento: SucoCast → YouTube.
+- primeira operação a ser desenvolvida após a conexão: definida pelo contexto da conta conectada.
 
 ## Regra operacional
 
 Todo novo desenvolvimento estrutural e operacional do WordDark deve nascer, ser integrado e testado aqui.
 
-A atualização estrutural não significa construir todas as funções agora. Ela apenas mantém a planta do mundo compatível com os setores que já foram definidos. A implementação detalhada continua sendo feita por operação, começando pelo circuito ativo do SucoCast.
+A atualização estrutural não significa construir todas as funções agora. Ela apenas mantém a planta do mundo compatível com os setores que já foram definidos. A implementação detalhada continua sendo feita por operação, começando pelo circuito que surgir da primeira conta conectada.
