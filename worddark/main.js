@@ -26,6 +26,11 @@ import { WorldStructureClassifier } from "./core-central/world-structure.js";
 import { AccountOperationsManager } from "./core-central/account-operations-manager.js";
 import { CentralOrchestrator } from "./core-central/central-orchestrator.js";
 import { CentralAutomationController } from "./core-central/central-automation-controller.js";
+import { ContractRegistry } from "./core-central/contract-registry.js";
+import { DependencyMap } from "./core-central/dependency-map.js";
+import { AutonomyPolicy } from "./core-central/capability-policy.js";
+import { RollbackManager } from "./core-central/rollback-manager.js";
+import { LifecycleManager } from "./core-central/lifecycle-manager.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -35,13 +40,18 @@ export function createWordDarkWorld(){
  const accountOperations=new AccountOperationsManager({accountManager});
  const emergencyStop=new EmergencyStop();
  const automation=new CentralAutomationController({accountManager,emergencyStop});
- const runtime=new WordDarkRuntime({central,emergencyStop});
+ const contractRegistry=new ContractRegistry();
+ const dependencyMap=new DependencyMap();
+ const rollback=new RollbackManager();
+ const lifecycle=new LifecycleManager({dependencyMap});
+ const runtime=new WordDarkRuntime({central,emergencyStop,contractRegistry});
  const centralOrchestrator=new CentralOrchestrator({centralManager:accountOperations,runtime,automation});
  const library=new CentralLibrary();
  const audit=new AuditLog();
  const security=new Security({audit});
  const finance=new CentralFinance();
  const permissions=new PermissionManager();
+ const autonomy=new AutonomyPolicy({permissionManager:permissions,emergencyStop});
  const rights=new ProductionRights();
  const persistence=new MemoryPersistence();
  const versions=new VersionHistory();
@@ -49,7 +59,7 @@ export function createWordDarkWorld(){
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK"});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
- const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry});
+ const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
  const integrations=new IntegrationRegistry({audit});
  const externalConnections=createExternalConnectionHub({integrationRegistry:integrations,audit});
  const {terra}=createTerra({runtime});
@@ -71,9 +81,15 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"DARK-FACTORY-GATE",ownerId:"DARK-FACTORY",layer:"CEU"});
  runtime.registerGate({gateId:"MARKETING-GATE",ownerId:"MARKETING",layer:"CEU"});
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
+ dependencyMap.add({module:"CENTRAL-ORCHESTRATOR",dependsOn:"CENTRAL-AUTOMATION-CONTROLLER",reason:"AUTOMATION_DISPATCH"});
+ dependencyMap.add({module:"CENTRAL-ORCHESTRATOR",dependsOn:"WORDDARK-RUNTIME",reason:"OPERATION_EXECUTION"});
+ dependencyMap.add({module:"CENTRAL-AUTOMATION-CONTROLLER",dependsOn:"EMERGENCY-STOP",reason:"SAFETY_GATE"});
+ autonomy.set("CENTRAL-AUTOMATION-CONTROLLER",1,{allowedActions:["QUEUE","APPROVE","DISPATCH"],requiresApproval:true});
+ autonomy.set("DARK-FACTORY",1,{allowedActions:["EXECUTE"],requiresApproval:true});
+ autonomy.set("MARKETING",1,{allowedActions:["EXECUTE"],requiresApproval:true});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,security,finance,
-  operationRegistry,communication,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
+  operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
