@@ -1,8 +1,11 @@
 import { AccountManager } from './worddark/core-central/account-manager.js';
 import { YouTubeConnector } from './worddark/core-central/social-networks.js';
 import { AccountOperationsManager } from './worddark/core-central/account-operations-manager.js';
+import { AccountLoginManager, CONNECTION_SOURCES } from './worddark/core-central/account-login-manager.js';
 
-const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:localStorage.getItem('wd.account.name')||'Conta local'});
+const loginManager=new AccountLoginManager();
+const identity=loginManager.restore();
+const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:identity?.name||localStorage.getItem('wd.account.name')||'Conta local'});
 const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
 const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'PROFILE_MANAGER'});
 const centralOperations=new AccountOperationsManager({accountManager:manager});
@@ -12,6 +15,11 @@ const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 function persist(){localStorage.setItem('wd.account.name',manager.name);localStorage.setItem('wd.account.profiles',JSON.stringify(manager.listProfiles()));}
 function render(){
   const profiles=manager.listProfiles();
+  const session=loginManager.restore();
+  $('#login-state').textContent=session?'AUTENTICADO':'NÃO AUTENTICADO';
+  $('#identity-name').textContent=session?session.name:'Entre para iniciar o gestor.';
+  $('#identity-note').textContent=session?('Identidade: '+session.provider+(session.email?' · '+session.email:'')+'. Agora selecione as conexões que devem entrar no WordDark.'):'O login identifica quem está usando o WordDark. Depois dele, você escolhe quais contas deseja entregar ao gestor.';
+  $('#google-login').textContent=session?'Trocar identidade Google':'Entrar com Google';
   $('#account-name').textContent=manager.name;
   $('#account-id').textContent=manager.id;
   $('#profile-count').textContent=profiles.length+' PERFIS';
@@ -23,6 +31,55 @@ function render(){
   $('#managers').innerHTML='<article class="wd-manager central-manager"><span>GESTOR CENTRAL</span><h3>'+safe(centralOperations.name)+'</h3><p>ACCOUNT_OPERATIONS_MANAGER</p><strong>'+profiles.length+' perfil(is) sob coordenação</strong></article>'+manager.listManagers().map(m=>'<article class="wd-manager"><span>GESTOR DE PERFIL</span><h3>'+safe(m.name)+'</h3><p>'+safe(m.role)+'</p><strong>'+profiles.filter(p=>p.managerId===m.id).length+' perfil(is) gerenciado(s)</strong></article>').join('');
   document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>prepareRealConnection(b.dataset.auth));
 }
+async function loginGoogle(){
+  if(!window.google?.accounts?.id){$('#identity-note').textContent='Serviço de login Google ainda não carregado.';return;}
+  const clientId=localStorage.getItem('wd.google.clientId')||prompt('Informe o Google OAuth Client ID do projeto WordDark:');
+  if(!clientId?.trim()){return;}
+  localStorage.setItem('wd.google.clientId',clientId.trim());
+  $('#identity-note').textContent='Aguardando identidade Google…';
+  const credential=await new Promise((resolve,reject)=>{
+    window.google.accounts.id.initialize({client_id:clientId.trim(),callback:resolve});
+    window.google.accounts.id.prompt(notification=>{if(notification.isNotDisplayed?.())reject(new Error('GOOGLE_PROMPT_NOT_DISPLAYED'));});
+  });
+  const payload=JSON.parse(atob(credential.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+  loginManager.loginGoogle(payload); render();
+}
+$('#google-login').onclick=()=>loginGoogle().catch(error=>{$('#identity-note').textContent='Falha no login Google: '+(error?.message||error);});
+function renderConnectionOptions(){
+  const session=loginManager.restore();
+  const root=$('#connection-options');
+  if(!session){root.innerHTML='<div class="wd-empty">Faça login primeiro para abrir a entrada de conexões.</div>';return;}
+  const available=['YOUTUBE','INSTAGRAM','TIKTOK','FACEBOOK'];
+  root.innerHTML=available.map(key=>{const s=CONNECTION_SOURCES[key];const connected=manager.listProfiles().some(p=>p.network===key);return '<label class="wd-profile" style="display:block;cursor:pointer"><div class="wd-profile-top"><span class="network">'+safe(s.name)+'</span><span class="wd-chip '+(connected?'active':'')+'">'+(connected?'CONECTADO':'DISPONÍVEL')+'</span></div><h3><input type="checkbox" class="wd-connection-check" value="'+key+'" '+(connected?'checked':'')+'> '+safe(s.name)+'</h3><p>'+safe(s.description)+'</p><small>'+ (key==='YOUTUBE'?'Autoriza pelo Google OAuth.':'Conector do provedor será usado quando habilitado.') +'</small></label>';}).join('');
+}
+$('#connect-selected').onclick=async()=>{
+  const selected=[...document.querySelectorAll('.wd-connection-check:checked')].map(x=>x.value);
+  if(!loginManager.restore()){location.hash='login';return;}
+  $('#selection-count').textContent=selected.length+' SELECIONADAS';
+  $('#batch-note').textContent='Entrada recebida: '+selected.join(', ')+'. Encaminhando aos gestores…';
+  for(const network of selected){
+    if(network==='YOUTUBE'){
+      const clientId=localStorage.getItem('wd.youtube.clientId')||prompt('Informe o YouTube/Google OAuth Client ID:');
+      if(!clientId)continue;
+      localStorage.setItem('wd.youtube.clientId',clientId.trim());
+      try{
+        const result=await new YouTubeConnector({clientId}).authorize();
+        const c=result.channel;
+        if(!manager.listProfiles().some(p=>p.network==='YOUTUBE'&&p.config?.youtube?.channelId===c.channelId)){
+          const p=manager.connectProfile({network:'YOUTUBE',displayName:c.displayName,handle:c.customUrl||c.channelId,status:'ACTIVE',config:{youtube:c}});manager.assignManager(p.id,defaultManager.id);
+        }
+      }catch(error){$('#batch-note').textContent='YouTube aguardando autorização: '+(error?.message||error);}
+    }else{
+      $('#batch-note').textContent+=' '+network+' ainda requer o conector OAuth específico.';
+    }
+  }
+  persist();render();renderConnectionOptions();
+  $('#batch-note').textContent='Entrada concluída. As conexões autorizadas foram entregues aos gestores de perfil.';
+};
+function updateSelectionCount(){const n=document.querySelectorAll('.wd-connection-check:checked').length;$('#selection-count').textContent=n+' SELECIONADAS';}
+document.addEventListener('change',e=>{if(e.target.classList?.contains('wd-connection-check'))updateSelectionCount();});
+function renderConnectionOptionsAndSelection(){renderConnectionOptions();updateSelectionCount();}
+
 $('#rename-account').onclick=()=>{const name=prompt('Nome da conta:',manager.name);if(name?.trim()){manager.rename(name);persist();render();}};
 $('#connect-form').onsubmit=e=>{
   e.preventDefault();
@@ -88,4 +145,4 @@ $('#youtube-config').hidden=$('#network').value!=='YOUTUBE';
 const themeButton=$('[data-wd-theme]');
 function syncTheme(){themeButton.textContent=document.documentElement.dataset.theme==='light'?'☾ Tema escuro':'☼ Tema claro'}
 themeButton.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='light'?'':'light';syncTheme()};
-syncTheme();render();
+syncTheme();render();renderConnectionOptionsAndSelection();
