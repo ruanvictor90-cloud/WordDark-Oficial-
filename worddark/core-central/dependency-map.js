@@ -7,7 +7,7 @@ export class DependencyMap{
     this.edges.set(key,edge);this.audit?.record?.("DEPENDENCY_REGISTERED",edge);return structuredClone(edge);
   }
   remove(module,dependsOn){return this.edges.delete(module+"::"+dependsOn);}
-  dependenciesOf(module){return [...this.edges.values()].filter(x=>x.module===module).map(structuredClone);}
+  dependenciesOf(module){return [...this.edges.values()].filter(x=>x.module===module).map(x=>structuredClone(x));}
   dependentsOf(module){return [...this.edges.values()].filter(x=>x.dependsOn===module).map(structuredClone);}
   canDeactivate(module){const blockers=this.dependentsOf(module).filter(x=>x.required);return{allowed:blockers.length===0,blockers};}
   list(){return [...this.edges.values()].map(structuredClone);}
