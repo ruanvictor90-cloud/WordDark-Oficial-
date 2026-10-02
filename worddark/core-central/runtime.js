@@ -4,11 +4,12 @@ import { CapabilityRegistry } from "./capabilities.js";
 import { Road } from "./road.js";
 import { WorldRegistry } from "./registry.js";
 import { OperationPipeline } from "./pipeline.js";
+import { ContractRegistry } from "./contract-registry.js";
 
 export class WordDarkRuntime {
- constructor({central=null,emergencyStop=null}={}){
+ constructor({central=null,emergencyStop=null,contractRegistry=null}={}){
   this.registry=new WorldRegistry();this.capabilities=new CapabilityRegistry();this.road=new Road({registry:this.capabilities});
-  this.gates=new Map();this.modules=new Map();this.central=central;this.emergencyStop=emergencyStop;this.pipeline=new OperationPipeline(this);this.status="ONLINE";
+  this.gates=new Map();this.modules=new Map();this.central=central;this.emergencyStop=emergencyStop;this.contractRegistry=contractRegistry||new ContractRegistry();this.pipeline=new OperationPipeline(this);this.status="ONLINE";
  }
  registerModule(module){
   if(!module?.id||typeof module.handle!=="function")throw new Error("INVALID_MODULE");
@@ -37,10 +38,15 @@ export class WordDarkRuntime {
   const route=this.road.route(op);
   if(!route.success){this.central?.receiveRequest?.(op,route.reason);return op.transition("BLOCKED",{reason:route.reason});}
   op.transition("ROUTED",route.delivery);
-  const result=this.executeModule(op,route.capability.id,{route:route.delivery});
+  const contractId=`EXCHANGE:${op.origin}:${route.capability.owner}`;
+  if(!this.contractRegistry.get(contractId)) this.contractRegistry.register({id:contractId,origin:op.origin,destination:route.capability.owner,operations:[op.type],capability:route.capability.id,reversible:true,metadata:{generated:true,route:route.delivery.id}});
+  const contract=this.contractRegistry.validate(op,{contractId});
+  if(!contract.valid)return op.transition("REJECTED",{reason:"MODULE_CONTRACT_INVALID",contract});
+  op.context.contractId=contractId;
+  const result=this.executeModule(op,route.capability.id,{route:route.delivery,contractId});
   if(!result?.success){op.checkpoint(route.capability.id,"FAILED",result);return op.transition("FAILED",result);}
   op.checkpoint(route.capability.id,"PASSED",result);return op.transition("COMPLETED",result);
  }
  reenter(operation,moduleId,reason="MODULE_REENTRY"){const safe=this.assertSafe(operation?.id);if(!safe.allowed)return operation.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});return this.pipeline.reenter(operation,moduleId,reason);}
- status(){return {status:this.status,modules:this.modules.size,capabilities:this.capabilities.list(),gates:this.gates.size,events:this.registry.events.length,emergencyStop:this.emergencyStop?.globalStatus||"UNWIRED"};}
+ status(){return {status:this.status,modules:this.modules.size,capabilities:this.capabilities.list(),gates:this.gates.size,events:this.registry.events.length,contracts:this.contractRegistry.list().length,emergencyStop:this.emergencyStop?.globalStatus||"UNWIRED"};}
 }
