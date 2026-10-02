@@ -44,7 +44,8 @@ export class WorldSchool {
   }
   registerPlatformGuidelines({platform,rules=[],evaluationSignals=[],source="EXTERNAL"}={}) {
     if(!platform) throw new Error("SCHOOL_PLATFORM_REQUIRED");
-    const item={platform,rules:structuredClone(rules),evaluationSignals:structuredClone(evaluationSignals),source,updatedAt:new Date().toISOString()};
+    const item={platform,rules:structuredClone(rules),evaluationSignals:structuredClone(evaluationSignals),source,version:null,sourceUrl:null,capturedAt:null,updatedAt:new Date().toISOString()};
+    if(arguments.length){const input=arguments[0]||{};if(input.version)item.version=input.version;if(input.sourceUrl)item.sourceUrl=input.sourceUrl;if(input.capturedAt)item.capturedAt=input.capturedAt;}
     this.platformGuidelines.set(platform,item);
     this.audit?.record?.("SCHOOL_PLATFORM_GUIDELINES_UPDATED",item);
     return structuredClone(item);
