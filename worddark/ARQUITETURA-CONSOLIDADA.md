@@ -148,7 +148,7 @@ Nível maior não remove contratos, permissões, auditoria ou parada de emergên
 `RollbackManager` captura estado antes de operações que suportem reversão. Quando não existe função de desfazer, o sistema informa que o rollback não está disponível em vez de fingir reversibilidade.
 
 ### 9. Biblioteca Central
-A Biblioteca permanece lenta e deliberadamente consolidada. Ela recebe memória e registros sem ser transformada em dependência obrigatória de cada execução.
+A Biblioteca Central é a **Memória Mundial permanente**. Ela recebe, preserva e relaciona conhecimento filtrado pelos setores. A consolidação pode acontecer de forma assíncrona, mas sua função não é ser apenas um arquivo lento: ela mantém a memória global sem virar dependência obrigatória de cada execução.
 
 ### 10. Conceito não é componente
 Uma ideia só vira componente executável quando possui responsabilidade, contrato, consumidor e ciclo de vida. Caso contrário permanece documentação/conceito.
@@ -201,3 +201,81 @@ A consolidação é seletiva. A Biblioteca Central não é dependência síncron
 A estrutura é compatível com setores temporários: a exclusão de um setor ou executor não apaga automaticamente sua memória relevante já consolidada.
 
 `SectorLibraryManager` registra bibliotecas por setor, permite classificação local e promove somente os registros selecionados para a Biblioteca Central.
+
+
+## Governança do mundo — Conselho, Escola e Controle
+
+### Conselho Mundial
+
+O Conselho é uma camada de **governança e observação**, não um executor oculto. Ele pode analisar o uso recorrente do mundo, comparar estruturas e identificar quando uma função está sendo usada fora do setor mais adequado.
+
+Fluxo:
+
+```
+MEMÓRIA + USO DO MUNDO
+        ↓
+     CONSELHO
+        ↓
+OBSERVAÇÃO / DECISÃO
+        ├── manter
+        ├── reclassificar setor
+        ├── solicitar reestruturação
+        └── solicitar revisão
+```
+
+O Conselho pode decidir sobre organização e encaminhamento, mas continua sujeito às permissões, contratos, auditoria e controles do mundo.
+
+### Escola do Mundo
+
+A Escola fica na Central de Controle e aprende por duas fontes:
+
+- conhecimento filtrado das bibliotecas locais;
+- acontecimentos/sinais relevantes observados no mundo.
+
+Ela pode preparar conteúdos e mantê-los prontos, mas **não possui autorização implícita para colocá-los no mundo**.
+
+```
+BIBLIOTECA LOCAL ─┐
+                  ├→ ESCOLA → CONTEÚDO PRONTO
+MUNDO REAL ───────┘                 ↓
+                             AUTORIZAÇÃO HUMANA
+                                    ↓
+                              LINHA DE POSTAGEM
+```
+
+### Automação
+
+Automação deve ser usada principalmente onde existe repetição, previsibilidade e baixo impacto externo. Ela acelera setores e tarefas internas, mas não transforma automaticamente uma operação interna em autorização para agir no mundo.
+
+### Resultado parcial e reestruturação
+
+Uma operação não precisa ser classificada apenas como "sucesso" ou "falha".
+
+```
+RESULTADO
+├── COMPLETED
+├── NEEDS_EDIT
+├── NEEDS_RESTRUCTURE
+├── FAILED
+├── BLOCKED
+└── WAITING_HUMAN
+```
+
+**NEEDS_EDIT** é usado quando existe um problema corrigível, como direitos, segurança, conteúdo prejudicial ou requisito específico.
+
+**NEEDS_RESTRUCTURE** é usado quando a operação funciona, mas o resultado ficou abaixo do objetivo e precisa ser melhorado. Exemplo: um conteúdo foi produzido corretamente, porém apresentou métricas abaixo do objetivo; ele volta para melhoria sem ser tratado como uma falha total.
+
+Quando a reestruturação não resolve, a operação pode ser encaminhada para uma nova tentativa/refazimento conforme a política do setor.
+
+### O que exige confirmação humana
+
+Tudo que produzir consequência externa relevante permanece atrás de autorização humana explícita, especialmente:
+
+- conteúdo que será publicado;
+- escolha/confirmação do conteúdo a publicar;
+- definição de data e horário de postagem;
+- autorização final de publicação;
+- ações que alterem contas externas;
+- ações com direitos, segurança ou risco relevante.
+
+A **Linha de Postagem** recebe conteúdo autorizado e mantém a confirmação humana como requisito antes do agendamento/execução.
