@@ -2,7 +2,7 @@ import { AccountManager } from './worddark/core-central/account-manager.js';
 import { YouTubeConnector } from './worddark/core-central/social-networks.js';
 import { AccountOperationsManager } from './worddark/core-central/account-operations-manager.js';
 
-const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:localStorage.getItem('wd.account.name')||'Minha Conta'});
+const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:localStorage.getItem('wd.account.name')||'Conta local'});
 const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
 const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'PROFILE_MANAGER'});
 const centralOperations=new AccountOperationsManager({accountManager:manager});
