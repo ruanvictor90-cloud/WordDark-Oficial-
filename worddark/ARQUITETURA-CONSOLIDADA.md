@@ -464,3 +464,99 @@ Necessidade → Fábrica → Validação.
 - Autorizado: entra na Linha de Postagem.
 
 `PARTIAL` fica reservado para operações com partes independentes em estados diferentes; não significa resultado mediano.
+
+## Organização de responsabilidades — consolidação 2026-10
+
+### Central de Controle
+Responsável por coordenar o fluxo operacional central, sem absorver as funções especializadas.
+- Orquestrador Central
+- Controlador de Automação
+- Linha de Postagem
+- Escola do Mundo
+
+A Escola é uma área da Central de Controle, mas possui autonomia funcional para pesquisar, aprender, cruzar conhecimento e preparar conteúdo.
+
+### Central de Conexões Externas
+É o único ponto responsável por conectores, provedores, autorização, contas/conexões externas, saúde e adaptadores.
+Nenhum setor operacional deve manter seu próprio conector externo.
+
+### Governança
+É o bloco responsável pelo poder institucional do mundo:
+- Conselho Mundial
+- Judiciário
+- Leis
+- Termos
+- Contratos
+- Regras externas incorporadas como requisitos de conformidade
+
+A composição do Conselho, representantes, cargos, pesos e regra definitiva de votação permanecem deliberadamente em definição.
+
+### Escola do Mundo
+A Escola funciona como uma camada de conhecimento ampla, inspirada em uma ferramenta de pesquisa:
+- conhecimento interno das bibliotecas locais e da Memória Mundial;
+- conhecimento externo autorizado;
+- sinais de tendência;
+- métricas das operações;
+- diretrizes e critérios públicos das plataformas;
+- comparação entre conteúdo produzido e desempenho observado.
+
+A Escola aprende continuamente, mas não possui autoridade para publicar no mundo externo.
+
+### Dark Factory
+A Dark Factory é o estúdio local de produção do WordDark, não um conector de plataformas.
+Seu papel é semelhante ao de um editor/estúdio de conteúdo local:
+- briefing;
+- roteiro;
+- visual;
+- áudio;
+- edição;
+- montagem;
+- qualidade;
+- versões;
+- melhoria baseada em métricas.
+
+Uma operação que apresentar problema de direitos, segurança ou conformidade retorna para edição. Se não houver solução adequada, pode ser refeita. Uma operação com resultado abaixo do objetivo entra em reestruturação para melhoria.
+
+### Ciclo de conteúdo
+```
+NECESSIDADE
+  ↓
+DARK FACTORY
+  ↓
+QUALIDADE / CONFORMIDADE
+  ├── problema de direitos/segurança → EDIÇÃO
+  ├── problema sem solução → REFAZER
+  ├── resultado abaixo do objetivo → REESTRUTURAÇÃO
+  └── aprovado internamente → CENTRAL DE CONTROLE
+                                      ↓
+                                AUTORIZAÇÃO HUMANA
+                                      ↓
+                                  LINHA DE POSTAGEM
+                                      ↓
+                              CONEXÃO EXTERNA
+```
+
+### Resultados
+`PARTIAL` significa somente que uma parte da operação foi concluída enquanto outra parte está pendente ou falhou. Não representa uma avaliação de qualidade.
+
+Resultado mediano/abaixo da meta é tratado como `NEEDS_RESTRUCTURE`: o conteúdo retorna ao ciclo de melhoria, preservando o histórico e as métricas anteriores.
+
+### Métricas e aprendizado
+O WordDark deve aprender tanto com o mundo externo quanto com o próprio mundo:
+```
+PLATAFORMAS / PESQUISA / FONTES EXTERNAS
+                 ↓
+              ESCOLA
+                 ↓
+      CONHECIMENTO + SINAIS
+                 ↓
+             OPERAÇÕES
+                 ↓
+        MÉTRICAS / RESULTADOS
+                 ↓
+              ESCOLA
+                 ↓
+        MELHORIA / APRENDIZADO
+```
+
+A Memória Mundial preserva o conhecimento; a Escola interpreta e aprende; a Governança julga segundo as leis; a Central de Conexões conecta; a Dark Factory produz; a Central de Controle coordena.
