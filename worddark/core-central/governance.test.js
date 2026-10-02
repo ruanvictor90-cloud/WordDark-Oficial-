@@ -46,4 +46,38 @@ const promoted=sectorLibraries.consolidate("TEST-SECTOR",{classify:()=>KNOWLEDGE
 assert.equal(promoted.length,1);
 assert.equal(world.library.find(x=>x.sourceSector==="TEST-SECTOR").length,1);
 assert.equal(sectorLibraries.list("TEST-SECTOR")[0].centralizedAt!==undefined,true);
+// Ciclo operacional mínimo: Terra -> Rodovia -> Content.Produce -> módulos -> reentrada.
+const productionInput={
+  id:"OP-PRODUCTION-001", type:"CONTENT.PRODUCE", requesterId:"TERRA-TEST", origin:"TERRA-TEST",
+  destination:"DARK-FACTORY", service:"DARK-FACTORY", gateId:"DARK-FACTORY-GATE",
+  payload:{taskType:"CONTENT.PRODUCE",contentId:"CONTENT-TEST-001",title:"Teste de fogo WordDark",requirements:"Vídeo curto"}
+};
+world.factory.attachRuntime(world.runtime);
+const production=world.runtime.request(productionInput);
+assert.equal(production.status,"COMPLETED");
+assert.equal(production.pipeline.status,"COMPLETED");
+assert.equal(production.pipeline.failedModule,null);
+assert.equal(production.checkpoints.some(x=>x.module==="AUDIO"&&x.status==="PASSED"),true);
+assert.equal(world.factory.logs.at(-1).executor,"CONTENT.PRODUCE");
+
+let failAudio=true;
+world.runtime.registerCapability({id:"AUDIO",name:"AUDIO",owner:"DARK-FACTORY",layer:"CEU",handler:()=>{
+  if(failAudio){failAudio=false;return {success:false,reason:"AUDIO_TEST_FAILURE"};}
+  return {success:true,result:{executor:"AUDIO",recovered:true}};
+},metadata:{type:"FACTORY_EXECUTOR",factory:"DARK-FACTORY"}});
+const failed=world.runtime.request({
+  id:"OP-PRODUCTION-002", type:"CONTENT.PRODUCE", requesterId:"TERRA-TEST", origin:"TERRA-TEST",
+  destination:"DARK-FACTORY", service:"DARK-FACTORY", gateId:"DARK-FACTORY-GATE",
+  payload:{taskType:"CONTENT.PRODUCE",contentId:"CONTENT-TEST-002",title:"Teste de reentrada",requirements:"Áudio com falha controlada"}
+});
+assert.equal(failed.status,"FAILED");
+assert.equal(failed.pipeline.failedModule,"AUDIO");
+assert.equal(failed.checkpoints.some(x=>x.module==="IDENTITY"&&x.status==="PASSED"),true);
+assert.equal(failed.checkpoints.some(x=>x.module==="SCRIPT"&&x.status==="PASSED"),true);
+const recovered=world.runtime.reenter(failed,"AUDIO","TEST_AUDIO_RECOVERY");
+assert.equal(recovered.status,"COMPLETED");
+assert.equal(recovered.pipeline.status,"COMPLETED");
+assert.equal(recovered.pipeline.failedModule,null);
+assert.equal(recovered.history.some(x=>x.status==="REENTRY"&&x.module==="AUDIO"),true);
+
 console.log("WordDark governance tests: OK");
