@@ -16,6 +16,10 @@ export class EmergencyStop {
   isStopped(operationId){ return this.globalStatus==="STOPPED"||this.stops.get(operationId)?.status==="ACTIVE"; }
 
   assertRunning(operationId){
+    if(this.globalStatus==="STOPPED"){
+      const globalStop=this.stops.get("GLOBAL");
+      return {allowed:false,reason:"EMERGENCY_STOP_GLOBAL_ACTIVE",stopId:globalStop?.id||"GLOBAL"};
+    }
     const stop=this.stops.get(operationId);
     return stop?.status==="ACTIVE"
       ? {allowed:false,reason:"EMERGENCY_STOP_ACTIVE",stopId:stop.id}
