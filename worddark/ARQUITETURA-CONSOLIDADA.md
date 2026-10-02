@@ -560,3 +560,52 @@ PLATAFORMAS / PESQUISA / FONTES EXTERNAS
 ```
 
 A Memória Mundial preserva o conhecimento; a Escola interpreta e aprende; a Governança julga segundo as leis; a Central de Conexões conecta; a Dark Factory produz; a Central de Controle coordena.
+
+## Circuito de Inteligência, Produção e Publicação — consolidação 2026-10
+
+### Escola — inteligência híbrida do WordDark
+A Escola é o setor de conhecimento e aprendizagem. Sua função é pesquisar e cruzar conhecimento interno e externo, incluindo bibliotecas locais, Memória Mundial, sinais de tendência, documentação pública e diretrizes/indicadores divulgados pelas plataformas quando as conexões estiverem disponíveis.
+
+A Escola não publica e não transforma informação externa em verdade automaticamente. O ciclo é:
+
+fonte → captura → análise → evidência → validação → memória/recomendação
+
+Ela também pode preparar conteúdos candidatos e referências para a fábrica. A pesquisa externa fica desacoplada dos conectores: antes das conexões, a estrutura existe em modo preparado; depois, os provedores podem alimentar a Escola.
+
+### Conselho — governança e julgamento
+O Conselho é um setor de governança responsável por julgar situações do mundo segundo as leis já definidas pelo WordDark. Sua composição, cargos e autoridade detalhada ainda serão definidos.
+
+Ele pode consultar memória, operações e evidências para analisar conformidade, conflitos, uso recorrente fora do setor adequado e outras situações que mereçam julgamento. Termos e contratos entram nessa camada quando as conexões externas forem criadas e as relações reais existirem.
+
+Conselho julga; não executa nem publica.
+
+### Dark Factory — produção modular
+A fábrica recebe necessidades de produção e pode operar em quatro caminhos principais:
+
+PRODUCE → EDIT → RESTRUCTURE → REDO
+
+- EDIT: corrige um problema localizado, como áudio, roteiro, imagem ou direitos.
+- RESTRUCTURE: resultado foi entregue, mas ficou abaixo do objetivo; a operação retorna para melhoria.
+- REDO: a solução não foi encontrada ou a abordagem precisa ser refeita substancialmente.
+- Cada caminho preserva histórico e permite reentrada modular.
+
+### Marketing — estratégia e crescimento
+Marketing deixa de ser apenas um receptor de pedidos. Ele pesquisa sinais, transforma conhecimento em estratégias/candidatos de conteúdo, interpreta desempenho e devolve recomendações para a fábrica e para a Escola.
+
+Marketing não possui conectores externos próprios. Dados externos entram pela Central de Conexões/Escola e resultados das operações retornam pela camada de métricas.
+
+### Linha de postagem e autorização humana
+O WordDark separa claramente produção de publicação:
+
+Escola/Marketing → candidato → Dark Factory → validação → Linha de Postagem → autorização humana → agendamento/publicação
+
+Qualquer ação que altere o mundo externo, especialmente postagem e definição de quando publicar, permanece protegida por confirmação humana.
+
+### Aprendizado pelo resultado
+Depois da operação externa, métricas e eventos retornam para a Escola/Marketing. Um resultado parcial significa execução incompleta — por exemplo, uma rede publicou e outra falhou. Resultado mediano é tratado como RESTRUCTURE, porque a operação terminou mas não atingiu o objetivo definido.
+
+O ciclo completo passa a ser:
+
+MUNDO → ESCOLA → MARKETING → FÁBRICA → REVISÃO → HUMANO → POSTAGEM → MÉTRICAS → ESCOLA/MARKETING
+
+Esse circuito permite automação em tarefas repetitivas e aceleráveis sem conceder à automação a autorização final para colocar algo no mundo.
