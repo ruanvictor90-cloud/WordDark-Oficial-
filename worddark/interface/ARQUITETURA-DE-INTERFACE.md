@@ -97,3 +97,94 @@ O sistema deve revelar informação sob demanda, não despejar informação ante
 O WordDark Oficial está sendo construído como uma arquitetura definitiva.
 
 Correções de problemas encontrados durante o desenvolvimento devem fortalecer esta estrutura, e não criar atalhos que quebrem a separação de responsabilidades.
+
+
+## HUD oficial por setor — atualização 2.0
+
+A identidade visual não é tratada como avatar de usuário. Ela é um recurso espacial do mundo.
+
+### Identidade por contexto
+
+Cada entrada de setor pode possuir uma identidade visual própria:
+- símbolo/marca do ambiente;
+- imagem de entrada;
+- imagem de capa/ambientação;
+- ícone da função;
+- imagem de estado quando fizer sentido.
+
+A mesma identidade pode aparecer em pontos diferentes quando representar o mesmo local, mas não deve ser usada apenas como decoração ou perfil.
+
+### Regra de revelação
+
+A entrada de cada setor mostra apenas:
+1. onde estou;
+2. qual é a responsabilidade deste setor;
+3. quais são as poucas áreas disponíveis;
+4. ações essenciais de entrada/saída.
+
+Ao selecionar uma área, a página muda de contexto e passa a mostrar somente aquela área.
+
+Fluxo visual:
+
+```
+ENTRADA DO SETOR
+    ↓
+ÁREA
+    ↓
+OPERAÇÃO
+    ↓
+RESULTADO
+```
+
+Voltar significa retornar ao contexto anterior; não significa carregar novamente todas as informações do mundo.
+
+### Imagem como parte da arquitetura
+
+Imagens oficiais podem ser vinculadas a:
+- País/grupo;
+- Estado/operação;
+- Cidade/perfil;
+- Bairro/setor;
+- área específica;
+- ferramenta ou operação.
+
+A imagem deve comunicar o local/função em que o usuário entrou. Ela não substitui permissões, identidade técnica ou registros.
+
+### HUD mínimo
+
+O HUD deve privilegiar:
+- identificação visual do setor;
+- nome e posição no mundo;
+- status essencial;
+- entrada para as áreas daquele setor;
+- navegação contextual;
+- retorno ao nível anterior.
+
+Indicadores secundários, logs, diagnósticos, configurações e dados técnicos ficam atrás de suas respectivas áreas.
+
+### Regra anti-painel gigante
+
+Nenhuma página deve antecipar as funções de seus filhos.
+
+Exemplo:
+
+```
+SUCOCAST
+└── YOUTUBE
+    └── VÍDEO
+```
+
+A entrada do YouTube não mostra roteiro, áudio, vídeo, publicação e diagnósticos simultaneamente. Ela mostra os setores disponíveis. O conteúdo de cada setor aparece somente depois da entrada.
+
+### Regra para novas interfaces
+
+Quando um novo setor for criado, sua interface deve nascer com:
+- Portão visual;
+- identidade;
+- contexto estrutural;
+- responsabilidade;
+- áreas filhas;
+- navegação de retorno;
+- ações mínimas.
+
+A interface só cresce quando o setor cresce.
