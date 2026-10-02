@@ -6,6 +6,23 @@ Esta é a regra definitiva de apresentação do WordDark.
 
 A interface nunca tenta mostrar o mundo inteiro.
 
+A infraestrutura visual é criada para receber conexões. Conta, grupo, operação e setor são contextos dinâmicos, não nomes pré-cadastrados.
+
+Fluxo base:
+LOGIN → WORDDARK → GESTOR → CONTA → OPERAÇÃO → AMBIENTE → SETOR → ÁREA → AÇÃO
+
+Nem todos os níveis precisam existir em toda conta. A interface só mostra o nível que realmente existe.
+
+## Regra de conta conectada
+
+Uma única conta não deve receber um País artificial. Ao conectar novas contas ou criar explicitamente um grupo, a estrutura territorial pode nascer conforme a necessidade.
+
+Suco, SucoCast, Instagram, YouTube e outros nomes conectados entram como contexto depois da conexão; não são a estrutura fixa da interface inicial.
+
+## Princípio anterior
+
+A interface nunca tenta mostrar o mundo inteiro.
+
 Cada tela representa apenas o nível atual de acesso e a responsabilidade daquele nível.
 
 Fluxo:
