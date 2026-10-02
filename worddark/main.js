@@ -24,6 +24,7 @@ import { AccountManager } from "./core-central/account-manager.js";
 import { WorldStructureClassifier } from "./core-central/world-structure.js";
 import { AccountOperationsManager } from "./core-central/account-operations-manager.js";
 import { CentralOrchestrator } from "./core-central/central-orchestrator.js";
+import { CentralAutomationController } from "./core-central/central-automation-controller.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -31,7 +32,7 @@ export function createWordDarkWorld(){
  const accountManager=new AccountManager({accountId:"ACCOUNT-LOCAL",accountName:"Minha Conta"});
  const structureClassifier=new WorldStructureClassifier();
  const accountOperations=new AccountOperationsManager({accountManager});
- const runtime=new WordDarkRuntime({central});
+ const runtime=new WordDarkRuntime({central,emergencyStop});
  const centralOrchestrator=new CentralOrchestrator({centralManager:accountOperations,runtime});
  const library=new CentralLibrary();
  const audit=new AuditLog();
@@ -43,6 +44,7 @@ export function createWordDarkWorld(){
  const versions=new VersionHistory();
  const errors=new ErrorRecovery();
  const emergencyStop=new EmergencyStop();
+ const automation=new CentralAutomationController({accountManager,emergencyStop});
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK"});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
@@ -73,4 +75,4 @@ export function createWordDarkWorld(){
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
-export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status()};}
+export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus};}
