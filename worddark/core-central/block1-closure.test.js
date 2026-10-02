@@ -36,7 +36,8 @@ const policy = world.autonomy.set("BLOCK1-MODULE", AUTONOMY_LEVEL.CONTROLLED, {
 });
 assert.equal(policy.level, AUTONOMY_LEVEL.CONTROLLED);
 assert.equal(world.autonomy.can("BLOCK1-MODULE", "EXECUTE").allowed, false);
-assert.equal(world.autonomy.can("BLOCK1-MODULE", "EXECUTE", { approved: true }).allowed, false);
+world.permissions.grant({subjectId:"BLOCK1-TEST",capability:"BLOCK1-MODULE",action:"EXECUTE"});
+assert.equal(world.autonomy.can("BLOCK1-MODULE", "EXECUTE", { subjectId:"BLOCK1-TEST", approved: true }).allowed, true);
 
 // 4. Rollback: registra estado e executa reversão quando há undo.
 world.rollback.capture({
