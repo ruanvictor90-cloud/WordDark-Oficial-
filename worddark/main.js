@@ -10,7 +10,6 @@ import { CentralFinance } from "./financeiro-central/index.js";
 import { createWorldCreation } from "./criacao-do-mundo/index.js";
 import { AuditLog } from "./auditoria/index.js";
 import { PermissionManager } from "./permissoes/index.js";
-import { ProductionRights } from "./direitos-producoes/index.js";
 import { MemoryPersistence } from "./core-central/persistence.js";
 import { VersionHistory } from "./core-central/versioning.js";
 import { ErrorRecovery } from "./core-central/error-recovery.js";
@@ -32,7 +31,6 @@ import { DependencyMap } from "./core-central/dependency-map.js";
 import { AutonomyPolicy } from "./core-central/capability-policy.js";
 import { RollbackManager } from "./core-central/rollback-manager.js";
 import { LifecycleManager } from "./core-central/lifecycle-manager.js";
-import { WorldCouncil } from "./core-central/council.js";
 import { WorldSchool } from "./core-central/school.js";
 import { ContentLifecycle } from "./core-central/content-lifecycle.js";
 import { PostingLine } from "./core-central/posting-line.js";
@@ -60,15 +58,14 @@ export function createWordDarkWorld(){
  const finance=new CentralFinance();
  const permissions=new PermissionManager();
  const autonomy=new AutonomyPolicy({permissionManager:permissions,emergencyStop,audit});
- const rights=new ProductionRights();
  const persistence=new MemoryPersistence();
  const versions=new VersionHistory();
  const errors=new ErrorRecovery();
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK",metadata:{scope:"CORE_OPERATIONAL_MEMORY"}});
  const sectorLibraries=new SectorLibraryManager({centralLibrary:library,audit});
- const council=new WorldCouncil({audit,sectorLibraries,centralLibrary:library});
  const governance=new GovernanceSector({audit,sectorLibraries,centralLibrary:library});
+ const council=governance.council;
  const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
  school.registerExternalSource({id:"WORLD-WEB",name:"Conhecimento Externo",type:"WEB_SEARCH",status:"AUTHORIZATION_REQUIRED"});
  school.registerExternalSource({id:"WORLD-TRENDS",name:"Sinais de Tendência",type:"TREND_MONITOR",status:"AUTHORIZATION_REQUIRED"});
@@ -78,7 +75,6 @@ export function createWordDarkWorld(){
  const sectorRegistry=new WorldSectorRegistry({audit});
  governance.council.decisionRule=governance.decisionRule;
  sectorLibraries.registerSector({sectorId:"WORDDARK-CORE",ownerId:"WORDDARK",metadata:{role:"CORE_OPERATIONAL_MEMORY"}});
- governance.productionRights=rights;
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
  const integrations=new IntegrationRegistry({audit});
@@ -114,7 +110,7 @@ export function createWordDarkWorld(){
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
   operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,postingLine,centralControl,
-  audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics,governance,sectorRegistry
+  audit,permissions,rights:governance.productionRights,persistence,versions,errors,emergencyStop,diagnostics,governance,sectorRegistry
  };
 }
 export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus,externalConnections:world.externalConnections.status(),centralControl:world.centralControl.status(),contentLifecycle:world.contentLifecycle.list().length};}
