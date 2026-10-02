@@ -69,6 +69,18 @@ export class AccountOperationsManager{
     return structuredClone(schedule);
   }
 
+  updateTargetStatus(scheduleId,slotId,profileId,status,data={}){
+    const schedule=this.schedules.find(item=>item.id===scheduleId);if(!schedule)throw new Error("SCHEDULE_NOT_FOUND");
+    const slot=schedule.slots.find(item=>item.id===slotId);if(!slot)throw new Error("SCHEDULE_SLOT_NOT_FOUND");
+    const target=slot.targets.find(item=>item.profileId===profileId);if(!target)throw new Error("SCHEDULE_TARGET_NOT_FOUND");
+    target.status=status;Object.assign(target,data);target.updatedAt=new Date().toISOString();
+    slot.status=slot.targets.every(item=>item.status==="COMPLETED")?"COMPLETED":
+      slot.targets.some(item=>["FAILED","BLOCKED"].includes(item.status))?"PARTIAL":"RUNNING";
+    schedule.updatedAt=new Date().toISOString();
+    this.accountManager.record("SCHEDULE_TARGET_UPDATED",{scheduleId,slotId,profileId,status,data});
+    return structuredClone(target);
+  }
+
   dispatchScheduledSlot(scheduleId,slotId){
     const schedule=this.schedules.find(item=>item.id===scheduleId);
     if(!schedule)throw new Error('SCHEDULE_NOT_FOUND');
@@ -90,7 +102,7 @@ export class AccountOperationsManager{
     return dispatched;
   }
 
-  listSchedules(){return this.schedules.map(structuredClone);}
+  listSchedules(){return this.schedules.map(structuredClone);}\n\n  queueStatus(){const slots=this.schedules.flatMap(s=>s.slots);const targets=slots.flatMap(s=>s.targets);return {schedules:this.schedules.length,slots:slots.length,targets:targets.length,completed:targets.filter(x=>x.status==="COMPLETED").length,failed:targets.filter(x=>x.status==="FAILED").length,blocked:targets.filter(x=>x.status==="BLOCKED").length,pending:targets.filter(x=>!["COMPLETED","FAILED","BLOCKED"].includes(x.status)).length};}
 
   status(){
     return {id:this.id,name:this.name,role:'ACCOUNT_OPERATIONS_MANAGER',status:this.status,
