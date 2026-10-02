@@ -103,6 +103,8 @@ export function createWordDarkWorld(){
  autonomy.set("CENTRAL-AUTOMATION-CONTROLLER",1,{allowedActions:["QUEUE","APPROVE","DISPATCH"],requiresApproval:true});
  autonomy.set("DARK-FACTORY",1,{allowedActions:["EXECUTE"],requiresApproval:true});
  autonomy.set("MARKETING",1,{allowedActions:["EXECUTE"],requiresApproval:true});
+ autonomy.set("WORLD-SCHOOL",1,{allowedActions:["SEARCH","ANALYZE","INGEST","PREPARE_CONTENT"],requiresApproval:false});
+ autonomy.set("WORLD-COUNCIL",0,{allowedActions:["REVIEW_WORLD","JUDGE","DECIDE"],requiresApproval:false});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
   operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,postingLine,centralControl,
