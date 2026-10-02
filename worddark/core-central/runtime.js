@@ -25,12 +25,19 @@ export class WordDarkRuntime {
   if(!module)return {success:false,reason:"MODULE_NOT_FOUND",moduleId};
   const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
   const owner=module.owner||module.id;
-  const contractId=context.contractId||`EXCHANGE:${operation.origin}:${owner}`;
-  if(!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:operation.destination||owner,operations:[operation.type],capability:moduleId,reversible:true,metadata:{generated:true,module:moduleId}});
-  const contract=this.contractRegistry.validate(operation,{contractId});
+  const isCapability=!module.handle&&typeof module.handler==="function";
+  const contractId=context.contractId||`EXCHANGE:${operation.origin}:${owner}:${moduleId}`;
+  if(!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:operation.destination||owner,operations:[operation.type],capability:moduleId,reversible:true,metadata:{generated:true,module:moduleId,internal:isCapability}});
+  const nextContext={...(operation.context||{})};
+  if(!context.contractId)nextContext.capability=moduleId;
+  nextContext.contractId=contractId;
+  const contract=this.contractRegistry.validate({...operation,context:nextContext},{contractId});
   if(!contract.valid)return {success:false,reason:"MODULE_CONTRACT_INVALID",contract,moduleId};
-  operation.context={...(operation.context||{}),contractId};
-  try{return module.handle(operation,{runtime:this,contractId,...context})||{success:false,reason:"MODULE_NO_RESULT"};}
+  operation.context=nextContext;
+  try{
+   const handler=module.handle||module.handler;
+   return handler(operation,{runtime:this,contractId,...context})||{success:false,reason:"MODULE_NO_RESULT"};
+  }
   catch(error){return {success:false,reason:error.message,moduleId};}
  }
  request(input){
