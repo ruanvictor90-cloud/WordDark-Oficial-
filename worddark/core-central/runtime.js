@@ -6,9 +6,9 @@ import { WorldRegistry } from "./registry.js";
 import { OperationPipeline } from "./pipeline.js";
 
 export class WordDarkRuntime {
- constructor({central=null}={}){
+ constructor({central=null,emergencyStop=null}={}){
   this.registry=new WorldRegistry();this.capabilities=new CapabilityRegistry();this.road=new Road({registry:this.capabilities});
-  this.gates=new Map();this.modules=new Map();this.central=central;this.pipeline=new OperationPipeline(this);this.status="ONLINE";
+  this.gates=new Map();this.modules=new Map();this.central=central;this.emergencyStop=emergencyStop;this.pipeline=new OperationPipeline(this);this.status="ONLINE";
  }
  registerModule(module){
   if(!module?.id||typeof module.handle!=="function")throw new Error("INVALID_MODULE");
@@ -18,15 +18,15 @@ export class WordDarkRuntime {
  }
  registerCapability(capability){return this.capabilities.register(capability);}
  registerGate(config){const gate=new Gate(config);this.gates.set(gate.gateId,gate);return gate;}
- executeModule(operation,moduleId,context={}){
+ assertSafe(operationId){const check=this.emergencyStop?.assertRunning?.(operationId);return check&&!check.allowed?check:{allowed:true};}\n executeModule(operation,moduleId,context={}){
   const module=this.modules.get(moduleId)||this.capabilities.find(moduleId);
-  if(!module)return {success:false,reason:"MODULE_NOT_FOUND",moduleId};
+  if(!module)return {success:false,reason:"MODULE_NOT_FOUND",moduleId};\n  const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
   try{return module.handle(operation,{runtime:this,...context})||{success:false,reason:"MODULE_NO_RESULT"};}
   catch(error){return {success:false,reason:error.message,moduleId};}
  }
  request(input){
   const op=input instanceof Operation?input:new Operation(input);
-  const valid=op.validate();if(!valid.valid)return op.transition("REJECTED",{errors:valid.errors});
+  const valid=op.validate();if(!valid.valid)return op.transition("REJECTED",{errors:valid.errors});\n  const safe=this.assertSafe(op.id);if(!safe.allowed)return op.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});
   const gate=this.gates.get(op.gateId);if(!gate)return op.transition("REJECTED",{reason:"GATE_NOT_FOUND"});
   const entry=gate.receive({id:op.id,type:op.type});if(!entry.success)return op.transition("REJECTED",{reason:entry.reason});
   op.transition("IDENTIFIED",{gateId:gate.gateId});
@@ -38,6 +38,6 @@ export class WordDarkRuntime {
   if(!result?.success){op.checkpoint(route.capability.id,"FAILED",result);return op.transition("FAILED",result);}
   op.checkpoint(route.capability.id,"PASSED",result);return op.transition("COMPLETED",result);
  }
- reenter(operation,moduleId,reason="MODULE_REENTRY"){return this.pipeline.reenter(operation,moduleId,reason);}
- status(){return {status:this.status,modules:this.modules.size,capabilities:this.capabilities.list(),gates:this.gates.size,events:this.registry.events.length};}
+ reenter(operation,moduleId,reason="MODULE_REENTRY"){const safe=this.assertSafe(operation?.id);if(!safe.allowed)return operation.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});return this.pipeline.reenter(operation,moduleId,reason);}
+ status(){return {status:this.status,modules:this.modules.size,capabilities:this.capabilities.list(),gates:this.gates.size,events:this.registry.events.length,emergencyStop:this.emergencyStop?.globalStatus||"UNWIRED"};}
 }
