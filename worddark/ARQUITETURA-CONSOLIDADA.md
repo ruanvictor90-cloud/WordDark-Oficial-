@@ -396,3 +396,71 @@ MEMÓRIA
 ```
 
 O teste legado de Terra deve validar essa criação dinâmica, e não depender de País/SucoCast pré-existentes.
+
+
+## Mapa oficial de setores — sem pontas soltas
+
+Cada responsabilidade possui um setor de referência. A Central coordena o fluxo, mas não absorve o poder funcional dos setores.
+
+| Setor | Responsabilidade principal |
+|---|---|
+| Central de Controle | coordenação, filas, orquestração e fronteira de postagem |
+| Central de Conexões Externas | todos os conectores, provedores, autorização, saúde e adapters externos |
+| Governança | Conselho, leis, termos, contratos e Judiciário |
+| Escola Mundial | pesquisa, aprendizado interno/externo, tendências e diretrizes de plataformas |
+| Memória Mundial | bibliotecas locais + Biblioteca Central |
+| Segurança | permissões, capabilities, auditoria e Socorro Deus |
+| Rodovia | transporte de pedidos/resultados |
+| Operações/Núcleo | runtime, contratos, dependências, rollback e ciclo de vida |
+| Dark Factory | produção local de conteúdo, edição, montagem, áudio, visual e qualidade |
+| Marketing | estratégia e campanhas; não possui conectores externos |
+| Financeiro | operações financeiras, mantido modular |
+| Terra | necessidades, operações, ambientes e setores executores |
+
+### Regra dos conectores
+
+Nenhum setor operacional cria seu próprio conector externo. Redes sociais, serviços de pesquisa, bancos de dados externos e futuros provedores passam pela Central de Conexões.
+
+### Escola Mundial
+
+A Escola é um centro de pesquisa e aprendizagem. Ela cruza conhecimento interno (bibliotecas locais, Memória Mundial e resultados das operações) com conhecimento externo (fontes conectadas, pesquisa, tendências da internet e diretrizes/sinais das plataformas). Aprender não concede autorização automática para publicar.
+
+### Governança e Judiciário
+
+O Conselho pertence ao bloco de Governança. O Judiciário é uma função interna desse bloco e trabalha com leis, termos, contratos, evidências, decisões e histórico. A composição do Conselho permanece sem participantes por enquanto; representantes e cargos serão definidos depois.
+
+As decisões deverão usar uma regra configurável de unanimidade ou maioria votada. O poder funcional permanece distribuído: nenhum bloco recebe autoridade universal apenas por ocupar uma posição hierárquica.
+
+### Hierarquia funcional
+
+A hierarquia será definida por importância e responsabilidade. A arquitetura reserva categorias funcionais como Executores (execução), Gestores (gestão), Orquestradores (coordenação) e Representantes/Governança (julgamento e representação). Os cargos, poderes exatos, representantes e pesos ainda serão definidos por bloco.
+
+### Fronteira humana
+
+A intervenção humana é obrigatória quando a operação cruza para o mundo externo ou produz consequência externa relevante: publicação, confirmação final do conteúdo, definição/confirmação de data e horário, alteração de conta externa ou ação externa de risco.
+
+A automação pode acelerar tarefas repetitivas internas, mas não herda automaticamente essa autoridade.
+
+### Dark Factory — estúdio local
+
+A Dark Factory é uma fábrica/estúdio local de conteúdo, conceitualmente próxima de um editor de vídeo, mas pertencente ao WordDark. Possui briefing, roteiro, visual, edição, áudio, montagem, qualidade e conhecimento.
+
+A fábrica produz e devolve resultados ao fluxo do WordDark; ela não possui conectores externos. Cada produção pode manter projeto local, versões, ativos, timeline, áudio e avaliação de qualidade.
+
+### Aprendizado contínuo
+
+Operação → Resultado → Biblioteca Local → Escola → Análise/Cruzamento → Conhecimento Reutilizável → Memória Mundial.
+
+Eventos externos relevantes também podem entrar pela Escola e ser comparados com o conhecimento interno.
+
+### Ciclo de conteúdo
+
+Necessidade → Fábrica → Validação.
+
+- Direitos/segurança: volta para Edição.
+- Resultado mediano: vai para Reestruturação.
+- Sem solução: vai para Refazer.
+- Aprovado tecnicamente: aguarda Autorização Humana.
+- Autorizado: entra na Linha de Postagem.
+
+`PARTIAL` fica reservado para operações com partes independentes em estados diferentes; não significa resultado mediano.
