@@ -15,6 +15,19 @@ for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.m
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function persist(){localStorage.setItem('wd.account.name',manager.name);localStorage.setItem('wd.account.profiles',JSON.stringify(manager.listProfiles()));}
+function renderScheduleTargets(){
+  const root=$('#schedule-targets');
+  if(!root)return;
+  const profiles=manager.listProfiles();
+  root.innerHTML=profiles.length?profiles.map(p=>'<label class="wd-profile" style="display:block;cursor:pointer"><div class="wd-profile-top"><span class="network">'+safe(p.networkName)+'</span><span class="wd-chip active">'+safe(p.status)+'</span></div><h3><input type="checkbox" class="wd-schedule-target" value="'+safe(p.id)+'" checked> '+safe(p.displayName)+'</h3><p>'+safe(p.handle||p.id)+'</p></label>').join(''):'<div class="wd-empty">Conecte pelo menos um perfil antes de criar um calendário.</div>';
+}
+function renderSchedules(){
+  const root=$('#schedule-list');
+  if(!root)return;
+  const schedules=centralOperations.listSchedules();
+  root.innerHTML=schedules.length?schedules.map(s=>'<article class="wd-manager"><span>CALENDÁRIO CENTRAL</span><h3>'+safe(s.id)+'</h3><p>'+s.scheduledContents+' conteúdo(s) · '+s.postsPerDay+' por dia · '+safe(s.dates.join(', '))+'</p><strong>'+s.targets.length+' destino(s) · '+safe(s.status)+'</strong><small>'+s.slots.map(slot=>safe(slot.date)+' '+safe(slot.time||'horário aberto')+' · '+safe(slot.content.text||slot.content.title||('Conteúdo '+slot.contentIndex))).join('<br>')+'</small></article>').join(''):'<div class="wd-empty">Nenhum calendário criado.</div>';
+}
+
 function render(){
   const profiles=manager.listProfiles();
   const session=loginManager.restore();
@@ -35,6 +48,8 @@ function render(){
   document.querySelectorAll('[data-network]').forEach(b=>b.onclick=()=>openNetworkSector(b.dataset.network));
   $('#managers').innerHTML='<article class="wd-manager central-manager"><span>GESTOR CENTRAL</span><h3>'+safe(centralOperations.name)+'</h3><p>ACCOUNT_OPERATIONS_MANAGER</p><strong>'+profiles.length+' perfil(is) sob coordenação</strong></article>'+manager.listManagers().map(m=>'<article class="wd-manager"><span>GESTOR DE PERFIL</span><h3>'+safe(m.name)+'</h3><p>'+safe(m.role)+'</p><strong>'+profiles.filter(p=>p.managerId===m.id).length+' perfil(is) gerenciado(s)</strong></article>').join('');
   document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>prepareRealConnection(b.dataset.auth));
+  renderScheduleTargets();
+  renderSchedules();
 }
 function openNetworkSector(network){
   const sector=networkSectors.prepareConnection(network);
@@ -108,6 +123,20 @@ $('#network').onchange=()=>{
   $('#handle').placeholder=youtube?'Será preenchido pelo canal real':'@seuperfil';
 };
 $('#open-connect').onclick=()=>location.hash='conectar';
+$('#schedule-form').onsubmit=e=>{
+  e.preventDefault();
+  const contents=$('#schedule-contents').value.split(/\\n+/).map(text=>text.trim()).filter(Boolean).map(text=>({text,format:'CONTENT'}));
+  const dates=$('#schedule-dates').value.split(',').map(x=>x.trim()).filter(Boolean);
+  const times=$('#schedule-times').value.split(',').map(x=>x.trim()).filter(Boolean);
+  const postsPerDay=Number($('#schedule-per-day').value);
+  const profileIds=[...document.querySelectorAll('.wd-schedule-target:checked')].map(x=>x.value);
+  try{
+    const schedule=centralOperations.createContentSchedule({contents,profileIds,postsPerDay,dates,times});
+    manager.registerCentralOperation(schedule);
+    $('#schedule-note').textContent='Calendário '+schedule.id+' criado: '+schedule.scheduledContents+' conteúdo(s) distribuído(s) em '+schedule.dates.length+' dia(s). '+(schedule.unscheduledContents?'Ficaram '+schedule.unscheduledContents+' conteúdo(s) sem slot.':'Todos os conteúdos receberam slot.');
+    renderSchedules();
+  }catch(error){$('#schedule-note').textContent='Não foi possível criar o calendário: '+(error?.message||error);}
+};
 $('#broadcast-form').onsubmit=e=>{
   e.preventDefault();
   const operation=centralOperations.createBroadcastOperation({
@@ -158,4 +187,4 @@ $('#youtube-config').hidden=$('#network').value!=='YOUTUBE';
 const themeButton=$('[data-wd-theme]');
 function syncTheme(){themeButton.textContent=document.documentElement.dataset.theme==='light'?'☾ Tema escuro':'☼ Tema claro'}
 themeButton.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='light'?'':'light';syncTheme()};
-syncTheme();render();renderConnectionOptionsAndSelection();
+syncTheme();render();renderConnectionOptionsAndSelection();renderScheduleTargets();renderSchedules();
