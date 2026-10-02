@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordDark — Central de Conexões</title>
+<link rel="stylesheet" href="../ui/worddark-ui.css"></head>
+<body class="wd-body">
+<button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false">☰</button>
+<div class="wd-shell"><aside id="wd-sidebar" class="wd-sidebar">
+<div class="wd-brand"><div class="wd-mark">🔗</div><div><strong>WORDDARK</strong><small>Central de Conexões</small></div></div>
+<nav class="wd-nav"><a href="../../">◈ Portão</a><a href="../">☁ Céu</a><a class="active" href="./">🔗 Conexões</a><a href="../darkfactory/">⚙ Dark Factory</a></nav>
+<div class="wd-footer">CÉU · CONEXÕES EXTERNAS</div></aside>
+<main class="wd-main"><div class="wd-surface">
+<div class="wd-top"><div><div class="wd-eyebrow">Camada · Céu · Conexões</div><h1 class="wd-title">Central de Conexões</h1><p class="wd-sub">A conexão acontece pela própria interface. O chat não é necessário para autorizar ou consultar uma integração.</p></div><button class="wd-btn" data-wd-theme type="button">Modo claro</button></div>
+<section class="wd-grid">
+<article class="wd-card full"><div class="wd-eyebrow">Entrada externa</div><h2>Identidade e provedores</h2><p class="wd-muted">Primeiro autorize o provedor; depois os setores podem usar as capacidades liberadas.</p><div id="providers" class="wd-entry-grid"></div></article>
+<article class="wd-card full"><div class="wd-eyebrow">YouTube</div><h2>Primeira conexão operacional</h2><p class="wd-muted">Informe o OAuth Client ID criado no Google Cloud. O navegador abre a autorização e retorna os dados do canal para esta interface.</p>
+<form id="youtube-form"><label class="wd-field">OAuth Client ID<input id="youtube-client-id" required autocomplete="off" placeholder="seu-client-id.apps.googleusercontent.com"></label><button class="wd-btn" type="submit">Autorizar YouTube</button></form>
+<div id="connection-note" class="wd-muted" style="margin-top:1rem"></div></article>
+<article class="wd-card"><div class="wd-eyebrow">Estado local</div><h2 id="connection-count">0 conexões</h2><p id="connection-state" class="wd-muted">Nenhum provedor autorizado neste navegador.</p></article>
+<article class="wd-card"><div class="wd-eyebrow">Segurança</div><h2>Sem segredo no código</h2><p class="wd-muted">Client ID pode ficar no navegador; client secrets nunca devem ser publicados no GitHub Pages.</p></article>
+</section></div></main></div>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module" src="./app.js"></script><script src="../ui/worddark-ui.js"></script>
+</body></html>
