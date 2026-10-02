@@ -95,3 +95,17 @@ assert.equal(caseReview.worldReview.findings.length,1);
 assert.ok(world.sectorLibraries.getSector("CENTRAL-CONTROL"));
 assert.ok(world.sectorLibraries.getSector("WORLD-SCHOOL"));
 console.log("Unified School + Council case + sector language: PASS");
+
+// Conselho: ciclo de caso com evidência, decisão e possibilidade de recurso.
+const councilCase=world.council.openCase({subjectId:"CONTENT-CASE-001",type:"CONTENT_COMPLIANCE",requesterId:"SECTOR-001",reason:"revisão de conformidade"});
+assert.equal(councilCase.status,"OPEN");
+const evidence=world.council.addEvidence(councilCase.id,{type:"CONTENT_RECORD",source:"LOCAL_LIBRARY",data:{rights:"PENDING"}});
+assert.equal(evidence.caseId,councilCase.id);
+const caseJudgment=world.council.judge({subjectId:"CONTENT-CASE-001",lawIds:["LAW-001"],facts:{violations:["NO_HARM"]},evidenceIds:[evidence.id]});
+assert.equal(caseJudgment.status,"NON_COMPLIANT");
+assert.equal(world.council.getCase(councilCase.id).status,"AWAITING_DECISION");
+const appeal=world.council.appeal(councilCase.id,{requesterId:"HUMAN-001",reason:"solicitar nova análise das evidências"});
+assert.equal(appeal.status,"OPEN");
+world.council.closeCase(councilCase.id,{closedBy:"HUMAN-001",reason:"encaminhamento concluído"});
+assert.equal(world.council.getCase(councilCase.id).status,"CLOSED");
+console.log("Council case lifecycle + evidence + appeal: PASS");
