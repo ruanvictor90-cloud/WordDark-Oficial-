@@ -35,7 +35,7 @@ export class WorldSectorRegistry {
     this.sectors=new Map(Object.entries(WORLD_SECTOR_MAP));
   }
   get(id){ return structuredClone(this.sectors.get(id)||null); }
-  list(){ return [...this.sectors.values()].map(structuredClone); }
+  list(){ return [...this.sectors.values()].map(item=>structuredClone(item)); }
   responsibilityFor(component){
     return this.list().find(sector=>sector.owns.includes(component))||null;
   }
