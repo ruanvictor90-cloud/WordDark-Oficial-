@@ -22,8 +22,16 @@ export class DarkFactory extends SkyDomain {
   this.knowledge.createNucleus({id:"DF-VALIDATION",name:"Validação"});
  }
  attachExecutors(executors){if(!executors||typeof executors.execute!=="function")throw new Error("EXECUTOR_REGISTRY_INVALID");this.executors=executors;return executors;}
+ attachRuntime(runtime){if(!runtime||typeof runtime.pipeline?.run!=="function")throw new Error("RUNTIME_REQUIRED");this.runtime=runtime;return runtime;}
  handle(operation){
-  const requestedTask=operation.payload?.taskType||operation.service;
+  const requestedTask=String(operation.payload?.taskType||operation.service||"").toUpperCase();
+  if(requestedTask==="CONTENT.PRODUCE"||requestedTask==="CONTENT_PRODUCE"){
+   if(!this.runtime)return {success:false,reason:"RUNTIME_NOT_ATTACHED"};
+   operation.pipeline={id:`CONTENT-PRODUCE-${operation.id}`,modules:["IDENTITY","SCRIPT","IMAGE","AUDIO","VIDEO"],currentIndex:0,failedModule:null,status:"PENDING"};
+   const result=this.runtime.pipeline.run(operation);
+   this.logs.push({id:id("DFLOG"),operationId:operation.id,executor:"CONTENT.PRODUCE",result,at:new Date().toISOString()});
+   return result?.status==="COMPLETED"?{success:true,result}:{success:false,reason:result?.reason||"PRODUCTION_FAILED",result};
+  }
   const task=requestedTask==="REEL" ? "VIDEO" : requestedTask;
   if(!this.executors)return {success:false,reason:"EXECUTOR_REGISTRY_NOT_CONFIGURED"};
   const result=this.executors.execute(task,operation,{factory:this});
