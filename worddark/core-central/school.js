@@ -92,6 +92,30 @@ export class WorldSchool {
     return matches.slice(0,Math.max(1,limit));
   }
 
+  research(query,{sources=null,sectorId=null,limit=25}={}){
+    const selected=sources||[...this.externalSources.keys()];
+    const external=selected.map(sourceId=>this.searchExternal(sourceId,query,{context:{sectorId,limit}}));
+    const learning=this.learn({query,sectorId,includeLocal:true,includeCentral:true,includeExternal:true,limit});
+    return {query,sectorId,external,learning};
+  }
+
+  captureTrend({topic,platform=null,signals=[],source="EXTERNAL"}={}){
+    const trend={id:id("SCHOOL-TREND"),topic,platform,signals:structuredClone(signals),source,capturedAt:new Date().toISOString(),status:"REVIEW_REQUIRED"};
+    this.signals.push(trend);this.knowledgeIndex.push({id:trend.id,source:KNOWLEDGE_SOURCE.EXTERNAL_SOURCE,type:"TREND",data:trend,status:trend.status});
+    this.audit?.record?.("SCHOOL_TREND_CAPTURED",trend);return structuredClone(trend);
+  }
+
+  registerPolicyPack({platform,version,sourceUrl=null,rules=[],evaluationSignals=[],capturedAt=null}={}){
+    if(!platform||!version) throw new Error("SCHOOL_POLICY_PACK_INVALID");
+    return this.registerPlatformGuidelines({platform,rules,evaluationSignals,source:"EXTERNAL_POLICY_PACK",version,sourceUrl,capturedAt:capturedAt||new Date().toISOString()});
+  }
+
+  recommend({query="",sectorId=null,platform=null}={}){
+    const snapshot=this.knowledgeSnapshot({query,sectorId});
+    const recommendation={id:id("SCHOOL-RECOMMENDATION"),query,sectorId,platform,sources:{local:snapshot.local.length,central:snapshot.central.length,external:snapshot.external.length},guidelines:platform?snapshot.guidelines.filter(x=>x.platform===platform):snapshot.guidelines,confidence:"REVIEW_REQUIRED",createdAt:new Date().toISOString()};
+    this.audit?.record?.("SCHOOL_RECOMMENDATION_CREATED",recommendation);return structuredClone(recommendation);
+  }
+
   learn({query="",sectorId=null,includeLocal=true,includeCentral=true,includeExternal=true,limit=25}={}) {
     const results=this.search(query,{sectorId,includeLocal,includeCentral,includeExternal,limit});
     const learning={id:id("SCHOOL-LEARNING"),query,sectorId,sources:[...new Set(results.map(x=>x.source))],results,at:new Date().toISOString()};
