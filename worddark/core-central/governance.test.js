@@ -6,6 +6,7 @@ import { DependencyMap } from "./dependency-map.js";
 import { AutonomyPolicy } from "./capability-policy.js";
 import { RollbackManager } from "./rollback-manager.js";
 import { LifecycleManager } from "./lifecycle-manager.js";
+import { KNOWLEDGE_CLASS } from "../biblioteca/knowledge-flow.js";
 
 const world=createWordDarkWorld();
 
@@ -35,4 +36,14 @@ policy.set("M-1",1,{allowedActions:["EXECUTE"],requiresApproval:false});
 assert.equal(policy.can("M-1","EXECUTE").allowed,true);
 
 assert.equal(world.contractRegistry.list().length,0);
+
+const sectorLibraries=world.sectorLibraries;
+sectorLibraries.registerSector({sectorId:"TEST-SECTOR",ownerId:"TEST-OWNER"});
+sectorLibraries.save("TEST-SECTOR",{id:"R-1",type:"RESULT",value:"useful"});
+assert.equal(sectorLibraries.list("TEST-SECTOR").length,1);
+assert.equal(sectorLibraries.filter("TEST-SECTOR").length,1);
+const promoted=sectorLibraries.consolidate("TEST-SECTOR",{classify:()=>KNOWLEDGE_CLASS.CANDIDATE});
+assert.equal(promoted.length,1);
+assert.equal(world.library.find(x=>x.sourceSector==="TEST-SECTOR").length,1);
+assert.equal(sectorLibraries.list("TEST-SECTOR")[0].centralizedAt!==undefined,true);
 console.log("WordDark governance tests: OK");
