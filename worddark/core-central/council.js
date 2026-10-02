@@ -102,6 +102,26 @@ export class WorldCouncil {
     return structuredClone(result);
   }
 
+  reviewSubject({subjectId,facts={},lawIds=[],contractIds=[],externalRuleIds=[],recurringUsage=[],sectorAssignments=[],worldSignals=[]}={}) {
+    const judgment=this.judge({subjectId,lawIds,contractIds,externalRuleIds,facts});
+    const worldReview=this.reviewWorld({recurringUsage,sectorAssignments,worldSignals});
+    return {id:id("COUNCIL-CASE"),subjectId,jurisdiction:"WORLD",judgment,worldReview,at:new Date().toISOString()};
+  }
+
+  inspectWorld() {
+    return {
+      id:id("COUNCIL-WORLD-SNAPSHOT"),
+      memory:this.inspectWorldMemory(),
+      findings:structuredClone(this.findings),
+      decisions:structuredClone(this.decisions),
+      laws:structuredClone(this.laws),
+      terms:structuredClone(this.terms),
+      contracts:structuredClone(this.contracts),
+      externalRules:structuredClone(this.externalRules),
+      at:new Date().toISOString()
+    };
+  }
+
   inspectWorldMemory({sectorId=null,knowledgeClass=null}={}) {
     if(sectorId&&this.sectorLibraries) {
       const records=this.sectorLibraries.list(sectorId);
