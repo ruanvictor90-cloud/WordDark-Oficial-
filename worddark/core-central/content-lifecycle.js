@@ -8,7 +8,8 @@ export const CONTENT_OUTCOME=Object.freeze({
   FAILED:"FAILED",
   BLOCKED:"BLOCKED",
   WAITING_HUMAN:"WAITING_HUMAN",
-  REDO:"REDO"
+  REDO:"REDO",
+  HUMAN_RELEASE:"HUMAN_RELEASE"
 });
 
 export const CONTENT_ROUTE=Object.freeze({
@@ -16,7 +17,8 @@ export const CONTENT_ROUTE=Object.freeze({
   MEDIOCRE_RESULT:"RESTRUCTURE",
   UNRESOLVED:"REDO",
   READY_FOR_WORLD:"WORLD_RELEASE_GATE",
-  PARTIAL_EXECUTION:"PARTIAL"
+  PARTIAL_EXECUTION:"PARTIAL",
+  HUMAN_RELEASE:"WORLD_RELEASE_GATE"
 });
 
 export const CONTENT_OUTCOME_DEFINITION=Object.freeze({
@@ -88,6 +90,14 @@ export class ContentLifecycle {
     if(evaluated.outcome===CONTENT_OUTCOME.COMPLETED) return {route:CONTENT_ROUTE.READY_FOR_WORLD,item:evaluated};
     if(!solvable||evaluated.outcome===CONTENT_OUTCOME.REDO) return {route:CONTENT_ROUTE.UNRESOLVED,item:evaluated};
     return {route:"REVIEW",item:evaluated};
+  }
+
+  requestHumanRelease(operationId,{reason="CONTENT_READY_FOR_WORLD"}={}){
+    const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    item.outcome=CONTENT_OUTCOME.HUMAN_RELEASE;
+    item.history.push({id:id("CONTENT-HUMAN-RELEASE"),type:"WAITING_HUMAN_RELEASE",reason,at:new Date().toISOString()});
+    this.audit?.record?.("CONTENT_WAITING_HUMAN_RELEASE",{operationId,reason});
+    return structuredClone(item);
   }
 
   markPartial(operationId,{completedTargets=[],pendingTargets=[],failedTargets=[],reason=null}={}) {
