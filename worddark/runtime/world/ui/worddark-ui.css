@@ -16,3 +16,24 @@ body.wd-body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,
 @media(max-width:900px){.wd-shell{grid-template-columns:1fr}.wd-sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--wd-line)}.wd-nav{grid-template-columns:repeat(2,1fr)}.wd-card,.wd-card.wide{grid-column:1/-1}.wd-form-grid{grid-template-columns:1fr}}
 @media(max-width:480px){.wd-nav{grid-template-columns:1fr}.wd-main{padding:20px 14px 40px}.wd-sidebar{padding:14px 10px}.wd-title{font-size:2.25rem}.wd-card{padding:15px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.wd-btn,.wd-nav a{transition:none}}
+
+/* HUD contextual oficial — identidade de setor */
+.wd-entry{position:relative;overflow:hidden;border:1px solid var(--wd-line);border-radius:20px;background:linear-gradient(135deg,var(--wd-panel),var(--wd-panel2));min-height:180px;padding:22px;display:flex;align-items:flex-end}
+.wd-entry-media{position:absolute;inset:0;background-size:cover;background-position:center;opacity:.22;pointer-events:none}
+.wd-entry::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,9,18,.92),rgba(7,9,18,.48),rgba(7,9,18,.78));pointer-events:none}
+.wd-entry-content{position:relative;z-index:1;max-width:760px}
+.wd-location{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--wd-muted);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.wd-location b{color:var(--wd-text)}
+.wd-sector-mark{width:54px;height:54px;border:1px solid rgba(177,140,255,.55);border-radius:16px;display:grid;place-items:center;background:rgba(14,19,32,.7);backdrop-filter:blur(8px);margin-bottom:14px;font-size:1.45rem}
+.wd-entry .wd-title{font-size:clamp(1.8rem,4vw,3.2rem);margin-bottom:7px}
+.wd-entry .wd-sub{max-width:650px}
+.wd-context-nav{display:flex;align-items:center;gap:7px;margin-top:18px;overflow:auto;padding-bottom:3px}
+.wd-context-nav a{white-space:nowrap;color:var(--wd-muted);text-decoration:none;border:1px solid var(--wd-line);background:var(--wd-panel);border-radius:999px;padding:7px 10px;font-size:.76rem}
+.wd-context-nav a.active{color:var(--wd-text);border-color:var(--wd-accent);background:rgba(139,92,246,.14)}
+.wd-entry-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:18px}
+.wd-entry-card{display:block;text-decoration:none;color:var(--wd-text);border:1px solid var(--wd-line);border-radius:15px;background:var(--wd-panel);padding:15px;transition:.16s ease}
+.wd-entry-card:hover{transform:translateY(-2px);border-color:var(--wd-accent)}
+.wd-entry-card .wd-card-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--wd-panel2);margin-bottom:12px}
+.wd-entry-card small{color:var(--wd-muted);display:block;line-height:1.45;margin-top:5px}
+.wd-surface{max-width:1100px;margin:0 auto}
+@media(max-width:600px){.wd-entry{min-height:210px;padding:17px}.wd-entry-grid{grid-template-columns:1fr 1fr}.wd-entry-card{padding:13px}}
