@@ -5,6 +5,7 @@ import { AccountLoginManager, CONNECTION_SOURCES } from './worddark/core-central
 import { NetworkSectorManager } from './worddark/core-central/network-sector-manager.js';
 import { EmergencyStop } from './worddark/core-central/emergency-stop.js';
 import { CentralAutomationController } from './worddark/core-central/central-automation-controller.js';
+import { createExternalConnectionHub } from './worddark/core-central/external-connection-hub.js';
 
 const loginManager=new AccountLoginManager();
 const identity=loginManager.restore();
@@ -16,6 +17,7 @@ try{centralOperations.schedules=JSON.parse(localStorage.getItem('wd.central.sche
 const networkSectors=new NetworkSectorManager({accountManager:manager});
 const emergencyStop=new EmergencyStop();
 const automation=new CentralAutomationController({accountManager:manager,emergencyStop});
+const externalConnections=createExternalConnectionHub();
 for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -55,6 +57,7 @@ function render(){
   document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>prepareRealConnection(b.dataset.auth));
   renderScheduleTargets();
   renderSchedules();
+  renderExternalConnections();
 }
 function openNetworkSector(network){
   const sector=networkSectors.prepareConnection(network);
@@ -205,3 +208,13 @@ $('#automation-release')?.addEventListener('click',()=>{
   const note=$('#automation-note');if(note)note.textContent='Automação permanece em PREPARADO e com aprovação humana obrigatória.';
   render();
 });
+
+function renderExternalConnections(){
+  const root=$('#external-connections');
+  if(!root)return;
+  root.innerHTML=externalConnections.listProviders().map(provider=>{
+    const state=provider.status;
+    const label=state==='READY'?'CONECTOR PREPARADO':state==='AUTHORIZATION_REQUIRED'?'AGUARDANDO OAUTH':state;
+    return '<article class="wd-manager"><span>CENTRAL DE CONEXÕES</span><h3>'+safe(provider.name)+'</h3><p>'+safe(provider.type)+'</p><strong>'+label+'</strong><small>'+safe(provider.capabilities.join(' · '))+'</small><button class="wd-profile-action" data-external="'+safe(provider.id)+'">Ver conexão</button></article>';
+  }).join('');
+}
