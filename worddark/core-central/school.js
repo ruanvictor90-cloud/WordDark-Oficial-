@@ -14,13 +14,15 @@ export class WorldSchool {
     this.signals=[];
     this.readyContent=new Map();
   }
-  analyzeLocalKnowledge(sectorId,{records=[],worldSignals=[]}={}) {
-    const analyzed=records.map(record=>({
+  analyzeLocalKnowledge(sectorId,{records=null,worldSignals=[]}={}) {
+    const sourceRecords=records||this.sectorLibraries?.list?.(sectorId)||[];
+    const analyzed=sourceRecords.map(record=>({
       recordId:record.id||null,
       sectorId,
       relevance:record.relevance||"UNASSESSED",
       reusable:Boolean(record.reusable),
-      worldFit:record.worldFit||null
+      worldFit:record.worldFit||null,
+      knowledgeClass:record.knowledgeClass||"LOCAL"
     }));
     const signals=worldSignals.filter(x=>x?.requiresAttention||x?.relevant);
     const result={id:id("SCHOOL-ANALYSIS"),sectorId,source:KNOWLEDGE_SOURCE.LOCAL_LIBRARY,analyzed,worldSignals:structuredClone(signals),at:new Date().toISOString()};
@@ -33,6 +35,14 @@ export class WorldSchool {
     this.signals.push(result);
     this.audit?.record?.("SCHOOL_WORLD_EVENT_CAPTURED",result);
     return structuredClone(result);
+  }
+  evaluateWorldEvent(event,{promoteToMemory=false,reason="WORLD_EVENT_REVIEW"}={}) {
+    const learned=this.learnFromWorld(event);
+    if(promoteToMemory&&this.centralLibrary) {
+      const memory=this.centralLibrary.append({id:id("SCHOOL-MEMORY"),type:"WORLD_MEMORY",source:"WORLD-SCHOOL",reason,data:learned});
+      return {learned,memory:structuredClone(memory)};
+    }
+    return {learned,memory:null};
   }
   prepareContent(content,{source="LOCAL_LIBRARY",sectorId=null,reason="READY_FOR_HUMAN_REVIEW"}={}) {
     const item={id:id("CONTENT-READY"),content:structuredClone(content),source,sectorId,reason,status:"READY_FOR_HUMAN_AUTHORIZATION",createdAt:new Date().toISOString()};
