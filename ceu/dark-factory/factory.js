@@ -55,6 +55,19 @@ export class DarkFactory extends SkyDomain {
    this.logs.push({id:id("DFLOG"),operationId:operation.id,projectId:project.id,executor:"CONTENT.PRODUCE",result,at:new Date().toISOString()});
    return result?.status==="COMPLETED"?{success:true,result,projectId:project.id}:{success:false,reason:result?.reason||"PRODUCTION_FAILED",result,projectId:project.id};
   }
+  const reviewMode={
+    "CONTENT.EDIT":"EDIT",
+    "CONTENT_EDIT":"EDIT",
+    "CONTENT.RESTRUCTURE":"RESTRUCTURE",
+    "CONTENT_RESTRUCTURE":"RESTRUCTURE",
+    "CONTENT.REDO":"REDO",
+    "CONTENT_REDO":"REDO"
+  }[requestedTask];
+  if(reviewMode){
+    const result=this._runRevision(operation,reviewMode);
+    this.logs.push({id:id("DFLOG"),operationId:operation.id,executor:"CONTENT."+reviewMode,result,at:new Date().toISOString()});
+    return result;
+  }
   const task=requestedTask==="REEL"?"VIDEO":requestedTask;
   if(!this.executors)return {success:false,reason:"EXECUTOR_REGISTRY_NOT_CONFIGURED"};
   const result=this.executors.execute(task,operation,{factory:this});
