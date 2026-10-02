@@ -65,7 +65,7 @@ export function createWordDarkWorld(){
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK",metadata:{scope:"CORE_OPERATIONAL_MEMORY"}});
  const sectorLibraries=new SectorLibraryManager({centralLibrary:library,audit});
- const council=new WorldCouncil({audit,sectorLibraries});
+ const council=new WorldCouncil({audit,sectorLibraries,centralLibrary:library});
  const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
