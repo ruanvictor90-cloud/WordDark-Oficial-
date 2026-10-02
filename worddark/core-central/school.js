@@ -20,11 +20,11 @@ export class WorldSchool {
     this.knowledgeIndex=[];this.metricSignals=[];this.learningRules=[];
   }
 
-  registerExternalSource({id:sourceId,name,type="SEARCH",adapter=null,status="READY"}={}) {
+  registerExternalSource({id:sourceId,name,type="SEARCH",adapter=null,status="READY",providerId=null,capabilities=[]}={}) {
     if(!sourceId||!name) throw new Error("SCHOOL_SOURCE_INVALID");
-    const source={id:sourceId,name,type,status,adapter};
+    const source={id:sourceId,name,type,status,adapter,providerId,capabilities:[...capabilities]};
     this.externalSources.set(sourceId,source);
-    this.audit?.record?.("SCHOOL_EXTERNAL_SOURCE_REGISTERED",{id:sourceId,name,type,status});
+    this.audit?.record?.("SCHOOL_EXTERNAL_SOURCE_REGISTERED",{id:sourceId,name,type,status,providerId,capabilities});
     return structuredClone({...source,adapter:undefined});
   }
 
@@ -90,6 +90,41 @@ export class WorldSchool {
     if(includeCentral&&this.centralLibrary) for(const record of this.centralLibrary.list()) add(record,"WORLD_MEMORY");
     if(includeExternal) for(const record of this.knowledgeIndex) add(record,"EXTERNAL_SOURCE");
     return matches.slice(0,Math.max(1,limit));
+  }
+
+  learn({query="",sectorId=null,includeLocal=true,includeCentral=true,includeExternal=true,limit=25}={}) {
+    const results=this.search(query,{sectorId,includeLocal,includeCentral,includeExternal,limit});
+    const learning={id:id("SCHOOL-LEARNING"),query,sectorId,sources:[...new Set(results.map(x=>x.source))],results,at:new Date().toISOString()};
+    this.signals.push(learning);
+    this.audit?.record?.("SCHOOL_LEARNING_CYCLE",learning);
+    return structuredClone(learning);
+  }
+
+  observeWorld({event,source="WORLD_EVENT",requiresAttention=false,relevance="UNASSESSED"}={}) {
+    return this.learnFromWorld({event,source,requiresAttention,relevance});
+  }
+
+  ingestPlatformGuideline(platform,data={}) {
+    return this.registerPlatformGuidelines({
+      platform,
+      rules:data.rules||[],
+      evaluationSignals:data.evaluationSignals||[],
+      source:data.source||"EXTERNAL_PLATFORM"
+    });
+  }
+
+  knowledgeSnapshot({query="",sectorId=null}={}) {
+    const results=this.search(query,{sectorId});
+    return {
+      id:id("SCHOOL-SNAPSHOT"),
+      query,
+      sectorId,
+      local:results.filter(x=>x.source==="LOCAL_LIBRARY"),
+      central:results.filter(x=>x.source==="WORLD_MEMORY"),
+      external:results.filter(x=>x.source==="EXTERNAL_SOURCE"),
+      guidelines:this.getPlatformGuidelines(),
+      at:new Date().toISOString()
+    };
   }
 
   getPlatformGuidelines(platform=null) {
