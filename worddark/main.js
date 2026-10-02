@@ -37,6 +37,7 @@ import { PostingLine } from "./core-central/posting-line.js";
 import { CentralControl } from "./core-central/central-control.js";
 import { GovernanceSector } from "./governanca/index.js";
 import { WorldSectorRegistry } from "./core-central/sector-map.js";
+import { ChannelManagementOperation } from "./core-central/channel-management-operation.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -77,6 +78,7 @@ export function createWordDarkWorld(){
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
  const centralControl=new CentralControl({council:governance.council,school,postingLine,automation,audit});
+ const channelManagement=new ChannelManagementOperation({accountManager,accountOperations,school,contentLifecycle,postingLine,audit});
  governance.council.decisionRule=governance.decisionRule;
 
  // Toda unidade setorial nasce falando a mesma linguagem de memoria:
@@ -148,7 +150,7 @@ export function createWordDarkWorld(){
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
   operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,postingLine,centralControl,
-  audit,permissions,rights:governance.productionRights,persistence,versions,errors,emergencyStop,diagnostics,governance,sectorRegistry
+  audit,permissions,rights:governance.productionRights,persistence,versions,errors,emergencyStop,diagnostics,governance,sectorRegistry,channelManagement
  };
 }
 export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus,externalConnections:world.externalConnections.status(),centralControl:world.centralControl.status(),contentLifecycle:world.contentLifecycle.list().length};}
