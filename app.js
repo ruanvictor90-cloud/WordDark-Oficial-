@@ -2,6 +2,7 @@ import { AccountManager } from './worddark/core-central/account-manager.js';
 import { YouTubeConnector } from './worddark/core-central/social-networks.js';
 import { AccountOperationsManager } from './worddark/core-central/account-operations-manager.js';
 import { AccountLoginManager, CONNECTION_SOURCES } from './worddark/core-central/account-login-manager.js';
+import { NetworkSectorManager } from './worddark/core-central/network-sector-manager.js';
 
 const loginManager=new AccountLoginManager();
 const identity=loginManager.restore();
@@ -9,6 +10,7 @@ const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:identity
 const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
 const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'PROFILE_MANAGER'});
 const centralOperations=new AccountOperationsManager({accountManager:manager});
+const networkSectors=new NetworkSectorManager({accountManager:manager});
 for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -28,9 +30,20 @@ function render(){
     const real=p.config?.youtube?.channelId;
     return '<article class="wd-profile"><div class="wd-profile-top"><span class="network">'+safe(p.networkName)+'</span><span class="wd-chip active">'+safe(p.status)+'</span></div><h3>'+safe(p.displayName)+'</h3><p>'+safe(p.handle||p.id)+'</p><div class="wd-profile-meta"><span>SETOR: <b>'+safe(p.displayName)+'</b></span><span>GESTOR: <b>'+safe(g?.name||'Sem gestor')+'</b></span></div><small>'+ (real?'CANAL REAL · '+safe(real):'CADASTRO LOCAL') +'</small><button class="wd-profile-action" data-auth="'+p.id+'">Conectar conta real</button></article>'
   }).join(''):'<div class="wd-empty">Nenhum perfil conectado ainda.<br><strong>O primeiro passo é conectar uma rede.</strong></div>';
+  const sectorRoot=$('#network-sectors');
+  if(sectorRoot) sectorRoot.innerHTML=networkSectors.listSectors().map(s=>'<article class="wd-manager"><span>SETOR DE REDE</span><h3>'+safe(s.manager)+'</h3><p>'+safe(s.name)+' · '+safe(s.status)+'</p><strong>'+s.profiles+' perfil(is)</strong><button class="wd-profile-action" data-network="'+safe(s.id)+'">Abrir setor</button></article>').join('');
+  document.querySelectorAll('[data-network]').forEach(b=>b.onclick=()=>openNetworkSector(b.dataset.network));
   $('#managers').innerHTML='<article class="wd-manager central-manager"><span>GESTOR CENTRAL</span><h3>'+safe(centralOperations.name)+'</h3><p>ACCOUNT_OPERATIONS_MANAGER</p><strong>'+profiles.length+' perfil(is) sob coordenação</strong></article>'+manager.listManagers().map(m=>'<article class="wd-manager"><span>GESTOR DE PERFIL</span><h3>'+safe(m.name)+'</h3><p>'+safe(m.role)+'</p><strong>'+profiles.filter(p=>p.managerId===m.id).length+' perfil(is) gerenciado(s)</strong></article>').join('');
   document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>prepareRealConnection(b.dataset.auth));
 }
+function openNetworkSector(network){
+  const sector=networkSectors.prepareConnection(network);
+  $('#network').value=network;
+  $('#youtube-config').hidden=network!=='YOUTUBE';
+  $('#connect-note').textContent=sector.message;
+  location.hash='conectar';
+}
+
 async function loginGoogle(){
   if(!window.google?.accounts?.id){$('#identity-note').textContent='Serviço de login Google ainda não carregado.';return;}
   const clientId=localStorage.getItem('wd.google.clientId')||prompt('Informe o Google OAuth Client ID do projeto WordDark:');
