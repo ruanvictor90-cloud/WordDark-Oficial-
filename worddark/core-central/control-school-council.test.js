@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { createWordDarkWorld } from "../main.js";
 
 const world=createWordDarkWorld();
+assert.equal(world.centralControl.id,"CENTRAL-CONTROL");
+assert.equal(world.centralControl.school.id,"WORLD-SCHOOL");
 
 // Conselho: observa recorrência e pode propor realocação de setor.
 world.council.addMember({id:"COUNCIL-001",name:"Conselheiro Operacional"});
