@@ -18,6 +18,7 @@ import { OperationDiagnostics } from "./core-central/diagnostics.js";
 import { OperationRegistry } from "./core-central/operation-registry.js";
 import { CommunicationBus } from "./core-central/communication.js";
 import { IntegrationRegistry } from "./core-central/integrations.js";
+import { createExternalConnectionHub } from "./core-central/external-connection-hub.js";
 import { createTerra } from "../terra/index.js";
 import { ChannelOperationContract } from "./core-central/channel-contract.js";
 import { AccountManager } from "./core-central/account-manager.js";
@@ -50,6 +51,7 @@ export function createWordDarkWorld(){
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry});
  const integrations=new IntegrationRegistry({audit});
+ const externalConnections=createExternalConnectionHub({integrationRegistry:integrations,audit});
  const {terra}=createTerra({runtime});
  const creation=createWorldCreation({runtime,library,security});
  central.creation=creation;
@@ -71,8 +73,8 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,security,finance,
-  operationRegistry,communication,integrations,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
+  operationRegistry,communication,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
-export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus};}
+export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus,externalConnections:world.externalConnections.status()};}
