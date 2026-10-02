@@ -1,4 +1,4 @@
-import { YouTubeConnector } from "../../../../../../core-central/social-networks.js";
+import { YouTubeConnector } from "../../../../core-central/social-networks.js";
 const STORAGE_KEY="wd.external.connections", CLIENT_KEY="wd.youtube.clientId";
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
