@@ -32,6 +32,9 @@ import { DependencyMap } from "./core-central/dependency-map.js";
 import { AutonomyPolicy } from "./core-central/capability-policy.js";
 import { RollbackManager } from "./core-central/rollback-manager.js";
 import { LifecycleManager } from "./core-central/lifecycle-manager.js";
+import { WorldCouncil } from "./core-central/council.js";
+import { WorldSchool } from "./core-central/school.js";
+import { ContentLifecycle } from "./core-central/content-lifecycle.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -60,6 +63,9 @@ export function createWordDarkWorld(){
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK",metadata:{scope:"CORE_OPERATIONAL_MEMORY"}});
  const sectorLibraries=new SectorLibraryManager({centralLibrary:library,audit});
+ const council=new WorldCouncil({audit,sectorLibraries});
+ const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
+ const contentLifecycle=new ContentLifecycle({audit});
  sectorLibraries.registerSector({sectorId:"WORDDARK-CORE",ownerId:"WORDDARK",metadata:{role:"CORE_OPERATIONAL_MEMORY"}});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
@@ -93,7 +99,7 @@ export function createWordDarkWorld(){
  autonomy.set("MARKETING",1,{allowedActions:["EXECUTE"],requiresApproval:true});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
-  operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
+  operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
