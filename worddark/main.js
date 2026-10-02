@@ -46,6 +46,9 @@ export function createWordDarkWorld(){
  const accountOperations=new AccountOperationsManager({accountManager});
  const audit=new AuditLog();
  const emergencyStop=new EmergencyStop();
+ const integrations=new IntegrationRegistry({audit});
+ const externalConnections=createExternalConnectionHub({integrationRegistry:integrations,audit});
+ const sectorRegistry=new WorldSectorRegistry({audit});
  const automation=new CentralAutomationController({accountManager,emergencyStop});
  const contractRegistry=new ContractRegistry({audit});
  const dependencyMap=new DependencyMap({audit});
@@ -74,7 +77,6 @@ export function createWordDarkWorld(){
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
  const centralControl=new CentralControl({council:governance.council,school,postingLine,automation,audit});
- const sectorRegistry=new WorldSectorRegistry({audit});
  governance.council.decisionRule=governance.decisionRule;
 
  // Toda unidade setorial nasce falando a mesma linguagem de memoria:
@@ -106,8 +108,6 @@ export function createWordDarkWorld(){
  school.registerLearningRule({id:"PLATFORM-GUIDELINES",name:"Diretrizes e sinais de plataforma",metric:"PLATFORM_EVALUATION",source:"EXTERNAL",weight:1});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
- const integrations=new IntegrationRegistry({audit});
- const externalConnections=createExternalConnectionHub({integrationRegistry:integrations,audit});
  for(const source of [
   {id:"GOOGLE-SEARCH",name:"Google Search",type:"KNOWLEDGE_SEARCH",status:"AUTHORIZATION_REQUIRED",capabilities:["SEARCH"]},
   {id:"YOUTUBE-DATA",name:"YouTube Data",type:"PLATFORM_KNOWLEDGE",status:"AUTHORIZATION_REQUIRED",capabilities:["SEARCH","PUBLIC_CONTENT"]},
