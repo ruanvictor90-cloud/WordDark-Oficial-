@@ -9,12 +9,14 @@ export const COUNCIL_DECISIONS=Object.freeze({
 });
 
 export class WorldCouncil {
-  constructor({audit=null,sectorLibraries=null}={}) {
+  constructor({audit=null,sectorLibraries=null,centralLibrary=null}={}) {
     this.id="WORLD-COUNCIL";
     this.audit=audit;
     this.sectorLibraries=sectorLibraries;
+    this.centralLibrary=centralLibrary;
     this.members=[];
     this.decisions=[];
+    this.findings=[];
   }
   addMember({id:memberId,name,role="COUNCIL_MEMBER",scope="WORLD"}={}) {
     if(!memberId||!name) throw new Error("COUNCIL_MEMBER_INVALID");
@@ -45,18 +47,36 @@ export class WorldCouncil {
         subject:signal.subject||null,reason:signal.reason||"WORLD_SIGNAL_REVIEW"
       });
     }
-    const result={id:id("COUNCIL-REVIEW"),status:"REVIEWED",findings,sectorAssignments:structuredClone(sectorAssignments)};
+    this.findings.push(...findings);
+    const result={id:id("COUNCIL-REVIEW"),status:"REVIEWED",findings,sectorAssignments:structuredClone(sectorAssignments),worldMemory:this.inspectWorldMemory()};
     this.decisions.push(result);
     this.audit?.record?.("COUNCIL_WORLD_REVIEWED",result);
     return structuredClone(result);
   }
+  inspectWorldMemory({sectorId=null,knowledgeClass=null}={}) {
+    if(sectorId&&this.sectorLibraries) {
+      const records=this.sectorLibraries.list(sectorId);
+      return {scope:"SECTOR",sectorId,records:records.filter(x=>!knowledgeClass||x.knowledgeClass===knowledgeClass),count:records.length};
+    }
+    const records=this.centralLibrary?.list?.()||[];
+    return {scope:"WORLD_MEMORY",records:structuredClone(records),count:records.length};
+  }
+  inspectRecurringUsage(records=[]) {
+    const bySector=new Map();
+    for(const record of records) {
+      const key=record.sectorId||record.usedSector||"UNASSIGNED";
+      bySector.set(key,(bySector.get(key)||0)+1);
+    }
+    return [...bySector.entries()].map(([sectorId,count])=>({sectorId,count}));
+  }
   decide(findingId,decision,{reason=null,targetSector=null,requesterId=null}={}) {
+    if(!Object.values(COUNCIL_DECISIONS).includes(decision)) throw new Error("COUNCIL_DECISION_INVALID");
     const decisionEntry={id:id("COUNCIL-DECISION"),findingId,decision,reason,targetSector,requesterId,at:new Date().toISOString()};
     this.decisions.push(decisionEntry);
     this.audit?.record?.("COUNCIL_DECISION",decisionEntry);
     return structuredClone(decisionEntry);
   }
   status() {
-    return {id:this.id,members:this.members.length,activeMembers:this.members.filter(x=>x.active).length,decisions:this.decisions.length};
+    return {id:this.id,members:this.members.length,activeMembers:this.members.filter(x=>x.active).length,findings:this.findings.length,decisions:this.decisions.length,worldMemoryAccessible:Boolean(this.centralLibrary)};
   }
 }
