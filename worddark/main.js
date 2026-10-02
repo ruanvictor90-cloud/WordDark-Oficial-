@@ -36,6 +36,7 @@ import { WorldCouncil } from "./core-central/council.js";
 import { WorldSchool } from "./core-central/school.js";
 import { ContentLifecycle } from "./core-central/content-lifecycle.js";
 import { PostingLine } from "./core-central/posting-line.js";
+import { CentralControl } from "./core-central/central-control.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -68,6 +69,7 @@ export function createWordDarkWorld(){
  const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
+ const centralControl=new CentralControl({council,school,postingLine,automation,audit});
  sectorLibraries.registerSector({sectorId:"WORDDARK-CORE",ownerId:"WORDDARK",metadata:{role:"CORE_OPERATIONAL_MEMORY"}});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
@@ -101,8 +103,8 @@ export function createWordDarkWorld(){
  autonomy.set("MARKETING",1,{allowedActions:["EXECUTE"],requiresApproval:true});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
-  operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,postingLine,
+  operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,postingLine,centralControl,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
-export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus,externalConnections:world.externalConnections.status(),council:world.council.status(),school:world.school.status(),postingLine:world.postingLine.status(),contentLifecycle:world.contentLifecycle.list().length};}
+export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus,externalConnections:world.externalConnections.status(),centralControl:world.centralControl.status(),contentLifecycle:world.contentLifecycle.list().length};}
