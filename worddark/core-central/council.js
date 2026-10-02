@@ -1,5 +1,7 @@
 import { id } from "./id.js";
 
+export const COUNCIL_SCOPE=Object.freeze({ WORLD:"WORLD", JUDICIARY:"JUDICIARY", STRUCTURE:"STRUCTURE", OPERATIONS:"OPERATIONS" });
+
 export const COUNCIL_DECISIONS=Object.freeze({
   OBSERVE:"OBSERVE",
   RECLASSIFY:"RECLASSIFY",
@@ -17,6 +19,9 @@ export class WorldCouncil {
     this.members=[];
     this.decisions=[];
     this.findings=[];
+    this.laws=[];
+    this.terms=[];
+    this.contracts=[];
   }
   addMember({id:memberId,name,role="COUNCIL_MEMBER",scope="WORLD"}={}) {
     if(!memberId||!name) throw new Error("COUNCIL_MEMBER_INVALID");
@@ -24,6 +29,27 @@ export class WorldCouncil {
     this.members.push(member);
     this.audit?.record?.("COUNCIL_MEMBER_ADDED",member);
     return structuredClone(member);
+  }
+  registerLaw(law={}) {
+    if(!law.id||!law.name) throw new Error("COUNCIL_LAW_INVALID");
+    const item={id:law.id,name:law.name,scope:law.scope||COUNCIL_SCOPE.WORLD,rules:structuredClone(law.rules||[]),version:law.version||"1.0.0",status:law.status||"ACTIVE"};
+    this.laws.push(item);this.audit?.record?.("COUNCIL_LAW_REGISTERED",item);return structuredClone(item);
+  }
+  registerTerm(term={}) {
+    if(!term.id||!term.name) throw new Error("COUNCIL_TERM_INVALID");
+    const item={id:term.id,name:term.name,type:term.type||"TERM",text:term.text||"",version:term.version||"1.0.0",status:term.status||"ACTIVE"};
+    this.terms.push(item);this.audit?.record?.("COUNCIL_TERM_REGISTERED",item);return structuredClone(item);
+  }
+  registerContract(contract={}) {
+    if(!contract.id||!contract.parties) throw new Error("COUNCIL_CONTRACT_INVALID");
+    const item={id:contract.id,name:contract.name||contract.id,parties:structuredClone(contract.parties),terms:structuredClone(contract.terms||[]),status:contract.status||"ACTIVE",version:contract.version||"1.0.0"};
+    this.contracts.push(item);this.audit?.record?.("COUNCIL_CONTRACT_REGISTERED",item);return structuredClone(item);
+  }
+  judge({subjectId,lawIds=[],contractIds=[],facts={},requestedDecision=COUNCIL_DECISIONS.REQUEST_REVIEW}={}) {
+    const applicableLaws=this.laws.filter(x=>lawIds.includes(x.id)||lawIds.length===0&&x.status==="ACTIVE");
+    const applicableContracts=this.contracts.filter(x=>contractIds.includes(x.id)||contractIds.length===0&&x.status==="ACTIVE");
+    const judgment={id:id("COUNCIL-JUDGMENT"),subjectId,scope:COUNCIL_SCOPE.JUDICIARY,requestedDecision,lawIds:applicableLaws.map(x=>x.id),contractIds:applicableContracts.map(x=>x.id),facts:structuredClone(facts),status:"REVIEWED",at:new Date().toISOString()};
+    this.decisions.push(judgment);this.audit?.record?.("COUNCIL_JUDGMENT",judgment);return structuredClone(judgment);
   }
   reviewWorld({recurringUsage=[],sectorAssignments=[],worldSignals=[]}={}) {
     const findings=[];
@@ -77,6 +103,6 @@ export class WorldCouncil {
     return structuredClone(decisionEntry);
   }
   status() {
-    return {id:this.id,members:this.members.length,activeMembers:this.members.filter(x=>x.active).length,findings:this.findings.length,decisions:this.decisions.length,worldMemoryAccessible:Boolean(this.centralLibrary)};
+    return {id:this.id,members:this.members.length,activeMembers:this.members.filter(x=>x.active).length,findings:this.findings.length,decisions:this.decisions.length,laws:this.laws.length,terms:this.terms.length,contracts:this.contracts.length,worldMemoryAccessible:Boolean(this.centralLibrary)};
   }
 }
