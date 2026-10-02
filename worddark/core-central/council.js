@@ -2,6 +2,15 @@ import { id } from "./id.js";
 
 export const COUNCIL_SCOPE=Object.freeze({ WORLD:"WORLD", JUDICIARY:"JUDICIARY", STRUCTURE:"STRUCTURE", OPERATIONS:"OPERATIONS" });
 
+export const COUNCIL_CASE_STATUS=Object.freeze({
+  OPEN:"OPEN",
+  UNDER_REVIEW:"UNDER_REVIEW",
+  AWAITING_DECISION:"AWAITING_DECISION",
+  DECIDED:"DECIDED",
+  REFERRED:"REFERRED",
+  CLOSED:"CLOSED"
+});
+
 export const COUNCIL_DECISIONS=Object.freeze({
   OBSERVE:"OBSERVE",
   RECLASSIFY:"RECLASSIFY",
@@ -24,6 +33,9 @@ export class WorldCouncil {
     this.contracts=[];this.externalRules=[];
     this.decisionRule="UNANIMOUS";
     this.votingHistory=[];
+    this.cases=new Map();
+    this.evidence=new Map();
+    this.appeals=[];
   }
 
   addMember({id:memberId,name,role="COUNCIL_MEMBER",scope="WORLD"}={}) {
@@ -58,7 +70,35 @@ export class WorldCouncil {
     this.externalRules.push(item);this.audit?.record?.("COUNCIL_EXTERNAL_RULE_REGISTERED",item);return structuredClone(item);
   }
 
-  judge({subjectId,lawIds=[],contractIds=[],externalRuleIds=[],facts={},requestedDecision=COUNCIL_DECISIONS.REQUEST_REVIEW}={}) {
+  openCase({subjectId,type="WORLD_REVIEW",scope=COUNCIL_SCOPE.WORLD,requesterId=null,reason=null}={}) {
+    if(!subjectId) throw new Error("COUNCIL_SUBJECT_REQUIRED");
+    const item={id:id("COUNCIL-CASE"),subjectId,type,scope,requesterId,reason,status:COUNCIL_CASE_STATUS.OPEN,evidenceIds:[],judgmentId:null,decisionId:null,createdAt:new Date().toISOString()};
+    this.cases.set(item.id,item);
+    this.audit?.record?.("COUNCIL_CASE_OPENED",item);
+    return structuredClone(item);
+  }
+
+  addEvidence(caseId,evidence={}) {
+    const item=this.cases.get(caseId);
+    if(!item) throw new Error("COUNCIL_CASE_NOT_FOUND");
+    if(!evidence.id) evidence.id=id("COUNCIL-EVIDENCE");
+    const entry={...structuredClone(evidence),caseId,capturedAt:new Date().toISOString()};
+    this.evidence.set(entry.id,entry);
+    item.evidenceIds.push(entry.id);
+    item.status=COUNCIL_CASE_STATUS.UNDER_REVIEW;
+    this.audit?.record?.("COUNCIL_EVIDENCE_ADDED",entry);
+    return structuredClone(entry);
+  }
+
+  getCase(caseId) {
+    return structuredClone(this.cases.get(caseId)||null);
+  }
+
+  listCases() {
+    return [...this.cases.values()].map(structuredClone);
+  }
+
+  judge({subjectId,lawIds=[],contractIds=[],externalRuleIds=[],facts={},evidenceIds=[],requestedDecision=COUNCIL_DECISIONS.REQUEST_REVIEW}={}) {
     const applicableLaws=this.laws.filter(x=>lawIds.includes(x.id)||lawIds.length===0&&x.status==="ACTIVE");
     const applicableContracts=this.contracts.filter(x=>contractIds.includes(x.id)||contractIds.length===0&&x.status==="ACTIVE");
     const applicableExternalRules=this.externalRules.filter(x=>externalRuleIds.includes(x.id)||externalRuleIds.length===0&&x.status==="ACTIVE");
@@ -73,11 +113,15 @@ export class WorldCouncil {
     const judgment={
       id:id("COUNCIL-JUDGMENT"),subjectId,scope:COUNCIL_SCOPE.JUDICIARY,requestedDecision,
       lawIds:applicableLaws.map(x=>x.id),contractIds:applicableContracts.map(x=>x.id),externalRuleIds:applicableExternalRules.map(x=>x.id),
-      facts:structuredClone(facts),violations,status:violations.length?"NON_COMPLIANT":"REVIEWED",
+      facts:structuredClone(facts),evidenceIds:[...evidenceIds],violations,status:violations.length?"NON_COMPLIANT":"REVIEWED",
       recommendation:violations.length?COUNCIL_DECISIONS.REQUEST_REVIEW:COUNCIL_DECISIONS.OBSERVE,
       at:new Date().toISOString()
     };
-    this.decisions.push(judgment);this.audit?.record?.("COUNCIL_JUDGMENT",judgment);return structuredClone(judgment);
+    this.decisions.push(judgment);
+    const openCase=[...this.cases.values()].find(x=>x.subjectId===subjectId&&x.status!==COUNCIL_CASE_STATUS.CLOSED);
+    if(openCase){openCase.status=COUNCIL_CASE_STATUS.AWAITING_DECISION;openCase.judgmentId=judgment.id;}
+    this.audit?.record?.("COUNCIL_JUDGMENT",judgment);
+    return structuredClone(judgment);
   }
 
   reviewWorld({recurringUsage=[],sectorAssignments=[],worldSignals=[]}={}) {
@@ -161,6 +205,28 @@ export class WorldCouncil {
     return structuredClone(result);
   }
 
+  appeal(caseId,{requesterId,reason}={}) {
+    const item=this.cases.get(caseId);
+    if(!item) throw new Error("COUNCIL_CASE_NOT_FOUND");
+    if(!reason) throw new Error("COUNCIL_APPEAL_REASON_REQUIRED");
+    const appeal={id:id("COUNCIL-APPEAL"),caseId,requesterId:requesterId||null,reason,status:"OPEN",createdAt:new Date().toISOString()};
+    this.appeals.push(appeal);
+    item.status=COUNCIL_CASE_STATUS.REFERRED;
+    this.audit?.record?.("COUNCIL_APPEAL_OPENED",appeal);
+    return structuredClone(appeal);
+  }
+
+  closeCase(caseId,{reason=null,closedBy=null}={}) {
+    const item=this.cases.get(caseId);
+    if(!item) throw new Error("COUNCIL_CASE_NOT_FOUND");
+    item.status=COUNCIL_CASE_STATUS.CLOSED;
+    item.closedAt=new Date().toISOString();
+    item.closedBy=closedBy||null;
+    item.closeReason=reason||null;
+    this.audit?.record?.("COUNCIL_CASE_CLOSED",item);
+    return structuredClone(item);
+  }
+
   decide(findingId,decision,{reason=null,targetSector=null,requesterId=null}={}) {
     if(!Object.values(COUNCIL_DECISIONS).includes(decision)) throw new Error("COUNCIL_DECISION_INVALID");
     const decisionEntry={id:id("COUNCIL-DECISION"),findingId,decision,reason,targetSector,requesterId,at:new Date().toISOString()};
@@ -173,7 +239,7 @@ export class WorldCouncil {
     return {
       id:this.id,members:this.members.length,activeMembers:this.members.filter(x=>x.active).length,
       findings:this.findings.length,decisions:this.decisions.length,decisionRule:this.decisionRule,votes:this.votingHistory.length,laws:this.laws.length,
-      terms:this.terms.length,contracts:this.contracts.length,externalRules:this.externalRules.length,worldMemoryAccessible:Boolean(this.centralLibrary)
+      terms:this.terms.length,contracts:this.contracts.length,externalRules:this.externalRules.length,openCases:this.listCases().filter(x=>x.status!==COUNCIL_CASE_STATUS.CLOSED).length,evidence:this.evidence.size,appeals:this.appeals.length,worldMemoryAccessible:Boolean(this.centralLibrary)
     };
   }
 }
