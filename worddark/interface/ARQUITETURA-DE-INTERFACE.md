@@ -205,3 +205,42 @@ Quando um novo setor for criado, sua interface deve nascer com:
 - ações mínimas.
 
 A interface só cresce quando o setor cresce.
+
+
+## GitHub Pages oficial — Portão → Contexto → Setor
+
+O GitHub Pages é a representação visual navegável do mundo oficial. Ele não cria uma segunda arquitetura: apenas expõe a arquitetura operacional existente.
+
+Entrada oficial:
+
+```
+PORTÃO WORDDARK
+  ↓
+IDENTIDADE / ACESSO
+  ↓
+CAMADA
+  ├── TERRA
+  ├── CÉU
+  └── NÚCLEO
+  ↓
+SETOR
+  ↓
+ÁREA
+  ↓
+AÇÃO
+```
+
+A página inicial não lista estruturas de negócio como SucoCast, YouTube ou Dark Factory como se fossem obrigatórias. Elas só aparecem depois que existirem no contexto apropriado.
+
+O HUD deve manter:
+- contexto atual e posição no mundo;
+- identidade visual do local/setor;
+- status essencial;
+- ações de entrada e saída;
+- navegação para o próximo nível;
+- segurança contextual;
+- memória contextual.
+
+Não deve antecipar funções dos níveis filhos nem transformar a entrada em um painel administrativo gigante.
+
+A Biblioteca Central pode ser acessada pelo contexto de memória, mas continua sendo memória mundial, não centro de controle da execução.
