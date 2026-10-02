@@ -3,6 +3,8 @@ import { YouTubeConnector } from './worddark/core-central/social-networks.js';
 import { AccountOperationsManager } from './worddark/core-central/account-operations-manager.js';
 import { AccountLoginManager, CONNECTION_SOURCES } from './worddark/core-central/account-login-manager.js';
 import { NetworkSectorManager } from './worddark/core-central/network-sector-manager.js';
+import { EmergencyStop } from './worddark/core-central/emergency-stop.js';
+import { CentralAutomationController } from './worddark/core-central/central-automation-controller.js';
 
 const loginManager=new AccountLoginManager();
 const identity=loginManager.restore();
@@ -12,6 +14,8 @@ const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',
 const centralOperations=new AccountOperationsManager({accountManager:manager});
 try{centralOperations.schedules=JSON.parse(localStorage.getItem('wd.central.schedules')||'[]');}catch{centralOperations.schedules=[];}
 const networkSectors=new NetworkSectorManager({accountManager:manager});
+const emergencyStop=new EmergencyStop();
+const automation=new CentralAutomationController({accountManager:manager,emergencyStop});
 for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -189,3 +193,15 @@ const themeButton=$('[data-wd-theme]');
 function syncTheme(){themeButton.textContent=document.documentElement.dataset.theme==='light'?'☾ Tema escuro':'☼ Tema claro'}
 themeButton.onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='light'?'':'light';syncTheme()};
 syncTheme();render();renderConnectionOptionsAndSelection();renderScheduleTargets();renderSchedules();
+$('#emergency-stop')?.addEventListener('click',()=>{
+  const result=emergencyStop.triggerGlobal({requesterId:loginManager.restore()?.email||'LOCAL-USER',reason:'Socorro Deus acionado pelo Gestor de Contas.'});
+  automation.stop({requesterId:loginManager.restore()?.email||'LOCAL-USER',reason:'Socorro Deus acionado pelo Gestor de Contas.'});
+  const note=$('#automation-note');if(note)note.textContent='🚨 AUTOMAÇÃO PARADA. Nenhuma nova execução pode avançar até a liberação.';
+  render();
+});
+$('#automation-release')?.addEventListener('click',()=>{
+  emergencyStop.release('GLOBAL',{requesterId:loginManager.restore()?.email||'LOCAL-USER',reason:'Liberação manual após parada de emergência.'});
+  automation.release();
+  const note=$('#automation-note');if(note)note.textContent='Automação permanece em PREPARADO e com aprovação humana obrigatória.';
+  render();
+});
