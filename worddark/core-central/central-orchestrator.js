@@ -1,15 +1,15 @@
 import { Operation } from './operation.js';
 
 export class CentralOrchestrator{
-  constructor({centralManager,runtime=null}={}){
+  constructor({centralManager,runtime=null,automation=null}={}){
     if(!centralManager)throw new Error('CENTRAL_MANAGER_REQUIRED');
     this.centralManager=centralManager;
-    this.runtime=runtime;
+    this.runtime=runtime;this.automation=automation;
     this.id='CENTRAL-ORCHESTRATOR';
     this.status='ACTIVE';
   }
 
-  attachRuntime(runtime){
+  attachAutomation(automation){this.automation=automation;return this.status();}\n\n  attachRuntime(runtime){
     this.runtime=runtime;
     return this.status();
   }
@@ -32,7 +32,26 @@ export class CentralOrchestrator{
     }));
   }
 
-  dispatchToFactory(scheduleId,slotId){
+  queueSlot(scheduleId,slotId,{priority="NORMAL"}={}){
+    const jobs=this.prepareSlot(scheduleId,slotId);
+    if(!this.automation)return jobs.map(job=>({...job,status:"WAITING_AUTOMATION_CONTROLLER"}));
+    return jobs.map(job=>this.automation.enqueue({
+      operationId:job.id,scheduleId,slotId,target:job.target,content:job.content,priority
+    }));
+  }
+
+  dispatchToFactory(scheduleId,slotId,{approved=false,requesterId=null}={}){
+    const jobs=this.prepareSlot(scheduleId,slotId);
+    if(this.automation){
+      const queued=this.queueSlot(scheduleId,slotId);
+      if(!approved)return queued.map(job=>({...job,status:"WAITING_APPROVAL"}));
+      return queued.map(job=>{
+        const approvedJob=this.automation.approve(job.id,{requesterId});
+        if(approvedJob.status!=="READY")return approvedJob;
+        this.automation.updateJob(job.id,"RUNNING");
+        return this._dispatchJob(jobs.find(item=>item.id===job.operationId),job.id);
+      });
+    }
     const jobs=this.prepareSlot(scheduleId,slotId);
     if(!this.runtime){
       return jobs.map(job=>({...job,status:'WAITING_RUNTIME'}));
