@@ -76,7 +76,34 @@ export function createWordDarkWorld(){
  const centralControl=new CentralControl({council:governance.council,school,postingLine,automation,audit});
  const sectorRegistry=new WorldSectorRegistry({audit});
  governance.council.decisionRule=governance.decisionRule;
+
+ // Toda unidade setorial nasce falando a mesma linguagem de memoria:
+ // cada setor possui biblioteca local; a Biblioteca Central permanece como Memoria Mundial.
+ for(const sector of sectorRegistry.list()) {
+  sectorLibraries.registerSector({
+   sectorId:sector.id,
+   ownerId:sector.id,
+   metadata:{responsibility:sector.responsibility,rule:sector.rule}
+  });
+ }
  sectorLibraries.registerSector({sectorId:"WORDDARK-CORE",ownerId:"WORDDARK",metadata:{role:"CORE_OPERATIONAL_MEMORY"}});
+
+ // A Escola usa as mesmas fontes registradas na Central de Conexoes.
+ for(const source of externalConnections.listProviders()) {
+  school.registerExternalSource({
+   id:source.id,
+   name:source.name,
+   type:source.type,
+   providerId:source.id,
+   capabilities:source.capabilities||[],
+   status:source.status
+  });
+ }
+
+ // Regras iniciais da Escola: aprender do mundo, do desempenho interno e das diretrizes externas.
+ school.registerLearningRule({id:"WORLD-TRENDS",name:"Tendencias do mundo",metric:"TREND_SIGNAL",source:"EXTERNAL",weight:1});
+ school.registerLearningRule({id:"CONTENT-PERFORMANCE",name:"Desempenho do proprio conteudo",metric:"CONTENT_METRICS",source:"INTERNAL",weight:1});
+ school.registerLearningRule({id:"PLATFORM-GUIDELINES",name:"Diretrizes e sinais de plataforma",metric:"PLATFORM_EVALUATION",source:"EXTERNAL",weight:1});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
  const integrations=new IntegrationRegistry({audit});
