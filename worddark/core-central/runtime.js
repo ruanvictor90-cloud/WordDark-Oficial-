@@ -26,6 +26,7 @@ export class WordDarkRuntime {
   const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
   const owner=module.owner||module.id;
   const isCapability=!module.handle&&typeof module.handler==="function";
+  if(!operation.destination)operation.destination=owner;
   const contractId=context.contractId||`EXCHANGE:${operation.origin}:${owner}:${moduleId}`;
   if(!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:operation.destination||owner,operations:[operation.type],capability:moduleId,reversible:true,metadata:{generated:true,module:moduleId,internal:isCapability}});
   const nextContext={...(operation.context||{})};
