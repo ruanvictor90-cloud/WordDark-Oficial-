@@ -1,9 +1,9 @@
 import { id } from "./id.js";
 
 export class EmergencyStop {
-  constructor(){ this.stops=new Map(); this.audit=[]; }
+  constructor(){ this.stops=new Map(); this.audit=[]; this.globalStatus="RUNNING"; }
   trigger({operationId,sectorId,requesterId,reason}={}){
-    if(!operationId) return {success:false,reason:"OPERATION_ID_REQUIRED"};
+    if(!operationId) return this.triggerGlobal({sectorId,requesterId,reason});
     const current=this.stops.get(operationId);
     if(current?.status!=="RELEASED") return {success:true,status:"ALREADY_STOPPED",stop:structuredClone(current)};
     const stop={id:id("STOP"),operationId,sectorId:sectorId||null,requesterId:requesterId||null,
@@ -11,14 +11,14 @@ export class EmergencyStop {
     this.stops.set(operationId,stop); this.audit.push({event:"TRIGGERED",...structuredClone(stop)});
     return {success:true,status:"STOPPED",stop:structuredClone(stop)};
   }
-  isStopped(operationId){ return this.stops.get(operationId)?.status==="ACTIVE"; }
+  isStopped(operationId){ return this.globalStatus==="STOPPED"||this.stops.get(operationId)?.status==="ACTIVE"; }
   assertRunning(operationId){
     const stop=this.stops.get(operationId);
     return stop?.status==="ACTIVE"
       ? {allowed:false,reason:"EMERGENCY_STOP_ACTIVE",stopId:stop.id}
       : {allowed:true};
   }
-  release(operationId,{requesterId,reason}={}){
+  release(operationId="GLOBAL",{requesterId,reason}={}){\n    if(operationId==="GLOBAL"){\n      if(this.globalStatus!=="STOPPED")return {success:false,reason:"GLOBAL_STOP_NOT_FOUND"};\n      const stop=this.stops.get("GLOBAL");stop.status="RELEASED";stop.releasedAt=new Date().toISOString();this.globalStatus="RUNNING";\n      this.audit.push({event:"GLOBAL_RELEASED",operationId,requesterId:requesterId||null,reason:reason||null,stopId:stop.id});\n      return {success:true,status:"RELEASED",stop:structuredClone(stop)};\n    }
     const stop=this.stops.get(operationId); if(!stop) return {success:false,reason:"STOP_NOT_FOUND"};
     stop.status="RELEASED"; stop.releasedAt=new Date().toISOString();
     this.audit.push({event:"RELEASED",operationId,requesterId:requesterId||null,reason:reason||null,stopId:stop.id});
