@@ -10,11 +10,12 @@ const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:identity
 const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
 const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'PROFILE_MANAGER'});
 const centralOperations=new AccountOperationsManager({accountManager:manager});
+try{centralOperations.schedules=JSON.parse(localStorage.getItem('wd.central.schedules')||'[]');}catch{centralOperations.schedules=[];}
 const networkSectors=new NetworkSectorManager({accountManager:manager});
 for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function persist(){localStorage.setItem('wd.account.name',manager.name);localStorage.setItem('wd.account.profiles',JSON.stringify(manager.listProfiles()));}
+function persist(){localStorage.setItem('wd.account.name',manager.name);localStorage.setItem('wd.account.profiles',JSON.stringify(manager.listProfiles()));localStorage.setItem('wd.central.schedules',JSON.stringify(centralOperations.listSchedules()));}
 function renderScheduleTargets(){
   const root=$('#schedule-targets');
   if(!root)return;
