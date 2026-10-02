@@ -1,132 +1,129 @@
-# WordDark — Arquitetura Oficial do Mundo
+# WordDark — Mapa Oficial Consolidado
 
-> Documento-base do Marco Zero. Define o mapa público e as responsabilidades das grandes camadas antes da expansão do código.
+## Regra central
 
-## 1. Visão do mundo
+O WordDark é uma infraestrutura modular. A estrutura territorial nasce conforme conexões, grupos e operações reais existirem.
 
-O WordDark é um mundo digital modular.
-
-~~~
+```
 WORDDARK
-├── CÉU  → fornece suporte, infraestrutura e execução
-└── TERRA → cria, opera e expande necessidades
-~~~
+├── CÉU  → infraestrutura, serviços e execução
+└── TERRA → grupos, operações, ambientes e setores
+```
 
-A separação existe para evitar que uma área assuma a função da outra.
+**A Terra gera necessidades. O Céu fornece os meios para atendê-las.**
 
-### Céu
+## Terra
 
-O Céu resolve necessidades. Pode fornecer infraestrutura, serviços, sistemas, segurança, armazenamento, roteamento, execução, fábricas e tecnologias.
+A estrutura territorial é dinâmica:
 
-### Terra
+```
+PAÍS    → GRUPO / ORGANIZAÇÃO
+ESTADO  → OPERAÇÃO
+CIDADE  → AMBIENTE / PERFIL / REDE
+BAIRRO  → SETOR EXECUTOR
+```
 
-A Terra gera e administra necessidades. Pode conter países, estados, setores, empresas, marcas, lojas, produtos, serviços, projetos e operações.
-
-**Regra central:** A Terra gera necessidades. O Céu fornece os meios para atendê-las.
-
-## 2. Mapa territorial da Terra
-
-~~~
-TERRA
-└── PAÍS
-    └── ESTADO
-        └── SETOR
-            └── OPERAÇÃO
-~~~
-
-Cada unidade pode possuir identidade, memória, armazenamento, segurança e regras próprias.
+Nenhuma camada é criada artificialmente. Antes de criar uma nova camada, o classificador verifica se a necessidade cabe em uma estrutura existente.
 
 ### Exemplo
 
-~~~
-Juice Country
-└── SucoCast
-    ├── Conteúdo
-    ├── Produção
-    ├── Distribuição
-    └── Inteligência
-~~~
+Uma conta isolada:
 
-## 3. Mapa de suporte do Céu
+```
+CONTA
+└── contexto mínimo
+    └── ambiente/perfil
+```
 
-~~~
-CÉU
-├── DARK FACTORY
-├── ROUTING / RODOVIA
-├── REGISTRY
-├── SECURITY
-├── STORAGE
-└── CONTRACTS
-~~~
+Várias contas de uma mesma pessoa ou grupo:
 
-### Dark Factory
-Produz, edita, processa e valida trabalhos autorizados. Não cria a necessidade da Terra, não administra uma marca e não escolhe onde um conteúdo será publicado.
+```
+PAÍS: Grupo
+└── ESTADO: Operação
+    ├── CIDADE: Instagram
+    └── CIDADE: YouTube
+```
 
-### Rodovia
-Transporta pedidos e respostas entre unidades.
+## Céu
 
-### Registry
-Conhece unidades, serviços, capacidades e executores registrados.
+```
+DOMÍNIO → REGIÃO → NÚCLEO → DISTRITO
+```
 
-### Security
-Cuida de identidade, autenticação, autorização, escopo e auditoria.
+O Céu contém serviços compartilhados, como:
 
-### Storage
-Mantém dados operacionais e históricos conforme as regras do mundo.
+- Runtime
+- Registry
+- Rodovia
+- Segurança
+- Biblioteca
+- Dark Factory
+- Marketing
+- infraestrutura de conexões externas
 
-### Contracts
-Define como as unidades conversam e quais formatos devem respeitar.
+## Central de Conexões Externas
 
-## 4. Fluxo oficial
+Todas as integrações com serviços externos passam por um único ponto:
 
-~~~
+```
+SETOR
+  ↓
+CENTRAL DE CONEXÕES EXTERNAS
+  ├── identidade/autorização
+  ├── provider
+  ├── connector/adapter
+  ├── capacidades
+  ├── estado
+  ├── saúde
+  ├── auditoria
+  └── recuperação
+  ↓
+SERVIÇO EXTERNO
+```
+
+O setor não precisa conhecer a implementação do provedor.
+
+## Fluxo operacional
+
+```
 TERRA
-  │ necessidade
-  ▼
+ ↓
+PORTÃO
+ ↓
+IDENTIFICAÇÃO
+ ↓
+PERMISSÃO
+ ↓
 RODOVIA
-  ▼
-CÉU
-  ├── identificação
-  ├── autorização
-  ├── execução
-  ├── validação
-  └── registro
-  ▼
+ ↓
+CÉU / SERVIÇO
+ ↓
+VALIDAÇÃO
+ ↓
+RESULTADO
+ ↓
 RODOVIA
-  ▼
+ ↓
 TERRA
-  └── resultado
-~~~
+```
 
-### Exemplo de conteúdo
+## Automação
 
-~~~
-SucoCast → requerimento → Rodovia → Dark Factory
-Dark Factory → produção/edição/validação → Rodovia → SucoCast
-SucoCast → escolhe destino → distribuição/publicação
-~~~
+Toda automação futura deve passar por:
 
-**Regra:** a Fábrica produz; o País/Estado decide o destino e a distribuição.
+```
+REQUISITO
+→ FILA
+→ APROVAÇÃO
+→ EXECUÇÃO
+→ RESULTADO
+→ REGISTRO
+```
 
-## 5. Identidade e rastreabilidade
+A automação permanece controlada e possui parada por operação e parada global.
 
-Toda comunicação importante deve permitir responder: quem, o quê, de onde, para onde, com qual autorização, o que foi executado e qual foi o resultado.
+## Estado do mundo
 
-## 6. Princípios do Marco Zero
+Os nomes históricos **País Suco, SucoCast, Cidade de Compras** e outros permanecem como templates/legado funcional quando aplicável. Eles não devem aparecer como estrutura universal do WordDark.
 
-1. Modularidade.
-2. Responsabilidade separada.
-3. Identidade antes de execução.
-4. Autorização antes de ação.
-5. Registro das operações importantes.
-6. Comunicação por contratos e rotas.
-7. Nada de função escondida em outra camada.
-8. Crescimento sem reconstrução do núcleo.
-9. Testes antes de colocar mudanças no mundo operacional.
-10. O mapa do mundo vem antes da expansão do código.
-
-## 7. Ordem de construção
-
-~~~
-MARCO ZERO → NÚCLEO → MVP FUNCIONAL → TESTES → SEGURANÇA → AUTOMAÇÃO → ESCALA
-~~~
+A conexão real ou criação explícita determina quando essas estruturas passam a existir no mundo operacional.
