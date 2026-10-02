@@ -32,8 +32,10 @@ export function createWordDarkWorld(){
  const accountManager=new AccountManager({accountId:"ACCOUNT-LOCAL",accountName:"Minha Conta"});
  const structureClassifier=new WorldStructureClassifier();
  const accountOperations=new AccountOperationsManager({accountManager});
+ const emergencyStop=new EmergencyStop();
+ const automation=new CentralAutomationController({accountManager,emergencyStop});
  const runtime=new WordDarkRuntime({central,emergencyStop});
- const centralOrchestrator=new CentralOrchestrator({centralManager:accountOperations,runtime});
+ const centralOrchestrator=new CentralOrchestrator({centralManager:accountOperations,runtime,automation});
  const library=new CentralLibrary();
  const audit=new AuditLog();
  const security=new Security({audit});
@@ -43,8 +45,6 @@ export function createWordDarkWorld(){
  const persistence=new MemoryPersistence();
  const versions=new VersionHistory();
  const errors=new ErrorRecovery();
- const emergencyStop=new EmergencyStop();
- const automation=new CentralAutomationController({accountManager,emergencyStop});
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK"});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
@@ -71,7 +71,7 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,security,finance,
-  operationRegistry,communication,integrations,accountManager,accountOperations,centralOrchestrator,structureClassifier,
+  operationRegistry,communication,integrations,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
