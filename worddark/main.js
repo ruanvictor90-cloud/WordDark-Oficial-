@@ -22,13 +22,17 @@ import { createTerra } from "../terra/index.js";
 import { ChannelOperationContract } from "./core-central/channel-contract.js";
 import { AccountManager } from "./core-central/account-manager.js";
 import { WorldStructureClassifier } from "./core-central/world-structure.js";
+import { AccountOperationsManager } from "./core-central/account-operations-manager.js";
+import { CentralOrchestrator } from "./core-central/central-orchestrator.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
  const channelContract=new ChannelOperationContract({id:"CHANNEL-OPERATION-CONTRACT",name:"Central de Operações"});
  const accountManager=new AccountManager({accountId:"ACCOUNT-LOCAL",accountName:"Minha Conta"});
  const structureClassifier=new WorldStructureClassifier();
+ const accountOperations=new AccountOperationsManager({accountManager});
  const runtime=new WordDarkRuntime({central});
+ const centralOrchestrator=new CentralOrchestrator({centralManager:accountOperations,runtime});
  const library=new CentralLibrary();
  const audit=new AuditLog();
  const security=new Security({audit});
@@ -65,8 +69,8 @@ export function createWordDarkWorld(){
  runtime.registerGate({gateId:"WORLD-GATE",ownerId:"WORDDARK",layer:"CENTRAL"});
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,security,finance,
-  operationRegistry,communication,integrations,accountManager,structureClassifier,
+  operationRegistry,communication,integrations,accountManager,accountOperations,centralOrchestrator,structureClassifier,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
 }
-export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status()};}
+export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status()};}
