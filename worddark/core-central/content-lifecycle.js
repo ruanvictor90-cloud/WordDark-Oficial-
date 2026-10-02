@@ -1,0 +1,49 @@
+import { id } from "./id.js";
+
+export const CONTENT_OUTCOME=Object.freeze({
+  COMPLETED:"COMPLETED",
+  NEEDS_EDIT:"NEEDS_EDIT",
+  NEEDS_RESTRUCTURE:"NEEDS_RESTRUCTURE",
+  FAILED:"FAILED",
+  BLOCKED:"BLOCKED",
+  WAITING_HUMAN:"WAITING_HUMAN"
+});
+
+export class ContentLifecycle {
+  constructor({audit=null}={}) {this.audit=audit;this.items=new Map();}
+  register(operationId,{contentId=null,metrics=null,rights=null,safety=null}={}) {
+    const item={id:id("CONTENT-LIFECYCLE"),operationId,contentId,metrics:structuredClone(metrics||{}),rights:structuredClone(rights||{}),safety:structuredClone(safety||{}),outcome:"IN_PROGRESS",revision:0,history:[],createdAt:new Date().toISOString()};
+    this.items.set(operationId,item);
+    return structuredClone(item);
+  }
+  evaluate(operationId,{rightsOk=true,safetyOk=true,metricsOk=true,needsEdit=false,needsRestructure=false,reason=null}={}) {
+    const item=this.items.get(operationId);
+    if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    let outcome="COMPLETED";
+    if(!rightsOk||!safetyOk) outcome=CONTENT_OUTCOME.NEEDS_EDIT;
+    else if(needsRestructure) outcome=CONTENT_OUTCOME.NEEDS_RESTRUCTURE;
+    else if(!metricsOk||needsEdit) outcome=CONTENT_OUTCOME.NEEDS_EDIT;
+    const entry={id:id("CONTENT-OUTCOME"),outcome,reason,at:new Date().toISOString()};
+    item.outcome=outcome;item.history.push(entry);
+    this.audit?.record?.("CONTENT_OUTCOME_EVALUATED",{operationId,...entry});
+    return structuredClone(item);
+  }
+  restructure(operationId,{reason=null}={}) {
+    const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    item.revision+=1;
+    item.outcome=CONTENT_OUTCOME.NEEDS_RESTRUCTURE;
+    item.history.push({id:id("CONTENT-REVISION"),type:"RESTRUCTURE",revision:item.revision,reason,at:new Date().toISOString()});
+    this.audit?.record?.("CONTENT_RESTRUCTURE_REQUESTED",{operationId,revision:item.revision,reason});
+    return structuredClone(item);
+  }
+  edit(operationId,{reason=null}={}) {
+    const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    item.revision+=1;
+    item.outcome=CONTENT_OUTCOME.NEEDS_EDIT;
+    item.history.push({id:id("CONTENT-REVISION"),type:"EDIT",revision:item.revision,reason,at:new Date().toISOString()});
+    this.audit?.record?.("CONTENT_EDIT_REQUESTED",{operationId,revision:item.revision,reason});
+    return structuredClone(item);
+  }
+  get(operationId){return structuredClone(this.items.get(operationId)||null);}
+  list(){return [...this.items.values()].map(structuredClone);}
+}
