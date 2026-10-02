@@ -279,3 +279,35 @@ Tudo que produzir consequência externa relevante permanece atrás de autorizaç
 - ações com direitos, segurança ou risco relevante.
 
 A **Linha de Postagem** recebe conteúdo autorizado e mantém a confirmação humana como requisito antes do agendamento/execução.
+
+## Bloco 1 — Controle, Escola, Conselho e passagem ao mundo
+
+### Conselho Mundial
+O Conselho possui visão de mundo e acesso à Memória Mundial para observar recorrências, sinais e uso de estruturas. Ele pode registrar decisões de observação, reclassificação, revisão, reestruturação ou retenção. A decisão do Conselho não substitui o executor: ela gera uma decisão/diretriz que deve ser encaminhada ao setor responsável.
+
+### Escola Mundial
+A Escola aprende em duas direções:
+- biblioteca local dos setores;
+- acontecimentos/sinais observados no mundo.
+
+Ela pode analisar conhecimento, aprender com eventos e preparar conteúdos. A preparação não equivale à publicação: conteúdo destinado ao mundo permanece atrás de autorização humana.
+
+### Ciclo de conteúdo
+- NEEDS_EDIT: direitos, segurança ou correção localizada exigem edição.
+- NEEDS_RESTRUCTURE: resultado abaixo do objetivo/métrica ou qualidade mediana pede melhoria estrutural.
+- REDO: quando a solução não é viável, o conteúdo volta para refazer.
+- WORLD_RELEASE_GATE: conteúdo tecnicamente pronto aguarda a passagem humana ao mundo.
+
+Uma operação não deve ser considerada "parcial" por ter qualidade mediana. Parcial fica reservado para operações com múltiplos alvos quando apenas parte deles concluiu.
+
+### Linha de postagem
+A Linha de Postagem é a fronteira entre produção e mundo externo. Publicação e agendamento exigem confirmação humana registrada. A automação pode preparar, organizar e acelerar etapas repetitivas, mas não recebe por padrão a autoridade final de colocar algo no mundo.
+
+### Automação
+Automação é mecanismo de aceleração para tarefas repetitivas e controláveis. Ela não deve assumir a autorização humana necessária para ações de passagem ao mundo. O catálogo exato de tarefas automatizáveis será definido antes das conexões externas.
+
+### Regra de passagem ao mundo
+Fluxo conceitual:
+Necessidade → Produção → Validação → Edição/Reestruturação/Refazer quando necessário → Pronto → Confirmação humana → Linha de Postagem → Agendamento/Publicação.
+
+Ações externas irreversíveis ou públicas permanecem explicitamente atrás de confirmação humana.
