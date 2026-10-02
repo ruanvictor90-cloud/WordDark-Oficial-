@@ -1,5 +1,3 @@
-import { Object.freeze } from "node:util";
-
 export const SECTOR_RESPONSIBILITY = Object.freeze({
   CENTRAL_CONTROL: "CENTRAL_CONTROL",
   EXTERNAL_CONNECTIONS: "EXTERNAL_CONNECTIONS",
