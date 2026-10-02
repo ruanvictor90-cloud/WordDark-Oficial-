@@ -7,7 +7,7 @@ export const FACTORY_STAGE = Object.freeze({
 });
 
 export class LocalContentStudio {
-  constructor({audit=null}={}) { this.id="FACTORY-CONTENT-STUDIO"; this.audit=audit; this.projects=new Map(); }
+  constructor({audit=null}={}) { this.id="FACTORY-CONTENT-STUDIO"; this.audit=audit; this.projects=new Map();this.learningSignals=[]; }
   createProject({projectId=id("CONTENT-PROJECT"),operationId,brief={},format="VIDEO"}={}) {
     const project={id:projectId,operationId,format,brief:structuredClone(brief),stage:FACTORY_STAGE.BRIEF,
       assets:[],timeline:[],audio:[],versions:[],quality:[],status:"EDITING",createdAt:new Date().toISOString()};
@@ -61,5 +61,5 @@ export class DarkFactory extends SkyDomain {
   this.logs.push({id:id("DFLOG"),operationId:operation.id,executor:task,result,at:new Date().toISOString()});
   return result?.success?result:{success:false,reason:result?.reason||"EXECUTOR_FAILED"};
  }
- status(){return {...super.status(),layer:this.layer,executors:this.executors?.list?.()||[],projects:this.studio.projects.size,logs:this.logs.length};}
+ status(){return {...super.status(),layer:this.layer,executors:this.executors?.list?.()||[],projects:this.studio.projects.size,learningSignals:this.studio.learningSignals.length,logs:this.logs.length};}
 }
