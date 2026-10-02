@@ -70,3 +70,12 @@ assert.equal(release.route,"WORLD_RELEASE_GATE");
 // Resultado parcial = apenas parte dos alvos concluiu; não é o mesmo que resultado mediano.
 const partial=world.contentLifecycle.markPartial("OP-CONTENT-001",{completedTargets:["YOUTUBE"],pendingTargets:["INSTAGRAM"],failedTargets:[],reason:"alvos em estados diferentes"});
 assert.equal(partial.outcome,"PARTIAL");
+
+// Escola: índice unificado de conhecimento local, memória mundial e conhecimento externo.
+world.school.ingestExternalKnowledge("WORLD-WEB",{topic:"TEST",records:[{id:"EXT-1",title:"Tendência externa",platform:"TEST"}]});
+assert.equal(world.school.search("Tendência externa",{includeLocal:false,includeCentral:false}).length,1);
+// Judiciário do mundo: termos/leis podem apontar não conformidade sem executar a operação.
+const legal=world.council.judge({subjectId:"CONTENT-LEGAL-001",lawIds:["LAW-001"],facts:{violations:["NO_HARM"]}});
+assert.equal(legal.status,"NON_COMPLIANT");
+assert.equal(legal.recommendation,"REQUEST_REVIEW");
+console.log("School unified search + Council judicial validation: PASS");
