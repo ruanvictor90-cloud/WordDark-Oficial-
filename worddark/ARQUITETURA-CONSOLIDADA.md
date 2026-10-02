@@ -175,3 +175,29 @@ AVALIAR
 O `LifecycleManager` mantém o ciclo de vida da estrutura. A exclusão da estrutura não apaga automaticamente os registros de auditoria da operação que a utilizou.
 
 Uma estrutura temporária também pode ser promovida para uma estrutura permanente quando a necessidade se torna recorrente. A criação continua limitada por contratos, capabilities, permissões, dependências, recursos e Socorro Deus.
+
+## Biblioteca Mundial — memória em camadas
+
+A Biblioteca Central é a **Memória Mundial do WordDark**. Ela preserva e relaciona memória, conhecimento, histórico, aprendizados, padrões, erros, soluções, decisões, versões, resultados e experiências produzidos pelo mundo.
+
+Cada setor de operação possui uma **Biblioteca Local** própria. A biblioteca local é a primeira camada de memória do setor e registra o contexto operacional sem obrigar toda informação a subir para a Central.
+
+Fluxo:
+
+```text
+SETOR
+ ↓
+BIBLIOTECA LOCAL
+ ↓
+FILTRAGEM / CONSOLIDAÇÃO
+ ├── permanece local
+ ├── conhecimento reutilizável no setor
+ ├── candidato à memória mundial
+ └── Biblioteca Central
+```
+
+A consolidação é seletiva. A Biblioteca Central não é dependência síncrona de cada execução e não controla os setores; ela recebe conhecimento filtrado para formar a memória mundial.
+
+A estrutura é compatível com setores temporários: a exclusão de um setor ou executor não apaga automaticamente sua memória relevante já consolidada.
+
+`SectorLibraryManager` registra bibliotecas por setor, permite classificação local e promove somente os registros selecionados para a Biblioteca Central.
