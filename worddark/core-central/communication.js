@@ -2,6 +2,7 @@ import { id } from "./id.js";
 export class CommunicationBus {
   constructor({road,registry=null,contractRegistry=null}={}){if(!road)throw new Error("ROAD_REQUIRED");this.road=road;this.registry=registry;this.contractRegistry=contractRegistry;this.messages=[];this.receipts=[];this.pending=new Map();}
   send(operation){const route=this.road.route(operation);if(!route.success)return route;const contractId=`EXCHANGE:${operation.origin}:${route.capability.owner}`;
+    if(!operation.destination)operation.destination=route.capability.owner;
     if(this.contractRegistry&&!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:route.capability.owner,operations:[operation.type],capability:route.capability.id,reversible:true,metadata:{generated:true,route:route.delivery.id}});
     const contract=this.contractRegistry?.validate?.(operation,{contractId});
     if(contract&&!contract.valid)return{success:false,reason:"MODULE_CONTRACT_INVALID",contract};
