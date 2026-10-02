@@ -17,7 +17,7 @@ export class WorldSchool {
     this.readyContent=new Map();
     this.externalSources=new Map();
     this.platformGuidelines=new Map();
-    this.knowledgeIndex=[];
+    this.knowledgeIndex=[];this.metricSignals=[];this.learningRules=[];
   }
 
   registerExternalSource({id:sourceId,name,type="SEARCH",adapter=null,status="READY"}={}) {
@@ -28,6 +28,20 @@ export class WorldSchool {
     return structuredClone({...source,adapter:undefined});
   }
 
+  registerLearningRule({id:ruleId,name,metric,source="INTERNAL",weight=1}={}) {
+    if(!ruleId||!name||!metric) throw new Error("SCHOOL_LEARNING_RULE_INVALID");
+    const rule={id:ruleId,name,metric,source,weight};this.learningRules.push(rule);
+    this.audit?.record?.("SCHOOL_LEARNING_RULE_REGISTERED",rule);return structuredClone(rule);
+  }
+  ingestWorldMetrics({contentId,platform=null,metrics={},context={},source="WORLD_OPERATION"}={}) {
+    const signal={id:id("SCHOOL-METRIC"),contentId,platform,metrics:structuredClone(metrics),context:structuredClone(context),source,at:new Date().toISOString()};
+    this.metricSignals.push(signal);this.knowledgeIndex.push({id:signal.id,source:KNOWLEDGE_SOURCE.WORLD_EVENT,type:"METRIC_SIGNAL",data:signal,status:"LEARNING_QUEUE"});
+    this.audit?.record?.("SCHOOL_WORLD_METRICS_INGESTED",signal);return structuredClone(signal);
+  }
+  compareContentPerformance(contentId,{metrics={},baseline={},platform=null}={}) {
+    const deltas={};for(const key of new Set([...Object.keys(metrics),...Object.keys(baseline)])){const current=Number(metrics[key]??0),base=Number(baseline[key]??0);deltas[key]={current,baseline:base,delta:current-base};}
+    const result={id:id("SCHOOL-COMPARISON"),contentId,platform,deltas,at:new Date().toISOString()};this.audit?.record?.("SCHOOL_CONTENT_PERFORMANCE_COMPARED",result);return structuredClone(result);
+  }
   registerPlatformGuidelines({platform,rules=[],evaluationSignals=[],source="EXTERNAL"}={}) {
     if(!platform) throw new Error("SCHOOL_PLATFORM_REQUIRED");
     const item={platform,rules:structuredClone(rules),evaluationSignals:structuredClone(evaluationSignals),source,updatedAt:new Date().toISOString()};
@@ -153,7 +167,7 @@ export class WorldSchool {
       readyContent:this.readyContent.size,
       authorized:this.listReady().filter(x=>x.status==="AUTHORIZED_FOR_POSTING").length,
       externalSources:this.externalSources.size,
-      platformGuidelines:this.platformGuidelines.size
+      platformGuidelines:this.platformGuidelines.size,metricSignals:this.metricSignals.length,learningRules:this.learningRules.length
     };
   }
 }
