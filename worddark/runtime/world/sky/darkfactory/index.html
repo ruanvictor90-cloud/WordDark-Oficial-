@@ -8,13 +8,13 @@
   <div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
   <nav class="wd-nav" aria-label="Navegação">
     <a href="../../../">◈ WordDark</a><a href="../">☁ Céu</a><a class="active" href="./">⚙ Dark Factory</a>
-    <a href="../../earth/">◉ Terra</a><a href="../../earth/juice-country/sucocast/">🧃 SucoCast</a><a href="../../core/">◎ Operações</a>
+    <a href="../../earth/">◉ Terra</a><a href="../../core/">◎ Operações</a>
   </nav>
   <div class="wd-footer">DF-0.7 · serviço de produção<br>Operation Engine conectado</div>
 </aside>
 <main class="wd-main">
 <div class="wd-top">
-  <div><div class="wd-eyebrow">Céu · serviço compartilhado</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade e decide o destino. O circuito abaixo usa o núcleo operacional para transportar, executar, validar e registrar a produção.</p></div>
+  <div><div class="wd-eyebrow">Céu · serviço compartilhado</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade e decide o destino. O circuito abaixo usa a infraestrutura operacional do WordDark para transportar, executar, validar e registrar a produção.</p></div>
   <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><button class="wd-btn danger" id="emergencyButton" type="button">🚨 Socorro Deus</button></div>
 </div>
 
@@ -26,15 +26,15 @@
 <section class="wd-grid">
 <article class="wd-card wide">
   <div class="wd-eyebrow">Serviço · content.produce</div><h2>Solicitação de produção</h2>
-  <p class="wd-muted">Pedido originado na Terra. A fábrica não recebe destino de publicação.</p>
+  <p class="wd-muted">Pedido originado na Terra. A fábrica produz e devolve o resultado à operação solicitante; publicação externa pertence à linha de postagem e exige autorização humana.</p>
   <div class="wd-form-grid">
-    <label class="wd-field">Solicitante<input class="wd-input" id="requester" value="SC-001"></label>
-    <label class="wd-field">Origem<input class="wd-input" id="origin" value="world/earth/juice-country/sucocast"></label>
+    <label class="wd-field">Solicitante<input class="wd-input" id="requester" value="ORIGIN-001"></label>
+    <label class="wd-field">Origem<input class="wd-input" id="origin" value="world/earth/example-operation"></label>
   </div>
   <label class="wd-field" style="margin-top:12px">Requerimento<textarea class="wd-textarea" id="task">Produzir material de teste do circuito WordDark.</textarea></label>
   <div class="wd-form-grid" style="margin-top:12px">
-    <label class="wd-field">ID do conteúdo<input class="wd-input" id="contentId" value="CONTENT-DEMO-001"></label>
-    <label class="wd-field">Título<input class="wd-input" id="contentTitle" value="WordDark — primeiro circuito operacional"></label>
+    <label class="wd-field">ID do conteúdo<input class="wd-input" id="contentId" value="CONTENT-EXAMPLE-001"></label>
+    <label class="wd-field">Título<input class="wd-input" id="contentTitle" value="WordDark — circuito operacional"></label>
   </div>
   <label class="wd-field" style="margin-top:12px">Especificações<textarea class="wd-textarea" id="requirements">Vídeo curto · vertical · teste estrutural</textarea></label>
   <button class="wd-btn primary" id="runProduction" type="button" style="margin-top:14px">Enviar pela Rodovia e produzir</button>
@@ -85,13 +85,13 @@
   const factory=new DarkFactory({registry:serviceRegistry,pipeline});
 
   const security=new WordDarkSecurityManager();
-  security.registerIdentity(new WordDarkIdentity({identityId:"SC-001",type:"UNIT",parentId:"world/earth/juice-country",metadata:{name:"SucoCast"}}));
-  security.grant(new WordDarkAccessRule({identityId:"SC-001",capability:"content.produce",action:"request",environment:"TEST",scope:"world/sky/darkfactory"}));
+  security.registerIdentity(new WordDarkIdentity({identityId:"ORIGIN-001",type:"UNIT",parentId:"world/earth",metadata:{name:"Operação de exemplo"}}));
+  security.grant(new WordDarkAccessRule({identityId:"ORIGIN-001",capability:"content.produce",action:"request",environment:"TEST",scope:"world/sky/darkfactory"}));
 
   const road=new WordDarkRoad();
   const registerRoute=(routeId,origin,destination)=>road.registerRoute(new WordDarkRoute({routeId,origin,destination,service:"content.produce"}));
-  registerRoute("ROUTE-SUCOCAST-DF-PRODUCE","world/earth/juice-country/sucocast","world/sky/darkfactory");
-  registerRoute("ROUTE-DF-SUCOCAST-PRODUCE","world/sky/darkfactory","world/earth/juice-country/sucocast");
+  registerRoute("ROUTE-EXAMPLE-DF-PRODUCE","world/earth/example-operation","world/sky/darkfactory");
+  registerRoute("ROUTE-DF-EXAMPLE-PRODUCE","world/sky/darkfactory","world/earth/example-operation");
   registerRoute("ROUTE-DEMO-DF-PRODUCE","world/earth/demo-city","world/sky/darkfactory");
   registerRoute("ROUTE-DF-DEMO-PRODUCE","world/sky/darkfactory","world/earth/demo-city");
 
