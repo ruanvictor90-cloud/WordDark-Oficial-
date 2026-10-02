@@ -27,8 +27,8 @@ assert.equal(analysis.sectorId,"DF-KNOWLEDGE");
 assert.equal(analysis.analyzed.length,1);
 const learned=world.school.learnFromWorld({subject:"TREND",reason:"acontecimento relevante"});
 assert.equal(learned.source,"WORLD_EVENT");
-assert.equal(world.school.externalSources.size,2);
-assert.equal(world.school.searchExternal("WORLD-WEB","tendências",{context:{platform:"TEST"}}).success,false);
+assert.equal(world.school.externalSources.size,world.externalConnections.status().total);
+assert.equal(world.school.searchExternal("GOOGLE-SEARCH","tendências",{context:{platform:"TEST"}}).success,false);
 world.school.registerPlatformGuidelines({platform:"TEST",rules:["RULE-1"],evaluationSignals:["RETENTION","POLICY"]});
 assert.equal(world.school.getPlatformGuidelines("TEST").platform,"TEST");
 
@@ -63,7 +63,7 @@ console.log("Control + School + Council suite: PASS");
 assert.equal(world.council.inspectWorldMemory().scope,"WORLD_MEMORY");
 // Conteúdo mediano volta para reestruturação; problema de direitos volta para edição; insolúvel vai para refazer.
 const routed=world.contentLifecycle.routeAfterEvaluation("OP-CONTENT-001",{metricsOk:false,reason:"métrica abaixo do objetivo"});
-assert.equal(routed.route,"RESTRUCTURE");
+assert.equal(routed.route,"MEDIOCRE_RESULT");
 const release=world.contentLifecycle.routeAfterEvaluation("OP-CONTENT-001",{rightsOk:true,safetyOk:true,metricsOk:true});
 assert.equal(release.route,"WORLD_RELEASE_GATE");
 
@@ -72,10 +72,26 @@ const partial=world.contentLifecycle.markPartial("OP-CONTENT-001",{completedTarg
 assert.equal(partial.outcome,"PARTIAL");
 
 // Escola: índice unificado de conhecimento local, memória mundial e conhecimento externo.
-world.school.ingestExternalKnowledge("WORLD-WEB",{topic:"TEST",records:[{id:"EXT-1",title:"Tendência externa",platform:"TEST"}]});
+world.school.ingestExternalKnowledge("GOOGLE-SEARCH",{topic:"TEST",records:[{id:"EXT-1",title:"Tendência externa",platform:"TEST"}]});
 assert.equal(world.school.search("Tendência externa",{includeLocal:false,includeCentral:false}).length,1);
 // Judiciário do mundo: termos/leis podem apontar não conformidade sem executar a operação.
 const legal=world.council.judge({subjectId:"CONTENT-LEGAL-001",lawIds:["LAW-001"],facts:{violations:["NO_HARM"]}});
 assert.equal(legal.status,"NON_COMPLIANT");
 assert.equal(legal.recommendation,"REQUEST_REVIEW");
 console.log("School unified search + Council judicial validation: PASS");
+
+const learning=world.school.learn({query:"Tendência externa",includeLocal:false,includeCentral:false,includeExternal:true});
+assert.equal(learning.results.length,1);
+const snapshot=world.school.knowledgeSnapshot({query:"Tendência externa"});
+assert.equal(snapshot.external.length,1);
+const caseReview=world.council.reviewSubject({
+  subjectId:"CONTENT-LEGAL-002",
+  lawIds:["LAW-001"],
+  facts:{violations:["NO_HARM"]},
+  recurringUsage:[{itemId:"CONTENT-002",usedSector:"DF-EDITOR",expectedSector:"DF-VALIDATION"}]
+});
+assert.equal(caseReview.judgment.status,"NON_COMPLIANT");
+assert.equal(caseReview.worldReview.findings.length,1);
+assert.ok(world.sectorLibraries.getSector("CENTRAL-CONTROL"));
+assert.ok(world.sectorLibraries.getSector("WORLD-SCHOOL"));
+console.log("Unified School + Council case + sector language: PASS");
