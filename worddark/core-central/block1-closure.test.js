@@ -93,12 +93,12 @@ assert.equal(
 
 // 8. Auditoria: os mecanismos fechados deixam rastros.
 const events = world.audit.list();
-assert.ok(events.some(e => e.event === "CONTRACT_REGISTERED"));
-assert.ok(events.some(e => e.event === "ROLLBACK_CAPTURED"));
-assert.ok(events.some(e => e.event === "ROLLBACK_EXECUTED"));
-assert.ok(events.some(e => e.event === "STRUCTURE_CREATED"));
-assert.ok(events.some(e => e.event === "STRUCTURE_LIFECYCLE_CHANGED"));
-assert.ok(events.some(e => e.event === "AUTONOMY_POLICY_SET"));
-assert.ok(events.some(e => e.event === "DEPENDENCY_REGISTERED"));
+assert.ok(events.some(e => e.type === "CONTRACT_REGISTERED"));
+assert.ok(events.some(e => e.type === "ROLLBACK_CAPTURED"));
+assert.ok(events.some(e => e.type === "ROLLBACK_EXECUTED"));
+assert.ok(events.some(e => e.type === "STRUCTURE_CREATED"));
+assert.ok(events.some(e => e.type === "STRUCTURE_LIFECYCLE_CHANGED"));
+assert.ok(events.some(e => e.type === "AUTONOMY_POLICY_SET"));
+assert.ok(events.some(e => e.type === "DEPENDENCY_REGISTERED"));
 
 console.log("WordDark Block 1 closure tests: OK");
