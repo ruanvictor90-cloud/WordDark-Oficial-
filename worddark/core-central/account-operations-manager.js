@@ -35,7 +35,7 @@ export class AccountOperationsManager{
     return operation;
   }
 
-  createContentSchedule({contents=[],profileIds=null,postsPerDay=1,dates=[],startDate=null,type='CONTENT',options={}}={}){
+  createContentSchedule({contents=[],profileIds=null,postsPerDay=1,dates=[],startDate=null,times=[],type='CONTENT',options={}}={}){
     if(!Array.isArray(contents)||!contents.length)throw new Error('SCHEDULE_CONTENTS_REQUIRED');
     if(!Number.isInteger(postsPerDay)||postsPerDay<1)throw new Error('POSTS_PER_DAY_INVALID');
     const targets=this.listTargets(profileIds);
@@ -49,7 +49,7 @@ export class AccountOperationsManager{
       for(let slot=0;slot<postsPerDay&&contentIndex<contents.length;slot++){
         const content=contents[contentIndex++];
         slots.push({
-          id:id('SLOT'),date,slot:slot+1,contentIndex,content:structuredClone(content),
+          id:id('SLOT'),date,slot:slot+1,time:times[slot]||null,contentIndex,content:structuredClone(content),
           status:'SCHEDULED',targets:targets.map(target=>({...target,status:'SCHEDULED'}))
         });
       }
@@ -58,7 +58,7 @@ export class AccountOperationsManager{
     const schedule={
       id:id('SCHEDULE'),type,mode:'SCHEDULE',
       accountId:this.accountManager.id,accountName:this.accountManager.name,
-      sourceManagerId:this.id,postsPerDay,dates:days,totalContents:contents.length,
+      sourceManagerId:this.id,postsPerDay,dates:days,times:structuredClone(times),totalContents:contents.length,
       scheduledContents:slots.length,unscheduledContents:Math.max(contents.length-slots.length,0),
       targets,slots,options:structuredClone(options),
       status:slots.length?'SCHEDULED':'DRAFT',
