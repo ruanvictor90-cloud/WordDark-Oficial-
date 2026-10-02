@@ -2,6 +2,7 @@ import { id } from "./id.js";
 
 export const CONTENT_OUTCOME=Object.freeze({
   COMPLETED:"COMPLETED",
+  PARTIAL:"PARTIAL",
   NEEDS_EDIT:"NEEDS_EDIT",
   NEEDS_RESTRUCTURE:"NEEDS_RESTRUCTURE",
   FAILED:"FAILED",
@@ -17,11 +18,12 @@ export class ContentLifecycle {
     this.items.set(operationId,item);
     return structuredClone(item);
   }
-  evaluate(operationId,{rightsOk=true,safetyOk=true,metricsOk=true,needsEdit=false,needsRestructure=false,unresolved=false,reason=null}={}) {
+  evaluate(operationId,{rightsOk=true,safetyOk=true,metricsOk=true,needsEdit=false,needsRestructure=false,unresolved=false,partial=false,reason=null}={}) {
     const item=this.items.get(operationId);
     if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
     let outcome="COMPLETED";
     if(unresolved) outcome=CONTENT_OUTCOME.REDO;
+    else if(partial) outcome=CONTENT_OUTCOME.PARTIAL;
     else if(!rightsOk||!safetyOk) outcome=CONTENT_OUTCOME.NEEDS_EDIT;
     else if(needsRestructure||!metricsOk||needsEdit) outcome=CONTENT_OUTCOME.NEEDS_RESTRUCTURE;
     const entry={id:id("CONTENT-OUTCOME"),outcome,reason,at:new Date().toISOString()};
@@ -57,6 +59,11 @@ export class ContentLifecycle {
     if(evaluated.outcome===CONTENT_OUTCOME.COMPLETED) return {route:"WORLD_RELEASE_GATE",item:evaluated};
     if(!solvable||evaluated.outcome===CONTENT_OUTCOME.REDO) return {route:"REDO",item:evaluated};
     return {route:"REVIEW",item:evaluated};
+  }
+  markPartial(operationId,{completedTargets=[],pendingTargets=[],failedTargets=[],reason=null}={}) {
+    const item=this.items.get(operationId);if(!item) throw new Error("CONTENT_LIFECYCLE_NOT_FOUND");
+    item.outcome=CONTENT_OUTCOME.PARTIAL;item.history.push({id:id("CONTENT-PARTIAL"),type:"PARTIAL",completedTargets:[...completedTargets],pendingTargets:[...pendingTargets],failedTargets:[...failedTargets],reason,at:new Date().toISOString()});
+    this.audit?.record?.("CONTENT_PARTIAL_RESULT",{operationId,completedTargets,pendingTargets,failedTargets,reason});return structuredClone(item);
   }
   get(operationId){return structuredClone(this.items.get(operationId)||null);}
   list(){return [...this.items.values()].map(structuredClone);}
