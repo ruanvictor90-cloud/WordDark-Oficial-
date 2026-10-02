@@ -14,3 +14,13 @@
     sync();
   }
 })();
+  const entries=document.querySelectorAll("[data-wd-entry]");
+  entries.forEach((entry)=>{
+    const image=entry.dataset.wdEntry;
+    if(image){
+      const media=document.createElement("div");
+      media.className="wd-entry-media";
+      media.style.backgroundImage="url(" + JSON.stringify(image) + ")";
+      entry.prepend(media);
+    }
+  });
