@@ -18,15 +18,18 @@ export class WordDarkRuntime {
  }
  registerCapability(capability){return this.capabilities.register(capability);}
  registerGate(config){const gate=new Gate(config);this.gates.set(gate.gateId,gate);return gate;}
- assertSafe(operationId){const check=this.emergencyStop?.assertRunning?.(operationId);return check&&!check.allowed?check:{allowed:true};}\n executeModule(operation,moduleId,context={}){
+ assertSafe(operationId){const check=this.emergencyStop?.assertRunning?.(operationId);return check&&!check.allowed?check:{allowed:true};}
+ executeModule(operation,moduleId,context={}){
   const module=this.modules.get(moduleId)||this.capabilities.find(moduleId);
-  if(!module)return {success:false,reason:"MODULE_NOT_FOUND",moduleId};\n  const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
+  if(!module)return {success:false,reason:"MODULE_NOT_FOUND",moduleId};
+  const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
   try{return module.handle(operation,{runtime:this,...context})||{success:false,reason:"MODULE_NO_RESULT"};}
   catch(error){return {success:false,reason:error.message,moduleId};}
  }
  request(input){
   const op=input instanceof Operation?input:new Operation(input);
-  const valid=op.validate();if(!valid.valid)return op.transition("REJECTED",{errors:valid.errors});\n  const safe=this.assertSafe(op.id);if(!safe.allowed)return op.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});
+  const valid=op.validate();if(!valid.valid)return op.transition("REJECTED",{errors:valid.errors});
+  const safe=this.assertSafe(op.id);if(!safe.allowed)return op.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});
   const gate=this.gates.get(op.gateId);if(!gate)return op.transition("REJECTED",{reason:"GATE_NOT_FOUND"});
   const entry=gate.receive({id:op.id,type:op.type});if(!entry.success)return op.transition("REJECTED",{reason:entry.reason});
   op.transition("IDENTIFIED",{gateId:gate.gateId});
