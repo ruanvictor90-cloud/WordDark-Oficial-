@@ -207,7 +207,17 @@ A estrutura é compatível com setores temporários: a exclusão de um setor ou 
 
 ### Conselho Mundial
 
-O Conselho é uma camada de **governança e observação**, não um executor oculto. Ele pode analisar o uso recorrente do mundo, comparar estruturas e identificar quando uma função está sendo usada fora do setor mais adequado.
+O Conselho é uma camada de **governança, julgamento e observação**, não um executor oculto. Sua composição e regras finais ainda serão definidas. A arquitetura já reserva o setor responsável para que ele possa julgar situações do mundo segundo as leis do próprio WordDark.
+
+O braço jurídico/“Judiciário” do Conselho poderá trabalhar com:
+- leis e regras do mundo;
+- termos;
+- contratos;
+- versões e vigência;
+- fatos/evidências da operação;
+- decisões e histórico auditável.
+
+O Conselho não publica, edita ou executa diretamente: ele julga, registra a decisão e encaminha a consequência ao setor responsável. Ele pode analisar o uso recorrente do mundo, comparar estruturas e identificar quando uma função está sendo usada fora do setor mais adequado.
 
 Fluxo:
 
@@ -227,7 +237,20 @@ O Conselho pode decidir sobre organização e encaminhamento, mas continua sujei
 
 ### Escola do Mundo
 
-A Escola fica na Central de Controle e aprende por duas fontes:
+A Escola fica na Central de Controle e será tratada como uma **camada de conhecimento e pesquisa do mundo**, com uma experiência conceitual próxima de um buscador: ela poderá procurar, cruzar, comparar e organizar conhecimento externo e interno. O acesso externo será feito por conectores autorizados; antes das conexões reais, a estrutura fica preparada sem fingir acesso à internet.
+
+A Escola poderá estudar:
+- tendências e assuntos em alta;
+- diretrizes e políticas públicas das plataformas;
+- critérios e sinais usados pelas plataformas para avaliar conteúdo, quando essas informações estiverem disponíveis de forma legítima;
+- conhecimento técnico e histórico externo;
+- conhecimento das bibliotecas locais;
+- memória mundial;
+- resultados dos próprios experimentos do WordDark.
+
+A Escola não transforma informação externa em verdade automática: cada conhecimento deve carregar origem, contexto e registro.
+
+Ela aprende por duas fontes:
 
 - conhecimento filtrado das bibliotecas locais;
 - acontecimentos/sinais relevantes observados no mundo.
@@ -243,13 +266,25 @@ MUNDO REAL ───────┘                 ↓
                               LINHA DE POSTAGEM
 ```
 
+### Escola → conhecimento → produção
+
+A Escola pode alimentar duas saídas diferentes:
+
+1. **Conhecimento:** aprendizado volta para a biblioteca local ou para a Memória Mundial quando merecer consolidação.
+2. **Conteúdo preparado:** material pronto fica aguardando autorização humana e pode seguir para a Linha de Postagem.
+
 ### Automação
 
 Automação deve ser usada principalmente onde existe repetição, previsibilidade e baixo impacto externo. Ela acelera setores e tarefas internas, mas não transforma automaticamente uma operação interna em autorização para agir no mundo.
 
 ### Resultado parcial e reestruturação
 
-Uma operação não precisa ser classificada apenas como "sucesso" ou "falha".
+Uma operação não precisa ser classificada apenas como "sucesso" ou "falha". Há duas situações diferentes:
+
+- **PARTIAL:** parte dos alvos/etapas terminou e outra parte ainda está pendente ou falhou. Ex.: YouTube concluiu, Instagram aguarda conexão.
+- **NEEDS_RESTRUCTURE:** a operação terminou, mas a qualidade/resultado ficou abaixo do objetivo. Ex.: conteúdo publicado/testado não atingiu a métrica esperada e volta para melhoria.
+
+Uma operação não deve ser chamada de “parcial” apenas porque ficou mediana.
 
 ```
 RESULTADO
@@ -266,6 +301,10 @@ RESULTADO
 **NEEDS_RESTRUCTURE** é usado quando a operação funciona, mas o resultado ficou abaixo do objetivo e precisa ser melhorado. Exemplo: um conteúdo foi produzido corretamente, porém apresentou métricas abaixo do objetivo; ele volta para melhoria sem ser tratado como uma falha total.
 
 Quando a reestruturação não resolve, a operação pode ser encaminhada para uma nova tentativa/refazimento conforme a política do setor.
+
+### Fronteira entre o mundo interno e o mundo externo
+
+O WordDark trata ações com consequência pública/externa como uma **fronteira de autorização**. Produção e preparação podem ser automatizadas conforme política; a passagem para o mundo externo permanece explicitamente controlada.
 
 ### O que exige confirmação humana
 
@@ -311,3 +350,49 @@ Fluxo conceitual:
 Necessidade → Produção → Validação → Edição/Reestruturação/Refazer quando necessário → Pronto → Confirmação humana → Linha de Postagem → Agendamento/Publicação.
 
 Ações externas irreversíveis ou públicas permanecem explicitamente atrás de confirmação humana.
+
+
+## Escola — pesquisa externa e conhecimento interno
+
+A Escola possui fontes internas e pontos de conexão externa. A implementação interna já reserva fontes de busca/tendência e um catálogo de diretrizes por plataforma, mas o acesso real a cada plataforma só será ativado na etapa de Conexões Externas.
+
+Fluxo:
+```
+MUNDO EXTERNO ─┐
+               ├→ ESCOLA → CRUZAMENTO → APRENDIZADO
+MUNDO INTERNO ─┘                 ↓
+                         BIBLIOTECA LOCAL / MEMÓRIA MUNDIAL
+                                   ↓
+                            PRODUÇÃO / MELHORIA
+```
+
+A Escola pode observar o que está acontecendo fora e comparar com o que o próprio mundo já aprendeu. Ela não recebe autoridade para publicar só porque aprendeu algo.
+
+## Conselho — Judiciário do mundo
+
+O Conselho será responsável pela camada de julgamento interno segundo as leis que ainda serão definidas. A estrutura suporta leis, termos, contratos, fatos, decisões e auditoria. A definição de composição, competências detalhadas e regras materiais permanece pendente de decisão do criador.
+
+## Terra — pendência legada
+
+A Terra oficial deve permanecer dinâmica. País, Estado, Cidade e Bairro só são materializados quando uma necessidade real exigir. Estruturas antigas de exemplo não devem ser carregadas automaticamente para a operação oficial.
+
+A ligação atual é:
+```
+TERRA
+ ↓
+NECESSIDADE
+ ↓
+CIDADE / SETOR RESPONSÁVEL
+ ↓
+PORTÃO
+ ↓
+RODOVIA / RUNTIME
+ ↓
+SERVIÇO
+ ↓
+RESULTADO
+ ↓
+MEMÓRIA
+```
+
+O teste legado de Terra deve validar essa criação dinâmica, e não depender de País/SucoCast pré-existentes.
