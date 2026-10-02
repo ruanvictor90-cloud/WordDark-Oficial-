@@ -22,6 +22,8 @@ export class WorldCouncil {
     this.laws=[];
     this.terms=[];
     this.contracts=[];
+    this.decisionRule="UNANIMOUS";
+    this.votingHistory=[];
   }
 
   addMember({id:memberId,name,role="COUNCIL_MEMBER",scope="WORLD"}={}) {
@@ -110,6 +112,27 @@ export class WorldCouncil {
     return [...bySector.entries()].map(([sectorId,count])=>({sectorId,count}));
   }
 
+  setDecisionRule(rule) {
+    if(!["UNANIMOUS","MAJORITY"].includes(rule)) throw new Error("COUNCIL_DECISION_RULE_INVALID");
+    this.decisionRule=rule;
+    this.audit?.record?.("COUNCIL_DECISION_RULE_SET",{rule});
+    return rule;
+  }
+
+  vote(findingId,decision,{votes=[]}={}) {
+    if(!this.members.length) return {status:"WAITING_COUNCIL_MEMBERS",findingId,decision,rule:this.decisionRule};
+    const active=this.members.filter(x=>x.active);
+    const normalized=votes.filter(v=>active.some(m=>m.id===v.memberId));
+    const approvals=normalized.filter(v=>v.approve===true).length;
+    const required=this.decisionRule==="UNANIMOUS"?active.length:Math.floor(active.length/2)+1;
+    const approved=approvals>=required && normalized.length>=required;
+    const result={id:id("COUNCIL-VOTE"),findingId,decision,rule:this.decisionRule,activeMembers:active.length,
+      votes:structuredClone(normalized),approvals,required,approved,status:approved?"APPROVED":"PENDING"};
+    this.votingHistory.push(result);
+    this.audit?.record?.("COUNCIL_VOTE",result);
+    return structuredClone(result);
+  }
+
   decide(findingId,decision,{reason=null,targetSector=null,requesterId=null}={}) {
     if(!Object.values(COUNCIL_DECISIONS).includes(decision)) throw new Error("COUNCIL_DECISION_INVALID");
     const decisionEntry={id:id("COUNCIL-DECISION"),findingId,decision,reason,targetSector,requesterId,at:new Date().toISOString()};
@@ -121,7 +144,7 @@ export class WorldCouncil {
   status() {
     return {
       id:this.id,members:this.members.length,activeMembers:this.members.filter(x=>x.active).length,
-      findings:this.findings.length,decisions:this.decisions.length,laws:this.laws.length,
+      findings:this.findings.length,decisions:this.decisions.length,decisionRule:this.decisionRule,votes:this.votingHistory.length,laws:this.laws.length,
       terms:this.terms.length,contracts:this.contracts.length,worldMemoryAccessible:Boolean(this.centralLibrary)
     };
   }
