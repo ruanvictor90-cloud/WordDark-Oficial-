@@ -4,6 +4,7 @@ import { createWordDarkWorld } from "../main.js";
 const world=createWordDarkWorld();
 assert.equal(world.centralControl.id,"CENTRAL-CONTROL");
 assert.equal(world.centralControl.school.id,"WORLD-SCHOOL");
+assert.equal(world.council.inspectWorldMemory().scope,"WORLD_MEMORY");
 
 // Conselho: observa recorrência e pode propor realocação de setor.
 world.council.addMember({id:"COUNCIL-001",name:"Conselheiro Operacional"});
@@ -15,8 +16,10 @@ assert.equal(review.findings.length,2);
 assert.equal(world.council.decide(review.findings[0].id,"RECLASSIFY",{targetSector:"DF-VALIDATION"}).decision,"RECLASSIFY");
 
 // Escola: aprende com setor/mundo e prepara conteúdo, mas não publica sozinha.
-const analysis=world.school.analyzeLocalKnowledge("DF-KNOWLEDGE",{records:[{id:"KNOW-1",reusable:true,worldFit:"HIGH"}],worldSignals:[{relevant:true,subject:"TREND"}]});
+world.sectorLibraries.save("DF-KNOWLEDGE",{id:"KNOW-LOCAL-1",reusable:true,worldFit:"HIGH"});
+const analysis=world.school.analyzeLocalKnowledge("DF-KNOWLEDGE",{worldSignals:[{relevant:true,subject:"TREND"}]});
 assert.equal(analysis.sectorId,"DF-KNOWLEDGE");
+assert.equal(analysis.analyzed.length,1);
 const learned=world.school.learnFromWorld({subject:"TREND",reason:"acontecimento relevante"});
 assert.equal(learned.source,"WORLD_EVENT");
 
@@ -46,3 +49,11 @@ const redo=world.contentLifecycle.evaluate("OP-CONTENT-001",{unresolved:true,rea
 assert.equal(redo.outcome,"REDO");
 
 console.log("Control + School + Council suite: PASS");
+
+// Conselho consegue consultar memória mundial sem assumir função de execução.
+assert.equal(world.council.inspectWorldMemory().scope,"WORLD_MEMORY");
+// Conteúdo mediano volta para reestruturação; problema de direitos volta para edição; insolúvel vai para refazer.
+const routed=world.contentLifecycle.routeAfterEvaluation("OP-CONTENT-001",{metricsOk:false,reason:"métrica abaixo do objetivo"});
+assert.equal(routed.route,"RESTRUCTURE");
+const release=world.contentLifecycle.routeAfterEvaluation("OP-CONTENT-001",{rightsOk:true,safetyOk:true,metricsOk:true});
+assert.equal(release.route,"WORLD_RELEASE_GATE");
