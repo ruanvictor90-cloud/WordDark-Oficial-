@@ -62,6 +62,16 @@ export class WordDarkRuntime {
   if(op.status==="COMPLETED")return op;
   return op.transition("COMPLETED",result);
  }
- reenter(operation,moduleId,reason="MODULE_REENTRY"){const safe=this.assertSafe(operation?.id);if(!safe.allowed)return operation.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});return this.pipeline.reenter(operation,moduleId,reason);}
+ reenter(operation,moduleId,reason="MODULE_REENTRY"){
+  const safe=this.assertSafe(operation?.id);if(!safe.allowed)return operation.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});
+  if(!operation?.pipeline?.modules?.length){
+   operation.reenter(moduleId,reason);
+   const result=this.executeModule(operation,moduleId,{reentry:true});
+   if(!result?.success){operation.checkpoint(moduleId,"FAILED",result);return operation.transition("FAILED",{moduleId,result,reentry:true});}
+   operation.checkpoint(moduleId,"PASSED",result);
+   return operation.transition("COMPLETED",{moduleId,result,reentry:true});
+  }
+  return this.pipeline.reenter(operation,moduleId,reason);
+ }
  status(){return {status:this.status,modules:this.modules.size,capabilities:this.capabilities.list(),gates:this.gates.size,events:this.registry.events.length,contracts:this.contractRegistry.list().length,emergencyStop:this.emergencyStop?.globalStatus||"UNWIRED"};}
 }
