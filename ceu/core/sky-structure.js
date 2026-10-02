@@ -1,8 +1,9 @@
 import { id } from "../../worddark/core-central/id.js";
+import { STRUCTURAL_LAYERS } from "../../worddark/core-central/world-structure.js";
 
 export class SkyDistrict {
   constructor({id:districtId=id("DISTRICT"),name,type="DISTRITO",nucleusId}={}) {
-    this.id=districtId;this.name=name;this.type=type;this.nucleusId=nucleusId;this.needs=[];this.requests=[];this.events=[];
+    this.id=districtId;this.name=name;this.type=type;this.structuralMeaning=STRUCTURAL_LAYERS.DISTRITO.meaning;this.nucleusId=nucleusId;this.needs=[];this.requests=[];this.events=[];
   }
   addNeed(need){const entry={id:id("NEED"),...need,status:"PENDING",at:new Date().toISOString()};this.needs.push(entry);return entry;}
   request(service,payload={}){const request={id:id("REQ"),origin:this.id,service,payload,status:"REQUESTED",at:new Date().toISOString()};this.requests.push(request);return request;}
@@ -11,7 +12,7 @@ export class SkyDistrict {
 
 export class SkyNucleus {
   constructor({id:nucleusId=id("NUCLEUS"),name,regionId}={}) {
-    this.id=nucleusId;this.name=name;this.type="NÚCLEO";this.regionId=regionId;this.districts=new Map();this.status="ACTIVE";
+    this.id=nucleusId;this.name=name;this.type="NÚCLEO";this.structuralMeaning=STRUCTURAL_LAYERS.NUCLEO.meaning;this.regionId=regionId;this.districts=new Map();this.status="ACTIVE";
   }
   registerDistrict(district){this.districts.set(district.id,district);return district;}
   createDistrict(config){return this.registerDistrict(new SkyDistrict({...config,nucleusId:this.id}));}
@@ -20,7 +21,7 @@ export class SkyNucleus {
 
 export class SkyRegion {
   constructor({id:regionId=id("REGION"),name,domainId}={}) {
-    this.id=regionId;this.name=name;this.type="REGIÃO";this.domainId=domainId;this.nuclei=new Map();this.status="ACTIVE";
+    this.id=regionId;this.name=name;this.type="REGIÃO";this.structuralMeaning=STRUCTURAL_LAYERS.REGIAO.meaning;this.domainId=domainId;this.nuclei=new Map();this.status="ACTIVE";
   }
   registerNucleus(nucleus){this.nuclei.set(nucleus.id,nucleus);return nucleus;}
   createNucleus(config){return this.registerNucleus(new SkyNucleus({...config,regionId:this.id}));}
@@ -29,7 +30,7 @@ export class SkyRegion {
 
 export class SkyDomain {
   constructor({id:domainId,name,owner=null}={}) {
-    this.id=domainId;this.name=name;this.type="DOMÍNIO";this.owner=owner;this.regions=new Map();this.gateId=`${domainId}-GATE`;this.status="ACTIVE";
+    this.id=domainId;this.name=name;this.type="DOMÍNIO";this.structuralMeaning=STRUCTURAL_LAYERS.DOMINIO.meaning;this.owner=owner;this.regions=new Map();this.gateId=`${domainId}-GATE`;this.status="ACTIVE";
   }
   registerRegion(region){this.regions.set(region.id,region);return region;}
   createRegion(config){return this.registerRegion(new SkyRegion({...config,domainId:this.id}));}
