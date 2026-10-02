@@ -58,7 +58,9 @@ export class WordDarkRuntime {
   op.context.contractId=contractId;
   const result=this.executeModule(op,route.capability.id,{route:route.delivery,contractId});
   if(!result?.success){op.checkpoint(route.capability.id,"FAILED",result);return op.transition("FAILED",result);}
-  op.checkpoint(route.capability.id,"PASSED",result);return op.transition("COMPLETED",result);
+  op.checkpoint(route.capability.id,"PASSED",result);
+  if(op.status==="COMPLETED")return op;
+  return op.transition("COMPLETED",result);
  }
  reenter(operation,moduleId,reason="MODULE_REENTRY"){const safe=this.assertSafe(operation?.id);if(!safe.allowed)return operation.transition("BLOCKED",{reason:safe.reason,stopId:safe.stopId});return this.pipeline.reenter(operation,moduleId,reason);}
  status(){return {status:this.status,modules:this.modules.size,capabilities:this.capabilities.list(),gates:this.gates.size,events:this.registry.events.length,contracts:this.contractRegistry.list().length,emergencyStop:this.emergencyStop?.globalStatus||"UNWIRED"};}
