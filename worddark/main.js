@@ -37,6 +37,8 @@ import { WorldSchool } from "./core-central/school.js";
 import { ContentLifecycle } from "./core-central/content-lifecycle.js";
 import { PostingLine } from "./core-central/posting-line.js";
 import { CentralControl } from "./core-central/central-control.js";
+import { GovernanceSector } from "./governanca/index.js";
+import { WorldSectorRegistry } from "./core-central/sector-map.js";
 
 export function createWordDarkWorld(){
  const central=new CentralWorld();
@@ -66,13 +68,17 @@ export function createWordDarkWorld(){
  const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK",metadata:{scope:"CORE_OPERATIONAL_MEMORY"}});
  const sectorLibraries=new SectorLibraryManager({centralLibrary:library,audit});
  const council=new WorldCouncil({audit,sectorLibraries,centralLibrary:library});
+ const governance=new GovernanceSector({audit,sectorLibraries,centralLibrary:library});
  const school=new WorldSchool({sectorLibraries,centralLibrary:library,audit});
  school.registerExternalSource({id:"WORLD-WEB",name:"Conhecimento Externo",type:"WEB_SEARCH",status:"AUTHORIZATION_REQUIRED"});
  school.registerExternalSource({id:"WORLD-TRENDS",name:"Sinais de Tendência",type:"TREND_MONITOR",status:"AUTHORIZATION_REQUIRED"});
  const contentLifecycle=new ContentLifecycle({audit});
  const postingLine=new PostingLine({audit});
- const centralControl=new CentralControl({council,school,postingLine,automation,audit});
+ const centralControl=new CentralControl({council:governance.council,school,postingLine,automation,audit});
+ const sectorRegistry=new WorldSectorRegistry({audit});
+ governance.council.decisionRule=governance.decisionRule;
  sectorLibraries.registerSector({sectorId:"WORDDARK-CORE",ownerId:"WORDDARK",metadata:{role:"CORE_OPERATIONAL_MEMORY"}});
+ governance.productionRights=rights;
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
  const integrations=new IntegrationRegistry({audit});
@@ -108,7 +114,7 @@ export function createWordDarkWorld(){
  return {
   runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
   operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,council,school,contentLifecycle,postingLine,centralControl,
-  audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
+  audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics,governance,sectorRegistry
  };
 }
 export function worldStatus(world){return {runtime:world.runtime.status(),terra:world.terra.status(),factory:world.factory.status(),marketing:world.marketing.status(),library:world.library.list().length,financeAccounts:world.finance.accounts.size,creation:world.creation.status(),structure:world.structureClassifier.status(),central:world.centralOrchestrator.status(),automation:world.automation.status(),emergencyStop:world.emergencyStop.globalStatus,externalConnections:world.externalConnections.status(),centralControl:world.centralControl.status(),contentLifecycle:world.contentLifecycle.list().length};}
