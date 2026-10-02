@@ -4,6 +4,7 @@ import { DarkFactory } from "../ceu/dark-factory/factory.js";
 import { FactoryExecutors, registerDefaultContentExecutors } from "../ceu/dark-factory/executors.js";
 import { Marketing } from "../ceu/marketing/index.js";
 import { CentralLibrary, LocalLibrary } from "./biblioteca/index.js";
+import { SectorLibraryManager } from "./biblioteca/knowledge-flow.js";
 import { Security } from "./seguranca/index.js";
 import { CentralFinance } from "./financeiro-central/index.js";
 import { createWorldCreation } from "./criacao-do-mundo/index.js";
@@ -57,7 +58,9 @@ export function createWordDarkWorld(){
  const versions=new VersionHistory();
  const errors=new ErrorRecovery();
  const diagnostics=new OperationDiagnostics({registry:runtime.registry});
- const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK"});
+ const localLibrary=new LocalLibrary({libraryId:"WORDDARK-LOCAL-CORE",ownerId:"WORDDARK",metadata:{scope:"CORE_OPERATIONAL_MEMORY"}});
+ const sectorLibraries=new SectorLibraryManager({centralLibrary:library,audit});
+ sectorLibraries.registerSector({sectorId:"WORDDARK-CORE",ownerId:"WORDDARK",metadata:{role:"CORE_OPERATIONAL_MEMORY"}});
  const operationRegistry=new OperationRegistry({localLibrary,centralLibrary:library,audit});
  const communication=new CommunicationBus({road:runtime.road,registry:operationRegistry,contractRegistry});
  const integrations=new IntegrationRegistry({audit});
@@ -88,7 +91,7 @@ export function createWordDarkWorld(){
  autonomy.set("DARK-FACTORY",1,{allowedActions:["EXECUTE"],requiresApproval:true});
  autonomy.set("MARKETING",1,{allowedActions:["EXECUTE"],requiresApproval:true});
  return {
-  runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,security,finance,
+  runtime,central,creation,factory,marketing,terra,channelContract,library,localLibrary,sectorLibraries,security,finance,
   operationRegistry,communication,contractRegistry,dependencyMap,autonomy,rollback,lifecycle,integrations,externalConnections,accountManager,accountOperations,centralOrchestrator,structureClassifier,automation,
   audit,permissions,rights,persistence,versions,errors,emergencyStop,diagnostics
  };
