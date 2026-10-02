@@ -13,7 +13,25 @@ export class WorldSchool {
     this.audit=audit;
     this.signals=[];
     this.readyContent=new Map();
+    this.externalSources=new Map();
+    this.platformGuidelines=new Map();
   }
+  registerExternalSource({id:sourceId,name,type="SEARCH",adapter=null,status="READY"}={}) {
+    if(!sourceId||!name) throw new Error("SCHOOL_SOURCE_INVALID");
+    const source={id:sourceId,name,type,status,adapter};this.externalSources.set(sourceId,source);
+    this.audit?.record?.("SCHOOL_EXTERNAL_SOURCE_REGISTERED",{id:sourceId,name,type,status});return structuredClone({...source,adapter:undefined});
+  }
+  registerPlatformGuidelines({platform,rules=[],evaluationSignals=[]}={}) {
+    if(!platform) throw new Error("SCHOOL_PLATFORM_REQUIRED");
+    const item={platform,rules:structuredClone(rules),evaluationSignals:structuredClone(evaluationSignals),updatedAt:new Date().toISOString()};
+    this.platformGuidelines.set(platform,item);this.audit?.record?.("SCHOOL_PLATFORM_GUIDELINES_UPDATED",item);return structuredClone(item);
+  }
+  searchExternal(sourceId,query,{context={}}={}) {
+    const source=this.externalSources.get(sourceId);if(!source) throw new Error("SCHOOL_EXTERNAL_SOURCE_NOT_FOUND");
+    if(typeof source.adapter!=="function") return {success:false,reason:"EXTERNAL_SOURCE_NOT_CONNECTED",sourceId,query};
+    const result=source.adapter({query,context});this.audit?.record?.("SCHOOL_EXTERNAL_SEARCH",{sourceId,query,result});return structuredClone({success:true,sourceId,query,result});
+  }
+  getPlatformGuidelines(platform=null) { return platform ? structuredClone(this.platformGuidelines.get(platform)||null) : [...this.platformGuidelines.values()].map(structuredClone); }
   analyzeLocalKnowledge(sectorId,{records=null,worldSignals=[]}={}) {
     const sourceRecords=records||this.sectorLibraries?.list?.(sectorId)||[];
     const analyzed=sourceRecords.map(record=>({
@@ -71,5 +89,5 @@ export class WorldSchool {
     return structuredClone(item);
   }
   listReady(){return [...this.readyContent.values()].map(structuredClone);}
-  status(){return {id:this.id,signals:this.signals.length,readyContent:this.readyContent.size,authorized:this.listReady().filter(x=>x.status==="AUTHORIZED_FOR_POSTING").length};}
+  status(){return {id:this.id,signals:this.signals.length,readyContent:this.readyContent.size,authorized:this.listReady().filter(x=>x.status==="AUTHORIZED_FOR_POSTING").length,externalSources:this.externalSources.size,platformGuidelines:this.platformGuidelines.size};}
 }
