@@ -14,10 +14,10 @@ const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
 const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'PROFILE_MANAGER'});
 const centralOperations=new AccountOperationsManager({accountManager:manager});
 try{centralOperations.schedules=JSON.parse(localStorage.getItem('wd.central.schedules')||'[]');}catch{centralOperations.schedules=[];}
-const networkSectors=new NetworkSectorManager({accountManager:manager});
+const externalConnections=createExternalConnectionHub();
+const networkSectors=new NetworkSectorManager({accountManager:manager,connectionHub:externalConnections});
 const emergencyStop=new EmergencyStop();
 const automation=new CentralAutomationController({accountManager:manager,emergencyStop});
-const externalConnections=createExternalConnectionHub();
 for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
