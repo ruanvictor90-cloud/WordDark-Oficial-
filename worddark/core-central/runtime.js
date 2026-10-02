@@ -26,7 +26,7 @@ export class WordDarkRuntime {
   const safe=this.assertSafe(operation.id);if(!safe.allowed)return {success:false,reason:safe.reason,stopId:safe.stopId};
   const owner=module.owner||module.id;
   const contractId=context.contractId||`EXCHANGE:${operation.origin}:${owner}`;
-  if(!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:owner,operations:[operation.type],capability:moduleId,reversible:true,metadata:{generated:true,module:moduleId}});
+  if(!this.contractRegistry.get(contractId))this.contractRegistry.register({id:contractId,origin:operation.origin,destination:operation.destination||owner,operations:[operation.type],capability:moduleId,reversible:true,metadata:{generated:true,module:moduleId}});
   const contract=this.contractRegistry.validate(operation,{contractId});
   if(!contract.valid)return {success:false,reason:"MODULE_CONTRACT_INVALID",contract,moduleId};
   operation.context={...(operation.context||{}),contractId};
@@ -44,8 +44,8 @@ export class WordDarkRuntime {
   const route=this.road.route(op);
   if(!route.success){this.central?.receiveRequest?.(op,route.reason);return op.transition("BLOCKED",{reason:route.reason});}
   op.transition("ROUTED",route.delivery);
-  const contractId=`EXCHANGE:${op.origin}:${route.capability.owner}`;
-  if(!this.contractRegistry.get(contractId)) this.contractRegistry.register({id:contractId,origin:op.origin,destination:route.capability.owner,operations:[op.type],capability:route.capability.id,reversible:true,metadata:{generated:true,route:route.delivery.id}});
+  const contractId=`EXCHANGE:${op.origin}:${op.destination||route.capability.id}`;
+  if(!this.contractRegistry.get(contractId)) this.contractRegistry.register({id:contractId,origin:op.origin,destination:op.destination||route.capability.id,operations:[op.type],capability:route.capability.id,reversible:true,metadata:{generated:true,route:route.delivery.id}});
   const contract=this.contractRegistry.validate(op,{contractId});
   if(!contract.valid)return op.transition("REJECTED",{reason:"MODULE_CONTRACT_INVALID",contract});
   op.context.contractId=contractId;
