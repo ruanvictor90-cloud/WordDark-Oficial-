@@ -1,9 +1,11 @@
 import { AccountManager } from './worddark/core-central/account-manager.js';
 import { YouTubeConnector } from './worddark/core-central/social-networks.js';
+import { AccountOperationsManager } from './worddark/core-central/account-operations-manager.js';
 
 const manager=new AccountManager({accountId:'ACCOUNT-LOCAL',accountName:localStorage.getItem('wd.account.name')||'Minha Conta'});
 const stored=JSON.parse(localStorage.getItem('wd.account.profiles')||'[]');
-const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'ACCOUNT_MANAGER'});
+const defaultManager=manager.addManager({id:'GESTOR-01',name:'Gestor Principal',role:'PROFILE_MANAGER'});
+const centralOperations=new AccountOperationsManager({accountManager:manager});
 for(const profile of stored){try{const p=manager.connectProfile(profile);if(!p.managerId)manager.assignManager(p.id,defaultManager.id);}catch{}}
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -18,7 +20,7 @@ function render(){
     const real=p.config?.youtube?.channelId;
     return '<article class="wd-profile"><div class="wd-profile-top"><span class="network">'+safe(p.networkName)+'</span><span class="wd-chip active">'+safe(p.status)+'</span></div><h3>'+safe(p.displayName)+'</h3><p>'+safe(p.handle||p.id)+'</p><div class="wd-profile-meta"><span>SETOR: <b>'+safe(p.displayName)+'</b></span><span>GESTOR: <b>'+safe(g?.name||'Sem gestor')+'</b></span></div><small>'+ (real?'CANAL REAL · '+safe(real):'CADASTRO LOCAL') +'</small><button class="wd-profile-action" data-auth="'+p.id+'">Conectar conta real</button></article>'
   }).join(''):'<div class="wd-empty">Nenhum perfil conectado ainda.<br><strong>O primeiro passo é conectar uma rede.</strong></div>';
-  $('#managers').innerHTML=manager.listManagers().map(m=>'<article class="wd-manager"><span>GESTOR</span><h3>'+safe(m.name)+'</h3><p>'+safe(m.role)+'</p><strong>'+profiles.filter(p=>p.managerId===m.id).length+' perfil(is) gerenciado(s)</strong></article>').join('');
+  $('#managers').innerHTML='<article class="wd-manager central-manager"><span>GESTOR CENTRAL</span><h3>'+safe(centralOperations.name)+'</h3><p>ACCOUNT_OPERATIONS_MANAGER</p><strong>'+profiles.length+' perfil(is) sob coordenação</strong></article>'+manager.listManagers().map(m=>'<article class="wd-manager"><span>GESTOR DE PERFIL</span><h3>'+safe(m.name)+'</h3><p>'+safe(m.role)+'</p><strong>'+profiles.filter(p=>p.managerId===m.id).length+' perfil(is) gerenciado(s)</strong></article>').join('');
   document.querySelectorAll('[data-auth]').forEach(b=>b.onclick=()=>prepareRealConnection(b.dataset.auth));
 }
 $('#rename-account').onclick=()=>{const name=prompt('Nome da conta:',manager.name);if(name?.trim()){manager.rename(name);persist();render();}};
@@ -36,6 +38,18 @@ $('#network').onchange=()=>{
   $('#handle').placeholder=youtube?'Será preenchido pelo canal real':'@seuperfil';
 };
 $('#open-connect').onclick=()=>location.hash='conectar';
+$('#broadcast-form').onsubmit=e=>{
+  e.preventDefault();
+  const operation=centralOperations.createBroadcastOperation({
+    type:'CONTENT',
+    content:{text:$('#broadcast-text').value.trim(),mediaUrl:$('#broadcast-media').value.trim(),format:$('#broadcast-format').value},
+    requirements:[]
+  });
+  manager.registerCentralOperation(operation);
+  const dispatched=centralOperations.dispatch(operation);
+  $('#broadcast-note').textContent='Operação criada e distribuída para '+dispatched.targets.length+' perfil(is). Cada gestor de perfil recebeu sua parte.';
+  e.target.reset();
+};
 
 async function connectYouTubeReal(){
   const clientId=$('#youtube-client-id').value.trim();
