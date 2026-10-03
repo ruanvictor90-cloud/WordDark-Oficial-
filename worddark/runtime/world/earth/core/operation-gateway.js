@@ -1,13 +1,22 @@
-/* WordDark — Terra Operation Gateway · DF-0.11
- * A Terra cria necessidades/pedidos; os controles centrais decidem autorização,
- * roteamento e execução. Este gateway não executa produção.
+/* WordDark — Terra Operation Gateway
+ * Terra declara intenção/necessidade. WordDark decide a rota.
  */
 class WordDarkEarthOperationGateway{
   constructor({coordinator,defaultOrigin="world/earth"}={}){this.coordinator=coordinator||null;this.defaultOrigin=defaultOrigin;}
-  submit({requesterId="ORIGIN-001",originId=this.defaultOrigin,operationType="content.create",environment="TEST",payload={}}={}){
+  submit({
+    requesterId="ORIGIN-001",
+    originId=this.defaultOrigin,
+    operationType="content.create",
+    environment="TEST",
+    intent=null,
+    need=null,
+    capability=null,
+    destinationId=null,
+    payload={}
+  }={}){
     if(!this.coordinator)return{success:false,status:"FAILED",reason:"Coordenador central não configurado."};
     return this.coordinator.submit({
-      requesterId,originId,operationType,environment,
+      requesterId,originId,operationType,environment,intent,need,capability,destinationId,
       payload:{...payload,originId,requesterId}
     });
   }
