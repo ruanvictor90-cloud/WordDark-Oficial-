@@ -6,7 +6,7 @@ export const SOCIAL_NETWORKS=Object.freeze({
 });
 
 export const YOUTUBE_SCOPES=Object.freeze([
-  'https://www.googleapis.com/auth/youtube.readonly'
+  'https://www.googleapis.com/auth/youtube.readonly','https://www.googleapis.com/auth/youtube.upload'
 ]);
 
 export class SocialNetworkConnector{
