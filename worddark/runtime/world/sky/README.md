@@ -1,58 +1,82 @@
 # Céu
 
-O Céu é a área do WordDark responsável por gerenciar e suprir as necessidades do mundo.
+O **Céu é a área do WordDark que concentra empresas especializadas, fábricas e infraestrutura compartilhada**.
 
-Sua função é identificar problemas, necessidades e demandas e fornecer meios para resolvê-los.
+Ele não é uma empresa.
 
-O Céu pode conter:
+É uma área do mundo que fornece capacidades para as empresas da Terra e para outras unidades do próprio WordDark.
 
-- Serviços
-- Recursos
-- Soluções
-- Sistemas
-- Infraestrutura
-- Operações
-- Gestão
-- Fábricas
-- Tecnologias
-- Outros mecanismos necessários para manter e expandir o mundo
+## Empresas e serviços
 
-O Céu não gera a necessidade principal do mundo.
+### Dark Factory — Empresa de Produção de Conteúdo
 
-Ele existe para responder às necessidades geradas pela Terra.
+A Dark Factory é uma empresa especializada em:
+
+- criação de conteúdo;
+- edição;
+- montagem;
+- transformação;
+- renderização;
+- validação;
+- preparação de ativos;
+- operações modulares de produção.
+
+Ela recebe operações através das interfaces do WordDark.
+
+### Central de Conexões Externas
+
+É uma infraestrutura centralizada para comunicação com plataformas e serviços externos.
+
+Responsável por:
+
+- OAuth;
+- credenciais;
+- tokens;
+- adapters;
+- providers;
+- estado das conexões;
+- capacidades;
+- auditoria;
+- comunicação externa.
+
+Ela não deve ser incorporada à lógica de negócio das empresas.
+
+## Relação entre empresas
+
+```
+EMPRESA DE GESTÃO DE NEGÓCIOS
+            ↕
+EMPRESA DE OPERAÇÃO DIGITAL
+            ↕
+        WORDDARK
+            ↕
+     DARK FACTORY
+            ↕
+CENTRAL DE CONEXÕES EXTERNAS
+            ↕
+      MUNDO EXTERNO
+```
+
+As conexões entre essas unidades passam por contratos, permissões e Rodovias.
 
 ## Princípio
 
-A Terra gera necessidades.
+O Céu fornece capacidades especializadas.
 
-O Céu encontra, cria ou fornece as soluções para essas necessidades.
+A empresa que precisa de uma capacidade não precisa conhecer sua implementação interna. Ela solicita o serviço ao WordDark, que encaminha a operação para a unidade capaz.
 
 ## Estrutura-base
 
-O Céu será organizado inicialmente pelas seguintes camadas:
-
 ```
 CÉU
-├── DARK FACTORY
-├── ROUTING
-├── REGISTRY
-├── SECURITY
-├── STORAGE
-└── CONTRACTS
+├── Empresas especializadas
+│   └── Dark Factory
+├── Conexões externas
+├── Routing / Rodovia
+├── Registry
+├── Security
+├── Library
+└── Contracts
 ```
 
-Cada camada possui responsabilidade própria e não deve absorver funções das demais.
-
-### Relação com a Terra
-
-A Terra gera necessidades.
-
-O Céu recebe, encaminha, autoriza, executa, registra e devolve resultados por mecanismos controlados.
-
-A arquitetura detalhada está documentada em [Dark Factory / Arquitetura](darkfactory/architecture/).
-
-## Estado atual
-
-A estrutura-base está sendo fechada antes dos testes operacionais.
-
-O próximo objetivo é transformar as interfaces entre essas camadas em contratos claros antes de conectar o primeiro Estado do Juice Country.
+Novas empresas especializadas podem ser adicionadas ao Céu sem alterar a estrutura das empresas já existentes.
