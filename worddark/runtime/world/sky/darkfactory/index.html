@@ -74,7 +74,7 @@
 <script src="../../ui/worddark-ui.js"></script>
 <script src="../../contracts/identity.js"></script><script src="../../contracts/access.js"></script><script src="../../security/security-manager.js"></script>
 <script src="../../contracts/operation.js"></script><script src="../../contracts/message.js"></script><script src="../../contracts/request.js"></script><script src="../../contracts/receipt.js"></script><script src="../../contracts/route.js"></script><script src="../../contracts/environment.js"></script>
-<script src="../../core/operation-engine.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
+<script src="../../core/operation-engine.js"></script><script src="../../core/operation-coordinator.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
 <script src="../../contracts/emergency-stop.js?v=20260930-2"></script><script src="../../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../../security/account-manager.js"></script><script src="../../core/world-runtime.js"></script>
 <script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script>
 <script src="core/social-factory.js"></script><script src="core/account-operation.js"></script><script src="../connections/connection-registry.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="core/content-factory.js"></script>
@@ -133,11 +133,12 @@
   const $=id=>document.getElementById(id);
   const connectionRegistry=new ExternalConnectionRegistry();
   const accountBinding=new AccountOperationBinding(connectionRegistry);
+  const coordinator=new WordDarkOperationCoordinator({engine,road,destination:"world/sky/darkfactory"});
   function refreshAccounts(){const network=$("productionNetwork").value;const accounts=connectionRegistry.list().filter(c=>c.status==="CONNECTED"&&c.providerId===network);$("productionAccount").innerHTML="<option value=\"\">Nenhuma conta selecionada</option>"+accounts.map(c=>"<option value=\""+c.accountId+"\">"+(c.displayName||c.accountId)+"</option>").join("");}
   $("productionNetwork").addEventListener("change",refreshAccounts);refreshAccounts();
   $("serviceCount").textContent=serviceRegistry.list().length;
   $("factoryStatus").textContent=factory.getStatus().status;
-  $("runStatus").textContent="Runtime: "+runtime.getHealth().status+" · aguardando operação.";
+  $("runStatus").textContent="Runtime: "+runtime.getHealth().status+" · Coordenador: "+coordinator.getStatus().status+" · aguardando operação.";
 
   function renderOperation(operation){
     activeOperationId=operation&&operation.operationId||activeOperationId;
@@ -166,22 +167,37 @@
 
   $("runProduction").addEventListener("click",async()=>{
     try{
-      const accountId=$("productionAccount").value.trim(); const network=$("productionNetwork").value.trim(); const binding=accountId?accountBinding.bind({network,accountId,action:"CONTENT_PUBLISH",contentId:$("contentId").value.trim()}):{success:true,status:"NO_EXTERNAL_DESTINATION"}; if(!binding.success)throw new Error("Conta não autorizada: "+binding.status); $("accountBindingStatus").textContent=binding.status==="ACCOUNT_BOUND"?"Conta vinculada: "+(binding.account.displayName||binding.accountId)+" · "+network:"Produção sem destino externo."; const request={id:"REQ-"+Date.now().toString(36).toUpperCase(),taskType:"content.create",content:true,contentId:$("contentId").value.trim(),action:"CONTENT_CREATE",contentType:"VIDEO",requirements:$("requirements").value.trim(),payload:{requesterId:$("requester").value.trim(),originId:$("origin").value.trim(),task:$("task").value.trim(),contentId:$("contentId").value.trim(),title:$("contentTitle").value.trim(),type:"VIDEO",requirements:$("requirements").value.trim(),destination:binding.status==="ACCOUNT_BOUND"?{network,accountId}:null}};
-      const plan=factory.process(request);
-      renderOperation({operationId:plan.operationId,status:plan.status});
-      $("lastResult").textContent=JSON.stringify(plan,null,2);
-      $("runStatus").textContent="Planejamento concluído. Executando módulos da fábrica...";
-      const result=await contentFactory.execute(plan.operationId);
-      renderOperation({operationId:result.operationId,status:result.status});
-      $("runStatus").textContent=result.status==="COMPLETED"?"Produção concluída pela Dark Factory.":"Produção terminou em "+result.status+".";
-      $("lastResult").textContent=JSON.stringify(result,null,2);
+      const accountId=$("productionAccount").value.trim();
+      const network=$("productionNetwork").value.trim();
+      const contentId=$("contentId").value.trim();
+      const binding=accountId?accountBinding.bind({network,accountId,action:"CONTENT_PUBLISH",contentId}):{success:true,status:"NO_EXTERNAL_DESTINATION"};
+      if(!binding.success)throw new Error("Conta não autorizada: "+binding.status);
+      $("accountBindingStatus").textContent=binding.status==="ACCOUNT_BOUND"?"Conta vinculada: "+(binding.account.displayName||binding.accountId)+" · "+network:"Produção sem destino externo.";
+      const originId=$("origin").value.trim();
+      const request={
+        id:"REQ-"+Date.now().toString(36).toUpperCase(),
+        requesterId:$("requester").value.trim(),
+        originId,
+        operationType:"content.create",
+        environment:"TEST",
+        payload:{
+          content:true,contentId,action:"CONTENT_CREATE",contentType:"VIDEO",
+          requesterId:$("requester").value.trim(),originId,task:$("task").value.trim(),
+          title:$("contentTitle").value.trim(),type:"VIDEO",requirements:$("requirements").value.trim(),
+          destination:binding.status==="ACCOUNT_BOUND"?{network,accountId}:null
+        }
+      };
+      $("runStatus").textContent="Terra → controles WordDark → Rodovia → Céu...";
+      const operation=coordinator.submit(request);
+      renderOperation(operation);
+      $("lastResult").textContent=JSON.stringify(operation,null,2);
+      $("runStatus").textContent=operation.status==="COMPLETED"?"Operação concluída e resposta devolvida à Terra.":"Operação terminou em "+operation.status+".";
       renderBus();renderAudit();
     }catch(error){
       $("runStatus").textContent="Erro: "+error.message;
       $("lastResult").textContent=JSON.stringify({error:error.message,stack:error.stack},null,2);
     }
   });
-
   $("triggerStop").addEventListener("click",()=>{
     if(!activeOperationId){$("emergencyResult").textContent=JSON.stringify({success:false,reason:"NO_ACTIVE_OPERATION"},null,2);return;}
     const result=emergencyStop.trigger({sectorId:"DARKFACTORY",operationId:activeOperationId,requesterId:"UI-DF",reason:"Parada acionada no setor Dark Factory"});
