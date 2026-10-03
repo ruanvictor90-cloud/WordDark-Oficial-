@@ -7,7 +7,7 @@ $("health").onclick=()=>{try{const d={companies:R.companies.list().length,router
 $("route").onclick=()=>{try{const d=R.world.router.route({capability:"CONTENT_CREATE",need:"produzir conteúdo"});show("routeS",!!d&&d.target&&d.target.id==="WD-COMP-DARK-FACTORY",d)}catch(e){show("routeS",false,{error:e.message})}};
 function operation(){return R.gateway.submit({requesterId:"WD-TEST",originId:"world/test",operationType:"content.create",environment:"TEST",payload:{content:true,contentId:"TEST-"+Date.now(),action:"CONTENT_CREATE",contentType:"VIDEO",task:"Teste real",title:"Teste WordDark",requirements:"Laboratório"}})}
 $("op").onclick=()=>{try{const d=operation();failedId=d.operationId;show("opS",["COMPLETED","FAILED"].includes(d.status),d.toJSON?d.toJSON():d)}catch(e){show("opS",false,{error:e.message})}};
-$("failure").onclick=()=>{try{failAudio=true;const d=operation();failedId=d.operationId;failAudio=false;const r=R.cf.reenterFromModule(failedId,"AUDIO");show("failureS",d.status==="FAILED"&&r&&r.success!==false,{failed:d,reentry:r})}catch(e){show("failureS",false,{error:e.message})}};
+$("failure").onclick=()=>{try{failAudio=true;const d=operation();failedId=d.operationId;failAudio=false;const ready=R.cf.reenterFromModule(failedId,"AUDIO");const r=R.cf.executeFromModule(failedId,"AUDIO");show("failureS",d.status==="FAILED"&&ready&&ready.success!==false&&r&&r.success!==false,{failed:d,reentry:ready,resumed:r})}catch(e){show("failureS",false,{error:e.message})}};
 $("all").onclick=()=>{$("suite").textContent="EXECUTANDO";$("health").click();$("route").click();$("op").click();$("failure").click();$("suite").textContent="CONCLUÍDO";$("suite").className="wd-badge ok"};
 })();
 </script></body></html>
