@@ -75,7 +75,7 @@
 <script src="../../core/operation-engine.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
 <script src="../../contracts/emergency-stop.js?v=20260930-2"></script><script src="../../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../../security/account-manager.js"></script><script src="../../core/world-runtime.js"></script>
 <script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script>
-<script src="core/social-factory.js"></script><script src="core/content-operation.js"></script><script src="core/content-factory.js"></script>
+<script src="core/social-factory.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="core/content-factory.js"></script>
 <script src="core/request.js"></script><script src="core/service-registry.js"></script><script src="core/production-validator.js"></script><script src="core/production-pipeline.js"></script><script src="core/content-publication-executor.js"></script><script src="core/factory.js"></script><script src="core/operation-bridge.js"></script>
 <script>
 (() => {
@@ -83,7 +83,9 @@
   const serviceRegistry=new DarkFactoryServiceRegistry();
   const contentExecutor=new DarkFactoryContentExecutor();
   const socialFactory=new SocialFactory({connectionBridge:window.WordDarkConnectionBridge||null});
-  const contentFactory=new ContentFactory({executor:contentExecutor});
+  const contentModules=new ContentModuleRegistry();
+  ["INGEST","SCRIPT","ASSET","EDIT","AUDIO","TIMELINE","TRANSFORM","RENDER","VALIDATE","PACKAGE"].forEach(moduleId=>contentModules.register(moduleId,async context=>({success:true,status:"MODULE_COMPLETED",module:moduleId,contentId:context.operation.contentId,executedAt:new Date().toISOString()})));
+  const contentFactory=new ContentFactory({executor:contentExecutor,moduleRegistry:contentModules});
   serviceRegistry.register({serviceId:"DF-SERVICE-CONTENT-PRODUCE",name:"Content Production",type:"content.produce",status:"READY",executor:contentExecutor});
   const pipeline=new DarkFactoryProductionPipeline({registry:serviceRegistry,validator:new DarkFactoryProductionValidator(),emergencyStop});
   const factory=new DarkFactory({registry:serviceRegistry,pipeline,socialFactory,contentFactory});
@@ -156,31 +158,17 @@
     }catch(error){$("socialResult").textContent=JSON.stringify({error:error.message},null,2)}
   });
 
-  $("runProduction").addEventListener("click",()=>{
+  $("runProduction").addEventListener("click",async()=>{
     try{
-      const operation=new WordDarkOperation({
-        requesterId:$("requester").value.trim(),
-        originId:$("origin").value.trim(),
-        destinationId:"world/sky/darkfactory",
-        operationType:"content.produce",
-        environment:"TEST",
-        payload:{
-          identityId:$("requester").value.trim(),
-          capability:"content.produce",
-          action:"request",
-          scope:"world/sky/darkfactory",
-          task:$("task").value.trim(),
-          contentId:$("contentId").value.trim(),
-          title:$("contentTitle").value.trim(),
-          type:"VIDEO",
-          requirements:$("requirements").value.trim()
-        }
-      });
-      renderOperation(operation);$("runStatus").textContent="Executando operação pelo núcleo...";
-      const result=runtime.runOperation(operation);
-      renderOperation(result);
-      $("runStatus").textContent=result.status==="COMPLETED"?"Produção concluída e devolvida pela Rodovia.":"Operação terminou em "+result.status+".";
-      $("lastResult").textContent=JSON.stringify(result.toJSON(),null,2);
+      const request={id:"REQ-"+Date.now().toString(36).toUpperCase(),taskType:"content.create",content:true,contentId:$("contentId").value.trim(),action:"CONTENT_CREATE",contentType:"VIDEO",requirements:$("requirements").value.trim(),payload:{requesterId:$("requester").value.trim(),originId:$("origin").value.trim(),task:$("task").value.trim(),contentId:$("contentId").value.trim(),title:$("contentTitle").value.trim(),type:"VIDEO",requirements:$("requirements").value.trim()}};
+      const plan=factory.process(request);
+      renderOperation({operationId:plan.operationId,status:plan.status});
+      $("lastResult").textContent=JSON.stringify(plan,null,2);
+      $("runStatus").textContent="Planejamento concluído. Executando módulos da fábrica...";
+      const result=await contentFactory.execute(plan.operationId);
+      renderOperation({operationId:result.operationId,status:result.status});
+      $("runStatus").textContent=result.status==="COMPLETED"?"Produção concluída pela Dark Factory.":"Produção terminou em "+result.status+".";
+      $("lastResult").textContent=JSON.stringify(result,null,2);
       renderBus();renderAudit();
     }catch(error){
       $("runStatus").textContent="Erro: "+error.message;
