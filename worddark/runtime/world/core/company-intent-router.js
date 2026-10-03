@@ -32,9 +32,12 @@
 
   class WordDarkCompanyIntentRouter{
     constructor({companyRegistry=null}={}){this.companyRegistry=companyRegistry||null;}
+    capabilityFor(request={}){return typeof WordDarkCapabilityCatalog!=="undefined"
+      ? WordDarkCapabilityCatalog.resolve(request)
+      : (request.capability||INTENT_CAPABILITIES[request.intent]||this.inferCapability(request.need));}
 
     resolve({intent=null,need=null,capability=null}={}){
-      const requested=capability||INTENT_CAPABILITIES[intent]||this.inferCapability(need);
+      const requested=this.capabilityFor({intent,need,capability});
       if(!requested)return{success:false,status:"CAPABILITY_REQUIRED",reason:"A necessidade não possui uma capacidade identificável."};
       const companies=this.companyRegistry?.findCapability?.(requested)||[];
       if(!companies.length)return{success:false,status:"CAPABILITY_UNAVAILABLE",capability:requested,intent:intent||null,need:need||null};
