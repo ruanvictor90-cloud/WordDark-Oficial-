@@ -21,7 +21,7 @@ class WordDarkOperationCoordinator {
       capability:canonical
     });
     if(!resolved.success)return{success:false,reason:resolved.reason,capability:resolved.capability||null};
-    return{success:true,destination:resolved.destinationCompanyId,resolution:resolved};
+    return{success:true,destination:resolved.destination||resolved.destinationCompanyId,resolution:resolved};
   }
 
   ensureRoute(origin,service,destination){
