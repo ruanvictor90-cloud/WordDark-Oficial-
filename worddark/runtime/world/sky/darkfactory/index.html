@@ -10,7 +10,7 @@
     <a href="../../../">◈ WordDark</a><a href="../">☁ Céu</a><a class="active" href="./">⚙ Dark Factory</a>
     <a href="../../earth/">◉ Terra</a><a href="../../core/">◎ Operações</a>
   </nav>
-  <div class="wd-footer">DF-0.7 · serviço de produção<br>Operation Engine conectado</div>
+  <div class="wd-footer">EMPRESA · PRODUÇÃO DE CONTEÚDO<br>Operation Engine conectado</div>
 </aside>
 <main class="wd-main">
 <div class="wd-top">
@@ -20,7 +20,7 @@
 
 <section class="wd-card full">
   <div class="wd-eyebrow">Circuito operacional</div>
-  <div class="wd-flow"><span>IDENTIFIED</span><i class="wd-arrow">→</i><span>AUTHORIZED</span><i class="wd-arrow">→</i><span>ROUTED</span><i class="wd-arrow">→</i><span>EXECUTING</span><i class="wd-arrow">→</i><span>VALIDATING</span><i class="wd-arrow">→</i><span>COMPLETED</span></div>
+  <div class="wd-flow"><span>CREATED</span><i class="wd-arrow">→</i><span>AUTHORIZED</span><i class="wd-arrow">→</i><span>RECEIVED</span><i class="wd-arrow">→</i><span>ROUTED</span><i class="wd-arrow">→</i><span>EXECUTING</span><i class="wd-arrow">→</i><span>WAITING / REENTRY</span><i class="wd-arrow">→</i><span>VALIDATING</span><i class="wd-arrow">→</i><span>COMPLETED</span></div>
 </section>
 
 <section class="wd-grid">
@@ -74,7 +74,7 @@
 <script src="../../ui/worddark-ui.js"></script>
 <script src="../../contracts/identity.js"></script><script src="../../contracts/access.js"></script><script src="../../security/security-manager.js"></script>
 <script src="../../contracts/operation.js"></script><script src="../../contracts/message.js"></script><script src="../../contracts/request.js"></script><script src="../../contracts/receipt.js"></script><script src="../../contracts/route.js"></script><script src="../../contracts/environment.js"></script>
-<script src="../../core/operation-engine.js"></script><script src="../../core/operation-coordinator.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
+<script src="../../core/operation-engine.js"></script><script src="../../core/capability-catalog.js"></script><script src="../../core/company-registry.js"></script><script src="../../core/company-registry-seed.js"></script><script src="../../core/company-intent-router.js"></script><script src="../../core/world-company-bootstrap.js"></script><script src="../../core/operation-coordinator.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
 <script src="../../contracts/emergency-stop.js?v=20260930-2"></script><script src="../../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../../security/account-manager.js"></script><script src="../../core/world-runtime.js"></script>
 <script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script>
 <script src="core/social-factory.js"></script><script src="core/account-operation.js"></script><script src="../connections/connection-registry.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="core/content-factory.js"></script><script src="core/content-reentry-adapter.js"></script>
@@ -82,6 +82,7 @@
 <script>
 (() => {
   const emergencyStop=new WordDarkEmergencyStopManager();
+  const companyWorld=bootstrapWordDarkCompanies({registry:new WordDarkCompanyRegistry()});
   const serviceRegistry=new DarkFactoryServiceRegistry();
   const contentExecutor=new DarkFactoryContentExecutor();
   const socialFactory=new SocialFactory({connectionBridge:window.WordDarkConnectionBridge||null});
@@ -134,7 +135,7 @@
   const $=id=>document.getElementById(id);
   const connectionRegistry=new ExternalConnectionRegistry();
   const accountBinding=new AccountOperationBinding(connectionRegistry);
-  const coordinator=new WordDarkOperationCoordinator({engine,road,destination:"world/sky/darkfactory"});
+  const coordinator=new WordDarkOperationCoordinator({engine,road,companyRouter:companyWorld.router});
   function refreshAccounts(){const network=$("productionNetwork").value;const accounts=connectionRegistry.list().filter(c=>c.status==="CONNECTED"&&c.providerId===network);$("productionAccount").innerHTML="<option value=\"\">Nenhuma conta selecionada</option>"+accounts.map(c=>"<option value=\""+c.accountId+"\">"+(c.displayName||c.accountId)+"</option>").join("");}
   $("productionNetwork").addEventListener("change",refreshAccounts);refreshAccounts();
   $("serviceCount").textContent=serviceRegistry.list().length;
