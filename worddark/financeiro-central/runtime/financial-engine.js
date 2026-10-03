@@ -12,6 +12,7 @@
       this.accounts=new Map();
       this.entries=[];
       this.plans=new Map();
+      this.subscriptions=new Map();
       this._load();
     }
     _load(){
@@ -21,12 +22,13 @@
         (s.accounts||[]).forEach(x=>this.accounts.set(x.id,x));
         this.entries=s.entries||[];
         (s.plans||[]).forEach(x=>this.plans.set(x.id,x));
+        (s.subscriptions||[]).forEach(x=>this.subscriptions.set(x.subscriptionId,x));
       }catch(_){}
     }
     _save(){
       if(!this.storage)return;
       try{this.storage.setItem("wd.financial.engine",JSON.stringify({
-        accounts:[...this.accounts.values()],entries:this.entries,plans:[...this.plans.values()]
+        accounts:[...this.accounts.values()],entries:this.entries,plans:[...this.plans.values()],subscriptions:[...this.subscriptions.values()]
       }));}catch(_){}
     }
     registerAccount({id,name,ownerId,type="OPERATIONAL",currency=this.currency}={}){
@@ -54,8 +56,10 @@
     subscribe({subscriptionId,ownerId,planId,status="ACTIVE"}={}){
       const plan=this.plans.get(planId);
       if(!plan)return{success:false,status:"PLAN_NOT_FOUND"};
-      const subscription={subscriptionId,ownerId,planId,status,price:plan.price,currency:plan.currency,period:plan.period,startedAt:new Date().toISOString()};
+      const subscription={subscriptionId:subscriptionId||"SUB-"+Date.now().toString(36).toUpperCase(),ownerId,planId,status,price:plan.price,currency:plan.currency,period:plan.period,startedAt:new Date().toISOString()};
+      this.subscriptions.set(subscription.subscriptionId,subscription);
       this.post({accountId:ownerId,type:"SUBSCRIPTION",amount:-plan.price,description:"Plano WordDark",referenceId:subscriptionId,metadata:{planId}});
+      this._save();
       return{success:true,status:"SUBSCRIPTION_ACTIVE",subscription};
     }
     listEntries(accountId=null){return this.entries.filter(e=>!accountId||e.accountId===accountId);}
@@ -64,3 +68,4 @@
   if(typeof global!=="undefined")global.WordDarkFinancialEngine=WordDarkFinancialEngine;
   if(typeof module!=="undefined"&&module.exports)module.exports=WordDarkFinancialEngine;
 })(typeof globalThis!=="undefined"?globalThis:window);
+\n  listSubscriptions(ownerId=null){return [...this.subscriptions.values()].filter(x=>!ownerId||x.ownerId===ownerId);}\n  cancelSubscription(subscriptionId){const s=this.subscriptions.get(subscriptionId);if(!s)return{success:false,status:"SUBSCRIPTION_NOT_FOUND"};s.status="CANCELLED";s.cancelledAt=new Date().toISOString();this._save();return{success:true,status:"SUBSCRIPTION_CANCELLED",subscription:s};}\n
