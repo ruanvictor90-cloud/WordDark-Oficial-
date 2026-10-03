@@ -9,13 +9,13 @@
     const companies=[
       {
         id:"WD-COMP-DIGITAL-OPS",
-        name:"Empresa de Operação Digital",
+        name:"Empresa de Gestão de Conteúdos e Canais",
         area:"EARTH",
-        type:"DIGITAL_OPERATIONS_COMPANY",
+        type:"CONTENT_CHANNEL_MANAGEMENT_COMPANY",
         capabilities:[
           "CLIENT_ONBOARDING",
           "ACCOUNT_MANAGEMENT",
-          "CHANNEL_MANAGEMENT",
+          "CHANNEL_MANAGEMENT","CONTENT_MANAGEMENT","CONTENT_STRATEGY","AUDIENCE_MANAGEMENT",
           "AUTONOMOUS_CHANNEL_OPERATION",
           "CONTENT_BRIEF_RECEIVING",
           "CONTENT_IDEA_REQUEST",
@@ -23,7 +23,7 @@
           "CONTENT_OPERATIONS",
           "CONTENT_PUBLICATION"
         ],
-        inputs:["COMPANY_CONTENT_REQUEST","CONTENT_IDEA_REQUEST","PROMOTION_REQUEST"],
+        inputs:["COMPANY_INTENT","COMPANY_CONTENT_REQUEST","CONTENT_IDEA_REQUEST","PROMOTION_REQUEST"],
         outputs:["DIGITAL_CHANNEL_OPERATION","CONTENT_REQUEST","PUBLICATION_REQUEST"]
       },
       {
