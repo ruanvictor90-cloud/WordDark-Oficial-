@@ -3,7 +3,7 @@ const STORAGE_KEY="wd.external.connections", CLIENT_KEY="wd.youtube.clientId";
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const providers=[
-{id:"YOUTUBE",name:"YouTube",type:"SOCIAL_NETWORK",status:"READY",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
+{id:"YOUTUBE",name:"YouTube",type:"SOCIAL_NETWORK",status:"READY",capabilities:["ACCOUNT_READ","CONTENT_ROUTE"]},
 {id:"INSTAGRAM",name:"Instagram",type:"SOCIAL_NETWORK",status:"AUTHORIZATION_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
 {id:"TIKTOK",name:"TikTok",type:"SOCIAL_NETWORK",status:"AUTHORIZATION_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
 {id:"FACEBOOK",name:"Facebook",type:"SOCIAL_NETWORK",status:"AUTHORIZATION_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]}];
