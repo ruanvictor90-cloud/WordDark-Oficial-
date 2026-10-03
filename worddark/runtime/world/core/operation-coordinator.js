@@ -25,11 +25,15 @@ class WordDarkOperationCoordinator {
     return this.road.registerRoute(route);
   }
 
-  ensureReturnRoute(service){
-    if(!this.road)return{success:false,reason:"Rodovia não configurada."};
-    const existing=this.road.findRoute(this.destination,"*",service);
+  ensureReturnRoute(origin,service){
+    if(!this.road||!origin)return{success:false,reason:"Rodovia não configurada ou origem ausente."};
+    const existing=this.road.findRoute(this.destination,origin,service)||this.road.findRoute(this.destination,origin,"*");
     if(existing)return{success:true,routeId:existing.routeId};
-    return{success:true};
+    if(typeof WordDarkRoute==="undefined")return{success:false,reason:"Contrato de rota não carregado."};
+    return this.road.registerRoute(new WordDarkRoute({
+      routeId:"AUTO-RETURN-"+String(origin).replace(/[^a-z0-9]/gi,"-")+"-"+String(service).replace(/[^a-z0-9.*]/gi,"-"),
+      origin:this.destination,destination:origin,service
+    }));
   }
 
   submit(source={}){
@@ -38,6 +42,8 @@ class WordDarkOperationCoordinator {
     const service=source.operationType||source.service||"unknown.operation";
     const route=this.ensureRoute(origin,service);
     if(!route.success)return{success:false,status:"BLOCKED",stage:"ROUTING",reason:route.reason};
+    const returnRoute=this.ensureReturnRoute(origin,service);
+    if(!returnRoute.success)return{success:false,status:"BLOCKED",stage:"RETURN_ROUTING",reason:returnRoute.reason};
 
     const operation=this.engine.create({
       ...source,
