@@ -5,17 +5,20 @@ class WordDarkOperationCoordinator {
     this.road=road||null;
     this.destination=destination;
     this.companyRouter=companyRouter||null;
-    this.version="0.12";
+    this.version="0.20";
   }
 
   resolveDestination(source={},service="unknown.operation"){
     const explicit=source.destinationId||source.destination||this.destination;
     if(explicit)return{success:true,destination:explicit};
     if(!this.companyRouter)return{success:false,reason:"Destino e resolvedor de capacidade não configurados."};
+    const canonical=typeof WordDarkCapabilityCatalog!=="undefined"
+      ? WordDarkCapabilityCatalog.resolve({intent:source.intent,need:source.need,capability:source.capability,service})
+      : (source.capability||service);
     const resolved=this.companyRouter.route({
       intent:source.intent,
       need:source.need,
-      capability:source.capability||service
+      capability:canonical
     });
     if(!resolved.success)return{success:false,reason:resolved.reason,capability:resolved.capability||null};
     return{success:true,destination:resolved.destinationCompanyId,resolution:resolved};
@@ -47,7 +50,10 @@ class WordDarkOperationCoordinator {
     if(!this.engine)return{success:false,status:"FAILED",reason:"Operation Engine não configurado."};
     const origin=source.originId||source.origin;
     const service=source.operationType||source.service||"unknown.operation";
-    const destination=this.resolveDestination(source,service);
+    const capability=typeof WordDarkCapabilityCatalog!=="undefined"
+      ? WordDarkCapabilityCatalog.resolve({intent:source.intent,need:source.need,capability:source.capability,service})
+      : (source.capability||service);
+    const destination=this.resolveDestination({...source,capability},service);
     if(!destination.success)return{success:false,status:"BLOCKED",stage:"CAPABILITY",reason:destination.reason,capability:destination.capability||null};
     const route=this.ensureRoute(origin,service,destination.destination);
     if(!route.success)return{success:false,status:"BLOCKED",stage:"ROUTING",reason:route.reason};
@@ -59,6 +65,7 @@ class WordDarkOperationCoordinator {
       originId:origin,
       destinationId:destination.destination,
       operationType:service,
+      capability,
       environment:source.environment||"TEST"
     });
     return this.engine.run(operation);
