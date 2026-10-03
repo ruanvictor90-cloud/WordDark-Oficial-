@@ -61,4 +61,4 @@ O código legado em `worddark/runtime` permanece apenas como **referência hist�
 
 `npm test`
 
-A suíte oficial inclui testes do núcleo, fábrica, cidade de compras e integração da operação modular.
+A suíte oficial cobre o núcleo, operações, segurança, memória, Dark Factory e integração modular.
