@@ -11,7 +11,7 @@ class DarkFactoryOperationBridge {
     return new DarkFactoryRequest({
       requester:operation.requesterId,
       origin:operation.originId,
-      destination:operation.destinationId||"world/sky/darkfactory",
+      destination:operation.destinationId,
       task:operation.payload&&operation.payload.task||("Executar operação "+operation.operationType),
       taskType:this.getService(operation),
       permission:"approved",
