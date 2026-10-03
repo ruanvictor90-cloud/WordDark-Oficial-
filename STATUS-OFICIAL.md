@@ -4,8 +4,8 @@ Este é o repositório oficial e único de desenvolvimento do mundo WordDark.
 
 - Repositório oficial: `ruanvictor90-cloud/WordDark-Oficial-`
 - Branch oficial: `main`
-- Legado: preservado separadamente e desativado para desenvolvimento.
-- Financeiro: permanece separado até ser incorporado ao mundo oficial.
+- Legado estrutural: removido do repositório ativo; a arquitetura oficial é `worddark/runtime/world`.
+- Financeiro: infraestrutura compartilhada já exposta pelo WordDark, mantendo compatibilidade com o núcleo financeiro existente.
 
 ## Regra estrutural oficial — infraestrutura antes da conta
 
