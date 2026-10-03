@@ -8,6 +8,28 @@
 
     const companies=[
       {
+        id:"WD-COMP-MARKETING",
+        name:"Empresa de Marketing",
+        area:"SKY",
+        type:"MARKETING_COMPANY",
+        capabilities:[
+          "MARKETING_MANAGEMENT",
+          "MARKET_ANALYSIS",
+          "TREND_ANALYSIS",
+          "OPPORTUNITY_DETECTION",
+          "BRAND_IDENTITY",
+          "NAMING",
+          "POSITIONING",
+          "AUDIENCE_STRATEGY",
+          "CAMPAIGN_STRATEGY",
+          "CHANNEL_MARKETING",
+          "CONTENT_MARKETING",
+          "GROWTH_STRATEGY"
+        ],
+        inputs:["MARKETING_REQUEST","MARKETING_OPPORTUNITY","COMPANY_INTENT","TREND_SIGNAL"],
+        outputs:["MARKETING_STRATEGY","MARKETING_OPPORTUNITY","CAMPAIGN_BRIEF","CONTENT_DEMAND"]
+      },
+      {
         id:"WD-COMP-DIGITAL-OPS",
         name:"Empresa de Gestão de Conteúdos e Canais",
         area:"EARTH",
