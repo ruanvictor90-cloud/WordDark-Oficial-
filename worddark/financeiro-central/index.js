@@ -1,7 +1,8 @@
 /* WordDark — Financial Compatibility Facade
  * Mantém a API histórica e aponta o mundo para o motor financeiro central.
  */
-export { WordDarkFinancialEngine } from "./runtime/financial-engine.js";
+import { WordDarkFinancialEngine } from "./runtime/financial-engine.js";
+export { WordDarkFinancialEngine };
 
 export class CentralFinance {
   constructor(options={}){this.engine=options.engine||new WordDarkFinancialEngine(options);}
