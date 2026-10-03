@@ -15,8 +15,8 @@ As empresas são unidades operacionais do mundo. Cada uma possui uma responsabil
 │
 ├── 🌎 TERRA — empresas e operações voltadas ao mundo externo
 │   │
-│   ├── 🏢 Empresa de Operação Digital
-│   │   └── gestão de clientes, contas e canais sociais
+│   ├── 🏢 Empresa de Gestão de Conteúdos e Canais
+│   │   └── gestão de clientes, contas, canais sociais e operações de conteúdo
 │   │
 │   ├── 🏢 Empresa de Gestão de Negócios
 │   │   └── gestão, organização e operação de negócios
@@ -40,24 +40,31 @@ As empresas existem dentro dessas áreas conforme sua função operacional.
 
 ## Empresas atuais
 
-### 1. Empresa de Operação Digital
+### 1. Empresa de Gestão de Conteúdos e Canais
 
 Localização: **Terra**
 
-Responsabilidade: administrar a presença digital de clientes.
+Responsabilidade: gerir canais, conteúdos e presença digital para transformar necessidades de negócio em operações de conteúdo.
+
+Pensa:
+
+> **“Como usamos canais e conteúdo para atender esta necessidade?”**
 
 Opera:
 
 - clientes;
 - contas e perfis;
-- Países, Estados, Cidades e Bairros operacionais;
+- canais;
+- público e audiência;
 - planejamento de conteúdo;
-- operações de canais;
+- ideias e pautas;
+- campanhas;
 - solicitações de produção;
 - publicação;
-- acompanhamento e histórico.
+- acompanhamento e histórico;
+- operações autônomas de canais dark.
 
-A estrutura territorial de País → Estado → Cidade → Bairro é uma estrutura organizacional dessa empresa, não uma regra universal para todos os elementos do WordDark.
+Ela não precisa produzir tudo internamente. Quando precisa de uma capacidade, solicita ao WordDark pela intenção/necessidade; o mundo encontra a empresa capaz.
 
 ### 2. Dark Factory — Empresa de Produção de Conteúdo
 
@@ -73,9 +80,33 @@ Ela não deve administrar clientes ou guardar credenciais de plataformas externa
 
 Localização: **Terra**
 
-Responsabilidade: administrar operações de negócios, processos, recursos e necessidades empresariais.
+Responsabilidade: fazer o negócio funcionar e operar.
 
-Ela pode utilizar as demais empresas do mundo quando precisar de produção de conteúdo, operação digital, conexões externas ou outros serviços.
+Pensa:
+
+> **“Como esse negócio funciona e como fazemos ele operar?”**
+
+Exemplo:
+
+> “Temos este produto. Como fazemos para vender mais?”
+
+Opera:
+
+- negócios;
+- produtos;
+- fornecedores;
+- clientes;
+- preços e ofertas;
+- estoque;
+- pedidos;
+- vendas;
+- pagamentos;
+- entrega;
+- pós-venda;
+- processos e automações;
+- criação de necessidades para outras empresas.
+
+Quando precisa de conteúdo, canais ou produção, ela não precisa conhecer a implementação dessas empresas. Ela envia sua intenção e necessidade ao WordDark.
 
 ### 4. Futuras empresas
 
@@ -116,33 +147,37 @@ A empresa solicita um serviço. O WordDark identifica a capacidade responsável,
 
 ## Exemplo
 
+Uma necessidade pode atravessar várias empresas sem criar dependência direta entre elas:
+
 ```
-CLIENTE
-  ↓
 EMPRESA DE GESTÃO DE NEGÓCIOS
-  ↓
-necessidade de presença digital
-  ↓
-EMPRESA DE OPERAÇÃO DIGITAL
-  ↓
-necessidade de vídeo
-  ↓
+        ↓
+“Temos o Produto X. Como fazemos para vender mais?”
+        ↓
+WORDDARK / CENTRAL DE OPERAÇÕES
+        ↓
+EMPRESA DE GESTÃO DE CONTEÚDOS E CANAIS
+        ↓
+“Quais canais, públicos e conteúdos atendem essa necessidade?”
+        ↓
 WORDDARK / RODOVIA
-  ↓
+        ↓
 DARK FACTORY
-  ↓
-vídeo produzido
-  ↓
-EMPRESA DE OPERAÇÃO DIGITAL
-  ↓
-publicação
-  ↓
-CENTRAL DE CONEXÕES EXTERNAS
-  ↓
-PLATAFORMA EXTERNA
+        ↓
+conteúdo produzido
+        ↓
+GESTÃO DE CONTEÚDOS E CANAIS
+        ↓
+publicação / acompanhamento
+        ↓
+resultado
+        ↓
+GESTÃO DE NEGÓCIOS
+        ↓
+venda / nova necessidade
 ```
 
-Nenhuma dessas empresas precisa virar uma única empresa para executar o fluxo.
+A empresa solicitante não precisa saber onde a solução será executada. Ela declara **intenção + necessidade + contexto**; o WordDark resolve a capacidade disponível.
 
 ## Regra de arquitetura
 
@@ -225,9 +260,9 @@ Cada nova empresa deve entrar como uma unidade registrada, com:
 Assim o mundo cresce por adição de empresas e capacidades, e não por reconstrução da estrutura central.
 
 
-## Empresa de Operação Digital — novo papel
+## Empresa de Gestão de Conteúdos e Canais — novo papel
 
-A **Empresa de Operação Digital** não fica limitada a administrar canais de terceiros. Ela é uma empresa operacional capaz de receber demandas de outras empresas e, quando autorizada, conduzir a operação digital de ponta a ponta.
+A **Empresa de Gestão de Conteúdos e Canais** não fica limitada a administrar canais de terceiros. Ela é uma empresa operacional capaz de receber demandas de outras empresas e, quando autorizada, conduzir a operação digital de ponta a ponta.
 
 Ela possui dois modos principais:
 
@@ -267,7 +302,7 @@ OPERAÇÃO DIGITAL
 publicação / entrega / acompanhamento
 ```
 
-A Empresa de Operação Digital **não precisa produzir tudo internamente**. Ela coordena a operação digital que recebeu, enquanto o WordDark decide e registra as conexões entre capacidades.
+A Empresa de Gestão de Conteúdos e Canais **não precisa produzir tudo internamente**. Ela coordena a operação digital que recebeu, enquanto o WordDark decide e registra as conexões entre capacidades.
 
 ### 2. Operação autônoma de canais
 
@@ -301,11 +336,11 @@ A autonomia pertence à **empresa de Operação Digital**. As capacidades especi
 
 Por exemplo:
 
-- a Empresa de Operação Digital decide que precisa de um vídeo;
+- a Empresa de Gestão de Conteúdos e Canais decide que precisa de um vídeo;
 - o WordDark encontra a capacidade de produção;
 - a Dark Factory produz o vídeo;
 - o WordDark registra o resultado;
-- a Empresa de Operação Digital prepara a publicação;
+- a Empresa de Gestão de Conteúdos e Canais prepara a publicação;
 - a Central de Conexões Externas realiza a comunicação autorizada com a plataforma;
 - a operação retorna para acompanhamento.
 
@@ -358,8 +393,65 @@ Assim o WordDark consegue coordenar o trânsito da solicitação sem misturar a 
 
 ### Regra principal
 
-**A Empresa de Operação Digital opera o digital.  
+**A Empresa de Gestão de Conteúdos e Canais opera o digital.  
 O WordDark interliga as empresas.  
 Cada empresa executa sua própria especialidade.**
 
-Esse modelo permite que futuras empresas sejam conectadas ao mesmo circuito sem transformar a Empresa de Operação Digital em um sistema monolítico.
+Esse modelo permite que futuras empresas sejam conectadas ao mesmo circuito sem transformar a Empresa de Gestão de Conteúdos e Canais em um sistema monolítico.
+
+
+## Contrato de comunicação entre empresas
+
+O padrão de integração do mundo passa a ser:
+
+```
+EMPRESA
+  ↓
+INTENÇÃO
+  ↓
+NECESSIDADE
+  ↓
+CONTEXTO
+  ↓
+WORDDARK
+  ↓
+CAPACIDADE
+  ↓
+EMPRESA RESPONSÁVEL
+  ↓
+OPERAÇÃO
+  ↓
+RESULTADO
+```
+
+A empresa não deve depender diretamente da implementação interna de outra empresa.
+
+Exemplos de intenção:
+
+- `SELL_MORE`
+- `OPERATE_BUSINESS`
+- `MANAGE_CONTENT`
+- `PRODUCE_CONTENT`
+- `PUBLISH_CONTENT`
+- `CONNECT_EXTERNAL`
+
+O **Company Intent Router** transforma essa intenção/necessidade em uma capacidade registrada e consulta o Registro de Empresas para encontrar quem pode atender.
+
+Isso permite adicionar uma nova empresa sem alterar o contrato das empresas existentes: basta registrar sua responsabilidade, capacidades, entradas e saídas.
+
+## Estado atual da infraestrutura
+
+O núcleo já possui:
+
+- Registro central de empresas;
+- seed das empresas principais;
+- resolvedor de intenção/capacidade;
+- bootstrap das empresas;
+- Empresa de Gestão de Negócios;
+- Empresa de Gestão de Conteúdos e Canais;
+- Dark Factory;
+- coordenador com roteamento por capacidade;
+- Rodovia e contratos de operação;
+- comunicação e recibos.
+
+O próximo nível é transformar cada empresa em uma participante ativa desse circuito, conectando suas operações internas ao mesmo contrato central.
