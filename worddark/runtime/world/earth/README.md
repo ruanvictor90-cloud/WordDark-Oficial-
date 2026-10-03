@@ -1,55 +1,73 @@
 # Terra
 
-A Terra é a área do WordDark responsável por gerar necessidades e movimentar o mundo.
+A **Terra é a área do WordDark onde ficam principalmente as empresas e operações voltadas às necessidades do mundo externo**.
 
-É onde surgem e operam:
+Ela não é uma empresa.
 
-- Empresas
-- Marcas
-- Lojas
-- Produtos
-- Serviços
-- Projetos
-- Negócios
-- Novas operações
-- Países internos e suas unidades
+Ela é uma área do mundo que abriga e organiza empresas, clientes, negócios, marcas, contas, projetos e operações.
 
-Cada elemento da Terra pode gerar necessidades que serão atendidas pelo Céu.
+## Empresas da Terra
+
+### Empresa de Operação Digital
+
+Responsável pela gestão de canais e presença digital de clientes.
+
+Sua estrutura operacional utiliza:
+
+```
+EMPRESA
+└── País
+    └── Estado
+        └── Cidade / Canal / Plataforma
+            └── Bairro / Setor
+```
+
+Essa hierarquia é uma ferramenta organizacional da empresa.
+
+### Empresa de Gestão de Negócios
+
+Responsável pela gestão e operação de negócios, processos e necessidades empresariais.
+
+Ela pode solicitar serviços à Empresa de Operação Digital, à Dark Factory e a futuras empresas do WordDark.
+
+## Relação com o Céu
+
+A Terra gera e administra necessidades.
+
+O Céu contém empresas e infraestrutura especializadas para atender essas necessidades.
+
+Exemplo:
+
+```
+Empresa de Gestão de Negócios
+        ↓
+precisa de presença digital
+        ↓
+Empresa de Operação Digital
+        ↓
+precisa de conteúdo
+        ↓
+Dark Factory
+        ↓
+produção
+        ↓
+Empresa de Operação Digital
+        ↓
+publicação
+        ↓
+Central de Conexões Externas
+```
 
 ## Juice Country
 
-O **Juice Country** é um país interno da Terra e servirá como um dos primeiros grandes testes de escala da arquitetura.
+O Juice Country é uma **instância de laboratório** da Empresa de Operação Digital.
 
-Ele poderá conter estados/canais independentes, como:
+Ele não define a arquitetura geral do WordDark.
 
-- SucoCast
-- SucoGeek
-- SucoComed
-- SucoFactor
-
-A lista é expansível. Os estados poderão possuir setores e necessidades próprias, mas utilizarão a Dark Factory através de contratos e rotas padronizadas.
+Seus Estados, como SucoCast, servem para validar a operação antes da entrada de clientes reais.
 
 ## Princípio
 
-A Terra cria, opera e expande.
+A Terra abriga as empresas que operam necessidades, clientes e negócios.
 
-Ao crescer, gera necessidades que movimentam o Céu.
-
-O crescimento de uma unidade não deve exigir a reconstrução do sistema que atende as demais.
-
-
-## Modelo territorial
-
-A estrutura territorial da Terra está documentada em [Modelo Territorial](territory/).
-
-A hierarquia definida é:
-
-```
-Terra → País → Estado → Setor → Operação
-```
-
-O modelo será fechado antes dos testes operacionais.
-
-## Juice Country
-
-Documentação inicial: [Juice Country](juice-country/).
+O crescimento de uma empresa não deve exigir a reconstrução do WordDark ou das outras empresas.
