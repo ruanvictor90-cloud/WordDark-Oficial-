@@ -28,6 +28,8 @@
         countries:[],
         clients:[],
         accounts:[],
+        channels:[],
+        requests:[],
         operations:[]
       };
       this._load();
@@ -126,16 +128,129 @@
       });
     }
 
-    requestContent({clientId,accountId,contentId,type="CONTENT_CREATE",origin=null,destination="world/sky/darkfactory"}={}){
-      return this.createOperation({
-        id:"CONTENT-"+String(contentId||Date.now()),
+    registerChannel(channel={}){
+      if(!channel.id)return{success:false,status:"CHANNEL_ID_REQUIRED"};
+      const item={
+        id:String(channel.id),
+        clientId:channel.clientId||null,
+        accountId:channel.accountId||null,
+        name:channel.name||channel.id,
+        platform:channel.platform||null,
+        mode:channel.mode||"MANAGED",
+        autonomy:channel.autonomy||"ASSISTED",
+        status:channel.status||"PLANNED",
+        workflow:channel.workflow||"CONTENT_TO_PUBLICATION",
+        createdAt:channel.createdAt||new Date().toISOString()
+      };
+      const index=this.state.channels.findIndex(x=>x.id===item.id);
+      if(index>=0)this.state.channels[index]={...this.state.channels[index],...item};
+      else this.state.channels.push(item);
+      this._save();
+      return{success:true,status:"CHANNEL_REGISTERED",channel:item};
+    }
+
+    receiveCompanyRequest({requestId,requesterCompanyId,clientId=null,accountId=null,channelId=null,requestType="CONTENT_REQUEST",brief="",audience=null,publication=null,priority="NORMAL",origin=null}={}){
+      const id=String(requestId||("REQ-"+Date.now()));
+      const request={
+        id,
+        requesterCompanyId:requesterCompanyId||null,
         clientId,
         accountId,
+        channelId,
+        requestType,
+        brief,
+        audience,
+        publication:publication||null,
+        priority,
+        origin,
+        status:"RECEIVED",
+        createdAt:new Date().toISOString()
+      };
+      const index=this.state.requests.findIndex(x=>x.id===id);
+      if(index>=0)this.state.requests[index]={...this.state.requests[index],...request};
+      else this.state.requests.push(request);
+      this._save();
+      return{success:true,status:"COMPANY_REQUEST_RECEIVED",request};
+    }
+
+    requestContent({clientId,accountId,contentId,type="CONTENT_CREATE",origin=null,destination=null,requesterCompanyId=null,brief="",audience=null,publication=null}={}){
+      const request=this.receiveCompanyRequest({
+        requestId:"CONTENT-"+String(contentId||Date.now()),
+        requesterCompanyId,
+        clientId,
+        accountId,
+        requestType:type,
+        brief,
+        audience,
+        publication,
+        origin
+      });
+      if(!request.success)return request;
+      return this.createOperation({
+        id:request.request.id,
+        clientId,
+        accountId,
+        channelId:null,
         type,
         status:"REQUESTED",
         origin,
         destination,
-        contentId
+        contentId,
+        requesterCompanyId,
+        audience,
+        publication,
+        requestId:request.request.id
+      });
+    }
+
+    requestContentIdea({requesterCompanyId,clientId,accountId,brief="",product=null,audience=null,origin=null}={}){
+      return this.requestContent({
+        requesterCompanyId,
+        clientId,
+        accountId,
+        contentId:"IDEA-"+Date.now(),
+        type:"CONTENT_IDEA",
+        brief:product?brief+" | PRODUCT: "+product:brief,
+        audience,
+        origin
+      });
+    }
+
+    requestPromotionContent({requesterCompanyId,clientId,accountId,brief="",product=null,audience=null,publication=null,origin=null}={}){
+      return this.requestContent({
+        requesterCompanyId,
+        clientId,
+        accountId,
+        contentId:"PROMO-"+Date.now(),
+        type:"PROMOTION_CONTENT",
+        brief:product?brief+" | PRODUCT: "+product:brief,
+        audience,
+        publication,
+        origin
+      });
+    }
+
+    startAutonomousChannel({channelId,clientId,accountId,name,platform,autonomy="AUTONOMOUS"}={}){
+      const result=this.registerChannel({
+        id:channelId,
+        clientId,
+        accountId,
+        name,
+        platform,
+        autonomy,
+        mode:"AUTONOMOUS",
+        status:"ACTIVE"
+      });
+      if(!result.success)return result;
+      return this.createOperation({
+        id:"CHANNEL-START-"+String(channelId),
+        type:"AUTONOMOUS_CHANNEL_START",
+        status:"REQUESTED",
+        clientId,
+        accountId,
+        channelId,
+        origin:"world/earth/digital-operations",
+        destination:null
       });
     }
 
@@ -164,6 +279,11 @@
         origin:operation.origin||null,
         destination:operation.destination||null,
         contentId:operation.contentId||null,
+        requesterCompanyId:operation.requesterCompanyId||null,
+        requestId:operation.requestId||null,
+        channelId:operation.channelId||null,
+        audience:operation.audience||null,
+        publication:operation.publication||null,
         createdAt:operation.createdAt||new Date().toISOString()
       };
       this.state.operations.push(item);
@@ -177,6 +297,8 @@
         countries:[...this.state.countries],
         clients:[...this.state.clients],
         accounts:[...this.state.accounts],
+        channels:[...this.state.channels],
+        requests:[...this.state.requests],
         operations:[...this.state.operations]
       };
     }
@@ -189,6 +311,8 @@
         countries:this.state.countries.length,
         clients:this.state.clients.length,
         accounts:this.state.accounts.length,
+        channels:this.state.channels.length,
+        requests:this.state.requests.length,
         operations:this.state.operations.length
       };
     }
