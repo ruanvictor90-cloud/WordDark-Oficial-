@@ -10,7 +10,11 @@
     MANAGE_CONTENT:"MANAGE_CONTENT",
     PRODUCE_CONTENT:"PRODUCE_CONTENT",
     PUBLISH_CONTENT:"PUBLISH_CONTENT",
-    CONNECT_EXTERNAL:"CONNECT_EXTERNAL"
+    CONNECT_EXTERNAL:"CONNECT_EXTERNAL",
+    MANAGE_MARKETING:"MANAGE_MARKETING",
+    ANALYZE_TRENDS:"ANALYZE_TRENDS",
+    CREATE_BRAND:"CREATE_BRAND",
+    PLAN_CAMPAIGN:"PLAN_CAMPAIGN"
   });
 
   const INTENT_CAPABILITIES=Object.freeze({
@@ -19,7 +23,11 @@
     MANAGE_CONTENT:"CHANNEL_MANAGEMENT",
     PRODUCE_CONTENT:"CONTENT_CREATE",
     PUBLISH_CONTENT:"CONTENT_PUBLICATION",
-    CONNECT_EXTERNAL:"EXTERNAL_CONNECTION"
+    CONNECT_EXTERNAL:"EXTERNAL_CONNECTION",
+    MANAGE_MARKETING:"MARKETING_MANAGEMENT",
+    ANALYZE_TRENDS:"TREND_ANALYSIS",
+    CREATE_BRAND:"BRAND_IDENTITY",
+    PLAN_CAMPAIGN:"CAMPAIGN_STRATEGY"
   });
 
   class WordDarkCompanyIntentRouter{
@@ -43,7 +51,8 @@
     inferCapability(need){
       const text=String(need||"").toLowerCase();
       if(/vender|venda|negócio|negocio|pedido|cliente|fornecedor/.test(text))return"BUSINESS_OPERATIONS";
-      if(/canal|conteúdo|conteudo|campanha|público|publico|audiência|audiencia/.test(text))return"CHANNEL_MANAGEMENT";
+      if(/marketing|marca|branding|nome|identidade|posicionamento|campanha|tendência|tendencia|mercado/.test(text))return"MARKETING_MANAGEMENT";
+      if(/canal|conteúdo|conteudo|público|publico|audiência|audiencia/.test(text))return"CHANNEL_MANAGEMENT";
       if(/criar|produzir|editar|vídeo|video|imagem|áudio|audio/.test(text))return"CONTENT_CREATE";
       if(/publicar|publicação|publicacao/.test(text))return"CONTENT_PUBLICATION";
       return null;
