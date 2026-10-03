@@ -31,7 +31,7 @@ export class BrowserOAuthConnector extends SocialNetworkConnector{
   constructor({network,clientId,redirectUri,scopes}={}){super({network});if(!clientId?.trim())throw new Error(this.network.id+"_CLIENT_ID_REQUIRED");if(!redirectUri?.trim())throw new Error(this.network.id+"_REDIRECT_URI_REQUIRED");this.clientId=clientId.trim();this.redirectUri=redirectUri.trim();this.scopes=[...(scopes||[])];}
   createState(){const state=crypto.randomUUID();sessionStorage.setItem("wd.oauth.state."+this.network.id,state);return state;}
   buildAuthorizationUrl({state=this.createState()}={}){const params=new URLSearchParams({client_id:this.clientId,redirect_uri:this.redirectUri,response_type:"code",state});if(this.network.id==="INSTAGRAM"){params.set("scope",this.scopes.join(","));return "https://www.instagram.com/oauth/authorize?"+params;}
-    if(this.network.id==="TIKTOK"){params.set("scope",this.scopes.join(","));return "https://www.tiktok.com/v2/auth/authorize?"+params+"&response_type=code";}
+    if(this.network.id==="TIKTOK"){params.set("scope",this.scopes.join(","));return "https://www.tiktok.com/v2/auth/authorize?"+params;}
     if(this.network.id==="FACEBOOK"){params.set("scope",this.scopes.join(","));return "https://www.facebook.com/dialog/oauth?"+params;}
     throw new Error("OAUTH_PROVIDER_NOT_IMPLEMENTED");
   }
