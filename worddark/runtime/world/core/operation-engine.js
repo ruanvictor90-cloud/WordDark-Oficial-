@@ -1,40 +1,34 @@
-/* WordDark Core — Operation Engine
- * Motor único. Agora entende Gate + Context + Permission antes da autorização global.
- */
-(function(root,factory){
- if(typeof module==="object"&&module.exports){module.exports=factory(require("./operation"));return;}
- const r=root||(typeof window!=="undefined"?window:globalThis);r.WordDarkOperationEngine=factory(r.WordDarkCoreOperation);
-})(typeof globalThis!=="undefined"?globalThis:window,function(WordDarkOperation){
+/* WordDark Core — Unified Operation Engine */
+(function(root,factory){if(typeof module==="object"&&module.exports){module.exports=factory(require("./operation"));return;}const r=root||(typeof window!=="undefined"?window:globalThis);r.WordDarkOperationEngine=factory(r.WordDarkOperation);})(typeof globalThis!=="undefined"?globalThis:window,function(WordDarkOperation){
  class WordDarkOperationEngine{
-  constructor(options={}){this.security=options.security||null;this.authorize=options.authorize||null;this.route=options.route||(()=>({success:false,reason:"Roteamento não configurado."}));this.execute=options.execute||(()=>({success:false,reason:"Executor não configurado."}));this.registry=options.registry||null;this.environmentGuard=options.environmentGuard||null;this.record=options.record||(()=>{});this.idPrefix=options.idPrefix||"OP";this.completedOperations=new Set();this.emergencyStop=options.emergencyStop||null;this.gateRegistry=options.gateRegistry||new Map();this.permissionSet=options.permissionSet||null;this.operationalMemory=options.operationalMemory||null;}
-  generateId(){return this.idPrefix+"-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();}
-  create(source={}){const op=new WordDarkOperation({...source,operationId:source.operationId||this.generateId()});const v=op.validate();if(!v.valid&&op.status==="CREATED")op.transition("REJECTED",{stage:"VALIDATION",errors:v.errors});return op;}
-  recordStage(op,data={}){this.record(op);this.registry?.recordEvent?.(op,op.status,data);}
-  run(operation){
-   if(!(operation instanceof WordDarkOperation))throw new Error("O engine exige uma operação do contrato central.");
-   if(this.completedOperations.has(operation.operationId)){operation.replayBlocked=true;this.recordStage(operation,{stage:"SECURITY",reason:"OPERATION_ALREADY_COMPLETED"});return operation;}
-   const v=operation.validate();if(!v.valid){if(operation.status==="CREATED")operation.transition("REJECTED",{stage:"VALIDATION",errors:v.errors});this.recordStage(operation);return operation;}
+  constructor(o={}){this.security=o.security||null;this.authorize=o.authorize||null;this.route=o.route||(()=>({success:false,reason:"Roteamento não configurado."}));this.execute=o.execute||(()=>({success:false,reason:"Executor não configurado."}));this.registry=o.registry||null;this.environmentGuard=o.environmentGuard||null;this.record=o.record||(()=>{});this.idPrefix=o.idPrefix||"OP";this.completedOperations=new Set();this.emergencyStop=o.emergencyStop||null;this.gateRegistry=o.gateRegistry||new Map();this.permissionSet=o.permissionSet||null;this.operationalMemory=o.operationalMemory||null;}
+  generateId(){return this.idPrefix+"-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,8).toUpperCase();}
+  create(source={}){const op=new WordDarkOperation({...source,operationId:source.operationId||this.generateId()});const v=op.validate();if(!v.valid&&op.status==="CREATED")op.transition("REJECTED",{stage:"VALIDATION",errors:v.errors});this.emit(op,"OPERATION_CREATED");return op;}
+  emit(op,event,data={}){this.record(op);this.registry?.recordEvent?.(op,event,data);}
+  run(operation){if(!(operation instanceof WordDarkOperation))throw new Error("O engine exige uma operação do contrato central.");if(this.completedOperations.has(operation.operationId)){operation.replayBlocked=true;this.emit(operation,"OPERATION_RETURNED",{reason:"OPERATION_ALREADY_COMPLETED"});return operation;}
+   const v=operation.validate();if(!v.valid){if(operation.status==="CREATED")operation.transition("REJECTED",{stage:"VALIDATION",errors:v.errors});this.emit(operation,"MODULE_FAILED",{stage:"VALIDATION",errors:v.errors});return operation;}
    const stop=()=>this.emergencyStop?.assertRunning?.(operation.operationId)||{allowed:true};if(!stop().allowed)return this.cancel(operation,"PRE_EXECUTION",stop());
-   operation.transition("IDENTIFIED");this.recordStage(operation);
-   if(operation.context?.environment&&operation.context.environment!==operation.environment)return this.fail(operation,"CONTEXT","CONTEXT_ENVIRONMENT_MISMATCH");
+   operation.transition("IDENTIFIED");this.emit(operation,"OPERATION_CREATED");
    if(this.environmentGuard){const e=this.environmentGuard.canRun(operation);if(!e?.allowed)return this.block(operation,"ENVIRONMENT",e.reason);}
-   if(!stop().allowed)return this.cancel(operation,"ENVIRONMENT",stop());
-   const gate=this.gateRegistry?.get(operation.destinationId)||this.gateRegistry?.get(operation.context?.destinationId);
-   if(gate){const gr=gate.receive({profile:operation.context?.profile||operation.payload?.profile,context:operation.context});if(!gr.success)return this.reject(operation,"GATE",gr.reason);}
-   if(this.permissionSet){const p=this.permissionSet.authorize({profile:operation.context?.profile||operation.payload?.profile,capability:operation.payload?.capability||operation.operationType,action:operation.payload?.action||"request",resourceId:operation.resourceId,clientId:operation.clientId,environment:operation.environment});if(!p)return this.reject(operation,"PERMISSION","ACCESS_DENIED");}
-   const auth=this.authorize?this.authorize(operation):this.security?.authorize?.({identityId:operation.requesterId,operationId:operation.operationId,capability:operation.operationType,action:"request",environment:operation.environment,scope:operation.destinationId||"*"});if(!auth?.allowed)return this.reject(operation,"AUTHORIZATION",auth?.reason||"Operação não autorizada.");
-   operation.transition("AUTHORIZED",{authorization:auth.reference||null});this.recordStage(operation);
-   const routing=this.route(operation);if(!routing?.success)return this.block(operation,"ROUTING",routing?.reason||"Rota indisponível.");
-   operation.transition("ROUTED",{routeId:routing.routeId||null});this.recordStage(operation);operation.transition("EXECUTING");this.recordStage(operation);
-   const execution=this.execute(operation,{emergencyStop:this.emergencyStop});if(!execution?.success)return this.fail(operation,"EXECUTION",execution?.reason||"Execução falhou.");const postStop=stop();if(!postStop.allowed)return this.cancel(operation,"POST_EXECUTION",postStop);
-   operation.transition("VALIDATING",{execution:execution.result||execution});this.recordStage(operation);
-   if(execution.validated===false)return this.fail(operation,"VALIDATION",execution.validationReason||"Resultado não validado.");
-   operation.transition("COMPLETED",{routeId:routing.routeId||null,execution:execution.result||execution});this.completedOperations.add(operation.operationId);this.operationalMemory?.rememberCompletion?.({operationId:operation.operationId,status:"COMPLETED",data:{destinationId:operation.destinationId}});this.recordStage(operation);return operation;
+   const gate=this.gateRegistry?.get(operation.destinationId)||this.gateRegistry?.get(operation.context?.destinationId);if(gate){const gr=gate.receive({profile:operation.context?.profile||operation.payload?.profile,context:operation.context});if(!gr.success)return this.reject(operation,"GATE",gr.reason);}
+   if(this.permissionSet){const p=this.permissionSet.authorize({profile:operation.context?.profile||operation.payload?.profile,capability:operation.capability||operation.payload?.capability||operation.operationType,action:operation.payload?.action||"request",resourceId:operation.resourceId,clientId:operation.clientId,environment:operation.environment});if(!p)return this.reject(operation,"PERMISSION","ACCESS_DENIED");}
+   const auth=this.authorize?this.authorize(operation):this.security?.authorize?.({identityId:operation.requesterId,operationId:operation.operationId,capability:operation.capability||operation.operationType,action:"request",environment:operation.environment,scope:operation.destinationId||"*"});if(!auth?.allowed)return this.reject(operation,"AUTHORIZATION",auth?.reason||"Operação não autorizada.");
+   operation.transition("AUTHORIZED",{authorization:auth.reference||null});this.emit(operation,"OPERATION_RECEIVED");
+   const routing=this.route(operation);if(!routing?.success)return this.block(operation,"ROUTING",routing?.reason||"Rota indisponível.");operation.transition("ROUTED",{routeId:routing.routeId||null});this.emit(operation,"OPERATION_ROUTED",{routeId:routing.routeId||null});
+   operation.transition("EXECUTING");this.emit(operation,"MODULE_STARTED",{moduleId:operation.currentModuleId||null});
+   const execution=this.execute(operation,{emergencyStop:this.emergencyStop});
+   if(execution?.status==="WAITING"){operation.transition("WAITING",execution);this.emit(operation,"OPERATION_PAUSED",execution);return operation;}
+   if(!execution?.success)return this.fail(operation,"MODULE_FAILED",execution?.reason||"Execução falhou.",execution?.failedModule);
+   const postStop=stop();if(!postStop.allowed)return this.cancel(operation,"POST_EXECUTION",postStop);
+   operation.transition("VALIDATING",{execution:execution.result||execution});this.emit(operation,"MODULE_COMPLETED",{moduleId:operation.currentModuleId||null});
+   if(execution.validated===false)return this.fail(operation,"MODULE_FAILED",execution.validationReason||"Resultado não validado.",execution.failedModule);
+   operation.transition("COMPLETED",{operationId:operation.operationId,output:execution.result||execution,artifacts:execution.artifacts||[],errors:execution.errors||[],nextAction:execution.nextAction||null});this.completedOperations.add(operation.operationId);this.operationalMemory?.rememberCompletion?.({operationId:operation.operationId,status:"COMPLETED",data:{destinationId:operation.destinationId}});this.emit(operation,"OPERATION_COMPLETED",{result:operation.result});this.emit(operation,"OPERATION_RETURNED",{destination:operation.originId});return operation;
   }
-  reject(o,s,r){o.transition("REJECTED",{stage:s,reason:r});this.recordStage(o);return o;}
-  block(o,s,r){o.transition("BLOCKED",{stage:s,reason:r});this.recordStage(o);return o;}
-  fail(o,s,r){o.transition("FAILED",{stage:s,reason:r});this.operationalMemory?.rememberFailure?.({operationId:o.operationId,moduleId:o.failedModule||null,reason:r,data:{stage:s}});this.recordStage(o);return o;}
-  cancel(o,s,d){o.transition("CANCELLED",{stage:s,...d});this.recordStage(o);return o;}
+  reject(o,s,r){o.transition("REJECTED",{stage:s,reason:r});this.emit(o,"MODULE_FAILED",{stage:s,reason:r});return o;}
+  block(o,s,r){o.transition("BLOCKED",{stage:s,reason:r});this.emit(o,"MODULE_FAILED",{stage:s,reason:r});return o;}
+  fail(o,s,r,moduleId=null){o.failedModule=moduleId||o.failedModule||null;o.currentModuleId=o.failedModule;o.transition("FAILED",{stage:s,reason:r,failedModule:o.failedModule});this.operationalMemory?.rememberFailure?.({operationId:o.operationId,moduleId:o.failedModule,reason:r,data:{stage:s}});this.emit(o,"MODULE_FAILED",{moduleId:o.failedModule,reason:r});return o;}
+  cancel(o,s,d){o.transition("CANCELLED",{stage:s,...d});this.emit(o,"OPERATION_PAUSED",{stage:s,reason:"CANCELLED"});return o;}
+  reenter(operation,moduleId,patch={}){if(!operation?.operationId||!moduleId)return{success:false,status:"REENTRY_INVALID"};if(operation.status!=="FAILED"&&operation.status!=="WAITING")return{success:false,status:"REENTRY_NOT_ALLOWED",currentStatus:operation.status};operation.currentModuleId=moduleId;operation.failedModule=moduleId;Object.assign(operation,patch);operation.transition("REENTRY",{moduleId});this.emit(operation,"OPERATION_RESUMED",{moduleId});return operation;}
  }
  return WordDarkOperationEngine;
 });
