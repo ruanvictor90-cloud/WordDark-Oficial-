@@ -43,6 +43,7 @@
         name:String(company.name),
         area:company.area,
         type:company.type||"OPERATING_COMPANY",
+        endpoint:company.endpoint||null,
         status:company.status||COMPANY_STATUS.ACTIVE,
         capabilities:Array.isArray(company.capabilities)?company.capabilities:[],
         inputs:Array.isArray(company.inputs)?company.inputs:[],
