@@ -2,7 +2,7 @@
   "use strict";
 
   const COMPANY_TYPES = Object.freeze({
-    DIGITAL_OPERATIONS: "DIGITAL_OPERATIONS_COMPANY"
+    CONTENT_CHANNEL_MANAGEMENT: "CONTENT_CHANNEL_MANAGEMENT_COMPANY",\n    DIGITAL_OPERATIONS: "DIGITAL_OPERATIONS_COMPANY"
   });
 
   const ACCOUNT_STATES = Object.freeze({
@@ -16,7 +16,7 @@
   class DigitalOperationsCompany {
     constructor({
       companyId="WD-OPS-001",
-      displayName="Empresa de Operação Digital",
+      displayName="Empresa de Gestão de Conteúdos e Canais",
       type=COMPANY_TYPES.DIGITAL_OPERATIONS,
       storage=null
     }={}){
