@@ -1,32 +1,23 @@
-/* WordDark — Financial Compatibility Facade
- * Mantém a API histórica e aponta o mundo para o motor financeiro central.
- */
-import { WordDarkFinancialEngine } from "./runtime/financial-engine.js";
-export { WordDarkFinancialEngine };
-
 export class CentralFinance {
-  constructor(options={}){this.engine=options.engine||new WordDarkFinancialEngine(options);}
-  registerAccount(account){return this.engine.registerAccount(account);}
+  constructor(){this.accounts=new Map();this.movements=[];this.pending=[];}
+  registerAccount(account){
+    if(!account?.id||!account.ownerId)throw new Error("ACCOUNT_INVALID");
+    this.accounts.set(account.id,{...account});return this.accounts.get(account.id);
+  }
   move(movement){
-    return this.engine.post({
-      accountId:movement.accountId||movement.ownerId,
-      type:movement.type||"MOVEMENT",
-      amount:movement.amount,
-      description:movement.description||"",
-      referenceId:movement.id||null,
-      metadata:movement
-    });
+    if(!movement?.id||!movement.ownerId||movement.amount==null)throw new Error("MOVEMENT_INVALID");
+    const entry={...movement,status:movement.status||"PENDING",at:new Date().toISOString()};
+    this.movements.push(entry);
+    if(entry.status==="PENDING")this.pending.push(entry.id);
+    return entry;
   }
   setStatus(movementId,status){
-    const entry=this.engine.listEntries().find(x=>x.id===movementId||x.referenceId===movementId);
-    if(!entry)return null;
-    return {...entry,status};
+    const movement=this.movements.find(x=>x.id===movementId);
+    if(!movement)throw new Error("MOVEMENT_NOT_FOUND");
+    movement.status=status;
+    this.pending=this.pending.filter(x=>x!==movementId);
+    return movement;
   }
-  listByOwner(ownerId){
-    const accounts=[...this.engine.accounts.values()].filter(x=>x.ownerId===ownerId).map(x=>x.id);
-    return this.engine.entries.filter(x=>accounts.includes(x.accountId));
-  }
-  balance(ownerId){
-    return this.listByOwner(ownerId).reduce((sum,m)=>sum+Number(m.amount||0),0);
-  }
+  listByOwner(ownerId){return this.movements.filter(x=>x.ownerId===ownerId);}
+  balance(ownerId){return this.listByOwner(ownerId).reduce((sum,m)=>sum+(m.status==="AVAILABLE"?Number(m.amount):0),0);}
 }
