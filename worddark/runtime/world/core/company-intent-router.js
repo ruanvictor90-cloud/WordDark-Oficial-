@@ -65,7 +65,7 @@
       const resolution=this.resolve(request);
       if(!resolution.success)return resolution;
       const target=resolution.candidates[0];
-      return{...resolution,status:"ROUTE_READY",destinationCompanyId:target.id,destinationCompany:target};
+      return{...resolution,status:"ROUTE_READY",destinationCompanyId:target.id,destinationCompany:target,destination:target.endpoint||target.id};
     }
   }
 
