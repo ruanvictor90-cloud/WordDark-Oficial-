@@ -1,1 +1,0 @@
-import assert from "node:assert/strict";import {createSalesCity,createSalesNeighborhood,requestService} from "./index.js";const c=createSalesCity({id:"CITY-1"});const b=createSalesNeighborhood({cityId:c.id});const r=requestService(b,{service:"MARKETING",purpose:"campanha"});assert.equal(r.status,"REQUESTED");assert.equal(r.origin,b.id);console.log("sales-city OK");
