@@ -25,6 +25,9 @@ As empresas são unidades operacionais do mundo. Cada uma possui uma responsabil
 │
 └── ☁️ CÉU — empresas e infraestrutura especializadas
     │
+    ├── 📣 Empresa de Marketing
+    │   └── estratégia, identidade, tendências, campanhas e crescimento
+    │
     ├── 🏭 Dark Factory
     │   └── produção e transformação de conteúdo
     │
@@ -66,6 +69,51 @@ Opera:
 
 Ela não precisa produzir tudo internamente. Quando precisa de uma capacidade, solicita ao WordDark pela intenção/necessidade; o mundo encontra a empresa capaz.
 
+### 2. Empresa de Marketing
+
+Localização: **Céu**
+
+Responsabilidade: cuidar do marketing de forma ampla, analisando o mercado e o mundo real, identificando tendências e oportunidades e desenvolvendo estratégia para negócios, marcas e canais.
+
+Pensa:
+
+> **“Como posicionamos, divulgamos e fazemos isso crescer?”**
+
+Opera:
+
+- análise de mercado e tendências;
+- identificação de oportunidades;
+- nomes e naming;
+- identidade e posicionamento de marca;
+- definição de público e estratégia de audiência;
+- campanhas;
+- marketing de canais;
+- estratégias de crescimento;
+- planejamento de marketing por período;
+- geração de oportunidades a partir de sinais do mundo real.
+
+O Marketing pode trabalhar por demanda ou de forma contínua. Uma tendência relevante pode virar uma oportunidade operacional sem que outra empresa precise descobrir a tendência primeiro.
+
+Quando a estratégia exigir conteúdo, publicação ou outra capacidade, o Marketing comunica a necessidade ao WordDark. A Rodovia encontra a empresa responsável.
+
+Exemplo:
+
+```
+TENDÊNCIA / NECESSIDADE
+        ↓
+MARKETING
+        ↓
+análise + estratégia
+        ↓
+WORDDARK
+        ↓
+GESTÃO DE CONTEÚDOS E CANAIS
+        ↓
+DARK FACTORY
+        ↓
+PUBLICAÇÃO / RESULTADO
+```
+
 ### 2. Dark Factory — Empresa de Produção de Conteúdo
 
 Localização: **Céu**
@@ -76,7 +124,7 @@ A Dark Factory recebe operações de outras empresas e setores através da infra
 
 Ela não deve administrar clientes ou guardar credenciais de plataformas externas.
 
-### 3. Empresa de Gestão de Negócios
+### 4. Empresa de Gestão de Negócios
 
 Localização: **Terra**
 
@@ -108,7 +156,7 @@ Opera:
 
 Quando precisa de conteúdo, canais ou produção, ela não precisa conhecer a implementação dessas empresas. Ela envia sua intenção e necessidade ao WordDark.
 
-### 4. Futuras empresas
+### 5. Futuras empresas
 
 Novas empresas podem ser criadas quando uma responsabilidade operacional justificar uma unidade própria.
 
@@ -428,7 +476,7 @@ A empresa não deve depender diretamente da implementação interna de outra emp
 
 Exemplos de intenção:
 
-- `SELL_MORE`
+- `SELL_MORE` → Marketing
 - `OPERATE_BUSINESS`
 - `MANAGE_CONTENT`
 - `PRODUCE_CONTENT`
