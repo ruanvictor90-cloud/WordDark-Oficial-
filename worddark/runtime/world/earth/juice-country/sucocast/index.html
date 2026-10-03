@@ -84,7 +84,7 @@
 <script src="../../../core/operation-engine.js?v=20260930-2"></script><script src="../../../core/environment-guard.js"></script><script src="../../../core/road.js"></script><script src="../../../core/communication.js?v=20260930-3"></script><script src="../../../core/operation-registry.js?v=20260930-2"></script>
 <script src="../../../security/account-manager.js"></script><script src="../../../core/world-runtime.js?v=20260930-2"></script>
 <script src="../../../library/local-library.js"></script><script src="../../../library/central-library.js"></script>
-<script src="../../../sky/darkfactory/core/request.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/service-registry.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/production-validator.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/production-pipeline.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/content-publication-executor.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/factory.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/operation-bridge.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/content-operation.js?v=20261003-1"></script><script src="../../../sky/darkfactory/core/content-module-registry.js?v=20261003-1"></script><script src="../../../sky/darkfactory/core/content-factory.js?v=20261003-1"></script><script src="../../../core/operation-coordinator.js?v=20261003-1"></script><script src="../../core/operation-gateway.js?v=20261003-2"></script>
+<script src="../../../sky/darkfactory/core/request.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/service-registry.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/production-validator.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/production-pipeline.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/content-publication-executor.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/factory.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/operation-bridge.js?v=20260929-2"></script><script src="../../../sky/darkfactory/core/content-operation.js?v=20261003-1"></script><script src="../../../sky/darkfactory/core/content-module-registry.js?v=20261003-1"></script><script src="../../../sky/darkfactory/core/content-factory.js?v=20261003-1"></script><script src="../../../sky/darkfactory/core/content-reentry-adapter.js?v=20261003-1"></script><script src="../../../core/operation-coordinator.js?v=20261003-1"></script><script src="../../core/operation-gateway.js?v=20261003-2"></script>
 
 <script>
 (() => {
@@ -110,6 +110,8 @@
     });
     const contentExecutor=new DarkFactoryContentExecutor();
     const contentFactory=new ContentFactory({executor:contentExecutor,moduleRegistry:modules});
+    installContentReentry(contentFactory);
+    window.__WD_TEST={contentFactory};
     const factory=new DarkFactory({contentFactory});
     const bridge=new DarkFactoryOperationBridge({factory,communication});
     const engine=new WordDarkOperationEngine({
@@ -126,6 +128,12 @@
     $("runtimeStatus").textContent=runtime.getHealth().status;
     $("factoryStatus").textContent=factory.getStatus().status;
 
+    $("reentryButton").addEventListener("click",()=>{
+      const operationId=$("reentryOperation").value.trim();
+      const moduleId=$("reentryModule").value;
+      const result=window.__WD_TEST.contentFactory.reenterFromModule(operationId,moduleId);
+      $("reentryResult").textContent=JSON.stringify(result,null,2);
+    });
     $("request").addEventListener("click",()=>{
       try {
         const title=$("title").value.trim(), type=$("type").value, requirements=$("requirements").value.trim();
@@ -146,7 +154,7 @@
         });
         $("operationState").textContent=result.status||"EXECUTADO";
         $("resultTitle").textContent=result.status==="COMPLETED" ? "Produção aceita no ambiente de teste" : "Operação: "+(result.status||"—");
-        $("operationId").textContent=result.operationId ? "Operação "+result.operationId : "Sem operação";
+        $("operationId").textContent=result.operationId ? "Operação "+result.operationId : "Sem operação"; if(result.operationId) $("reentryOperation").value=result.operationId;
         $("operationResult").textContent=JSON.stringify(result.toJSON?result.toJSON():result,null,2);
         $("result").textContent=JSON.stringify({
           status:result.status,operationId:result.operationId,origin:ORIGIN,destination:DESTINATION,
