@@ -16,10 +16,15 @@
           "CLIENT_ONBOARDING",
           "ACCOUNT_MANAGEMENT",
           "CHANNEL_MANAGEMENT",
+          "AUTONOMOUS_CHANNEL_OPERATION",
+          "CONTENT_BRIEF_RECEIVING",
+          "CONTENT_IDEA_REQUEST",
+          "PROMOTION_CONTENT_REQUEST",
           "CONTENT_OPERATIONS",
           "CONTENT_PUBLICATION"
         ],
-        outputs:["DIGITAL_CHANNEL_OPERATION","PUBLICATION_REQUEST"]
+        inputs:["COMPANY_CONTENT_REQUEST","CONTENT_IDEA_REQUEST","PROMOTION_REQUEST"],
+        outputs:["DIGITAL_CHANNEL_OPERATION","CONTENT_REQUEST","PUBLICATION_REQUEST"]
       },
       {
         id:"WD-COMP-BUSINESS-MGMT",
@@ -30,9 +35,10 @@
           "BUSINESS_MANAGEMENT",
           "BUSINESS_OPERATIONS",
           "PROCESS_MANAGEMENT",
-          "RESOURCE_MANAGEMENT"
+          "RESOURCE_MANAGEMENT",
+          "CONTENT_DEMAND_CREATION"
         ],
-        outputs:["BUSINESS_OPERATION"]
+        outputs:["BUSINESS_OPERATION","COMPANY_REQUEST"]
       },
       {
         id:"WD-COMP-DARK-FACTORY",
@@ -49,7 +55,8 @@
           "ASSET_PREPARE",
           "CONTENT_PACKAGE"
         ],
-        outputs:["PRODUCED_CONTENT"]
+        inputs:["CONTENT_REQUEST","CONTENT_IDEA","PROMOTION_CONTENT"],
+        outputs:["PRODUCED_CONTENT","VALIDATED_CONTENT"]
       }
     ];
 
