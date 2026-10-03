@@ -110,6 +110,6 @@ Esses nomes não definem a arquitetura. São somente identidades de teste para v
 
 A estrutura empresarial agora possui um núcleo de código próprio em:
 
-`core/digital-operations-company.js`
+`../core/digital-operations-company.js`
 
 Esse núcleo mantém o cadastro de Países, clientes, contas e operações sem misturar responsabilidades com a Dark Factory ou com as conexões externas.
