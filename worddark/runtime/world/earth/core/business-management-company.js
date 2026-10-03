@@ -47,6 +47,13 @@
       });
     }
 
+    buildWorldRequest({need,intent="SELL_MORE",businessId=null,productId=null,objective=null,context=null,priority="NORMAL"}={}){
+      if(!need)return{success:false,status:"NEED_REQUIRED"};
+      return{success:true,status:"WORLD_REQUEST_READY",request:{
+        requestId:"WREQ-"+Date.now(),sourceCompanyId:this.companyId,intent,need,businessId,productId,objective,context,priority,createdAt:new Date().toISOString()
+      }};
+    }
+
     createOperation(operation={}){
       if(!operation.id)return{success:false,status:"OPERATION_ID_REQUIRED"};
       const item={...operation,id:String(operation.id),sourceCompanyId:this.companyId,status:operation.status||"REQUESTED",createdAt:operation.createdAt||new Date().toISOString()};
