@@ -149,6 +149,22 @@
       return{success:true,status:"CHANNEL_REGISTERED",channel:item};
     }
 
+    receiveWorldRequest({request={}}={}){
+      return this.receiveCompanyRequest({
+        requestId:request.requestId,
+        requesterCompanyId:request.sourceCompanyId,
+        clientId:request.clientId||null,
+        accountId:request.accountId||null,
+        channelId:request.channelId||null,
+        requestType:request.intent||"COMPANY_CONTENT_REQUEST",
+        brief:request.need||request.objective||"",
+        audience:request.context?.audience||null,
+        publication:request.context?.publication||null,
+        priority:request.priority||"NORMAL",
+        origin:request.context?.origin||null
+      });
+    }
+
     receiveCompanyRequest({requestId,requesterCompanyId,clientId=null,accountId=null,channelId=null,requestType="CONTENT_REQUEST",brief="",audience=null,publication=null,priority="NORMAL",origin=null}={}){
       const id=String(requestId||("REQ-"+Date.now()));
       const request={
