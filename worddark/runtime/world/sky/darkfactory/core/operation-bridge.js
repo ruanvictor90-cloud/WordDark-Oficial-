@@ -1,13 +1,61 @@
-/* WordDark — Dark Factory Operation Bridge
- * A Rodovia Global é o transporte real entre Terra e Dark Factory.
+/* WordDark — Dark Factory Operation Bridge · DF-0.11
+ * A Rodovia Global transporta. O motor central autoriza.
+ * A Dark Factory executa apenas depois que a operação chega ao Céu.
  */
 class DarkFactoryOperationBridge {
   constructor({factory,communication,serviceMap={}}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;}
+
   getService(operation){return this.serviceMap[operation.operationType]||operation.operationType;}
-  createRequest(operation){return new DarkFactoryRequest({requester:operation.requesterId,origin:operation.originId,destination:operation.destinationId||"world/sky/darkfactory",task:operation.payload&&operation.payload.task||("Executar operação "+operation.operationType),taskType:this.getService(operation),permission:"approved",payload:operation.payload});}
-  route(operation){if(!this.communication)return {success:false,reason:"Comunicação/Rodovia não configurada."};return this.communication.sendOperationRequest(operation);}
-  execute(operation){if(!this.factory)return {success:false,reason:"Dark Factory não configurada."};if(!this.communication)return {success:false,reason:"Comunicação/Rodovia não configurada."};return this.communication.processOperation(operation,(request)=>this.factory.process(this.createRequestFromGlobal(request)));}
-  createRequestFromGlobal(request){return new DarkFactoryRequest({requester:request.requesterId,origin:request.originId,destination:request.destinationId,task:request.task,taskType:request.service,permission:"approved",payload:request.payload});}
+
+  createRequest(operation){
+    return new DarkFactoryRequest({
+      requester:operation.requesterId,
+      origin:operation.originId,
+      destination:operation.destinationId||"world/sky/darkfactory",
+      task:operation.payload&&operation.payload.task||("Executar operação "+operation.operationType),
+      taskType:this.getService(operation),
+      permission:"approved",
+      payload:operation.payload
+    });
+  }
+
+  route(operation){
+    if(!this.communication)return{success:false,reason:"Comunicação/Rodovia não configurada."};
+    return this.communication.sendOperationRequest(operation);
+  }
+
+  execute(operation){
+    if(!this.factory)return{success:false,reason:"Dark Factory não configurada."};
+    if(!this.communication)return{success:false,reason:"Comunicação/Rodovia não configurada."};
+
+    return this.communication.processOperation(operation,(request)=>{
+      const result=this.factory.process(this.createRequestFromGlobal(request));
+      if(!result?.success)return result;
+
+      /* Conteúdo: o Bridge continua o ciclo dentro do Céu.
+       * O planejamento não é confundido com conclusão.
+       */
+      const isContent=String(request.service||"").toLowerCase().startsWith("content.")||request.payload?.content===true||!!request.payload?.contentId;
+      if(isContent&&result.operationId&&this.factory.contentFactory?.execute){
+        return this.factory.contentFactory.execute(result.operationId);
+      }
+
+      return result;
+    });
+  }
+
+  createRequestFromGlobal(request){
+    const p=request.payload||{};
+    return new DarkFactoryRequest({
+      requester:request.requesterId,
+      origin:request.originId,
+      destination:request.destinationId,
+      task:request.task,
+      taskType:request.service,
+      permission:"approved",
+      payload:p
+    });
+  }
 }
-if(typeof module!=="undefined") module.exports=DarkFactoryOperationBridge;
-if(typeof window!=="undefined") window.DarkFactoryOperationBridge=DarkFactoryOperationBridge;
+if(typeof module!=="undefined")module.exports=DarkFactoryOperationBridge;
+if(typeof window!=="undefined")window.DarkFactoryOperationBridge=DarkFactoryOperationBridge;
