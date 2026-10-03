@@ -12,6 +12,7 @@
         name:"Empresa de Marketing",
         area:"SKY",
         type:"MARKETING_COMPANY",
+        endpoint:"world/sky/marketing",
         capabilities:[
           "MARKETING_MANAGEMENT",
           "MARKET_ANALYSIS",
@@ -34,6 +35,7 @@
         name:"Empresa de Gestão de Conteúdos e Canais",
         area:"EARTH",
         type:"CONTENT_CHANNEL_MANAGEMENT_COMPANY",
+        endpoint:"world/earth/content-channels",
         capabilities:[
           "CLIENT_ONBOARDING",
           "ACCOUNT_MANAGEMENT",
@@ -53,6 +55,7 @@
         name:"Empresa de Gestão de Negócios",
         area:"EARTH",
         type:"BUSINESS_MANAGEMENT_COMPANY",
+        endpoint:"world/earth/business-management",
         capabilities:[
           "BUSINESS_MANAGEMENT",
           "BUSINESS_OPERATIONS",
@@ -67,6 +70,7 @@
         name:"Dark Factory",
         area:"SKY",
         type:"CONTENT_PRODUCTION_COMPANY",
+        endpoint:"world/sky/darkfactory",
         capabilities:[
           "CONTENT_CREATE",
           "CONTENT_EDIT",
