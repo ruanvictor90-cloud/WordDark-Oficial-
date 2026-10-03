@@ -100,6 +100,59 @@
       return {success:true,status:"ACCOUNT_REGISTERED",account:item};
     }
 
+    onboardClient({clientId,name,countries=[]}={}){
+      const result=this.registerClient({id:clientId,name,countries});
+      if(!result.success)return result;
+      return {success:true,status:"CLIENT_ONBOARDED",client:result.client};
+    }
+
+    updateAccount(accountId,patch={}){
+      const index=this.state.accounts.findIndex(x=>x.id===String(accountId));
+      if(index<0)return {success:false,status:"ACCOUNT_NOT_FOUND"};
+      this.state.accounts[index]={...this.state.accounts[index],...patch,id:String(accountId)};
+      this._save();
+      return {success:true,status:"ACCOUNT_UPDATED",account:this.state.accounts[index]};
+    }
+
+    openAccount({clientId,accountId,providerId,displayName,handle="",capabilities=[]}={}){
+      return this.registerAccount({
+        id:accountId,
+        clientId,
+        providerId,
+        displayName,
+        handle,
+        capabilities,
+        state:ACCOUNT_STATES.PLANNED
+      });
+    }
+
+    requestContent({clientId,accountId,contentId,type="CONTENT_CREATE",origin=null,destination="world/sky/darkfactory"}={}){
+      return this.createOperation({
+        id:"CONTENT-"+String(contentId||Date.now()),
+        clientId,
+        accountId,
+        type,
+        status:"REQUESTED",
+        origin,
+        destination,
+        contentId
+      });
+    }
+
+    requestPublication({clientId,accountId,contentId,providerId}={}){
+      return this.createOperation({
+        id:"PUBLISH-"+String(contentId||Date.now()),
+        clientId,
+        accountId,
+        type:"CONTENT_PUBLISH",
+        status:"REQUESTED",
+        origin:"world/earth/digital-operations",
+        destination:"world/sky/connections",
+        contentId,
+        providerId
+      });
+    }
+
     createOperation(operation){
       if(!operation || !operation.id)return {success:false,status:"OPERATION_ID_REQUIRED"};
       const item={
