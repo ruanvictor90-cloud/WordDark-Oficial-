@@ -1,9 +1,10 @@
 class WordDarkOperationRegistry {
-  constructor({ localLibrary = null, centralLibrary = null } = {}) {
+  constructor({ localLibrary = null, centralLibrary = null, operationalMemory = null } = {}) {
     this.operations = new Map();
     this.events = [];
     this.localLibrary = localLibrary;
     this.centralLibrary = centralLibrary;
+    this.operationalMemory = operationalMemory || null;
   }
 
   record(operation) {
@@ -37,6 +38,7 @@ class WordDarkOperationRegistry {
       operationId: operation.operationId,
       data: event
     });
+    if (this.operationalMemory) this.operationalMemory.remember({operationId:operation.operationId,stage,status:operation.status,data});
     if (this.centralLibrary) this.centralLibrary.append({
       recordId: event.eventId,
       type: "OPERATION_EVENT",
