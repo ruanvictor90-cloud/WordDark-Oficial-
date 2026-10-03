@@ -63,9 +63,15 @@
       return{success:true,status:"SUBSCRIPTION_ACTIVE",subscription};
     }
     listEntries(accountId=null){return this.entries.filter(e=>!accountId||e.accountId===accountId);}
+    listSubscriptions(ownerId=null){return [...this.subscriptions.values()].filter(x=>!ownerId||x.ownerId===ownerId);}
+    cancelSubscription(subscriptionId){
+      const s=this.subscriptions.get(subscriptionId);
+      if(!s)return{success:false,status:"SUBSCRIPTION_NOT_FOUND"};
+      s.status="CANCELLED";s.cancelledAt=new Date().toISOString();this._save();
+      return{success:true,status:"SUBSCRIPTION_CANCELLED",subscription:s};
+    }
   }
 
   if(typeof global!=="undefined")global.WordDarkFinancialEngine=WordDarkFinancialEngine;
   if(typeof module!=="undefined"&&module.exports)module.exports=WordDarkFinancialEngine;
 })(typeof globalThis!=="undefined"?globalThis:window);
-\n  listSubscriptions(ownerId=null){return [...this.subscriptions.values()].filter(x=>!ownerId||x.ownerId===ownerId);}\n  cancelSubscription(subscriptionId){const s=this.subscriptions.get(subscriptionId);if(!s)return{success:false,status:"SUBSCRIPTION_NOT_FOUND"};s.status="CANCELLED";s.cancelledAt=new Date().toISOString();this._save();return{success:true,status:"SUBSCRIPTION_CANCELLED",subscription:s};}\n
