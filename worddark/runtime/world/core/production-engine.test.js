@@ -1,0 +1,13 @@
+const assert=require("assert");
+const Production=require("../contracts/production");
+const Engine=require("./production-engine");
+const Operation=require("../contracts/operation");
+const calls=[];
+const coordinator={submit:source=>{calls.push(source);return new Operation({...source,status:"COMPLETED",result:{ok:true}})}};
+const planner={plan:p=>({operations:[new Operation({operationId:p.productionId+"-OP-01",requesterId:p.requesterId,originId:p.originId,operationType:"CREATE_CONTENT",action:"CREATE_CONTENT",environment:"TEST",parentProductionId:p.productionId})]})};
+const engine=new Engine({operationCoordinator:coordinator,planner});
+const p=engine.create({productionId:"P-ENGINE-1",requesterId:"TEST",originId:"world/test",goal:"criar conteúdo"});
+engine.plan(p);engine.execute(p);
+assert.strictEqual(calls.length,1);
+assert.strictEqual(p.status,"COMPLETED");
+console.log("production-engine: ok");
