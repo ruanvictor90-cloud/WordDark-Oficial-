@@ -1,45 +1,71 @@
 # WordDark Oficial
 
-Este é o desenvolvimento oficial do mundo.
+Este é o desenvolvimento oficial do mundo **WordDark**.
 
-## Estrutura operacional
+## Princípio central
 
-- **MAIN** organiza o mundo.
-- **WORDDARK** governa, protege, registra, autoriza e coordena.
-- **CÉU** concentra capacidades globais organizadas em Domínios autônomos. Cada Domínio segue `Domínio → Região → Núcleo → Distrito`.
-- **TERRA** concentra os clientes/ecossistemas e suas operações territoriais.
+> **O WordDark coordena. As empresas operam. Os setores executam.**
 
-### Céu
+O mundo é a infraestrutura que interliga empresas, capacidades, operações, memória, segurança, permissões, finanças e conexões externas. Empresas não substituem o WordDark; elas usam o mundo para operar.
 
-O Céu usa a mesma lógica estrutural da Terra, mas com nomenclatura e finalidade próprias:
+## Mapa atual
 
-`Domínio → Região → Núcleo → Distrito`
+```
+WORDDARK
+├── Língua Universal
+│   ├── Produção
+│   └── Operação
+├── Infraestrutura
+│   ├── Registro
+│   ├── Segurança
+│   ├── Memória
+│   └── Central de Operações
+├── Rodovia
+├── Empresas
+│   ├── Terra
+│   │   ├── Gestão de Negócios
+│   │   └── Gestão de Conteúdos e Canais
+│   └── Céu
+│       ├── Marketing
+│       └── Dark Factory
+└── Conexões Externas
+```
 
-Exemplo: `Dark Factory → Produção Audiovisual → Editor → Distrito de Montagem`.
+Terra e Céu são áreas do mundo, não empresas.
 
-Marketing segue o mesmo princípio, com suas próprias Regiões e Núcleos.
+## Fluxo oficial
 
-### Terra
+```
+INTENÇÃO
+↓
+NECESSIDADE
+↓
+LÍNGUA UNIVERSAL
+↓
+CAPACIDADE
+↓
+EMPRESA
+↓
+PORTÃO
+↓
+RODOVIA
+↓
+OPERAÇÃO
+↓
+MÓDULOS
+↓
+RESULTADO
+↓
+MEMÓRIA
+↓
+RETORNO
+```
 
-`País → Estado → Cidade → Bairro`
+A **Central de Operações** é a entrada operacional única. Registries, planner, roteador e adapters permanecem por baixo do tapete; interfaces comuns mostram apenas o que é necessário para operar.
 
-- País: organiza o ecossistema/cliente.
-- Estado: representa o setor.
-- Cidade: sistema operacional do Estado.
-- Bairro: identifica, administra e solicita o que o Estado precisa.
+## Operação modular
 
-### Infraestrutura transversal
-
-- **Portão:** entrada/saída, identificação, recebimento e rastreabilidade.
-- **Rodovia:** transporte e roteamento por capacidade.
-- **Central do Mundo:** acompanha capacidades e recebe demandas que não possuem executor.
-- **Criação do Mundo:** prepara propostas; estruturas novas só entram no mundo após autorização.
-
-## Regra de operação modular
-
-Uma operação pode ser composta por vários módulos independentes.
-
-Cada módulo gera seu próprio checkpoint. Se um módulo falhar, a operação pode retornar somente a esse módulo e continuar do ponto seguinte após a correção.
+Uma produção pode possuir várias operações e módulos independentes. Se um módulo falhar, a operação pode reentrar somente naquele módulo.
 
 Exemplo:
 
@@ -49,16 +75,69 @@ Depois:
 
 `reentrada no áudio → áudio ✅ → vídeo → conclusão`
 
-Não é necessário repetir a imagem.
+Não é necessário repetir o que já foi concluído.
 
-## Regra de responsabilidade
+## Empresas
 
-A Cidade não vira fábrica. O Estado não conhece internamente outro setor. A Rodovia não executa trabalho. A Dark Factory executa produção do Céu. A Terra solicita e recebe resultados.
+### Terra
+- **Empresa de Gestão de Negócios:** negócios, produtos, fornecedores, clientes, pedidos, recursos, vendas e automações.
+- **Empresa de Gestão de Conteúdos e Canais:** contas, canais, conteúdo, audiência, planejamento operacional e publicação.
 
-O código legado em `worddark/runtime` permanece apenas como **referência histórica de migração** até que toda capacidade relevante esteja reconciliada e testada na estrutura oficial. O runtime oficial não depende dele.
+### Céu
+- **Empresa de Marketing:** mercado, tendências, oportunidades, naming, identidade, posicionamento, audiência, campanhas e crescimento.
+- **Dark Factory — Empresa de Produção de Conteúdo:** criação, edição, montagem, transformação, renderização, validação e preparação de conteúdo.
 
-## Testes
+## Conexões externas
+
+A **Central de Conexões Externas** é infraestrutura compartilhada, não empresa.
+
+Ela centraliza:
+- autorização;
+- contas externas;
+- adapters/connectors;
+- estado das conexões;
+- publicação e outras capacidades externas.
+
+A interface não precisa conhecer registries ou tokens. TEST usa somente simuladores; PROD exige autorização/aprovação e conexão adequada. Secrets não ficam no GitHub Pages.
+
+## TEST e PROD
+
+`TEST` é ambiente de laboratório e nunca deve executar connector real.
+
+`PROD` exige barreira explícita de aprovação e autorização. A separação existe para impedir que testes atinjam contas externas acidentalmente.
+
+## Central de Testes
+
+A Central de Testes é um laboratório funcional do runtime. Ela deve validar:
+- contratos;
+- empresas e capacidades;
+- roteamento;
+- operações;
+- produções;
+- execução por setores;
+- falhas;
+- reentrada;
+- resultados;
+- memória;
+- isolamento TEST/PROD;
+- conectores simulados.
+
+## Estrutura dinâmica
+
+Nenhum cliente, canal ou grupo histórico é criado automaticamente.
+
+A Terra cresce conforme necessidades reais. O Céu cresce conforme capacidades reais. Não existem SucoCast, Suco País ou derivados pré-instanciados na arquitetura oficial.
+
+## Desenvolvimento
+
+- `main` = 🌍 produção/online
+- `develop` = 🛠️ criação
+- `staging` = 🧪 integração/testes
+
+Todo desenvolvimento estrutural deve ser integrado e testado no repositório oficial antes de ser considerado parte do mundo.
+
+### Testes
 
 `npm test`
 
-A suíte oficial cobre o núcleo, operações, segurança, memória, Dark Factory e integração modular.
+A suíte Node valida o runtime central e os contratos. A Central de Testes valida também o comportamento no navegador/GitHub Pages.
