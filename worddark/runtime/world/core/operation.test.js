@@ -28,7 +28,7 @@ function baseOperation(extra = {}) {
   });
   const result=engine.run(baseOperation());
   assert.strictEqual(result.status,"COMPLETED");
-  assert.deepStrictEqual(events,["IDENTIFIED","AUTHORIZED","ROUTED","EXECUTING","VALIDATING","COMPLETED"]);
+  assert.deepStrictEqual(events,["IDENTIFIED","AUTHORIZED","RECEIVED","ROUTED","EXECUTING","VALIDATING","COMPLETED"]);
 })();
 
 (function testReplayProtection() {
