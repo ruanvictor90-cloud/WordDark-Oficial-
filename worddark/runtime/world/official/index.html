@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordDark — Conta Primária</title><link rel="stylesheet" href="../ui/worddark-ui.css"></head>
+<body class="wd-body">
+<button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false">☰</button>
+<div class="wd-shell"><aside id="wd-sidebar" class="wd-sidebar">
+<div class="wd-brand"><div class="wd-mark">🌍</div><div><strong>WORDDARK</strong><small>Conta Primária</small></div></div>
+<nav class="wd-nav"><a href="../">◈ Portão</a><a class="active" href="./">🌍 WordDark</a><a href="../library/">📚 Biblioteca</a><a href="../sky/connections/">🔗 Conexões</a></nav>
+<div class="wd-footer">CONTA PRIMÁRIA · HOMOLOGAÇÃO</div></aside>
+<main class="wd-main"><div class="wd-surface">
+<div class="wd-top"><div><div class="wd-eyebrow">Conta · Mundo · WordDark</div><h1 class="wd-title">WordDark</h1><p class="wd-sub">Conta primária do mundo. Primeiro validamos aqui; depois entram as operações reais dos clientes-piloto.</p></div><button class="wd-btn" data-wd-theme type="button">Modo claro</button></div>
+<section class="wd-grid">
+<article class="wd-card"><div class="wd-eyebrow">Identidade</div><h2 id="account-name">WordDark</h2><p id="account-state" class="wd-muted">HOMOLOGAÇÃO</p></article>
+<article class="wd-card"><div class="wd-eyebrow">Regra</div><h2>Validar → promover</h2><p class="wd-muted">Arquivos temporários ficam nesta conta durante a construção. Quando aprovados, são promovidos à Biblioteca Central e removidos desta área.</p></article>
+<article class="wd-card full"><div class="wd-eyebrow">Arquivos temporários</div><h2>Área de trabalho da conta</h2>
+<label class="wd-field">Nome do arquivo<input id="file-name" placeholder="ex.: apresentacao-worddark.webm"></label>
+<label class="wd-field">Tipo<input id="file-type" placeholder="video/webm"></label>
+<button id="add-file" class="wd-btn" type="button">Adicionar arquivo de validação</button>
+<div id="file-list" style="margin-top:16px"></div></article>
+<article class="wd-card full"><div class="wd-eyebrow">Primeiro conteúdo</div><h2>Apresentação do WordDark</h2><p class="wd-muted">Este espaço prepara o primeiro conteúdo real da conta primária. Nada é enviado para uma conta externa automaticamente.</p><button id="prepare-first" class="wd-btn primary" type="button">Preparar conteúdo 001</button><pre id="first-result">Aguardando preparação.</pre></article>
+</section></div></main></div>
+<script src="../ui/worddark-ui.js"></script><script src="./world-account.js"></script><script src="./account-files.js"></script>
+<script>
+const $=s=>document.querySelector(s), account=window.WordDarkWorldAccount.get();
+$("#account-name").textContent=account.name;
+$("#account-state").textContent=account.status+" · "+account.environment;
+function render(){
+ const files=window.WordDarkAccountFiles.list();
+ $("#file-list").innerHTML=files.length?files.map(f=>'<div class="wd-card" style="margin-top:10px"><strong>'+String(f.name).replace(/[&<>"]/g,"")+'</strong><small>'+f.type+' · '+f.status+'</small><div style="margin-top:10px"><button class="wd-btn" onclick="promote(\''+f.id+'\')">Validar e enviar para Biblioteca</button> <button class="wd-btn" onclick="removeFile(\''+f.id+'\')">Descartar</button></div></div>').join(""):'<p class="wd-muted">Nenhum arquivo temporário.</p>';
+}
+function promote(id){try{const r=window.WordDarkAccountFiles.promote(id,{purpose:"WORDDARK_FIRST_ACCOUNT_VALIDATION"});$("#first-result").textContent="PROMOVIDO → "+r.recordId+" → Biblioteca Central. Arquivo removido da área temporária.";render()}catch(e){$("#first-result").textContent="Falha: "+e.message}}
+function removeFile(id){window.WordDarkAccountFiles.remove(id);render()}
+$("#add-file").onclick=()=>{try{const r=window.WordDarkAccountFiles.add({name:$("#file-name").value.trim(),type:$("#file-type").value.trim()});$("#first-result").textContent="Arquivo temporário criado: "+r.id;$("#file-name").value="";$("#file-type").value="";render()}catch(e){$("#first-result").textContent="Falha: "+e.message}};
+$("#prepare-first").onclick=()=>{const content={contentId:"WORDDARK-CONTENT-001",accountId:"WORDDARK-OFFICIAL",title:"Apresentação do WordDark",goal:"Apresentar o mundo e validar o circuito completo antes dos clientes-piloto.",status:"DRAFT_VALIDATION",createdAt:new Date().toISOString()};window.WordDarkWorldAccount.recordContent(content);$("#first-result").textContent=JSON.stringify(content,null,2)};
+render();
+</script>
+</body></html>
