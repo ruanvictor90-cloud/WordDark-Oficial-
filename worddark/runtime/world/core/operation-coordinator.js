@@ -49,7 +49,7 @@ class WordDarkOperationCoordinator {
   submit(source={}){
     if(!this.engine)return{success:false,status:"FAILED",reason:"Operation Engine não configurado."};
     const origin=source.originId||source.origin;
-    const service=source.operationType||source.service||"unknown.operation";
+    const service=source.action||source.operationType||source.service||"unknown.operation";
     const capability=typeof WordDarkCapabilityCatalog!=="undefined"
       ? WordDarkCapabilityCatalog.resolve({intent:source.intent,need:source.need,capability:source.capability,service})
       : (source.capability||service);
