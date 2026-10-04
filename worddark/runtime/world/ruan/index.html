@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ruan — WordDark</title>
+<style>
+body{margin:0;background:#090b10;color:#eee;font:16px system-ui,sans-serif}
+main{max-width:720px;margin:auto;padding:24px}
+.card{background:#11151d;border:1px solid #252c38;border-radius:14px;padding:18px;margin:12px 0}
+input,textarea,button{width:100%;box-sizing:border-box;margin-top:8px;padding:12px;border-radius:9px;border:1px solid #303847;background:#0c1017;color:#fff}
+button{cursor:pointer}
+.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#18251c}
+small{color:#9da7b5}
+</style>
+</head>
+<body>
+<main>
+<h1>👤 Ruan</h1>
+<p><span class="badge">🔒 PRIVADO</span></p>
+<div class="card">
+<h2>Meu espaço</h2>
+<p>Tarefas, lembretes, ideias e anotações pessoais.</p>
+<input id="text" placeholder="Escreva algo...">
+<select id="type"><option value="tasks">Tarefa</option><option value="reminders">Lembrete</option><option value="ideas">Ideia</option><option value="notes">Nota</option></select>
+<button id="add">Adicionar</button>
+</div>
+<div class="card">
+<h2>Conversar com o WordDark</h2>
+<p>O mundo só recebe algo quando você pedir.</p>
+<input id="intent" placeholder="Ex.: preciso de ajuda para planejar...">
+<button id="ask">Enviar solicitação</button>
+<small id="bridge"></small>
+</div>
+<div class="card"><h2>Itens</h2><div id="list"></div></div>
+</main>
+<script type="module">
+import {WordDarkRuan} from "./ruan-space.js";
+import {WordDarkRuanBridge} from "./ruan-bridge.js";
+const $=id=>document.getElementById(id);
+function render(){
+ const s=WordDarkRuan.load();
+ $("list").innerHTML=Object.entries(s).filter(([k])=>k!=="requests").flatMap(([k,v])=>v.map(x=>"<p><b>"+k+"</b>: "+(x.text||"")+"</p>")).join("")||"<small>Nenhum item ainda.</small>";
+}
+$("add").onclick=()=>{const text=$("text").value.trim();if(!text)return;WordDarkRuan.add($("type").value,{text});$("text").value="";render()};
+$("ask").onclick=()=>{const intent=$("intent").value.trim();if(!intent)return;const req=WordDarkRuanBridge.createRequest({intent});WordDarkRuan.add("requests",req);$("bridge").textContent="Solicitação criada: "+req.requestId; $("intent").value="";render()};
+render();
+</script>
+</body>
+</html>
