@@ -1,0 +1,18 @@
+{
+  "system": "WORDDARK-INTELLECTUAL-PROPERTY",
+  "version": "0.1.0",
+  "ownerAuthority": "WORDDARK-ADM",
+  "projectStartDate": "24/09",
+  "responsibleYear": "2002",
+  "officialWorldAccount": "WORDDARK-OFFICIAL",
+  "assetTypes": ["TRADEMARK","BRAND_IDENTITY","SOFTWARE","ARCHITECTURE","DOCUMENTATION","PROCESS","METHOD","CONTENT","VISUAL","AUDIO","VIDEO","EXPERIMENT","OTHER"],
+  "rightsStatuses": ["UNKNOWN","INTERNAL","OWNED","LICENSED","THIRD_PARTY","MIXED","PENDING_REVIEW","RESTRICTED"],
+  "lifecycle": ["DRAFT","RECORDED","VALIDATED","PROTECTED","PUBLISHED","ARCHIVED"],
+  "requiredFields": ["ipId","name","type","ownerId","creatorId","origin","rightsStatus","version","status","createdAt"],
+  "governance": {
+    "automaticExternalRegistration": false,
+    "automaticPublication": false,
+    "automaticRightsTransfer": false,
+    "ownerAuthorityCanOverride": true
+  }
+}
