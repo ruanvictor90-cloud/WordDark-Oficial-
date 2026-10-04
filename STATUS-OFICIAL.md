@@ -1,95 +1,107 @@
 # WordDark Oficial — LINHA ATIVA
 
-Este é o repositório oficial e único de desenvolvimento do mundo WordDark.
+Este é o repositório oficial do mundo **WordDark**.
 
 - Repositório oficial: `ruanvictor90-cloud/WordDark-Oficial-`
-- Branch oficial: `main`
-- Legado estrutural: removido do repositório ativo; a arquitetura oficial é `worddark/runtime/world`.
-- Financeiro: infraestrutura compartilhada já exposta pelo WordDark, mantendo compatibilidade com o núcleo financeiro existente.
+- `main`: produção/online
+- `develop`: criação
+- `staging`: integração/testes
+- Arquitetura oficial: `worddark/runtime/world`
+- Financeiro: infraestrutura compartilhada do mundo.
 
-## Regra estrutural oficial — infraestrutura antes da conta
+## Regra estrutural
 
-O WordDark não cria País, Estado, Cidade ou Bairro apenas porque uma interface existe. Essas camadas surgem conforme contas, grupos, operações, ambientes e setores realmente conectados exigirem.
+O WordDark não cria estruturas históricas ou clientes artificiais apenas porque uma interface existe.
 
-A infraestrutura atual é de gestores, portões, rodovias, setores e operações. Contas e operações reais ocupam essa infraestrutura depois da conexão.
+Nenhum cliente, canal, grupo ou país pré-configurado é necessário para o mundo funcionar. Essas estruturas nascem quando uma necessidade ou conexão real exigir.
 
-### Regra de nascimento
-
-- Nenhuma conta conectada → somente infraestrutura de conexão.
-- Uma conta conectada → estrutura mínima; não criar País artificialmente.
-- Múltiplas contas ou grupo explicitamente criado → País representa o grupo.
-- Estado representa uma operação.
-- Cidade representa ambiente/perfil/rede sob gestão.
-- Bairro representa setor executor.
-
-Suco, SucoCast e derivados não são instanciados automaticamente. Só aparecem quando uma conta/grupo conectado criar ou receber essa operação.
-
-## Céu
-
-O Céu mantém a mesma lógica estrutural, adaptada à sua natureza global:
+## Mapa oficial
 
 ```
-DOMÍNIO → Grupo / domínio global
-REGIÃO  → Operação global
-NÚCLEO  → Ambiente / unidade global
-DISTRITO → Setor global
+WORDDARK
+├── Infraestrutura central
+│   ├── Registro
+│   ├── Segurança
+│   ├── Memória
+│   ├── Central de Operações
+│   └── Biblioteca
+├── Terra
+│   ├── Gestão de Negócios
+│   └── Gestão de Conteúdos e Canais
+├── Céu
+│   ├── Marketing
+│   └── Dark Factory
+└── Conexões Externas
 ```
 
-Assim, Céu e Terra seguem a mesma lógica de organização sem obrigar os dois a terem a mesma implementação.
+### Terra
 
-## Regra de criação
+Quando necessário, a organização territorial pode crescer por:
+
+`País → Estado → Cidade → Bairro`
+
+Esses níveis não são obrigatórios. O sistema cria somente o menor nível necessário.
+
+### Céu
+
+O Céu usa uma organização própria e flexível:
+
+`Domínio → Região → Unidade → Distrito`
+
+A nomenclatura é estrutural; não representa empresas adicionais. Marketing e Dark Factory são empresas registradas diretamente no mundo.
+
+## Operação
 
 ```
-Nova solução
+Intenção
 ↓
-Já existe grupo?
-├─ não → criar PAÍS
-└─ sim
-   ↓
-Existe operação adequada?
-├─ não → criar ESTADO
-└─ sim
-   ↓
-Existe ambiente/perfil adequado?
-├─ não → criar CIDADE
-└─ sim
-   ↓
-Existe setor adequado?
-├─ não → criar BAIRRO
-└─ sim → encaixar a solução no setor existente
+Necessidade
+↓
+Língua Universal
+↓
+Capacidade
+↓
+Empresa
+↓
+Portão
+↓
+Rodovia
+↓
+Operação
+↓
+Setor/Módulo
+↓
+Resultado
+↓
+Memória
 ```
 
-A criação pode, portanto, terminar no menor nível necessário. Não se cria um novo prédio quando basta adicionar um setor ou uma solução a um prédio existente.
+A Central de Operações é a fachada operacional única. A infraestrutura interna permanece invisível para interfaces comuns.
 
-## Estruturas já consolidadas
+## Modularidade
 
-O núcleo oficial já contempla, entre outras bases:
+Falhas não obrigam repetição integral.
 
-- Main geral do mundo;
-- WordDark central;
-- Céu e Terra;
-- Portões;
-- Rodovia e registro de capacidades;
-- Central do Mundo;
-- Biblioteca e memória;
-- Segurança;
-- Permissões;
-- Auditoria;
-- Criação do Mundo com autorização humana;
-- Direitos das Produções;
-- Financeiro Central;
-- Operações e pipeline modular com reentrada;
-- Dark Factory;
-- Marketing;
-- Central de Operações;
-- Gestor de Contas;
-- Gestor Central da Conta;
-- perfis sociais conectáveis;
-- estrutura País → Estado → Cidade → Bairro;
-- primeira operação a ser desenvolvida após a conexão: definida pelo contexto da conta conectada.
+Um módulo pode falhar, registrar sua evidência e receber reentrada específica. A operação continua somente depois da correção e validação daquele módulo.
 
-## Regra operacional
+## Conexões
 
-Todo novo desenvolvimento estrutural e operacional do WordDark deve nascer, ser integrado e testado aqui.
+A Central de Conexões Externas é infraestrutura compartilhada.
 
-A atualização estrutural não significa construir todas as funções agora. Ela apenas mantém a planta do mundo compatível com os setores que já foram definidos. A implementação detalhada continua sendo feita por operação, começando pelo circuito que surgir da primeira conta conectada.
+- conectores ficam registrados em um hub interno;
+- TEST usa somente execução simulada;
+- PROD exige autorização e aprovação;
+- tokens de runtime não são persistidos como segredo público;
+- a interface mostra somente o estado necessário para o usuário.
+
+## Regra oficial
+
+Não existem SucoCast, Suco País ou derivados pré-instanciados na arquitetura atual.
+
+Novas empresas e capacidades entram por registro. O mundo não precisa ser redesenhado para receber uma nova empresa.
+
+## Validação
+
+`npm test` é a suíte automatizada.
+
+A Central de Testes é a validação funcional do runtime no navegador. Nenhum resultado de teste de produção é considerado válido sem evidência real de execução.
