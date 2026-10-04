@@ -14,11 +14,11 @@
       let list=operations;
       if(!list.length&&this.planner?.plan)list=this.planner.plan(production).operations;
       production.transition("PLANNED");
-      for(const op of list)production.addOperation(op);
+      production.setOperationPlan(list);
       return production;
     }
     execute(production,operations=[]){
-      const list=operations.length?operations:production.operations;
+      const list=operations.length?operations:(production.operationPlan.length?production.operationPlan:production.operations);
       if(!list.length){production.transition("WAITING",{reason:"Nenhuma operação planejada."});return production;}
       production.transition("EXECUTING");const results=[];
       for(const source of list){
