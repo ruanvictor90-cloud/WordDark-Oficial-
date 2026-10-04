@@ -16,6 +16,7 @@ class WordDarkProduction {
     this.options=source.options||{};
     this.status=source.status||"CREATED";
     this.operations=Array.isArray(source.operations)?[...source.operations]:[];
+    this.operationPlan=Array.isArray(source.operationPlan)?[...source.operationPlan]:[];
     this.createdAt=source.createdAt||new Date().toISOString();
     this.updatedAt=source.updatedAt||this.createdAt;
   }
@@ -43,11 +44,16 @@ class WordDarkProduction {
     if(data)this.result=data;
     return this;
   }
+  setOperationPlan(operations=[]){
+    this.operationPlan=Array.isArray(operations)?[...operations]:[];
+    this.operations=[]; for(const operation of this.operationPlan)this.addOperation(operation);
+    return this;
+  }
   toJSON(){
     return {productionId:this.productionId,requesterId:this.requesterId,originId:this.originId,clientId:this.clientId,
       goal:this.goal,resourceId:this.resourceId,destinationId:this.destinationId,quantity:this.quantity,
       requirements:this.requirements,context:this.context,options:this.options,status:this.status,
-      operations:[...this.operations],result:this.result||null,createdAt:this.createdAt,updatedAt:this.updatedAt};
+      operations:[...this.operations],operationPlan:this.operationPlan.map(op=>op?.toJSON?op.toJSON():op),result:this.result||null,createdAt:this.createdAt,updatedAt:this.updatedAt};
   }
 }
 if(typeof module!=="undefined")module.exports=WordDarkProduction;
