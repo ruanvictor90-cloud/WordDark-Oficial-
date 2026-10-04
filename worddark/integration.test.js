@@ -5,7 +5,7 @@ import { createPipeline } from "./core-central/pipeline.js";
 const world=createWordDarkWorld();
 let soundAttempts=0;
 world.runtime.registerCapability({id:"SOUND-TEST",name:"Sound Test",owner:"DARK-FACTORY",layer:"CEU",handler:op=>{soundAttempts++;return soundAttempts===1?{success:false,reason:"AUDIO_PROBLEM"}:{success:true,result:{fixed:true,operationId:op.id}};}});
-const operation=new Operation({origin:"SUCOCAST-CIDADE-BAIRRO",service:"DARK-FACTORY",gateId:"WORLD-GATE",payload:{taskType:"IMAGE",contentId:"TEST-CONTENT"},pipeline:createPipeline(["IMAGE","SOUND-TEST","VIDEO"])});
+const operation=new Operation({origin:"WORDDARK-TEST-ORIGIN",service:"DARK-FACTORY",gateId:"WORLD-GATE",payload:{taskType:"IMAGE",contentId:"TEST-CONTENT"},pipeline:createPipeline(["IMAGE","SOUND-TEST","VIDEO"])});
 world.runtime.request(operation);
 assert.equal(operation.status,"FAILED");
 assert.equal(operation.pipeline.failedModule,"SOUND-TEST");
