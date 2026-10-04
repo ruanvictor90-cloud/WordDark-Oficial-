@@ -12,7 +12,7 @@
     submit(input={}){
       const parsed=this.normalize(input);const env=input.environment||parsed.options?.environment||this.defaultEnvironment;
       if(parsed.type==="OPERATION"){
-        const operation=new Operation({operationId:input.operationId,requesterId:input.requesterId||this.requesterId,originId:input.originId||this.defaultOrigin,destinationId:parsed.destinationId,operationType:parsed.action,action:parsed.action,environment:env,resourceId:parsed.resourceId,clientId:parsed.clientId,context:parsed.context,payload:parsed.parameters||{},intent:input.intent,need:input.need});
+        const operation=new Operation({operationId:input.operationId||("OP-CENTER-"+Date.now().toString(36).toUpperCase()),requesterId:input.requesterId||this.requesterId,originId:input.originId||this.defaultOrigin,destinationId:parsed.destinationId,operationType:parsed.action,action:parsed.action,environment:env,resourceId:parsed.resourceId,clientId:parsed.clientId,context:parsed.context,payload:parsed.parameters||{},intent:input.intent,need:input.need});
         const result=this.operationCoordinator?.submit?.(operation);
         return this.toResult(result,{action:parsed.action,environment:env});
       }
