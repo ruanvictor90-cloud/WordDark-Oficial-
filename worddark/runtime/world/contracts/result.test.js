@@ -1,0 +1,11 @@
+const assert=require("assert");
+const Result=require("./result");
+const ok=Result.success({id:"A"},{operationId:"OP-1"});
+assert.strictEqual(ok.success,true);
+assert.strictEqual(ok.status,"COMPLETED");
+assert.strictEqual(ok.operationId,"OP-1");
+const fail=Result.failure("simulated failure",{moduleId:"audio"});
+assert.strictEqual(fail.success,false);
+assert.strictEqual(fail.status,"FAILED");
+assert.strictEqual(fail.moduleId,"audio");
+console.log("result-contract: ok");
