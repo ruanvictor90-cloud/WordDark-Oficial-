@@ -1,8 +1,8 @@
-/* WordDark — Production Engine
+/* WordDark — Production Engine v0.2
  * Produção coordena objetivos compostos; Operação executa funções únicas.
  */
 (function(root,factory){
-  if(typeof module==="object"&&module.exports){module.exports=factory(require("../contracts/production"));}
+  if(typeof module==="object"&&module.exports)module.exports=factory(require("../contracts/production"));
   else{const r=root||(typeof window!=="undefined"?window:globalThis);r.WordDarkProductionEngine=factory(r.WordDarkProduction);}
 })(typeof globalThis!=="undefined"?globalThis:window,function(WordDarkProduction){
   class WordDarkProductionEngine{
@@ -13,18 +13,18 @@
       if(!(production instanceof WordDarkProduction))throw new Error("O Production Engine exige o contrato de produção.");
       let list=operations;
       if(!list.length&&this.planner?.plan)list=this.planner.plan(production).operations;
-      production.transition("PLANNED");
-      production.setOperationPlan(list);
-      return production;
+      production.transition("PLANNED");production.setOperationPlan(list);return production;
     }
     execute(production,operations=[]){
       const list=operations.length?operations:(production.operationPlan.length?production.operationPlan:production.operations);
       if(!list.length){production.transition("WAITING",{reason:"Nenhuma operação planejada."});return production;}
-      production.transition("EXECUTING");const results=[];
+      if(!this.operationCoordinator?.submit){production.transition("FAILED",{reason:"Operation Coordinator não configurado."});return production;}
+      production.transition("EXECUTING");
+      const results=[];
       for(const source of list){
-        const result=source?.operationId?source:this.operationCoordinator?.submit?.({...source,parentProductionId:production.productionId});
-        if(!result){results.push({success:false,reason:"Operation Coordinator não configurado."});continue;}
-        production.addOperation(result);results.push({operationId:result.operationId,status:result.status,success:result.status==="COMPLETED",result:result.result});
+        const result=this.operationCoordinator.submit({...((source?.toJSON instanceof Function)?source.toJSON():source),parentProductionId:production.productionId});
+        results.push({operationId:result?.operationId||source?.operationId||null,status:result?.status||"FAILED",success:result?.status==="COMPLETED",result:result?.result||result});
+        if(result?.status!=="COMPLETED")break;
       }
       const failed=results.filter(x=>!x.success);
       production.transition(failed.length?(results.some(x=>x.success)?"PARTIAL":"FAILED"):"COMPLETED",{results});
