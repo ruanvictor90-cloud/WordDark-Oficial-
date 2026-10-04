@@ -36,6 +36,7 @@ const WordDarkOperation=require("../contracts/operation");
   const operation=new WordDarkOperation({operationId:"OP-005",requesterId:"CITY-001",originId:"city",destinationId:"darkfactory",operationType:"content.produce",environment:"TEST"});
   operation.transition("IDENTIFIED");
   operation.transition("AUTHORIZED");
+  operation.transition("RECEIVED");
   operation.transition("ROUTED");
   operation.transition("EXECUTING");
   operation.transition("VALIDATING");
