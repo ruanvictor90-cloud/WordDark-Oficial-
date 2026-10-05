@@ -15,7 +15,7 @@ class WordDarkIncidentResponse {
       evidence:[...evidence],createdAt:this.clock(),updatedAt:this.clock(),history:[]
     };
     this.incidents.set(incident.incidentId,incident);
-    this.auditLedger?.append({actorId:"SECURITY",action:"INCIDENT_CREATED",resourceId:incident.incidentId,severity,data:{severity}});
+    this.auditLedger?.append({actorId:"SECURITY",action:"INCIDENT_CREATED",resourceId:incident.incidentId,severity,metadata:{severity}});
     return {...incident,history:[...incident.history],evidence:[...incident.evidence]};
   }
 
