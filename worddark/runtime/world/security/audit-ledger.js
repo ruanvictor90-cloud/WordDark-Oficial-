@@ -28,7 +28,7 @@ class WordDarkAuditLedger {
     };
     entry.hash=crypto.createHash("sha256").update(JSON.stringify(stable(entry))).digest("hex");
     this.entries.push(entry);
-    if(this.entries.length>this.maxEntries) this.entries.shift();
+    if(this.entries.length>this.maxEntries) throw new Error("AUDIT_LEDGER_CAPACITY_REACHED");
     return {...entry};
   }
 
