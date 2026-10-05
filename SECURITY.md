@@ -59,3 +59,26 @@ The minimum recovery set is:
 6. documented restore procedure.
 
 Security is not a single feature. It is the combination of authority, access control, secrets management, backups, evidence, legal protection and recovery.
+
+## World Security Core
+
+The runtime security layer now provides:
+
+- `authority-policy.js`: explicit ADM/WORLD/OPERATION/PUBLIC boundary checks and prevention of self-elevation.
+- `audit-ledger.js`: append-only, hash-chained audit records for tamper detection.
+- `incident-response.js`: incident lifecycle with containment/recovery states and evidence references.
+- `recovery-manifest.js`: recovery readiness checklist for repository, IP, library, accounts, domains and legal evidence.
+- `secret-policy.js`: defensive source scanning for common private-key and credential patterns.
+- `security-core.js`: central facade for authorization, audit, incident, recovery and secret policy.
+
+### Security boundary
+
+The browser/GitHub Pages layer is never treated as the final security authority. It is a public client. Sensitive authorization, credentials, production approvals and irreversible actions must be enforced outside the public frontend when real infrastructure is introduced.
+
+### Incident rule
+
+When a security incident is detected, preserve evidence before cleanup. Containment may freeze affected operations; recovery requires explicit validation before reopening production activity.
+
+### Recovery rule
+
+A recovery manifest being present does not mean a backup exists. Each required recovery item must point to a real external copy and be verified before the manifest is considered ready.
