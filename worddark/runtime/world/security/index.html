@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordDark — Segurança do Mundo</title>
+<style>
+body{margin:0;background:#07090d;color:#e8edf5;font:15px system-ui,sans-serif}
+main{max-width:900px;margin:auto;padding:24px}
+.card{background:#10141b;border:1px solid #26303d;border-radius:14px;padding:18px;margin:12px 0}
+h1{margin-bottom:4px} h2{font-size:18px}
+.ok{color:#78e08f}.warn{color:#ffd166}.muted{color:#98a2b3}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.badge{display:inline-block;padding:5px 9px;border-radius:99px;background:#18202a}
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <div class="badge">WORDDARK SECURITY CORE</div>
+    <h1>Segurança do Mundo</h1>
+    <p class="muted">Camada de governança, proteção, auditoria, incidentes e recuperação.</p>
+  </div>
+  <div class="grid">
+    <div class="card"><h2 class="ok">✓ Autoridade</h2><p>ADM/Ruan permanece acima do WordDark. O mundo não pode elevar a própria autoridade nem administrar a raiz do ADM.</p></div>
+    <div class="card"><h2 class="ok">✓ TEST / PROD</h2><p>Ambientes separados. Produção exige aprovação explícita adicional.</p></div>
+    <div class="card"><h2 class="ok">✓ Auditoria</h2><p>Operações críticas devem possuir identidade, ação, recurso, resultado e histórico verificável.</p></div>
+    <div class="card"><h2 class="ok">✓ Incidentes</h2><p>Incidentes podem conter operações e preservam evidências antes da recuperação.</p></div>
+    <div class="card"><h2 class="ok">✓ Recuperação</h2><p>Repositório, PI, biblioteca, contas externas, domínios e evidências precisam de cópias independentes.</p></div>
+    <div class="card"><h2 class="ok">✓ Segredos</h2><p>Credenciais, tokens, chaves privadas e segredos não pertencem ao frontend público.</p></div>
+  </div>
+  <div class="card">
+    <h2>Limite desta interface</h2>
+    <p class="muted">Esta página é um painel público/operacional. Ela não concede autoridade, não armazena credenciais e não substitui controles de backend.</p>
+  </div>
+</main>
+</body>
+</html>
