@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+tokens/
+*.secret
+*.secrets
+.DS_Store
+npm-debug.log*
