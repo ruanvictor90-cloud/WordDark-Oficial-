@@ -94,16 +94,23 @@
       candidates:[],winner:null,reason:"Nenhum candidato de conteúdo foi fornecido."
     };
     const winner=ranked[0];
+    const runnerUp=ranked[1]||null;
+    const confidence=runnerUp
+      ? Number(Math.max(0,Math.min(100,(winner.score-runnerUp.score)*2)).toFixed(2))
+      : 100;
     return{
       success:true,
       status:"SELECTED",
       mode:winner.mode,
       winner,
+      runnerUp,
       candidates:ranked,
       decision:{
         selectedId:winner.id,
         score:winner.score,
-        reason:reasonFor(winner)
+        confidence,
+        reason:reasonFor(winner),
+        alternatives:ranked.slice(1,3).map(item=>({id:item.id,title:item.title,score:item.score}))
       }
     };
   }
