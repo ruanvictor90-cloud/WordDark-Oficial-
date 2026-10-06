@@ -28,7 +28,7 @@ async function run(input={}){
     if(!r.success)return{success:false,status:"FAILED",operationId,stoppedAt:stage,history,pipeline,packages,reason:r.reason||null};
     packages[stage.split(".")[1]]=r.artifact?{...(r.result||{}),artifact:r.artifact}:r.result||r.record||r.variants||r;
   }
-  return{success:true,status:"READY",operationId,pipeline,history,packages,next:"external.connection"};
+  const finalArtifact=latestArtifact(packages);return{success:true,status:"READY",operationId,pipeline,history,packages,output:finalArtifact?{type:finalArtifact.type,mime:finalArtifact.mime||null,format:finalArtifact.format||null,duration:finalArtifact.duration||null,width:finalArtifact.width||null,height:finalArtifact.height||null,blob:finalArtifact.blob||null}:null,next:"external.connection"};
 }
 async function runOne(input={}){
   const stage=normalizeStages({...input,sectors:[input.sector||input.module]})[0];
