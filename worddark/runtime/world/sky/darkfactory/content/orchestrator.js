@@ -19,20 +19,20 @@ function runSector(stage,input,operationId,packages){
   const found=find(stage);if(!found)return{success:false,status:"SECTOR_NOT_FOUND",stage};
   return found[1].run({...input,...dependencies(stage,input,packages),operationId});
 }
-function run(input={}){
+async function run(input={}){
   const operationId=id(input),history=[],packages={},pipeline=normalizeStages(input);
   for(const stage of pipeline){
-    const r=runSector(stage,input,operationId,packages);
+    const r=await runSector(stage,input,operationId,packages);
     history.push({stage,status:r.status,result:r.result||r.record||r.variants||null,reason:r.reason||null});
     if(!r.success)return{success:false,status:"FAILED",operationId,stoppedAt:stage,history,pipeline,packages,reason:r.reason||null};
     packages[stage.split(".")[1]]=r.result||r.record||r.variants||r;
   }
   return{success:true,status:"READY",operationId,pipeline,history,packages,next:"external.connection"};
 }
-function runOne(input={}){
+async function runOne(input={}){
   const stage=normalizeStages({...input,sectors:[input.sector||input.module]})[0];
   if(!stage)return{success:false,status:"SECTOR_REQUIRED"};
-  return run({...input,sectors:[stage]});
+  return await run({...input,sectors:[stage]});
 }
 function listSectors(){return STAGES.map(x=>({id:x[0],alias:Object.keys(ALIASES).find(k=>ALIASES[k]===x[0])||x[0].split(".")[1],independent:true}));}
 return{VERSION,run,runOne,listSectors,normalizeStages};
