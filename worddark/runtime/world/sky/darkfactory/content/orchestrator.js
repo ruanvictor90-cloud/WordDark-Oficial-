@@ -13,7 +13,7 @@ function dependencies(stage,input,packages){
   if(stage==="content.script"&&packages.intelligence)return{intelligence:packages.intelligence};
   if(stage==="content.identity")return{brief:input.brief||packages.intelligence?.summary,content:packages.script||input.content};
   if(stage==="content.image")return{script:packages.script||input.script,identity:packages.identity||input.identity};
-  return{asset:input.asset||packages.image||packages.video,script:packages.script||input.script,result:packages};
+  return{asset:input.asset||packages.image?.artifact||packages.image||packages.video,artifact:packages.image?.artifact||input.artifact||null,script:packages.script||input.script,result:packages};
 }
 function runSector(stage,input,operationId,packages){
   const found=find(stage);if(!found)return{success:false,status:"SECTOR_NOT_FOUND",stage};
@@ -25,7 +25,7 @@ async function run(input={}){
     const r=await runSector(stage,input,operationId,packages);
     history.push({stage,status:r.status,result:r.result||r.record||r.variants||null,reason:r.reason||null});
     if(!r.success)return{success:false,status:"FAILED",operationId,stoppedAt:stage,history,pipeline,packages,reason:r.reason||null};
-    packages[stage.split(".")[1]]=r.result||r.record||r.variants||r;
+    packages[stage.split(".")[1]]=r.artifact?{...(r.result||{}),artifact:r.artifact}:r.result||r.record||r.variants||r;
   }
   return{success:true,status:"READY",operationId,pipeline,history,packages,next:"external.connection"};
 }
