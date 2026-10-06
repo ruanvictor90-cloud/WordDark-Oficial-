@@ -49,7 +49,18 @@ assert.equal(custom.winner.id,"A");
 
 const empty=Engine.choose([]);
 assert.equal(empty.success,false);
-assert.equal(empty.status,"NO_CANDIDATES");
+assert.equal(empty.status,"NO_ELIGIBLE_CANDIDATES");
+
+const constrained=Engine.choose([
+  {...candidates[0],id:"BLOCKED",blocked:true},
+  {...candidates[1],id:"RISKY",riskScore:90},
+  {...candidates[2],id:"TAGGED",tags:["experimental"]}
+],{maxRisk:50,requiredTags:["experimental"]});
+assert.equal(constrained.success,true);
+assert.equal(constrained.winner.id,"TAGGED");
+assert.equal(constrained.rejected.length,2);
+assert.equal(typeof constrained.decision.margin,"number");
+assert.ok(Array.isArray(constrained.decision.trace));
 
 console.log("content-decision-engine.test: OK");
 
