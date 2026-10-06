@@ -78,20 +78,37 @@
     };
   }
 
+  function eligible(candidate,constraints={}){
+    const c=normalizeCandidate(candidate);
+    if(constraints.minObjective!=null&&c.objective<number(constraints.minObjective))return false;
+    if(constraints.minAudience!=null&&c.audience<number(constraints.minAudience))return false;
+    if(constraints.minFeasibility!=null&&c.feasibility<number(constraints.minFeasibility))return false;
+    if(constraints.minIdentity!=null&&c.identity<number(constraints.minIdentity))return false;
+    if(constraints.maxRisk!=null&&c.risk>number(constraints.maxRisk,100))return false;
+    return true;
+  }
+
   function rank(candidates=[],options={}){
     const mode=options.mode||MODES.BEST_KNOWN;
     const weights={...DEFAULT_WEIGHTS,...(options.weights||{})};
-    const ranked=(Array.isArray(candidates)?candidates:[])
+    const source=Array.isArray(candidates)?candidates:[];
+    const eligibleCandidates=source.filter(candidate=>eligible(candidate,options.constraints||{}));
+    const ranked=eligibleCandidates
       .map((candidate,index)=>score(candidate,weights,mode))
       .sort((a,b)=>b.score-a.score);
     return ranked.map((item,index)=>({...item,rank:index+1}));
   }
 
   function choose(candidates=[],options={}){
-    const ranked=rank(candidates,options);
-    if(!ranked.length)return{
+    const source=Array.isArray(candidates)?candidates:[];
+    const ranked=rank(source,options);
+    if(!source.length)return{
       success:false,status:"NO_CANDIDATES",mode:options.mode||MODES.BEST_KNOWN,
       candidates:[],winner:null,reason:"Nenhum candidato de conteúdo foi fornecido."
+    };
+    if(!ranked.length)return{
+      success:false,status:"NO_ELIGIBLE_CANDIDATES",mode:options.mode||MODES.BEST_KNOWN,
+      candidates:[],winner:null,reason:"Nenhum candidato atende aos critérios mínimos da decisão.",constraints:options.constraints||{}
     };
     const winner=ranked[0];
     const runnerUp=ranked[1]||null;
@@ -134,6 +151,7 @@
     DEFAULT_WEIGHTS,
     MODES,
     normalizeCandidate,
+    eligible,
     score,
     rank,
     choose,
