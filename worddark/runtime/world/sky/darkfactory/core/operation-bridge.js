@@ -1,14 +1,15 @@
+const DefaultDarkFactoryRequest = typeof module === "object" && module.exports ? require("./request") : null;
 /* WordDark — Dark Factory Operation Bridge · DF-0.11
  * A Rodovia Global transporta. O motor central autoriza.
  * A Dark Factory executa apenas depois que a operação chega ao Céu.
  */
 class DarkFactoryOperationBridge {
-  constructor({factory,communication,serviceMap={}}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;}
+  constructor({factory,communication,serviceMap={},requestClass=null}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;this.requestClass=requestClass||DefaultDarkFactoryRequest||(typeof globalThis!=="undefined"?globalThis.DarkFactoryRequest:null);}
 
   getService(operation){return this.serviceMap[operation.operationType]||operation.operationType;}
 
   createRequest(operation){
-    return new DarkFactoryRequest({
+    return new this.requestClass({
       requester:operation.requesterId,
       origin:operation.originId,
       destination:operation.destinationId,
@@ -26,6 +27,7 @@ class DarkFactoryOperationBridge {
 
   execute(operation){
     if(!this.factory)return{success:false,reason:"Dark Factory não configurada."};
+    if(typeof this.requestClass!=="function")return{success:false,reason:"Contrato Dark Factory Request não configurado."};
     if(!this.communication)return{success:false,reason:"Comunicação/Rodovia não configurada."};
 
     return this.communication.processOperation(operation,(request)=>{
