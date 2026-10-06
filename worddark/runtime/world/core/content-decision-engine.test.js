@@ -52,3 +52,19 @@ assert.equal(empty.success,false);
 assert.equal(empty.status,"NO_CANDIDATES");
 
 console.log("content-decision-engine.test: OK");
+
+
+const constrained=Engine.choose(candidates,{constraints:{minFeasibility:90}});
+assert.equal(constrained.winner.id,"A");
+
+const blocked=Engine.choose(candidates,{constraints:{minFeasibility:99}});
+assert.equal(blocked.success,false);
+assert.equal(blocked.status,"NO_ELIGIBLE_CANDIDATES");
+
+const risky=Engine.choose([
+  {...candidates[0],id:"RISKY",riskScore:95},
+  {...candidates[1],id:"SAFE",riskScore:10}
+],{constraints:{maxRisk:50}});
+assert.equal(risky.winner.id,"SAFE");
+
+console.log("content-decision-engine.constraints.test: OK");
