@@ -9,11 +9,12 @@ function normalizeStages(input={}){
   if(!requested||!requested.length)return STAGES.map(x=>x[0]);
   return requested.map(x=>ALIASES[String(x).toUpperCase()]||String(x).toLowerCase()).filter(x=>find(x));
 }
+function latestArtifact(packages){const order=["learning","control","testing","audio","video","image"];for(const key of order){const value=packages[key];if(value?.artifact)return value.artifact;}return null;}
 function dependencies(stage,input,packages){
   if(stage==="content.script"&&packages.intelligence)return{intelligence:packages.intelligence};
   if(stage==="content.identity")return{brief:input.brief||packages.intelligence?.summary,content:packages.script||input.content};
   if(stage==="content.image")return{script:packages.script||input.script,identity:packages.identity||input.identity};
-  return{asset:input.asset||packages.image?.artifact||packages.image||packages.video,artifact:packages.image?.artifact||input.artifact||null,script:packages.script||input.script,result:packages};
+  const previous=latestArtifact(packages);return{asset:input.asset||previous||packages.image||packages.video,artifact:input.artifact||previous||null,script:packages.script||input.script,result:packages};
 }
 function runSector(stage,input,operationId,packages){
   const found=find(stage);if(!found)return{success:false,status:"SECTOR_NOT_FOUND",stage};
