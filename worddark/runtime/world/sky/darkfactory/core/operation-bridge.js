@@ -56,6 +56,11 @@ class DarkFactoryOperationBridge {
       taskType:request.service,
       permission:"approved",
       payload:p,
+      content:p.content||p.parameters?.content||false,
+      contentId:p.contentId||p.parameters?.contentId||null,
+      action:p.action||p.parameters?.action||null,
+      network:p.network||p.parameters?.network||null,
+      accountId:p.accountId||p.parameters?.accountId||null,
       createdAt:request.createdAt||new Date().toISOString(),
       validate(){return {valid:!!(this.requester&&this.origin&&this.destination&&this.task&&this.taskType),errors:[]};},
       toJSON(){return {...this};}
