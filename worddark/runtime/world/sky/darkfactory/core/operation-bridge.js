@@ -48,7 +48,7 @@ class DarkFactoryOperationBridge {
 
   createRequestFromGlobal(request){
     const p=request.payload||{};
-    return new DarkFactoryRequest({
+    return new this.requestClass({
       requester:request.requesterId,
       origin:request.originId,
       destination:request.destinationId,
