@@ -1,0 +1,1 @@
+const Renderer=require("./renderer");if(typeof Renderer.render!=="function")throw new Error("video renderer missing");if(typeof document!=="undefined")throw new Error("node renderer test must not run in browser");console.log("video renderer contract ok");
