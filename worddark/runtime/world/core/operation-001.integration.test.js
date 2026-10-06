@@ -141,6 +141,7 @@ const result=center.submit({
 });
 
 if(!result.success){
+  console.log("OP-001 security audit:",JSON.stringify(security.getAudit().slice(-3),null,2));
   console.log("OP-001 failure:",JSON.stringify(result,null,2));
   const debugProduction=productionEngine.create({
     productionId:"OP-001-DEBUG",
