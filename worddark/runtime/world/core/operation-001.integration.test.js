@@ -46,7 +46,7 @@ security.grant(new Access({
   capability:"CONTENT_CREATE",
   action:"request",
   environment:"TEST",
-  scope:"*"
+  scope:"world/sky/darkfactory"
 }));
 
 const localLibrary=new LocalLibrary({libraryId:"OP001-LOCAL",ownerId:"OP-001-RUAN"});
