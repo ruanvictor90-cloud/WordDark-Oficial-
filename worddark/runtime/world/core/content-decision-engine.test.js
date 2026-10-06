@@ -31,6 +31,8 @@ assert.equal(known.status,"SELECTED");
 assert.equal(known.mode,Engine.MODES.BEST_KNOWN);
 assert.equal(known.winner.rank,1);
 assert.equal(known.candidates.length,3);
+assert.equal(typeof known.decision.confidence,"number");
+assert.equal(known.decision.alternatives.length,2);
 
 const opportunity=Engine.choose(candidates,{mode:Engine.MODES.BEST_OPPORTUNITY});
 assert.equal(opportunity.winner.id,"B");
