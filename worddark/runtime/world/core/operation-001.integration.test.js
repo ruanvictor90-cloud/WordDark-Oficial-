@@ -24,6 +24,7 @@ const Access=require("../contracts/access");
 const DarkFactory=require("../sky/darkfactory/core/factory");
 const DarkFactoryBridge=require("../sky/darkfactory/core/operation-bridge");
 const DarkFactoryRequest=require("../sky/darkfactory/core/request");
+const DarkFactoryRequestClass=typeof DarkFactoryRequest==="function"?DarkFactoryRequest:DarkFactoryRequest.DarkFactoryRequest;
 const ServiceRegistry=require("../sky/darkfactory/core/service-registry");
 const ContentExecutor=require("../sky/darkfactory/core/content-publication-executor");
 const ContentModules=require("../sky/darkfactory/core/content-module-registry");
@@ -31,7 +32,7 @@ const ContentFactory=require("../sky/darkfactory/core/content-factory");
 
 global.WordDarkCapabilityCatalog=require("./capability-catalog");
 global.WordDarkRoute=Route;
-global.DarkFactoryRequest=DarkFactoryRequest;
+global.DarkFactoryRequest=DarkFactoryRequestClass;
 
 const road=new Road();
 const registry=new CompanyRegistry();
@@ -84,7 +85,7 @@ const modules=new ContentModules();
 const contentFactory=new ContentFactory({executor,moduleRegistry:modules});
 const factory=new DarkFactory({registry:services,contentFactory});
 const communication=new Communication({road,registry:opRegistry});
-const bridge=new DarkFactoryBridge({factory,communication,requestClass:DarkFactoryRequest});
+const bridge=new DarkFactoryBridge({factory,communication,requestClass:DarkFactoryRequestClass});
 
 const engine=new WordDarkOperationEngine({
   security,
