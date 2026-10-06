@@ -141,23 +141,6 @@ const result=center.submit({
   }
 });
 
-if(!result.success){
-  console.log("OP-001 security audit:",JSON.stringify(security.getAudit().slice(-3),null,2));
-  console.log("OP-001 failure:",JSON.stringify(result,null,2));
-  const debugProduction=productionEngine.create({
-    productionId:"OP-001-DEBUG",
-    requesterId:"OP-001-RUAN",
-    originId:"world/earth/official",
-    clientId:"WORDDARK-OFFICIAL",
-    goal:"Produzir o primeiro conteúdo oficial do WordDark",
-    resourceId:"WORDDARK-CONTENT-DEBUG",
-    requirements:{content:true,contentId:"WORDDARK-CONTENT-DEBUG",format:"VIDEO"},
-    options:{environment:"TEST",parameters:{content:true,contentId:"WORDDARK-CONTENT-DEBUG",title:"O que é o WordDark?",type:"VIDEO",task:"Produzir o primeiro conteúdo oficial do WordDark"}}
-  });
-  productionEngine.plan(debugProduction);
-  productionEngine.execute(debugProduction);
-  console.log("OP-001 production debug:",JSON.stringify(debugProduction.toJSON(),null,2));
-}
 assert.strictEqual(result.success,true,JSON.stringify(result,null,2));
 assert.strictEqual(result.status,"COMPLETED");
 assert.strictEqual(result.productionId,"OP-001");
