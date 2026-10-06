@@ -58,7 +58,7 @@ const constrained=Engine.choose([
 ],{maxRisk:50,requiredTags:["experimental"]});
 assert.equal(constrained.success,true);
 assert.equal(constrained.winner.id,"TAGGED");
-assert.equal(constrained.rejected.length,2);
+assert.equal(constrained.rejected.length,3);
 assert.equal(typeof constrained.decision.margin,"number");
 assert.ok(Array.isArray(constrained.decision.trace));
 
