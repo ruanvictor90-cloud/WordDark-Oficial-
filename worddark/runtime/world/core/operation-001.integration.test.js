@@ -84,7 +84,7 @@ const modules=new ContentModules();
 const contentFactory=new ContentFactory({executor,moduleRegistry:modules});
 const factory=new DarkFactory({registry:services,contentFactory});
 const communication=new Communication({road,registry:opRegistry});
-const bridge=new DarkFactoryBridge({factory,communication});
+const bridge=new DarkFactoryBridge({factory,communication,requestClass:DarkFactoryRequest});
 
 const engine=new WordDarkOperationEngine({
   security,
