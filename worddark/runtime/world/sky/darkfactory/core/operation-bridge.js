@@ -27,7 +27,6 @@ class DarkFactoryOperationBridge {
 
   execute(operation){
     if(!this.factory)return{success:false,reason:"Dark Factory não configurada."};
-    if(typeof this.requestClass!=="function")return{success:false,reason:"Contrato Dark Factory Request não configurado."};
     if(!this.communication)return{success:false,reason:"Comunicação/Rodovia não configurada."};
 
     return this.communication.processOperation(operation,(request)=>{
@@ -48,15 +47,19 @@ class DarkFactoryOperationBridge {
 
   createRequestFromGlobal(request){
     const p=request.payload||{};
-    return new this.requestClass({
+    return {
+      id:request.requestId||request.operationId,
       requester:request.requesterId,
       origin:request.originId,
       destination:request.destinationId,
       task:request.task,
       taskType:request.service,
       permission:"approved",
-      payload:p
-    });
+      payload:p,
+      createdAt:request.createdAt||new Date().toISOString(),
+      validate(){return {valid:!!(this.requester&&this.origin&&this.destination&&this.task&&this.taskType),errors:[]};},
+      toJSON(){return {...this};}
+    };
   }
 }
 if(typeof module!=="undefined")module.exports=DarkFactoryOperationBridge;
