@@ -35,7 +35,9 @@
       this.records.push(record);
       this.records=this.records.slice(-this.maxRecords);
       this._save();
-      if(this.library?.save)try{this.library.save(record);}catch(_){}\n      else if(this.library?.append)try{this.library.append({...record,type:"OPERATION_MEMORY"});}catch(_){}\n      if(this.centralPromoter)try{this.centralPromoter(record);}catch(_){}
+      if(this.library?.save)try{this.library.save(record);}catch(_){}
+      else if(this.library?.append)try{this.library.append({...record,type:"OPERATION_MEMORY"});}catch(_){}
+      if(this.centralPromoter)try{this.centralPromoter(record);}catch(_){}
       return record;
     }
 
