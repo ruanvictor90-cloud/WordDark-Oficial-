@@ -7,6 +7,9 @@ const Catalog=require("./capability-catalog");
 const Road=require("./road");
 const Route=require("../contracts/route");
 const Communication=require("./communication");
+const CompanyRegistry=require("./company-registry").WordDarkCompanyRegistry;
+const {registerCoreCompanies}=require("./company-registry-seed");
+const {WordDarkCompanyIntentRouter}=require("./company-intent-router");
 
 function expect(condition,message){assert.ok(condition,message);}
 
@@ -39,6 +42,18 @@ function expect(condition,message){assert.ok(condition,message);}
     expect(Catalog.serviceForCapability(capability)===service,capability+" service mapping");
   }
   console.log("capabilityAudit: OK");
+})();
+
+(function routingAudit(){
+  global.WordDarkCapabilityCatalog=Catalog;
+  const companies=new CompanyRegistry();
+  registerCoreCompanies(companies);
+  const router=new WordDarkCompanyIntentRouter({companyRegistry:companies});
+  const routed=router.route({capability:"CONTENT_CREATE"});
+  expect(routed.success,"Capability should resolve.");
+  expect(routed.destination==="WD-COMP-DARK-FACTORY","Routing destination must use canonical company id.");
+  expect(routed.endpoint==="world/sky/darkfactory","Endpoint must remain routing metadata.");
+  console.log("routingAudit: OK");
 })();
 
 (function communicationAudit(){
