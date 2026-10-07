@@ -1,1 +1,38 @@
-const assert=require("assert");\nconst fs=require("fs");\nconst path=require("path");\n\nconst root=path.resolve(__dirname,"..");\nconst required=[\n  "world/core/world-runtime.js",\n  "world/core/operation-engine.js",\n  "world/core/operation-coordinator.js",\n  "world/core/communication.js",\n  "world/core/capability-catalog.js",\n  "world/core/company-registry.js",\n  "world/core/company-intent-router.js",\n  "world/core/road.js",\n  "world/contracts/operation.js",\n  "world/contracts/request.js",\n  "world/contracts/message.js",\n  "world/contracts/receipt.js",\n  "world/sky/darkfactory/core/factory.js",\n  "world/sky/darkfactory/core/content-factory.js",\n  "world/sky/darkfactory/core/social-factory.js",\n  "world/sky/darkfactory/core/operation-bridge.js",\n  "world/sky/connections/connection-registry.js",\n  "world/sky/connections/connection-contract.js",\n  "world/sky/connections/connection-gateway.js"\n];\nfor(const relative of required)assert.ok(fs.existsSync(path.join(root,relative)),"Missing operational file: "+relative);\n\nconst legacyExecutable=[\n  "core-central/index.js",\n  "core-central/external-connection-hub.js",\n  "core-central/emergency-stop.js",\n  "core-central/central-automation-controller.js"\n];\nfor(const relative of legacyExecutable)assert.ok(!fs.existsSync(path.join(root,relative)),"Legacy core executable still exists: "+relative);\n\nconsole.log("operational-structure.test: OK");\n
+const assert=require("assert");
+const fs=require("fs");
+const path=require("path");
+
+const root=path.resolve(__dirname,"..");
+const required=[
+  "world/core/world-runtime.js",
+  "world/core/operation-engine.js",
+  "world/core/operation-coordinator.js",
+  "world/core/communication.js",
+  "world/core/capability-catalog.js",
+  "world/core/company-registry.js",
+  "world/core/company-intent-router.js",
+  "world/core/road.js",
+  "world/contracts/operation.js",
+  "world/contracts/request.js",
+  "world/contracts/message.js",
+  "world/contracts/receipt.js",
+  "world/sky/darkfactory/core/factory.js",
+  "world/sky/darkfactory/core/content-factory.js",
+  "world/sky/darkfactory/core/social-factory.js",
+  "world/sky/darkfactory/core/operation-bridge.js",
+  "world/core/connections/connection-registry.js",
+  "world/core/connections/connection-contract.js",
+  "world/core/connections/connection-gateway.js",
+  "world/library/hierarchical-library.js"
+];
+for(const relative of required)assert.ok(fs.existsSync(path.join(root,relative)),"Missing operational file: "+relative);
+
+const legacyExecutable=[
+  "core-central/index.js",
+  "core-central/external-connection-hub.js",
+  "core-central/emergency-stop.js",
+  "core-central/central-automation-controller.js"
+];
+for(const relative of legacyExecutable)assert.ok(!fs.existsSync(path.join(root,relative)),"Legacy core executable still exists: "+relative);
+
+console.log("operational-structure.test: OK");
