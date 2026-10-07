@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dark Factory — WordDark</title><link rel="stylesheet" href="../../ui/worddark-ui.css"></head>
+<title>Dark Factory — WordDark</title><link rel="stylesheet" href="../../ui/worddark-ui.css"><style>.wd-internal{display:none!important}.wd-debug{display:none!important}</style></head>
 <body class="wd-body">
 <div class="wd-shell">
 <aside class="wd-sidebar">
@@ -24,8 +24,8 @@
 </section>
 
 <section class="wd-grid">
-<article class="wd-card full"><div class="wd-eyebrow">Serviço · social.operation</div><h2>Operação para rede social</h2><p class="wd-muted">A fábrica aceita a intenção da operação e prepara o pedido. OAuth, tokens e comunicação com a plataforma permanecem exclusivamente na Central de Conexões.</p><div class="wd-form-grid"><label class="wd-field">Rede<input class="wd-input" id="socialNetwork" value="YOUTUBE" placeholder="YOUTUBE"></label><label class="wd-field">Ação<input class="wd-input" id="socialAction" value="CONTENT_PUBLISH" placeholder="CONTENT_PUBLISH"></label><label class="wd-field">Conta externa<input class="wd-input" id="socialAccount" placeholder="ID da conta conectada"></label></div><label class="wd-field" style="margin-top:12px">Dados da operação<textarea class="wd-textarea" id="socialPayload">{"title":"Teste WordDark","description":"Operação de teste"}</textarea></label><button class="wd-btn primary" id="runSocial" type="button" style="margin-top:14px">Preparar operação social</button><pre id="socialResult" style="margin-top:12px">Nenhuma operação social.</pre></article>
-<article class="wd-card wide">
+<article class="wd-card full wd-internal"><div class="wd-eyebrow">Serviço · social.operation</div><h2>Operação para rede social</h2><p class="wd-muted">A fábrica aceita a intenção da operação e prepara o pedido. OAuth, tokens e comunicação com a plataforma permanecem exclusivamente na Central de Conexões.</p><div class="wd-form-grid"><label class="wd-field">Rede<input class="wd-input" id="socialNetwork" value="YOUTUBE" placeholder="YOUTUBE"></label><label class="wd-field">Ação<input class="wd-input" id="socialAction" value="CONTENT_PUBLISH" placeholder="CONTENT_PUBLISH"></label><label class="wd-field">Conta externa<input class="wd-input" id="socialAccount" placeholder="ID da conta conectada"></label></div><label class="wd-field" style="margin-top:12px">Dados da operação<textarea class="wd-textarea" id="socialPayload">{"title":"Teste WordDark","description":"Operação de teste"}</textarea></label><button class="wd-btn primary" id="runSocial" type="button" style="margin-top:14px">Preparar operação social</button><pre id="socialResult" style="margin-top:12px">Nenhuma operação social.</pre></article>
+<article class="wd-card wide wd-internal">
   <div class="wd-eyebrow">Serviço · content.produce</div><h2>Solicitação de produção</h2>
   <p class="wd-muted">Pedido originado na Terra. A fábrica produz e devolve o resultado à operação solicitante; publicação externa pertence à linha de postagem e exige autorização humana.</p>
   <div class="wd-form-grid">
@@ -55,18 +55,18 @@
 </section>
 
 <section class="wd-grid">
-<article class="wd-card wide"><div class="wd-eyebrow">Operação</div><h2 id="operationId">Nenhuma</h2><span id="operationState" class="wd-badge">AGUARDANDO</span><pre id="lastResult">Nenhuma operação executada.</pre></article>
-<article class="wd-card"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Recibos</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
+<article class="wd-card wide wd-internal"><div class="wd-eyebrow">Operação</div><h2 id="operationId">Nenhuma</h2><span id="operationState" class="wd-badge">AGUARDANDO</span><pre id="lastResult">Nenhuma operação executada.</pre></article>
+<article class="wd-card wd-internal"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Recibos</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
 </section>
 
-<section class="wd-card full">
+<section class="wd-card full wd-internal">
 <div class="wd-eyebrow">Segurança</div><h2>🚨 Parada de emergência</h2>
 <p class="wd-muted">A parada é controlada por ID da operação. Qualquer setor que acione o mecanismo impede a continuação nos checkpoints cooperativos do núcleo e da fábrica.</p>
 <div class="wd-actions"><button class="wd-btn danger" id="triggerStop" type="button">Acionar parada na operação atual</button><button class="wd-btn" id="releaseStop" type="button">Liberar operação atual</button></div>
 <pre id="emergencyResult">Nenhuma parada.</pre>
 </section>
 
-<section class="wd-card full">
+<section class="wd-card full wd-internal">
 <div class="wd-eyebrow">Registro</div><h2>Biblioteca e auditoria</h2><pre id="auditResult">Aguardando operação.</pre>
 </section>
 </main></div>
