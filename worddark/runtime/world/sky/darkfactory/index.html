@@ -10,12 +10,12 @@
     <a href="../../../">◈ WordDark</a><a href="../">☁ Céu</a><a class="active" href="./">⚙ Dark Factory</a>
     <a href="../../earth/">◉ Terra</a><a href="../../core/">◎ Operações</a>
   </nav>
-  <div class="wd-footer">EMPRESA · PRODUÇÃO DE CONTEÚDO<br>Operation Engine conectado</div>
+  <div class="wd-footer">EMPRESA · PRODUÇÃO DE CONTEÚDO<br>Motor de Operações conectado</div>
 </aside>
 <main class="wd-main">
 <div class="wd-top">
-  <div><div class="wd-eyebrow">Céu · serviço compartilhado</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade e decide o destino. O circuito abaixo usa a infraestrutura operacional do WordDark para transportar, executar, validar e registrar a produção.</p></div>
-  <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><button class="wd-btn danger" id="emergencyButton" type="button">🚨 Socorro Deus</button></div>
+  <div><div class="wd-eyebrow">Céu · empresa de execução</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade e decide o destino. O circuito abaixo usa a infraestrutura operacional do WordDark para transportar, executar, validar e registrar a produção.</p></div>
+  <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><button class="wd-btn danger" id="emergencyButton" type="button">🚨 Parada de emergência</button></div>
 </div>
 
 <section class="wd-card full">
@@ -24,7 +24,7 @@
 </section>
 
 <section class="wd-grid">
-<article class="wd-card full"><div class="wd-eyebrow">Serviço · social.operation</div><h2>Operação para rede social</h2><p class="wd-muted">A fábrica aceita a intenção da operação e prepara o pedido. OAuth, tokens e comunicação com a plataforma permanecem exclusivamente na Central de Conexões.</p><div class="wd-form-grid"><label class="wd-field">Rede<input class="wd-input" id="socialNetwork" value="YOUTUBE" placeholder="YOUTUBE"></label><label class="wd-field">Ação<input class="wd-input" id="socialAction" value="CONTENT_PUBLISH" placeholder="CONTENT_PUBLISH"></label><label class="wd-field">Conta externa<input class="wd-input" id="socialAccount" placeholder="ID da conta conectada"></label></div><label class="wd-field" style="margin-top:12px">Payload da operação<textarea class="wd-textarea" id="socialPayload">{"title":"Teste WordDark","description":"Operação de teste"}</textarea></label><button class="wd-btn primary" id="runSocial" type="button" style="margin-top:14px">Preparar operação social</button><pre id="socialResult" style="margin-top:12px">Nenhuma operação social.</pre></article>
+<article class="wd-card full"><div class="wd-eyebrow">Serviço · social.operation</div><h2>Operação para rede social</h2><p class="wd-muted">A fábrica aceita a intenção da operação e prepara o pedido. OAuth, tokens e comunicação com a plataforma permanecem exclusivamente na Central de Conexões.</p><div class="wd-form-grid"><label class="wd-field">Rede<input class="wd-input" id="socialNetwork" value="YOUTUBE" placeholder="YOUTUBE"></label><label class="wd-field">Ação<input class="wd-input" id="socialAction" value="CONTENT_PUBLISH" placeholder="CONTENT_PUBLISH"></label><label class="wd-field">Conta externa<input class="wd-input" id="socialAccount" placeholder="ID da conta conectada"></label></div><label class="wd-field" style="margin-top:12px">Dados da operação<textarea class="wd-textarea" id="socialPayload">{"title":"Teste WordDark","description":"Operação de teste"}</textarea></label><button class="wd-btn primary" id="runSocial" type="button" style="margin-top:14px">Preparar operação social</button><pre id="socialResult" style="margin-top:12px">Nenhuma operação social.</pre></article>
 <article class="wd-card wide">
   <div class="wd-eyebrow">Serviço · content.produce</div><h2>Solicitação de produção</h2>
   <p class="wd-muted">Pedido originado na Terra. A fábrica produz e devolve o resultado à operação solicitante; publicação externa pertence à linha de postagem e exige autorização humana.</p>
@@ -56,12 +56,12 @@
 
 <section class="wd-grid">
 <article class="wd-card wide"><div class="wd-eyebrow">Operação</div><h2 id="operationId">Nenhuma</h2><span id="operationState" class="wd-badge">AGUARDANDO</span><pre id="lastResult">Nenhuma operação executada.</pre></article>
-<article class="wd-card"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Receipts</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
+<article class="wd-card"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Recibos</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
 </section>
 
 <section class="wd-card full">
-<div class="wd-eyebrow">Segurança</div><h2>🚨 Socorro Deus</h2>
-<p class="wd-muted">A parada é global por operationId. Qualquer setor que acione o mecanismo impede a continuação nos checkpoints cooperativos do núcleo e da fábrica.</p>
+<div class="wd-eyebrow">Segurança</div><h2>🚨 Parada de emergência</h2>
+<p class="wd-muted">A parada é controlada por ID da operação. Qualquer setor que acione o mecanismo impede a continuação nos checkpoints cooperativos do núcleo e da fábrica.</p>
 <div class="wd-actions"><button class="wd-btn danger" id="triggerStop" type="button">Acionar parada na operação atual</button><button class="wd-btn" id="releaseStop" type="button">Liberar operação atual</button></div>
 <pre id="emergencyResult">Nenhuma parada.</pre>
 </section>
@@ -212,7 +212,7 @@
   $("emergencyButton").addEventListener("click",()=> $("triggerStop").click());
   $("releaseStop").addEventListener("click",()=>{
     if(!activeOperationId){$("emergencyResult").textContent=JSON.stringify({success:false,reason:"NO_ACTIVE_OPERATION"},null,2);return;}
-    $("emergencyResult").textContent=JSON.stringify(emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Liberação manual de teste"}),null,2);
+    $("emergencyResult").textContent=JSON.stringify(emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Liberação manual da operação"}),null,2);
   });
 })();
 </script>
