@@ -170,6 +170,7 @@ body.wd-body{min-height:100vh}
 <script src="world/core/production-planner.js"></script>
 <script src="world/core/production-engine.js"></script>
 <script src="world/core/operation-center.js"></script>
+<script src="world/core/social-analytics.js"></script>
 
 <script>
 (()=> {
@@ -181,15 +182,26 @@ body.wd-body{min-height:100vh}
   function render(){
     const accounts=readConnections();
     const connected=accounts.filter(x=>x.status==="CONNECTED");
+    const analytics=window.WordDarkSocialAnalytics?new window.WordDarkSocialAnalytics():null;
+    const overview=analytics?.overview(accounts)||{};
     connectView.classList.toggle("active",connected.length===0);
     homeView.classList.toggle("active",connected.length>0);
     newRequest.style.display=connected.length?"block":"none";
     document.getElementById("statAccounts").textContent=connected.length;
+    document.getElementById("metricViews").textContent=overview.views?Number(overview.views).toLocaleString("pt-BR"):"—";
+    document.getElementById("metricUnique").textContent=overview.uniqueViews?Number(overview.uniqueViews).toLocaleString("pt-BR"):"—";
+    document.getElementById("metricLikes").textContent=overview.mostLiked?.title||"—";
+    document.getElementById("metricLikes").title=overview.mostLiked?.likes?Number(overview.mostLiked.likes).toLocaleString("pt-BR")+" curtidas":"";
+    document.getElementById("metricComments").textContent=overview.mostCommented?.title||"—";
+    document.getElementById("metricComments").title=overview.mostCommented?.comments?Number(overview.mostCommented.comments).toLocaleString("pt-BR")+" comentários":"";
+    document.getElementById("metricTopVideo").textContent=overview.mostViewed?.title||"—";
+    document.getElementById("metricTopVideoNote").textContent=overview.mostViewed?.views?Number(overview.mostViewed.views).toLocaleString("pt-BR")+" visualizações · "+(overview.mostViewed.accountName||""):"Ainda sem dados";
+    document.getElementById("metricBestAccount").textContent=overview.bestAccount?.displayName||overview.bestAccount?.accountId||"—";
     document.getElementById("accountList").innerHTML=connected.length?connected.map(x=>
       '<div class="wd-account-row"><div class="wd-avatar">'+(x.providerId==="YOUTUBE"?"▶":x.providerId==="INSTAGRAM"?"◎":x.providerId==="TIKTOK"?"♪":"f")+'</div><div class="wd-row-main"><strong>'+escapeHtml(x.displayName||x.accountId||x.providerId)+'</strong><small>'+escapeHtml(x.providerId)+' · conectado</small></div><span class="wd-ok">● Ativa</span></div>'
     ).join(""):'<div class="wd-empty">Conecte uma conta para começar.</div>';
-    document.getElementById("metricBestAccount").textContent=connected[0]?.displayName||"—";
-    document.getElementById("metricViewsNote").textContent=connected.length?"Dados serão preenchidos pela sincronização da rede":"Aguardando contas";
+    
+    document.getElementById("metricViewsNote").textContent=overview.updatedAt?"Atualizado "+new Date(overview.updatedAt).toLocaleString("pt-BR"):(connected.length?"Sincronizando dados das redes":"Aguardando contas");
   }
 
   document.getElementById("accountsTop").onclick=()=>{location.href="world/core/connections/"};
