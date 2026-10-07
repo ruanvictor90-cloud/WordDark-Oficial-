@@ -124,21 +124,22 @@
     record:()=>{}
   });
   const accountManager=new WordDarkAccountManager({security});
+  const coordinator=new WordDarkOperationCoordinator({engine,road,companyRouter:companyWorld.router});
   const runtime=WordDarkWorldRuntime.compose({
     accountManager,
     security,
     environmentGuard:guard,
     road,
     registry,
-    operationEngine:engine
+    operationEngine:engine,
+    communication,
+    operationCoordinator:coordinator
   });
   runtime.assertReady();
 
   let activeOperationId=null;
   const $=id=>document.getElementById(id);
-  const connectionRegistry=new ExternalConnectionRegistry();
   const accountBinding=new AccountOperationBinding(connectionRegistry);
-  const coordinator=new WordDarkOperationCoordinator({engine,road,companyRouter:companyWorld.router});
   function refreshAccounts(){const network=$("productionNetwork").value;const accounts=connectionRegistry.list().filter(c=>c.status==="CONNECTED"&&c.providerId===network);$("productionAccount").innerHTML="<option value=\"\">Nenhuma conta selecionada</option>"+accounts.map(c=>"<option value=\""+c.accountId+"\">"+(c.displayName||c.accountId)+"</option>").join("");}
   $("productionNetwork").addEventListener("change",refreshAccounts);refreshAccounts();
   $("serviceCount").textContent=serviceRegistry.list().length;
