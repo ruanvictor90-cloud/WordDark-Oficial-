@@ -77,15 +77,18 @@
 <script src="../../core/operation-engine.js"></script><script src="../../core/capability-catalog.js"></script><script src="../../core/company-registry.js"></script><script src="../../core/company-registry-seed.js"></script><script src="../../core/company-intent-router.js"></script><script src="../../core/world-company-bootstrap.js"></script><script src="../../core/operation-coordinator.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
 <script src="../../contracts/emergency-stop.js?v=20260930-2"></script><script src="../../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../../security/account-manager.js"></script><script src="../../core/world-runtime.js"></script>
 <script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script>
-<script src="core/social-factory.js"></script><script src="core/account-operation.js"></script><script src="../connections/connection-registry.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="core/content-factory.js"></script><script src="core/content-reentry-adapter.js"></script>
+<script src="core/social-factory.js"></script><script src="core/account-operation.js"></script><script src="../connections/connection-registry.js"></script><script src="../connections/connection-contract.js"></script><script src="../connections/connection-gateway.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="core/content-factory.js"></script><script src="core/content-reentry-adapter.js"></script>
 <script src="core/request.js"></script><script src="core/service-registry.js"></script><script src="core/production-validator.js"></script><script src="core/production-pipeline.js"></script><script src="core/content-publication-executor.js"></script><script src="core/factory.js"></script><script src="core/operation-bridge.js"></script>
 <script>
 (() => {
   const emergencyStop=new WordDarkEmergencyStopManager();
+  const connectionRegistry=new ExternalConnectionRegistry();
+  const connectionGateway=new ExternalConnectionGateway({registry:connectionRegistry});
+  window.WordDarkConnectionBridge=connectionGateway;
   const companyWorld=bootstrapWordDarkCompanies({registry:new WordDarkCompanyRegistry()});
   const serviceRegistry=new DarkFactoryServiceRegistry();
   const contentExecutor=new DarkFactoryContentExecutor();
-  const socialFactory=new SocialFactory({connectionBridge:window.WordDarkConnectionBridge||null});
+  const socialFactory=new SocialFactory({connectionBridge:connectionGateway});
   const contentModules=new ContentModuleRegistry();
   ["INGEST","SCRIPT","ASSET","EDIT","AUDIO","TIMELINE","TRANSFORM","RENDER","VALIDATE","PACKAGE"].forEach(moduleId=>contentModules.register(moduleId,async context=>({success:true,status:"MODULE_COMPLETED",module:moduleId,contentId:context.operation.contentId,executedAt:new Date().toISOString()})));
   const contentFactory=new ContentFactory({executor:contentExecutor,moduleRegistry:contentModules});
