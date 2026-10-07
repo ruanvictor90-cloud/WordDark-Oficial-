@@ -71,6 +71,8 @@ export class YouTubeConnector extends SocialNetworkConnector{
     const response=await fetch("https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true",{headers:{Authorization:"Bearer "+accessToken}});
     const data=await response.json();if(!response.ok)throw new Error(data?.error?.message||"YOUTUBE_CHANNEL_REQUEST_FAILED");
     const item=data?.items?.[0];if(!item)throw new Error("YOUTUBE_CHANNEL_NOT_FOUND");
-    return {channelId:item.id,displayName:item.snippet?.title||"YouTube",description:item.snippet?.description||"",customUrl:item.snippet?.customUrl||"",thumbnail:item.snippet?.thumbnails?.high?.url||item.snippet?.thumbnails?.default?.url||"",statistics:item.statistics||{},url:"https://www.youtube.com/channel/"+item.id};
+    const channel={channelId:item.id,displayName:item.snippet?.title||"YouTube",description:item.snippet?.description||"",customUrl:item.snippet?.customUrl||"",thumbnail:item.snippet?.thumbnails?.high?.url||item.snippet?.thumbnails?.default?.url||"",statistics:item.statistics||{},url:"https://www.youtube.com/channel/"+item.id};
+    try{if(window.WordDarkSocialAnalytics){new window.WordDarkSocialAnalytics().save({providerId:"YOUTUBE",accountId:item.id,metrics:{views:Number(item.statistics?.viewCount||0),uniqueViews:0,subscribers:Number(item.statistics?.subscriberCount||0)},topContent:[]});}}catch(error){console.warn("WordDark analytics snapshot não salvo:",error);}
+    return channel;
   }
 }
