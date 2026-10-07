@@ -11,6 +11,7 @@
       this.storage=storage||((typeof localStorage!=="undefined")?localStorage:null);
       this.maxRecords=maxRecords;
       this.records=[];
+      this.centralPromoter=centralPromoter||null;
       this._load();
     }
 
