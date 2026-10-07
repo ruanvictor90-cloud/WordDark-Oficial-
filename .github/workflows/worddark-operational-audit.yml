@@ -22,3 +22,7 @@ jobs:
         run: node worddark/runtime/world/core/connections/connection-gateway.test.js
       - name: End-to-end generic client
         run: node worddark/runtime/world/core/operation-001.integration.test.js
+      - name: Hierarchical library audit
+        run: node worddark/runtime/world/library/hierarchical-library.test.js
+      - name: Full npm suite
+        run: npm test
