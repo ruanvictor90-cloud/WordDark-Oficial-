@@ -120,23 +120,23 @@ const center=new Center({
 const result=center.submit({
   productionId:"OP-001",
   requesterId:"OP-001-RUAN",
-  originId:"world/earth/official",
-  clientId:"WORDDARK-OFFICIAL",
-  goal:"Produzir o primeiro conteúdo oficial do WordDark",
-  resourceId:"WORDDARK-CONTENT-001",
+  originId:"external/client-001",
+  clientId:"EXTERNAL-CLIENT-001",
+  goal:"Produzir conteúdo solicitado por um cliente externo",
+  resourceId:"EXTERNAL-CONTENT-001",
   requirements:{
     content:true,
-    contentId:"WORDDARK-CONTENT-001",
+    contentId:"EXTERNAL-CONTENT-001",
     format:"VIDEO"
   },
   options:{
     environment:"TEST",
     parameters:{
       content:true,
-      contentId:"WORDDARK-CONTENT-001",
-      title:"O que é o WordDark?",
+      contentId:"EXTERNAL-CONTENT-001",
+      title:"Conteúdo solicitado pelo cliente",
       type:"VIDEO",
-      task:"Produzir o primeiro conteúdo oficial do WordDark"
+      task:"Produzir conteúdo solicitado por um cliente externo"
     }
   }
 });
@@ -149,4 +149,7 @@ assert.ok(road.listDeliveries().length>=2,"A Rodovia deveria transportar ida e r
 assert.strictEqual(communication.getStatus().pending,0,"Não pode restar pedido pendente.");
 assert.ok(opRegistry.list().length>0,"A operação deveria ficar registrada.");
 assert.ok(centralLibrary.count()>0,"O circuito deveria registrar memória na biblioteca central.");
-console.log("OP-001 integration: ok");
+assert.strictEqual(result.operation.clientId,"EXTERNAL-CLIENT-001");
+assert.strictEqual(result.operation.originId,"external/client-001");
+assert.strictEqual(result.operation.destinationId,"WD-COMP-DARK-FACTORY");
+console.log("OP-001 external-client integration: ok");
