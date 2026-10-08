@@ -30,55 +30,29 @@ A entrada é simples. A arquitetura interna é ampla.
 
 Nenhum setor deve exigir que uma operação inteira seja repetida quando apenas uma capacidade precisa ser corrigida.
 
-Uma operação pode:
-
-- entrar;
-- ser interpretada;
-- ser dividida em capacidades;
-- executar somente as capacidades necessárias;
-- registrar cada etapa;
-- retornar ao ponto correto;
-- produzir resultado.
+Uma operação pode entrar, ser interpretada, ser dividida em capacidades, executar somente as capacidades necessárias, registrar cada etapa, retornar ao ponto correto e produzir resultado.
 
 ## Regra de informação
 
-Toda informação recebida deve possuir:
-
-- origem;
-- destino;
-- tipo;
-- finalidade;
-- contexto;
-- estado;
-- timestamp;
-- referência da operação, quando houver;
-- política de acesso.
+Toda informação recebida deve possuir origem, destino, tipo, finalidade, contexto, estado, timestamp, referência da operação quando houver e política de acesso.
 
 O Mundo não deve aceitar informação sem saber **de onde veio, para que serve e quem pode usá-la**.
 
 ## Regra de conexão
 
-Uma conexão não é apenas uma autorização.
-
-Ela representa:
-
-**entidade externa → identidade → autorização → capacidades → informação → operação → resultado → registro**
+Uma conexão representa: **entidade externa → identidade → autorização → capacidades → informação → operação → resultado → registro**.
 
 Segredos, tokens e credenciais pertencem à camada protegida de conexão. Setores consumidores recebem apenas a capacidade necessária.
 
 ## Regra de conhecimento
 
-O Mundo aprende por registros validados:
-
-**evento → resultado → avaliação → correção → validação → conhecimento**
+**evento → resultado → avaliação → correção → validação → conhecimento**.
 
 Conhecimento não substitui a execução; ele melhora decisões futuras.
 
 ## Regra de interface
 
-A interface deve mostrar apenas a responsabilidade do nível atual.
-
-A complexidade operacional permanece no núcleo.
+A interface mostra a responsabilidade do nível atual. A complexidade operacional permanece no núcleo.
 
 ## Estado
 
