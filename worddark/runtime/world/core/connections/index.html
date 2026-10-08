@@ -9,7 +9,8 @@
 <section class="wd-grid">
 <article class="wd-card full"><div class="wd-eyebrow">Próxima integração</div><h2>YouTube / Google</h2><p class="wd-muted">O ambiente Google Cloud já foi criado e o OAuth Client existe. O próximo passo é executar a autorização real e registrar a conexão. Nenhuma conta é considerada conectada antes de uma autorização confirmada.</p>
 <div class="wd-flow"><span>DESCOBERTA</span><i class="wd-arrow">→</i><span>AUTORIZAÇÃO</span><i class="wd-arrow">→</i><span>CONEXÃO ATIVA</span><i class="wd-arrow">→</i><span>CAPACIDADES</span></div>
-<div class="wd-actions" style="margin-top:16px"><a class="wd-btn primary" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Abrir Google Cloud</a><span class="wd-badge warn">AGUARDANDO AUTORIZAÇÃO</span></div></article>
+<div class="wd-actions" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><a class="wd-btn primary" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Abrir Google Cloud</a><button id="wd-connect-google" class="wd-btn" type="button">Conectar Google / YouTube</button><span id="wd-connection-status" class="wd-badge warn">AGUARDANDO AUTORIZAÇÃO</span></div>
+<div style="margin-top:14px"><label for="wd-client-id" class="wd-eyebrow" style="display:block;margin-bottom:7px">Client ID público</label><input id="wd-client-id" type="text" autocomplete="off" placeholder="Cole aqui o Client ID que termina em .apps.googleusercontent.com" style="width:100%;max-width:760px;padding:12px 14px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:rgba(255,255,255,.04);color:inherit"><p id="wd-connection-note" class="wd-muted" style="margin-top:8px">O Client ID é público. Nunca coloque o Client Secret aqui.</p></div></article>
 <article class="wd-card"><div class="wd-eyebrow">Regra</div><h2>Credencial fica isolada.</h2><p class="wd-muted">Empresas não recebem segredo bruto. Recebem uma capacidade autorizada.</p></article>
 <article class="wd-card"><div class="wd-eyebrow">Receber</div><h2>Informação entra com origem.</h2><p class="wd-muted">Toda entrada externa precisa de origem, finalidade e política de acesso.</p></article>
 <article class="wd-card"><div class="wd-eyebrow">Enviar</div><h2>Resultado sai com recibo.</h2><p class="wd-muted">Toda saída externa deve retornar evidência de entrega quando o provedor oferecer.</p></article>
@@ -19,46 +20,50 @@
 <div class="wd-entry-card"><div class="wd-card-icon">3</div><strong>Registro</strong><small>Conexão recebe estado e identificador interno.</small></div>
 <div class="wd-entry-card"><div class="wd-card-icon">4</div><strong>Capacidade</strong><small>Dark Channels solicita publicar, ler ou receber eventos.</small></div>
 </div></article>
-</section></div></main></div><script src="../../ui/worddark-ui.js"></script><script>
+</section></div></main></div><script src="./connection-config.js"></script><script src="../../ui/worddark-ui.js"></script><script>
 (function(){
   const button=document.getElementById("wd-connect-google");
   const status=document.getElementById("wd-connection-status");
   const note=document.getElementById("wd-connection-note");
+  const input=document.getElementById("wd-client-id");
   const cfg=window.WORDDARK_CONNECTION_CONFIG||{};
-  if(!button)return;
+  const saved=localStorage.getItem("wd.google.clientId")||cfg.googleClientId||"";
+  input.value=saved;
   button.addEventListener("click",function(){
-    if(!cfg.googleClientId){
-      status.textContent="CLIENT ID NÃO CONFIGURADO";
-      note.textContent="Próximo passo: configurar o Client ID público do OAuth. Não envie nem publique o Client Secret.";
+    const clientId=input.value.trim();
+    if(!clientId || !clientId.endsWith(".apps.googleusercontent.com")){
+      status.textContent="CLIENT ID INVÁLIDO";
+      note.textContent="Cole o Client ID público do Google Cloud. Ele deve terminar em .apps.googleusercontent.com.";
       return;
     }
+    localStorage.setItem("wd.google.clientId",clientId);
     status.textContent="PREPARANDO AUTORIZAÇÃO";
+    note.textContent="Abrindo a autorização do Google. O WordDark não armazena Client Secret nesta página.";
     if(!window.google?.accounts?.oauth2){
-      status.textContent="CARREGANDO GOOGLE";
       const s=document.createElement("script");
       s.src="https://accounts.google.com/gsi/client";
-      s.onload=()=>start();
-      s.onerror=()=>{status.textContent="FALHA AO CARREGAR GOOGLE";};
+      s.onload=()=>start(clientId);
+      s.onerror=()=>{status.textContent="FALHA AO CARREGAR GOOGLE";note.textContent="Verifique sua conexão e tente novamente.";};
       document.head.appendChild(s);
-    }else start();
+    }else start(clientId);
   });
-  function start(){
+  function start(clientId){
     const client=google.accounts.oauth2.initCodeClient({
-      client_id:cfg.googleClientId,
+      client_id:clientId,
       scope:cfg.scopes.join(" "),
       ux_mode:"popup",
       callback:function(response){
-        if(response.error){status.textContent="AUTORIZAÇÃO NÃO CONCLUÍDA";note.textContent=response.error_description||response.error;return;}
-        status.textContent="CÓDIGO RECEBIDO — AGUARDANDO MUNDO";
-        note.textContent="O Google devolveu o código. A próxima camada do WordDark deve enviá-lo ao endpoint seguro de autorização para validação e troca por tokens. O código não é armazenado nesta página.";
-        if(cfg.codeEndpoint){
-          fetch(cfg.codeEndpoint,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded","X-Requested-With":"XmlHttpRequest"},body:"code="+encodeURIComponent(response.code)})
-            .then(r=>r.ok?r.json():Promise.reject(new Error("HTTP_"+r.status)))
-            .then(data=>{status.textContent=data.status||"CONEXÃO RECEBIDA";note.textContent=data.message||"Autorização recebida pelo Mundo.";})
-            .catch(()=>{status.textContent="CÓDIGO RECEBIDO — ENDPOINT PENDENTE";});
+        if(response.error){
+          status.textContent="AUTORIZAÇÃO NÃO CONCLUÍDA";
+          note.textContent=response.error_description||response.error;
+          return;
         }
+        status.textContent="CÓDIGO RECEBIDO — MUNDO AGUARDANDO";
+        note.textContent="O Google autorizou e devolveu um código. A troca segura desse código por tokens ainda depende do endpoint de backend do WordDark; nenhum token é gravado nesta página.";
       },
-      error_callback:function(e){status.textContent=e?.type==="popup_closed"?"AUTORIZAÇÃO CANCELADA":"FALHA NA AUTORIZAÇÃO";}
+      error_callback:function(e){
+        status.textContent=e?.type==="popup_closed"?"AUTORIZAÇÃO CANCELADA":"FALHA NA AUTORIZAÇÃO";
+      }
     });
     client.requestCode();
   }
