@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang="pt-BR">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WordDark — Dark Channels</title><link rel="stylesheet" href="../../ui/worddark-ui.css"></head>
+<title>WordDark — Dark Channels</title><link rel="stylesheet" href="../../ui/worddark-ui.css">
+<style>
+.dc-status{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.dc-stat{padding:18px;border:1px solid var(--wd-line);border-radius:16px;background:var(--wd-panel)}.dc-stat strong{display:block;font-size:1.8rem;margin-top:5px}.dc-list{display:grid;gap:10px}.dc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px;border:1px solid var(--wd-line);border-radius:14px;background:var(--wd-panel)}.dc-row small{display:block;color:var(--wd-muted);margin-top:4px}.dc-dot{font-size:.75rem}.dc-green{color:#54d18a}.dc-yellow{color:#e7bd55}@media(max-width:760px){.dc-status{grid-template-columns:repeat(2,1fr)}.dc-row{align-items:flex-start;flex-direction:column}}
+</style></head>
 <body class="wd-body">
 <button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false" aria-label="Abrir menu">☰</button>
 <div class="wd-menu-backdrop" data-wd-menu-close></div>
@@ -10,28 +13,41 @@
 <nav class="wd-nav">
 <a href="../../../">◈ Mundo</a><a href="../">☁ Céu</a><a class="active" href="./">◉ Dark Channels</a>
 <a href="../marketing/">📣 Marketing</a><a href="../darkfactory/">⚙ Dark Factory</a>
-<a href="../../core/connections/">🔗 Conexões</a>
-</nav><div class="wd-footer">EMPRESA · GESTÃO DE CANAIS DIGITAIS</div>
-</aside>
+<a href="../../core/operations/">↻ Operações</a><a href="../../core/connections/">🔗 Conexões</a>
+</nav><div class="wd-footer">EMPRESA · GESTÃO DE CANAIS DIGITAIS</div></aside>
 <main class="wd-main"><div class="wd-surface">
 <div class="wd-top"><div><div class="wd-eyebrow">Céu · empresa operacional</div>
 <h1 class="wd-title">Dark Channels</h1>
-<p class="wd-sub">Empresa responsável por transformar necessidades de canais em operações organizadas: estratégia, produção, revisão, publicação e acompanhamento.</p></div>
-<div class="wd-actions"><span class="wd-badge ok">● OPERAÇÃO INTERNA</span><span class="wd-badge warn">CONEXÕES EXTERNAS: PENDENTES</span></div></div>
-<section class="wd-grid">
-<article class="wd-card wide"><div class="wd-eyebrow">Responsabilidade</div><h2>Gerir canais, não apenas publicar</h2><p class="wd-muted">Cada canal possui identidade, objetivos, calendário, conteúdo, contas, registros e resultados. A empresa coordena essas partes sem assumir o controle do Mundo.</p></article>
-<article class="wd-card"><div class="wd-eyebrow">Entrada</div><h2>Pedido</h2><p class="wd-muted">Recebe uma necessidade de Terra ou uma operação encaminhada pela Central.</p></article>
-<article class="wd-card"><div class="wd-eyebrow">Estratégia</div><h2>Marketing</h2><p class="wd-muted">Define posicionamento, formato, público, identidade e oportunidades.</p></article>
-<article class="wd-card"><div class="wd-eyebrow">Produção</div><h2>Dark Factory</h2><p class="wd-muted">Produz por módulos. Uma correção pode retornar somente ao módulo necessário.</p></article>
-<article class="wd-card"><div class="wd-eyebrow">Saída</div><h2>Publicação</h2><p class="wd-muted">Prepara e entrega o conteúdo ao destino externo por meio da Central de Conexões.</p></article>
-<article class="wd-card full"><div class="wd-eyebrow">Capacidades operacionais</div>
-<div class="wd-entry-grid">
-<a class="wd-entry-card" href="../marketing/"><div class="wd-card-icon">📣</div><strong>Estratégia</strong><small>Identidade, tendências, campanhas e crescimento.</small></a>
-<a class="wd-entry-card" href="../darkfactory/"><div class="wd-card-icon">⚙</div><strong>Produção</strong><small>Script, áudio, imagem, vídeo, edição e validação.</small></a>
-<a class="wd-entry-card" href="../../core/operations/"><div class="wd-card-icon">↻</div><strong>Operações</strong><small>Pedidos, estados, reentrada e resultados.</small></a>
-<a class="wd-entry-card" href="../../core/connections/"><div class="wd-card-icon">🔗</div><strong>Conexões</strong><small>Contas externas e autorização controlada.</small></a>
-</div></article>
-<article class="wd-card full"><div class="wd-eyebrow">Estado atual</div><div class="wd-flow"><span>ESTRUTURA</span><i class="wd-arrow">→</i><span>OPERACIONAL</span><i class="wd-arrow">→</i><span>AGUARDANDO CONEXÕES</span><i class="wd-arrow">→</i><span>OPERAÇÃO EXTERNA</span></div><p class="wd-muted">O próximo passo é conectar uma conta real. Até lá, nenhuma publicação externa é simulada como concluída.</p></article>
-</section></div></main></div>
-<script src="../../ui/worddark-ui.js"></script>
-</body></html>
+<p class="wd-sub">A empresa que transforma necessidades de canais em operações de conteúdo, crescimento e publicação.</p></div>
+<div class="wd-actions"><span class="wd-badge ok">● ESTRUTURA OPERACIONAL</span><span class="wd-badge warn">CONEXÕES EXTERNAS: PENDENTES</span></div></div>
+
+<section class="wd-section"><div class="wd-eyebrow">Painel da empresa</div>
+<div class="dc-status">
+<div class="dc-stat"><small>Canais</small><strong>0</strong><span class="wd-muted">aguardando cadastro</span></div>
+<div class="dc-stat"><small>Operações</small><strong>0</strong><span class="wd-muted">aguardando pedidos</span></div>
+<div class="dc-stat"><small>Produção</small><strong>0</strong><span class="wd-muted">fila vazia</span></div>
+<div class="dc-stat"><small>Conexões</small><strong>0</strong><span class="wd-muted">nenhuma autorizada</span></div>
+</div></section>
+
+<section class="wd-section"><div class="wd-section-head"><div><div class="wd-eyebrow">Empresa</div><h2>O que já está pronto</h2></div></div>
+<div class="wd-grid">
+<article class="wd-card"><div class="wd-eyebrow">01 · Gestão</div><h2>Canais</h2><p class="wd-muted">A empresa pode organizar identidade, objetivos, calendário, conteúdo e resultados de cada canal.</p></article>
+<article class="wd-card"><div class="wd-eyebrow">02 · Estratégia</div><h2>Marketing</h2><p class="wd-muted">Analisa posicionamento, tendências, formatos, campanhas e oportunidades.</p></article>
+<article class="wd-card"><div class="wd-eyebrow">03 · Produção</div><h2>Dark Factory</h2><p class="wd-muted">Executa conteúdo em módulos independentes, permitindo correção localizada.</p></article>
+<article class="wd-card"><div class="wd-eyebrow">04 · Entrega</div><h2>Publicação</h2><p class="wd-muted">Prepara o resultado para uma plataforma externa sem fingir que foi publicado antes da conexão real.</p></article>
+</div></section>
+
+<section class="wd-section"><div class="wd-section-head"><div><div class="wd-eyebrow">Fila operacional</div><h2>Pronta para receber trabalho</h2></div></div>
+<div class="dc-list">
+<div class="dc-row"><div><strong>Receber pedido</strong><small>Terra ou Central → Dark Channels</small></div><span class="dc-dot dc-green">● DISPONÍVEL</span></div>
+<div class="dc-row"><div><strong>Planejar</strong><small>Marketing define estratégia e rota de produção</small></div><span class="dc-dot dc-green">● DISPONÍVEL</span></div>
+<div class="dc-row"><div><strong>Produzir</strong><small>Dark Factory executa os módulos necessários</small></div><span class="dc-dot dc-green">● DISPONÍVEL</span></div>
+<div class="dc-row"><div><strong>Publicar</strong><small>Depende de uma conexão externa autorizada</small></div><span class="dc-dot dc-yellow">● AGUARDANDO CONEXÃO</span></div>
+</div></section>
+
+<section class="wd-section"><div class="wd-card full"><div class="wd-eyebrow">Primeiro circuito real</div>
+<div class="wd-flow"><span>PEDIDO</span><i class="wd-arrow">→</i><span>DARK CHANNELS</span><i class="wd-arrow">→</i><span>MARKETING</span><i class="wd-arrow">→</i><span>DARK FACTORY</span><i class="wd-arrow">→</i><span>PUBLICAÇÃO</span><i class="wd-arrow">→</i><span>CONEXÃO</span></div>
+<div class="wd-actions" style="margin-top:18px"><a class="wd-btn primary" href="../../core/connections/">Abrir Central de Conexões</a><a class="wd-btn" href="../../core/operations/">Ver Operações</a></div></div></section>
+
+<section class="wd-section"><div class="wd-card"><div class="wd-eyebrow">Regra</div><h2>Nada é marcado como concluído sem evidência.</h2><p class="wd-muted">Até a primeira conexão externa funcionar, a empresa permanece operacional internamente. Quando uma plataforma for autorizada, ela passa a receber somente as capacidades necessárias.</p></div></section>
+</div></main></div><script src="../../ui/worddark-ui.js"></script></body></html>
