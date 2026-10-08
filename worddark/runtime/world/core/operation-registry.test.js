@@ -23,8 +23,7 @@ assert.ok(registry.get("OP-TEST-001"));
 assert.strictEqual(registry.getEvents("OP-TEST-001").length, 1);
 assert.ok(localLibrary.get("OPERATION-OP-TEST-001"));
 assert.ok(localLibrary.get(registry.getEvents("OP-TEST-001")[0].eventId));
-const centralEventIndex = centralLibrary.list().find(record => record.detailRecordId === registry.getEvents("OP-TEST-001")[0].eventId);
-assert.ok(centralEventIndex);
+const centralEventIndex = centralLibrary.list().find(record => record.detailRecordId === registry.getEvents("OP-TEST-001")[0].eventId);\nassert.ok(centralEventIndex);
 
 registry.archiveOperation(operation);
 assert.strictEqual(centralLibrary.count(), 2);
