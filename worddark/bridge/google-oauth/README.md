@@ -1,25 +1,29 @@
-# WordDark — Google OAuth Bridge
+# WordDark — Google / YouTube OAuth Bridge
 
-Backend mínimo para completar a primeira conexão real Google/YouTube.
+Primeiro backend real da Central de Conexões.
 
-## Não publicar segredos
+## O que ele já faz
 
-Configure por variável de ambiente:
+- recebe o authorization code do Google;
+- troca o código por tokens no servidor;
+- consulta o canal YouTube autenticado;
+- devolve somente dados públicos/operacionais do canal;
+- nunca devolve access_token ou refresh_token ao navegador;
+- rejeita origens diferentes da origem autorizada.
+
+## Ainda pendente antes de produção
+
+A persistência segura da conexão ainda não está ativa. Os tokens existem somente durante a requisição e não são gravados.
+
+A próxima camada deve usar armazenamento de segredos/estado apropriado (por exemplo, Secret Manager + banco seguro) e registrar a conexão no registro central.
+
+## Deploy sugerido
+
+Cloud Run é o alvo do bridge. O GitHub Pages continua sendo somente a interface pública.
+
+Variáveis:
 - GOOGLE_CLIENT_ID
 - GOOGLE_CLIENT_SECRET
 - GOOGLE_REDIRECT_URI
 - WORDDARK_ALLOWED_ORIGIN
 
-O servidor nunca devolve access_token ou refresh_token ao navegador.
-
-## Endpoints
-- GET /health
-- POST /oauth/google/code
-
-## Estado atual
-
-O bridge está preparado para receber o código OAuth. A persistência segura dos tokens e o registro definitivo da conexão ainda precisam ser ligados ao armazenamento de segredos/estado escolhido para produção.
-
-## Deploy
-
-Pode ser executado em Cloud Run ou outro backend HTTPS seguro. Não deve ser hospedado como arquivo estático do GitHub Pages.
