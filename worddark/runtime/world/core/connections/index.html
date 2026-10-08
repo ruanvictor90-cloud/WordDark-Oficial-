@@ -13,10 +13,54 @@
 <article class="wd-card"><div class="wd-eyebrow">Regra</div><h2>Credencial fica isolada.</h2><p class="wd-muted">Empresas não recebem segredo bruto. Recebem uma capacidade autorizada.</p></article>
 <article class="wd-card"><div class="wd-eyebrow">Receber</div><h2>Informação entra com origem.</h2><p class="wd-muted">Toda entrada externa precisa de origem, finalidade e política de acesso.</p></article>
 <article class="wd-card"><div class="wd-eyebrow">Enviar</div><h2>Resultado sai com recibo.</h2><p class="wd-muted">Toda saída externa deve retornar evidência de entrega quando o provedor oferecer.</p></article>
-<article class="wd-card full"><div class="wd-eyebrow">Preparação</div><div class="wd-entry-grid">
+<article class="wd-card full"><div class="wd-eyebrow">O que a conexão vai entregar</div><div class="wd-entry-grid"><div class="wd-entry-card"><div class="wd-card-icon">1</div><strong>Identidade</strong><small>Identificação da conta autorizada.</small></div><div class="wd-entry-card"><div class="wd-card-icon">2</div><strong>Canal</strong><small>Dados do canal YouTube autorizado.</small></div><div class="wd-entry-card"><div class="wd-card-icon">3</div><strong>Capacidades</strong><small>Somente leitura, criação, mídia e publicação quando autorizadas.</small></div><div class="wd-entry-card"><div class="wd-card-icon">4</div><strong>Registro</strong><small>Estado da conexão e evidência da autorização.</small></div></div></article><article class="wd-card full"><div class="wd-eyebrow">Preparação</div><div class="wd-entry-grid">
 <div class="wd-entry-card"><div class="wd-card-icon">1</div><strong>Identidade</strong><small>Cliente OAuth e identidade do provedor.</small></div>
 <div class="wd-entry-card"><div class="wd-card-icon">2</div><strong>Autorização</strong><small>Conta de teste autoriza os escopos necessários.</small></div>
 <div class="wd-entry-card"><div class="wd-card-icon">3</div><strong>Registro</strong><small>Conexão recebe estado e identificador interno.</small></div>
 <div class="wd-entry-card"><div class="wd-card-icon">4</div><strong>Capacidade</strong><small>Dark Channels solicita publicar, ler ou receber eventos.</small></div>
 </div></article>
-</section></div></main></div><script src="../../ui/worddark-ui.js"></script></body></html>
+</section></div></main></div><script src="../../ui/worddark-ui.js"></script><script>
+(function(){
+  const button=document.getElementById("wd-connect-google");
+  const status=document.getElementById("wd-connection-status");
+  const note=document.getElementById("wd-connection-note");
+  const cfg=window.WORDDARK_CONNECTION_CONFIG||{};
+  if(!button)return;
+  button.addEventListener("click",function(){
+    if(!cfg.googleClientId){
+      status.textContent="CLIENT ID NÃO CONFIGURADO";
+      note.textContent="Próximo passo: configurar o Client ID público do OAuth. Não envie nem publique o Client Secret.";
+      return;
+    }
+    status.textContent="PREPARANDO AUTORIZAÇÃO";
+    if(!window.google?.accounts?.oauth2){
+      status.textContent="CARREGANDO GOOGLE";
+      const s=document.createElement("script");
+      s.src="https://accounts.google.com/gsi/client";
+      s.onload=()=>start();
+      s.onerror=()=>{status.textContent="FALHA AO CARREGAR GOOGLE";};
+      document.head.appendChild(s);
+    }else start();
+  });
+  function start(){
+    const client=google.accounts.oauth2.initCodeClient({
+      client_id:cfg.googleClientId,
+      scope:cfg.scopes.join(" "),
+      ux_mode:"popup",
+      callback:function(response){
+        if(response.error){status.textContent="AUTORIZAÇÃO NÃO CONCLUÍDA";note.textContent=response.error_description||response.error;return;}
+        status.textContent="CÓDIGO RECEBIDO — AGUARDANDO MUNDO";
+        note.textContent="O Google devolveu o código. A próxima camada do WordDark deve enviá-lo ao endpoint seguro de autorização para validação e troca por tokens. O código não é armazenado nesta página.";
+        if(cfg.codeEndpoint){
+          fetch(cfg.codeEndpoint,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded","X-Requested-With":"XmlHttpRequest"},body:"code="+encodeURIComponent(response.code)})
+            .then(r=>r.ok?r.json():Promise.reject(new Error("HTTP_"+r.status)))
+            .then(data=>{status.textContent=data.status||"CONEXÃO RECEBIDA";note.textContent=data.message||"Autorização recebida pelo Mundo.";})
+            .catch(()=>{status.textContent="CÓDIGO RECEBIDO — ENDPOINT PENDENTE";});
+        }
+      },
+      error_callback:function(e){status.textContent=e?.type==="popup_closed"?"AUTORIZAÇÃO CANCELADA":"FALHA NA AUTORIZAÇÃO";}
+    });
+    client.requestCode();
+  }
+})();
+</script><script src="./connection-config.js"></script></body></html>
