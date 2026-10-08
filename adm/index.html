@@ -1,1 +1,46 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WordDark — ADM / Ruan</title><style>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;font:16px system-ui;background:#08090c;color:#f4f4f5}main{max-width:1100px;margin:auto;padding:28px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{display:block;padding:22px;border:1px solid #252936;border-radius:18px;background:#101218;color:inherit;text-decoration:none}p{color:#aeb5c4;line-height:1.6}</style></head><body><main><a href="../">← Portão</a><p>CAMADA SUPERIOR · FORA DO MUNDO</p><h1>👤 ADM / RUAN</h1><p>Camada soberana do proprietário. O WordDark não administra esta área.</p><div class="grid"><a class="card" href="../worddark/runtime/world/ruan/">👤 Minha Área</a><a class="card" href="../world/">🌍 WordDark</a><a class="card" href="../world/operations/">🛣️ Operações</a><div class="card">🔐 Raiz<br><small>Secrets ficam fora do Pages.</small></div></div></main></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordDark — Área ADM</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#08090c;color:#f4f4f5;display:grid;place-items:center}
+main{width:min(430px,calc(100% - 32px));padding:34px 28px 30px;border:1px solid #24262d;border-radius:24px;background:#101116;box-shadow:0 24px 80px #0008}
+.mark{font-size:42px;text-align:center;margin-bottom:8px}.eyebrow{text-align:center;font-size:11px;letter-spacing:.2em;opacity:.5}
+h1{text-align:center;font-size:28px;margin:12px 0 7px}p{text-align:center;color:#a6a7ae;margin:0 0 28px;line-height:1.5}
+label{display:block;font-size:13px;margin:0 0 8px;color:#c7c8ce}
+input{width:100%;padding:14px 15px;border-radius:13px;border:1px solid #30323a;background:#0a0b0f;color:#fff;outline:none;margin-bottom:16px}
+input:focus{border-color:#777b88}
+button{width:100%;padding:14px;border:0;border-radius:13px;background:#f2f2f2;color:#111;font-weight:800;cursor:pointer}
+.note{margin-top:18px;font-size:11px;opacity:.42;text-align:center;line-height:1.45}
+#status{display:none;margin-top:14px;padding:12px;border-radius:12px;background:#191b21;font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<div class="mark">◈</div>
+<div class="eyebrow">WORDDARK · ÁREA ADM</div>
+<h1>Acesso administrativo</h1>
+<p>Entre na área superior que controla a abertura do Mundo WordDark.</p>
+<form id="loginForm">
+<label for="account">Conta ADM</label>
+<input id="account" name="account" autocomplete="username" placeholder="Sua conta" required>
+<label for="access">Chave de acesso</label>
+<input id="access" name="access" type="password" autocomplete="current-password" placeholder="••••••••" required>
+<button type="submit">Abrir Área ADM →</button>
+</form>
+<div id="status"></div>
+<div class="note">Interface inicial. A autenticação real será ligada ao serviço seguro antes da entrada operacional.</div>
+</main>
+<script>
+document.getElementById("loginForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ const s=document.getElementById("status");
+ s.style.display="block";
+ s.textContent="Interface criada. A autenticação real ainda precisa ser conectada ao gateway seguro.";
+});
+</script>
+</body>
+</html>
