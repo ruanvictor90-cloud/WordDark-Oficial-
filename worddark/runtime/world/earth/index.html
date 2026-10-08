@@ -1,50 +1,18 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WordDark — Terra</title><link rel="stylesheet" href="../ui/worddark-ui.css"><style>
-.wd-simple{max-width:820px;margin:0 auto}.wd-request{font-size:18px;min-height:130px;padding:18px}.wd-examples{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.wd-example{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:999px;padding:10px 14px;color:inherit;cursor:pointer}.wd-example:hover{background:rgba(255,255,255,.08)}.wd-answer{margin-top:18px;padding:16px;border-radius:14px;background:rgba(255,255,255,.04);display:none}.wd-answer strong{display:block;margin-bottom:6px}.wd-send{width:100%;margin-top:16px;font-size:17px;padding:14px}.wd-help{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:18px}.wd-help div{padding:14px;border-radius:14px;background:rgba(255,255,255,.035)}.wd-help b{display:block;margin-bottom:5px}</style></head><body class="wd-body">
-<button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false">☰</button>
-<div class="wd-shell"><aside id="wd-sidebar" class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">◉</div><div><strong>WORDDARK</strong><small>Terra</small></div></div><nav class="wd-nav"><a href="../../">◈ Portão</a><a href="../core/">◎ Central</a><a class="active" href="./">◉ Terra</a><a href="../sky/">☁ Céu</a></nav><div class="wd-footer">Você pede. WordDark organiza.</div></aside>
-<main class="wd-main"><div class="wd-surface"><div class="wd-top"><div><div class="wd-eyebrow">🌍 WordDark · Terra</div><h1 class="wd-title">O que você precisa?</h1><p class="wd-sub">Fale normalmente. Você não precisa saber códigos, nomes de empresas ou como o WordDark funciona.</p></div><button class="wd-btn" data-wd-theme type="button">Modo claro</button></div>
-<section class="wd-card full wd-simple"><div class="wd-eyebrow">Seu pedido</div><h2>Escreva do seu jeito</h2><textarea class="wd-textarea wd-request" id="humanRequest" placeholder="Ex.: Faz um conteúdo pra postar no Insta"></textarea>
-<div class="wd-examples"><button class="wd-example" data-example="Gera um conteúdo pros canais">🎬 Gera um conteúdo pros canais</button><button class="wd-example" data-example="Faz um conteúdo pra postar no Insta">📱 Faz um conteúdo pra postar no Insta</button><button class="wd-example" data-example="Edita uma foto">🖼️ Edita uma foto</button><button class="wd-example" data-example="Corta esse vídeo">✂️ Corta esse vídeo</button><button class="wd-example" data-example="Troca o áudio">🔊 Troca o áudio</button><button class="wd-example" data-example="Coloca legenda">💬 Coloca legenda</button></div>
-<button class="wd-btn primary wd-send" id="humanSubmit" type="button">Enviar pedido →</button>
-<div class="wd-answer" id="humanAnswer"></div>
-<div class="wd-help"><div><b>💬 Pode falar simples</b><span class="wd-muted">“faz um post”, “arruma a foto”, “quero vender mais”.</span></div><div><b>🧠 O WordDark entende</b><span class="wd-muted">A forma do pedido não precisa seguir um padrão.</span></div><div><b>⚙️ O sistema resolve</b><span class="wd-muted">Rota, capacidade e execução ficam nos bastidores.</span></div></div></section>
-</div></main></div>
-<script src="../ui/worddark-ui.js"></script>
-<script src="../contracts/identity.js"></script><script src="../contracts/access.js"></script><script src="../security/security-manager.js"></script>
-<script src="../contracts/operation.js"></script><script src="../contracts/message.js"></script><script src="../contracts/request.js"></script><script src="../contracts/receipt.js"></script><script src="../contracts/route.js"></script><script src="../contracts/environment.js"></script>
-<script src="../core/operation-engine.js"></script><script src="../core/capability-catalog.js"></script><script src="../core/operation-coordinator.js"></script><script src="../core/company-registry.js"></script><script src="../core/company-registry-seed.js"></script><script src="../core/company-intent-router.js"></script><script src="../core/world-company-bootstrap.js"></script><script src="../core/environment-guard.js"></script><script src="../core/road.js"></script><script src="../core/communication.js"></script><script src="../core/operation-registry.js?v=20260930-2"></script><script src="../contracts/emergency-stop.js?v=20260930-2"></script><script src="../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../security/account-manager.js"></script><script src="../core/world-runtime.js"></script>
-<script src="../library/local-library.js"></script><script src="../library/central-library.js"></script><script src="../library/hierarchical-library.js"></script><script src="../core/operational-memory.js"></script>
-<script src="../core/operational-dictionary.js"></script><script src="../core/universal-language.js"></script>
-<script src="../contracts/production.js"></script><script src="../contracts/result.js"></script><script src="../core/production-planner.js"></script><script src="../core/production-engine.js"></script><script src="../core/operation-center.js"></script>
-<script src="../sky/darkfactory/core/social-factory.js"></script><script src="../sky/darkfactory/core/content-operation.js"></script><script src="../sky/darkfactory/core/content-module-registry.js"></script><script src="../sky/darkfactory/core/content-factory.js"></script><script src="../sky/darkfactory/core/content-publication-executor.js"></script><script src="../sky/darkfactory/core/request.js"></script><script src="../sky/darkfactory/core/service-registry.js"></script><script src="../sky/darkfactory/core/production-validator.js"></script><script src="../sky/darkfactory/core/production-pipeline.js"></script><script src="../sky/darkfactory/core/factory.js"></script><script src="../sky/darkfactory/core/operation-bridge.js"></script><script src="core/operation-gateway.js"></script>
-<script>
-(()=> {
- const emergencyStop=new WordDarkEmergencyStopManager(), security=new WordDarkSecurityManager();
- security.registerIdentity(new WordDarkIdentity({identityId:"ORIGIN-001",type:"UNIT",parentId:"world/earth",metadata:{name:"Operação da Terra"}}));
- security.grant(new WordDarkAccessRule({identityId:"ORIGIN-001",capability:"content.create",action:"request",environment:"TEST",scope:"world/sky/darkfactory"}));
- security.grant(new WordDarkAccessRule({identityId:"ORIGIN-001",capability:"CONTENT_CREATE",action:"request",environment:"TEST",scope:"world/sky/darkfactory"}));
- const road=new WordDarkRoad(), companyRegistry=new WordDarkCompanyRegistry(), companyWorld=bootstrapWordDarkCompanies({registry:companyRegistry});
- const localLibrary=new WordDarkLocalLibrary({libraryId:"LIB-EARTH",ownerId:"world/earth"}), centralLibrary=new WordDarkCentralLibrary({libraryId:"WORDDARK-CENTRAL-LIBRARY"});
- const memory=new WordDarkOperationalMemory({library:centralLibrary}), registry=new WordDarkOperationRegistry({localLibrary,centralLibrary,operationalMemory:memory});
- const guard=new WordDarkEnvironmentGuard({environments:{TEST:new WordDarkEnvironment({name:"TEST"}),PROD:new WordDarkEnvironment({name:"PROD"})}});
- const serviceRegistry=new DarkFactoryServiceRegistry(), contentExecutor=new DarkFactoryContentExecutor();
- serviceRegistry.register({serviceId:"DF-SERVICE-CONTENT-PRODUCE",name:"Content Production",type:"content.produce",status:"READY",executor:contentExecutor});
- const contentModules=new ContentModuleRegistry();
- ["INGEST","SCRIPT","ASSET","EDIT","AUDIO","TIMELINE","TRANSFORM","RENDER","VALIDATE","PACKAGE"].forEach(id=>contentModules.register(id,async ctx=>({success:true,status:"MODULE_COMPLETED",module:id,contentId:ctx.operation.contentId,executedAt:new Date().toISOString()})));
- const contentFactory=new ContentFactory({executor:contentExecutor,moduleRegistry:contentModules}), factory=new DarkFactory({registry:serviceRegistry,contentFactory});
- const communication=new WordDarkCommunication({road,registry}), bridge=new DarkFactoryOperationBridge({factory,communication});
- const engine=new WordDarkOperationEngine({security,environmentGuard:guard,registry,emergencyStop,operationalMemory:memory,route:op=>bridge.route(op),execute:op=>bridge.execute(op),record:()=>{}});
- const coordinator=new WordDarkOperationCoordinator({engine,road,companyRouter:companyWorld.router});
- const operationCenter=new WordDarkOperationCenter({operationCoordinator:coordinator,productionEngine:new WordDarkProductionEngine({operationCoordinator:coordinator,planner:WordDarkProductionPlanner}),planner:WordDarkProductionPlanner,requesterId:"ORIGIN-001",defaultOrigin:"world/earth",defaultEnvironment:"TEST"});
- const request=document.getElementById("humanRequest"), answer=document.getElementById("humanAnswer");
- document.querySelectorAll("[data-example]").forEach(b=>b.addEventListener("click",()=>{request.value=b.dataset.example;request.focus()}));
- document.getElementById("humanSubmit").addEventListener("click",()=>{
-   const text=request.value.trim(); if(!text){answer.style.display="block";answer.innerHTML="<strong>Escreva o que você precisa.</strong><span>Você pode usar qualquer frase simples.</span>";return;}
-   const understood=WordDarkUniversalLanguage.resolveHuman(text), result=operationCenter.submit({text,requesterId:"ORIGIN-001",originId:"world/earth",environment:"TEST"});
-   const label=understood?.label||"Pedido recebido";
-   answer.style.display="block";
-   answer.innerHTML="<strong>✓ "+label+"</strong><span>"+(result?.success?"Pedido encaminhado e executado.":"Pedido recebido e encaminhado para resolução.")+"</span>";
-   if(result?.success===false && result?.reason) answer.innerHTML+="<br><small>"+String(result.reason)+"</small>";
- });
-})();
-</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WordDark — Terra</title><link rel="stylesheet" href="../ui/worddark-ui.css"></head>
+<body class="wd-body">
+<button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false" aria-label="Abrir menu">☰</button><div class="wd-menu-backdrop" data-wd-menu-close></div>
+<div class="wd-shell"><aside id="wd-sidebar" class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">◉</div><div><strong>WORDDARK</strong><small>Terra</small></div></div>
+<nav class="wd-nav"><a href="../core/">◎ WordDark</a><a href="../sky/">☁ Céu</a><a class="active" href="./">◉ Terra</a></nav><div class="wd-footer">TERRA · necessidades e negócios</div></aside>
+<main class="wd-main"><div class="wd-surface"><div class="wd-top"><div><div class="wd-eyebrow">Camada · Terra</div><h1 class="wd-title">O que precisa acontecer?</h1><p class="wd-sub">A Terra representa negócios, canais, entidades, produtos, serviços e necessidades. Ela gera pedidos; o WordDark organiza e encontra quem executa.</p></div></div>
+<section class="wd-grid">
+<article class="wd-card full"><div class="wd-eyebrow">Domínios</div><h2>Onde a necessidade nasce</h2><div class="wd-entry-grid">
+<a class="wd-entry-card" href="business-management/"><div class="wd-card-icon">🏢</div><strong>Empresas</strong><small>Negócios, clientes, produtos e serviços.</small></a>
+<a class="wd-entry-card" href="content-channels/"><div class="wd-card-icon">◉</div><strong>Canais</strong><small>Ativos digitais e suas necessidades operacionais.</small></a>
+<a class="wd-entry-card" href="./"><div class="wd-card-icon">◆</div><strong>Pedidos</strong><small>Demandas que entram no Mundo para serem organizadas.</small></a>
+</div></article>
+<article class="wd-card wide"><div class="wd-eyebrow">Princípio</div><h2>Terra não precisa conhecer a fábrica.</h2><p class="wd-muted">Ela descreve o que precisa. O WordDark decide a rota, a capacidade e a empresa adequada.</p></article>
+<article class="wd-card"><div class="wd-eyebrow">Saída</div><h2>Pedido organizado</h2><p class="wd-muted">Necessidade → pedido → operação.</p></article>
+<article class="wd-card full"><div class="wd-eyebrow">Circuito do Mundo</div><div class="wd-flow"><span>NECESSIDADE</span><i class="wd-arrow">→</i><span>TERRA</span><i class="wd-arrow">→</i><span>WORDDARK</span><i class="wd-arrow">→</i><span>CÉU</span><i class="wd-arrow">→</i><span>RESULTADO</span></div></article>
+</section></div></main></div><script src="../ui/worddark-ui.js"></script></body></html>
