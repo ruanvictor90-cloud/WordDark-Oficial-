@@ -6,7 +6,7 @@
   "use strict";
   const Dictionary=(typeof WordDarkOperationalDictionary!=="undefined"?WordDarkOperationalDictionary:null)
     || (typeof require==="function"?require("./operational-dictionary"):null);
-  const ACTIONS={"trocar audio":"REPLACE_AUDIO","trocar áudio":"REPLACE_AUDIO","substituir audio":"REPLACE_AUDIO","substituir áudio":"REPLACE_AUDIO","publicar":"PUBLISH_CONTENT","postar":"PUBLISH_CONTENT","cortar video":"CUT_VIDEO","cortar vídeo":"CUT_VIDEO","editar foto":"EDIT_PHOTO","editar imagem":"EDIT_PHOTO","adicionar legenda":"ADD_SUBTITLE","criar video":"CREATE_CONTENT","criar vídeo":"CREATE_CONTENT","criar conteúdo":"CREATE_CONTENT","criar conteudo":"CREATE_CONTENT","renderizar":"RENDER_CONTENT","validar":"VALIDATE_CONTENT"};
+  const ACTIONS={"trocar audio":"REPLACE_AUDIO","trocar áudio":"REPLACE_AUDIO","trocar o audio":"REPLACE_AUDIO","trocar o áudio":"REPLACE_AUDIO","substituir audio":"REPLACE_AUDIO","substituir áudio":"REPLACE_AUDIO","substituir o audio":"REPLACE_AUDIO","substituir o áudio":"REPLACE_AUDIO","publicar":"PUBLISH_CONTENT","postar":"PUBLISH_CONTENT","cortar video":"CUT_VIDEO","cortar vídeo":"CUT_VIDEO","editar foto":"EDIT_PHOTO","editar imagem":"EDIT_PHOTO","adicionar legenda":"ADD_SUBTITLE","criar video":"CREATE_CONTENT","criar vídeo":"CREATE_CONTENT","criar conteúdo":"CREATE_CONTENT","criar conteudo":"CREATE_CONTENT","renderizar":"RENDER_CONTENT","validar":"VALIDATE_CONTENT"};
   const text=v=>String(v||"").trim().toLowerCase();
   function findAction(input){
     const t=text(input), dictionaryMatch=Dictionary?.match?.(t);
