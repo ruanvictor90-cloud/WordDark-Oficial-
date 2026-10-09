@@ -11,7 +11,7 @@ function json(res,status,body){
   res.writeHead(status,{"Content-Type":"application/json; charset=utf-8","Access-Control-Allow-Origin":ALLOWED_ORIGIN||"null","Access-Control-Allow-Headers":"Content-Type, X-Requested-With","Access-Control-Allow-Methods":"POST, GET, OPTIONS","Cache-Control":"no-store"});
   res.end(JSON.stringify(body));
 }
-async function body(req){let raw="";for await(const chunk of req)raw+=chunk;return new URLSearchParams(raw);}
+async function body(req){let raw="";for await(const chunk of req){raw+=chunk;if(raw.length>8192)throw new Error("REQUEST_TOO_LARGE")}return new URLSearchParams(raw);}
 async function googleToken(code){
   const r=await fetch("https://oauth2.googleapis.com/token",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({code,client_id:CLIENT_ID,client_secret:CLIENT_SECRET,redirect_uri:REDIRECT_URI,grant_type:"authorization_code"})});
   const data=await r.json(); if(!r.ok)throw new Error(data.error||"GOOGLE_TOKEN_EXCHANGE_FAILED"); return data;
@@ -29,12 +29,16 @@ const server=http.createServer(async(req,res)=>{
   if(req.method==="POST"&&url.pathname==="/oauth/google/code"){
     if(!CLIENT_ID||!CLIENT_SECRET||!REDIRECT_URI||!ALLOWED_ORIGIN)return json(res,503,{status:"ENDPOINT_NOT_CONFIGURED"});
     if((req.headers.origin||"")!==ALLOWED_ORIGIN)return json(res,403,{status:"ORIGIN_REJECTED"});
+    if(req.headers["x-requested-with"]!=="XmlHttpRequest")return json(res,403,{status:"REQUEST_HEADER_REQUIRED"});
+    if(!String(req.headers["content-type"]||"").toLowerCase().startsWith("application/x-www-form-urlencoded"))return json(res,415,{status:"UNSUPPORTED_CONTENT_TYPE"});
     try{
-      const form=await body(req),code=form.get("code"); if(!code)return json(res,400,{status:"CODE_REQUIRED"});
+      const form=await body(req),code=form.get("code"),clientId=form.get("client_id");
+      if(!code)return json(res,400,{status:"CODE_REQUIRED"});
+      if(clientId!==CLIENT_ID)return json(res,403,{status:"CLIENT_ID_MISMATCH"});
       const tokens=await googleToken(code);
       const profile=await youtubeProfile(tokens.access_token);
       return json(res,200,{status:"CONNECTED",provider:"GOOGLE",service:"YOUTUBE",account:{id:profile.id,title:profile.title,customUrl:profile.customUrl,thumbnail:profile.thumbnail,statistics:profile.statistics},scope:tokens.scope||null,expiresIn:tokens.expires_in||null,persistence:"PENDING"});
-    }catch(e){return json(res,400,{status:"AUTHORIZATION_FAILED",message:e.message});}
+    }catch(e){const status=e?.message==="REQUEST_TOO_LARGE"?413:400;return json(res,status,{status:e?.message==="REQUEST_TOO_LARGE"?"REQUEST_TOO_LARGE":"AUTHORIZATION_FAILED",message:"Google authorization could not be completed."});}
   }
   return json(res,404,{status:"NOT_FOUND"});
 });
