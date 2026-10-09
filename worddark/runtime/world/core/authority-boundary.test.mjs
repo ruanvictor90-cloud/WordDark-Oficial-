@@ -11,7 +11,7 @@ test("sovereign ADM Dono is explicitly outside internal roles", () => {
   const boundary = describeWorldBoundary();
   assert.equal(boundary.sovereignAuthority, "ADM_DONO_EXTERNAL");
   assert.equal(boundary.sovereignAuthorityIsInternalRole, false);
-  assert.equal(normalizePrincipal({ role: "ADM-Ruan", zone: "ADM", authenticated: true, active: true }).role, null);
+  assert.equal(normalizePrincipal({ role: "ADM-Dono", zone: "ADM", authenticated: true, active: true }).role, null);
 });
 
 test("internal ADM can operate world but cannot grant sovereign authority or write DEV code", () => {
