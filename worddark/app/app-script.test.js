@@ -28,6 +28,18 @@ assert.ok(source.includes("data-export-job"), "Export controls must be present i
 assert.ok(source.includes("URL.createObjectURL(blob)"), "Export must create a downloadable package");
 assert.ok(source.includes("Direitos de uso conferidos"), "Export package must include rights-review status");
 assert.ok(source.includes("KEYS.contentJobs"), "Content jobs must use their own local storage key");
+assert.ok(source.includes("function exportWorldBackup()"), "The app must support exporting a complete local backup");
+assert.ok(source.includes("function restoreWorldBackupFile(file)"), "The app must support restoring a selected backup");
+assert.ok(source.includes("formatVersion:1"), "Backups must carry an explicit format version");
+assert.ok(source.includes("payload.app!=='WordDark'"), "Restore must reject files from another app");
+assert.ok(source.includes("payload.formatVersion!==1"), "Restore must reject unsupported backup versions");
+assert.ok(source.includes("file.size>5*1024*1024"), "Restore must reject oversized files");
+assert.ok(source.includes("Array.isArray(payload.collections[name])"), "Restore must validate every required collection before writing");
+assert.ok(source.includes("Isso substituirá as coleções locais atuais"), "Restore must warn before replacing local data");
+assert.ok(source.includes("localStorage.setItem(key,JSON.stringify(payload.collections[name]))"), "Restore must write validated collections to their existing local keys");
+assert.ok(source.includes("Falha ao restaurar. Foi tentada a recuperação dos dados anteriores."), "Restore must attempt rollback after storage errors");
+assert.ok(source.includes("data-export-backup"), "The library must expose a backup export action");
+assert.ok(source.includes('id="importBackupFile"'), "The library must expose a backup restore file picker");
 assert.ok(source.includes("function businessStore(kind)"), "Commercial submodules must have distinct screens");
 assert.ok(source.includes("catalog:()=>businessStore('catalog')"), "Catalog route must resolve to its own module");
 assert.ok(source.includes("suppliers:()=>businessStore('suppliers')"), "Supplier route must resolve to its own module");
