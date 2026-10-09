@@ -77,6 +77,7 @@ const rf=$('requestForm');if(rf)rf.addEventListener('submit',e=>{e.preventDefaul
 const lf=$('ledgerForm');if(lf)lf.addEventListener('submit',e=>{e.preventDefault();const amount=Number($('lAmount').value),desc=$('lDesc').value.trim();if(!desc||!Number.isFinite(amount)||amount<=0)return;ledger.push({id:String(Date.now()),desc,amount,type:$('lType').value,createdAt:new Date().toISOString()});write(KEYS.ledger,ledger);render();toast('Lançamento adicionado ao Cofre do mundo.')});
 const tf=$('transferForm');if(tf)tf.addEventListener('submit',e=>{e.preventDefault();const amount=Number($('tAmount').value),reason=$('tReason').value.trim();if(!reason||!Number.isFinite(amount)||amount<=0)return;transfers.push({id:String(Date.now()),amount,reason,status:'Aguardando decisão',createdAt:new Date().toISOString()});write(KEYS.transfers,transfers);render();toast('Proposta criada; nenhum dinheiro foi transferido.')});
 const nf=$('noteForm');if(nf)nf.addEventListener('submit',e=>{e.preventDefault();const title=$('nTitle').value.trim(),body=$('nBody').value.trim();if(!title||!body)return;notes.push({id:String(Date.now()),title,body,createdAt:new Date().toISOString()});write(KEYS.notes,notes);render();toast('Nota guardada na biblioteca local.')})}
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 render();
 })();
 </script></body></html>
