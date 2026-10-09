@@ -1,7 +1,7 @@
 name: WordDark Oficial CI
 on:
   push:
-    branches: [main]
+    branches: [main, world-appearance]
   pull_request:
     branches: [main]
 jobs:
