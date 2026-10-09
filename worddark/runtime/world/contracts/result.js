@@ -6,6 +6,7 @@ class WordDarkResult {
     this.success=source.success!==false;
     this.status=source.status||"COMPLETED";
     this.operationId=source.operationId||null;
+    this.operation=source.operation||null;
     this.productionId=source.productionId||null;
     this.moduleId=source.moduleId||null;
     this.companyId=source.companyId||null;
