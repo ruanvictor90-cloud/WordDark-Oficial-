@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "Ruan — Ambiente Pessoal",
+  "short_name": "Ruan",
+  "description": "Seu espaço pessoal modular para aplicativos, agenda e ferramentas.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#090a0d",
+  "theme_color": "#0a0b0e",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
