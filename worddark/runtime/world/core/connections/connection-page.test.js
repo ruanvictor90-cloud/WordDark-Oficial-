@@ -1,8 +1,9 @@
-import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import vm from "node:vm";
+const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
 
-const page = readFileSync(new URL("./index.html", import.meta.url), "utf8");
+const page = readFileSync(path.join(__dirname, "index.html"), "utf8");
 const scripts = [...page.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length, "Connection page must contain its OAuth controller");
 assert.doesNotThrow(() => new vm.Script(scripts.at(-1)[1]), "Connection page controller must be valid JavaScript");
@@ -15,7 +16,7 @@ assert.ok(controller.includes('result.persistence!=="ACTIVE"'), "The UI must not
 assert.ok(controller.includes("BACKEND NÃO CONFIGURADO"), "The UI must explain when the backend endpoint is missing");
 assert.ok(!controller.includes("localStorage.setItem(\"wd.google.accessToken\""), "OAuth tokens must not be persisted in browser storage");
 
-const bridge = readFileSync(new URL("../../../../bridge/google-oauth/server.js", import.meta.url), "utf8");
+const bridge = readFileSync(path.resolve(__dirname, "../../../../bridge/google-oauth/server.js"), "utf8");
 assert.ok(bridge.includes('req.headers["x-requested-with"]!=="XmlHttpRequest"'), "Bridge must validate the custom request header");
 assert.ok(bridge.includes('clientId!==CLIENT_ID'), "Bridge must reject authorization codes for a different client ID");
 assert.ok(bridge.includes("raw.length>8192"), "Bridge must bound the request body size");
