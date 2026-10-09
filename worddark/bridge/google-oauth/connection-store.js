@@ -20,11 +20,32 @@ export function createConnectionStore({firestore,kms,keyName,collectionName="wor
     if(!result?.plaintext)throw new Error("TOKEN_DECRYPTION_FAILED");
     return JSON.parse(Buffer.from(result.plaintext).toString("utf8"));
   }
+  function documentIdFor(providerId,accountId){
+    return createHash("sha256").update(String(providerId||"YOUTUBE").toUpperCase()+":"+String(accountId||"")).digest("hex");
+  }
+  async function load({providerId="YOUTUBE",accountId}={}){
+    if(!accountId)throw new Error("ACCOUNT_ID_REQUIRED");
+    const snapshot=await collection.doc(documentIdFor(providerId,accountId)).get();
+    if(!snapshot?.exists)return null;
+    const record=snapshot.data()||{};
+    if(record.providerId!==String(providerId).toUpperCase()||record.accountId!==String(accountId))return null;
+    // Runtime consumers receive metadata only; ciphertext is deliberately excluded.
+    const {encryptedTokenBundle,encryptionKey,...metadata}=record;
+    return metadata;
+  }
+  async function loadTokens({providerId="YOUTUBE",accountId}={}){
+    if(!accountId)throw new Error("ACCOUNT_ID_REQUIRED");
+    const snapshot=await collection.doc(documentIdFor(providerId,accountId)).get();
+    if(!snapshot?.exists)return null;
+    const record=snapshot.data()||{};
+    if(record.providerId!==String(providerId).toUpperCase()||record.accountId!==String(accountId)||!record.encryptedTokenBundle)return null;
+    return decryptTokens(record.encryptedTokenBundle);
+  }
   async function save({providerId="YOUTUBE",account,tokens,scope}={}){
     if(!account?.id||!tokens?.refresh_token||!tokens?.access_token)throw new Error("REFRESH_TOKEN_REQUIRED");
     const provider=String(providerId).toUpperCase();
     const accountId=String(account.id);
-    const documentId=createHash("sha256").update(provider+":"+accountId).digest("hex");
+    const documentId=documentIdFor(provider,accountId);
     const encryptedTokenBundle=await encryptTokens(tokens);
     const now=clock().toISOString();
     const record={
@@ -36,7 +57,7 @@ export function createConnectionStore({firestore,kms,keyName,collectionName="wor
     await collection.doc(documentId).set(record,{merge:true});
     return {providerId:provider,accountId,title:record.title,status:record.status,updatedAt:now};
   }
-  return Object.freeze({save,decryptTokens});
+  return Object.freeze({save,load,loadTokens,decryptTokens});
 }
 
 export async function createCloudConnectionStore({projectId=process.env.GOOGLE_CLOUD_PROJECT,keyName=process.env.GOOGLE_KMS_KEY_NAME,collectionName=process.env.WORDDARK_CONNECTION_COLLECTION||"worddarkExternalConnections"}={}){
