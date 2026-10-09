@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
+assert.ok(html.includes('id="privacidadePage"'), "Privacy page must exist");
+assert.ok(html.includes('id="exportData"'), "Data export must be available");
+assert.ok(html.includes('id="importDataBtn"'), "Backup restore must be available");
+assert.ok(html.includes('id="clearData"'), "Local data clearing must be available");
+assert.ok(html.includes("ruan-personal-backup"), "Backup format must be identifiable");
+assert.ok(html.includes("payload.version!==1"), "Backup restore must validate version");
+assert.ok(html.includes("WordDark controla esta área?</span><strong>Não"), "WordDark must not control the personal root");
+assert.ok(html.includes("não possui autenticação real"), "Prototype must disclose lack of real authentication");
+console.log("Ruan privacy tests passed.");

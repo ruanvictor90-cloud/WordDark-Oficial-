@@ -23,3 +23,10 @@ Ruan é o contêiner pessoal. Aplicativos são módulos independentes registrado
 
 ## Publicação
 A partir da raiz publicada do repositório, a área fica em /ruan/. A instalação PWA depende de HTTPS e suporte do navegador. O caminho de produção deve ser validado após a publicação.
+
+## Alfa 0.2 — controle dos dados pessoais
+- Área Privacidade com contagem dos registros locais.
+- Exportação de compromissos, lançamentos e notas em arquivo JSON.
+- Restauração com validação de formato, versão, tamanho e estrutura.
+- Limpeza explícita dos dados locais do Ruan, sem apagar dados do WordDark.
+- Limitações de privacidade informadas: ainda não existe login, criptografia ou sincronização.
