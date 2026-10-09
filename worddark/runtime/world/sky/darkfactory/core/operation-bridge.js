@@ -49,6 +49,8 @@ class DarkFactoryOperationBridge {
     const p=request.payload||{};
     return {
       id:request.requestId||request.operationId,
+      operationId:request.operationId||p.operationId||request.requestId,
+      parentOperationId:request.operationId||p.parentOperationId||null,
       requester:request.requesterId,
       origin:request.originId,
       destination:request.destinationId,
