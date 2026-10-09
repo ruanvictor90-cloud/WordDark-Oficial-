@@ -88,6 +88,8 @@
     const client=google.accounts.oauth2.initCodeClient({
       client_id:clientId,
       scope:cfg.scopes.join(" "),
+      access_type:"offline",
+      prompt:"consent",
       ux_mode:"popup",
       callback:function(response){
         if(response.error){
