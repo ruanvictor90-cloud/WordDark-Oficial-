@@ -12,4 +12,5 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: "20"
+      - run: npm run world:test
       - run: npm test
