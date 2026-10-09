@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 const page = readFileSync(new URL("./index.html", import.meta.url), "utf8");
-const scripts = [...page.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi)];
+const scripts = [...page.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length, "Connection page must contain its OAuth controller");
 assert.doesNotThrow(() => new vm.Script(scripts.at(-1)[1]), "Connection page controller must be valid JavaScript");
 const controller = scripts.at(-1)[1];
