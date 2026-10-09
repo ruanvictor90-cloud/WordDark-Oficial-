@@ -10,6 +10,15 @@ assert.ok(source.includes("function workbench()"), "Content workbench must be re
 assert.ok(source.includes("data-save-review"), "Review controls must be present");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
 assert.ok(source.includes("function dispatchRequest(id)"), "Content requests must dispatch into the Dark Factory");
+assert.ok(source.includes("function createLaunchMission()"), "The official launch content mission must be available");
+assert.ok(source.includes("data-create-launch-mission"), "The content workbench must expose the launch mission");
+assert.ok(source.includes("missionKey:'worddark-intro-v1'"), "The launch mission must have a stable key to avoid duplicates");
+assert.ok(source.includes("rightsChecked:false,policyChecked:false"), "Launch content must remain unapproved until manual review");
+assert.ok(source.includes("FORMATO PRINCIPAL · VÍDEO DE APRESENTAÇÃO"), "The launch package must include a main presentation script");
+assert.ok(source.includes("VERSÃO CURTA · SHORT"), "The launch package must include a short-form variant");
+assert.ok(source.includes("DESCRIÇÃO PARA YOUTUBE"), "The launch package must include a YouTube description");
+assert.ok(source.includes("].join('\\n');const job={id:'CT-'"), "Launch content must be joined with valid escaped newlines");
+assert.ok(source.includes("Não sugerir que a publicação automática, OAuth ou integrações externas já estejam ativas."), "Launch instructions must not overstate external integrations");
 assert.ok(source.includes("data-dispatch-request"), "Eligible requests must expose the dispatch action");
 assert.ok(source.includes("requestId:r.id"), "Dispatched jobs must retain the source request ID");
 assert.ok(source.includes("Solicitação de origem: '+(j.requestId||'Trabalho criado diretamente')"), "Delivery packages must preserve request provenance");
