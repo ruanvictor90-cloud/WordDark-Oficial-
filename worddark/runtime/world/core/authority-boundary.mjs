@@ -1,7 +1,7 @@
 /**
  * WordDark Core — Authority Boundary v1
  *
- * ADM Ruan is an external trust boundary, NOT a role that the world can assign.
+ * ADM Dono is an external trust boundary, NOT a role that the world can assign.
  * This module evaluates internal permissions only. It cannot create or grant
  * sovereign authority, authenticate people, or replace server-side identity checks.
  */
@@ -73,7 +73,7 @@ export function describeWorldBoundary() {
   return Object.freeze({
     version: 1,
     zones: Object.freeze(["ADM", "DEV", "PUBLIC"]),
-    sovereignAuthority: "ADM_RUAN_EXTERNAL",
+    sovereignAuthority: "ADM_DONO_EXTERNAL",
     sovereignAuthorityIsInternalRole: false,
     defaultDecision: "DENY",
     publicCanInspectInternalBlueprint: false,
