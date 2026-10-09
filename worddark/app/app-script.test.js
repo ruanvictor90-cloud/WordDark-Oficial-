@@ -17,5 +17,12 @@ assert.ok(source.includes("customers:()=>businessStore('customers')"), "Customer
 assert.ok(source.includes("function marketing()"), "Marketing must have a distinct screen");
 assert.ok(source.includes("module('workbench','▧','Dark Factory'"), "Sky must link directly to the content workbench");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
+assert.ok(source.includes("data-cancel-request"), "Queued operations must support cancellation");
+assert.ok(source.includes("data-delete-request"), "Queued operations must support deletion");
+assert.ok(source.includes("data-cancel-job"), "Content jobs must support cancellation");
+assert.ok(source.includes("data-delete-job"), "Content jobs must support deletion");
+assert.ok(source.includes("item.status='Cancelada'"), "Cancellation must preserve an explicit cancelled state");
+assert.ok(source.includes("requests=requests.filter(x=>x.id!==b.dataset.deleteRequest)"), "Deletion must remove the selected local operation");
+assert.ok(source.includes("contentJobs=contentJobs.filter(x=>x.id!==b.dataset.deleteJob)"), "Deletion must remove the selected local content job");
 assert.doesNotThrow(() => new vm.Script(source), "Inline app script must be valid JavaScript syntax");
 console.log("worddark app script test: OK");
