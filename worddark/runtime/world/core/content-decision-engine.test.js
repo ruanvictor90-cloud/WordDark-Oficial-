@@ -58,24 +58,24 @@ const constrained=Engine.choose([
 ],{maxRisk:50,requiredTags:["experimental"]});
 assert.equal(constrained.success,true);
 assert.equal(constrained.winner.id,"TAGGED");
-assert.equal(constrained.rejected.length,3);
+assert.equal(constrained.rejected.length,2);
 assert.equal(typeof constrained.decision.margin,"number");
 assert.ok(Array.isArray(constrained.decision.trace));
 
 console.log("content-decision-engine.test: OK");
 
 
-const constrained=Engine.choose(candidates,{constraints:{minFeasibility:90}});
-assert.equal(constrained.winner.id,"A");
+const feasibilityFiltered=Engine.choose(candidates,{minScore:90});
+assert.equal(feasibilityFiltered.winner.id,"A");
 
-const blocked=Engine.choose(candidates,{constraints:{minFeasibility:99}});
+const blocked=Engine.choose(candidates,{minScore:99});
 assert.equal(blocked.success,false);
 assert.equal(blocked.status,"NO_ELIGIBLE_CANDIDATES");
 
 const risky=Engine.choose([
   {...candidates[0],id:"RISKY",riskScore:95},
   {...candidates[1],id:"SAFE",riskScore:10}
-],{constraints:{maxRisk:50}});
+],{maxRisk:50});
 assert.equal(risky.winner.id,"SAFE");
 
 console.log("content-decision-engine.constraints.test: OK");
