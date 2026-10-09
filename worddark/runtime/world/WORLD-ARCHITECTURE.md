@@ -6,7 +6,7 @@ WordDark é um sistema de coordenação de operações e empresas, não apenas u
 
 ## Hierarquia de autoridade
 
-1. **ADM Ruan (externo e soberano):** camada de confiança externa ao WordDark. Autoriza acesso e limites; pode interromper ou revogar a operação do mundo. Não é uma conta/role interna que o WordDark possa criar, promover ou administrar.
+1. **ADM Dono (externo e soberano):** camada de confiança externa ao WordDark. Autoriza acesso e limites; pode interromper ou revogar a operação do mundo. Não é uma conta/role interna que o WordDark possa criar, promover ou administrar.
 2. **ADM (administração interna):** governa configurações e operações internas dentro do limite autorizado pelo topo.
 3. **DEV (desenvolvimento):** constrói, testa e mantém módulos autorizados. Não recebe autoridade administrativa por escrever código.
 4. **Público:** acessa somente interfaces e serviços publicados.
@@ -17,7 +17,7 @@ A ordem não é uma cadeia de promoção de cargos. Nenhuma camada inferior pode
 
 O módulo `core/world-gateway.mjs` funciona como uma camada de entrada para comandos autorizados. Ele usa uma lista fixa de comandos, resolve a identidade por um resolvedor confiável fornecido pela aplicação e consulta a fronteira de autoridade antes de chamar o executor. A decisão é negar quando a identidade não pode ser resolvida, o comando não existe, a permissão falta ou o executor não foi configurado.
 
-**Limite atual:** o gateway é uma camada pronta para integração, não um sistema completo de login. A aplicação hospedeira ainda precisa fornecer autenticação real, sessões seguras, armazenamento de identidades, registro de auditoria persistente e handlers conectados ao runtime. Não se deve confiar em cargos enviados diretamente pelo navegador nem publicar esse módulo como única proteção de uma API. ADM Ruan permanece uma fronteira soberana externa e não pode ser criado por comandos internos.
+**Limite atual:** o gateway é uma camada pronta para integração, não um sistema completo de login. A aplicação hospedeira ainda precisa fornecer autenticação real, sessões seguras, armazenamento de identidades, registro de auditoria persistente e handlers conectados ao runtime. Não se deve confiar em cargos enviados diretamente pelo navegador nem publicar esse módulo como única proteção de uma API. ADM Dono permanece uma fronteira soberana externa e não pode ser criado por comandos internos.
 
 ## Trindade funcional
 
