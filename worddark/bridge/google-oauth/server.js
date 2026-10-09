@@ -45,7 +45,7 @@ const server=http.createServer(async(req,res)=>{
       let saved;
       try{saved=await (await connectionStore()).save({providerId:"YOUTUBE",account:profile,tokens,scope:tokens.scope||null});}
       catch(error){console.error("WordDark connection persistence failed:",String(error?.message||"UNKNOWN").slice(0,120));return json(res,503,{status:"PERSISTENCE_UNAVAILABLE",message:"The authorization was received, but secure connection storage is unavailable. No active connection was registered."});}
-      return json(res,200,{status:"CONNECTED",provider:"GOOGLE",service:"YOUTUBE",account:{id:profile.id,title:profile.title,customUrl:profile.customUrl,thumbnail:profile.thumbnail,statistics:profile.statistics},scope:tokens.scope||null,expiresIn:tokens.expires_in||null,persistence:"ACTIVE",connection:{providerId:saved.providerId,accountId:saved.accountId,status:saved.status,updatedAt:saved.updatedAt}});
+      return json(res,200,{status:"CONNECTED",provider:"GOOGLE",service:"YOUTUBE",account:{id:profile.id,title:profile.title,customUrl:profile.customUrl,thumbnail:profile.thumbnail,statistics:profile.statistics},scope:tokens.scope||null,expiresIn:tokens.expires_in||null,persistence:"PERSISTED",connection:{providerId:saved.providerId,accountId:saved.accountId,status:saved.status,updatedAt:saved.updatedAt}});
     }catch(e){const tooLarge=e?.message==="REQUEST_TOO_LARGE";const status=tooLarge?413:400;return json(res,status,{status:tooLarge?"REQUEST_TOO_LARGE":"AUTHORIZATION_FAILED",message:"Google authorization could not be completed."});}
   }
   return json(res,404,{status:"NOT_FOUND"});
