@@ -11,6 +11,12 @@ Primeiro backend real da Central de Conexões.
 - nunca devolve access_token ou refresh_token ao navegador;
 - rejeita origens diferentes da origem autorizada.
 
+## Interface da Central de Conexões
+
+A interface agora envia o código de autorização de uso único para `codeEndpoint` em `worddark/runtime/world/core/connections/connection-config.js`, usando `X-Requested-With`. O endpoint permanece vazio por padrão até que o backend real esteja implantado e tenha um URL HTTPS confirmado. Não aponte a interface para um serviço desconhecido.
+
+O bridge ainda responde com `persistence: PENDING`: ele confirma a autorização e consulta metadados do canal, mas não grava tokens nem registra uma conexão durável. A interface, portanto, não deve marcar a conexão como ativa até que a persistência segura e o registro central estejam implementados.
+
 ## Ainda pendente antes de produção
 
 A persistência segura da conexão ainda não está ativa. Os tokens existem somente durante a requisição e não são gravados.
