@@ -1,5 +1,102 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="refresh" content="0; url=adm/"><link rel="canonical" href="adm/"><title>WordDark — Acesso</title>
-<script>window.location.replace("adm/");</script></head>
-<body><p>Abrindo a Área ADM…</p></body></html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090a0d">
+<meta name="description" content="WordDark — mundo de coordenação, empresas, operações e produção modular.">
+<title>WordDark — Central do Mundo</title>
+<style>
+:root{color-scheme:dark;--bg:#090a0d;--panel:#111319;--panel2:#151820;--line:#272b35;--text:#f2f3f5;--muted:#9298a5;--accent:#d7ff64;--blue:#91b8ff;--warn:#ffd17a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -20%,#20271a 0,transparent 42%),var(--bg);color:var(--text);min-height:100vh}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer}
+.shell{max-width:1220px;margin:auto;padding:22px 22px 50px}.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 0 24px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px}.symbol{width:42px;height:42px;border:1px solid #4b5634;border-radius:13px;display:grid;place-items:center;color:var(--accent);font-size:25px;background:#141a0f}.word{font-size:15px;font-weight:800;letter-spacing:.15em}.sub{font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:.08em}
+.pill{border:1px solid #4a4a35;background:#191a12;color:var(--warn);padding:7px 10px;border-radius:999px;font-size:11px;white-space:nowrap}
+.hero{padding:44px 0 30px;display:grid;grid-template-columns:1.35fr .65fr;gap:24px;align-items:end}.eyebrow{font-size:11px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase}h1{font-size:clamp(34px,5.6vw,64px);letter-spacing:-.055em;line-height:.99;font-weight:650;margin:15px 0 17px;max-width:760px}.hero p{max-width:660px;color:#b2b7c1;line-height:1.65;font-size:15px;margin:0}.hero-note{border:1px solid var(--line);border-radius:18px;background:linear-gradient(140deg,#171a20,#0e1015);padding:20px}.hero-note .big{font-size:28px;font-weight:650;letter-spacing:-.04em}.hero-note p{font-size:12px;line-height:1.55;margin-top:8px;color:var(--muted)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:22px 0 14px}.section-head h2{font-size:17px;margin:0;font-weight:600}.section-head span{font-size:11px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat,.card,.layer{border:1px solid var(--line);border-radius:16px;background:rgba(17,19,25,.88)}.stat{padding:17px}.stat label{display:block;font-size:11px;color:var(--muted)}.stat strong{display:block;font-size:21px;margin:10px 0 4px;font-weight:620}.stat small{font-size:11px;color:#a9afb9}
+.layout{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}.card{padding:20px}.card h3{font-size:15px;margin:0 0 5px}.muted{font-size:12px;color:var(--muted);line-height:1.5}
+.layers{display:grid;gap:10px;margin-top:18px}.layer{padding:13px 14px;display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;background:#0e1015}.layer-icon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;border:1px solid var(--line);background:#171a20;font-size:18px}.layer strong{font-size:13px;display:block}.layer p{font-size:11px;color:var(--muted);margin:4px 0 0}.layer .level{font-size:10px;color:var(--muted);border:1px solid var(--line);padding:5px 7px;border-radius:8px;white-space:nowrap}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:17px}.quick a,.quick button{min-height:100px;text-align:left;border:1px solid var(--line);border-radius:13px;padding:15px;background:#0d0f14;display:flex;flex-direction:column;justify-content:space-between;gap:14px}.quick a:hover,.quick button:hover{border-color:#56613b;background:#151a11}.quick .qicon{font-size:19px;color:var(--accent)}.quick strong{font-size:12px}.quick small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.feed{display:grid;gap:0;margin-top:12px}.event{display:grid;grid-template-columns:9px 1fr;gap:12px;padding:13px 0;border-bottom:1px solid #20232b}.event:last-child{border:0}.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);margin-top:5px}.dot.warn{background:var(--warn)}.event strong{font-size:12px}.event p{font-size:11px;color:var(--muted);line-height:1.5;margin:4px 0 0}
+.footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:30px;padding-top:17px;color:#747b87;font-size:10px;letter-spacing:.04em}
+.panel-detail{display:none;border:1px solid #495532;background:#11160d;border-radius:14px;padding:16px;margin-top:12px}.panel-detail.open{display:block}.panel-detail h4{margin:0 0 8px;font-size:14px}.panel-detail p{font-size:12px;line-height:1.6;color:#b6bdab;margin:0}
+@media(max-width:800px){.hero,.layout{grid-template-columns:1fr}.hero{padding-top:32px}.hero-note{max-width:none}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.shell{padding:15px 14px 34px}.bar{padding-bottom:17px}.symbol{width:38px;height:38px}.pill{font-size:10px;padding:7px 8px}.hero{padding:30px 0 20px}.hero p{font-size:13px}.stat{padding:13px}.stat strong{font-size:19px}.card{padding:16px}.layer{grid-template-columns:38px 1fr}.layer .level{grid-column:2;justify-self:start}.quick{gap:8px}.quick a,.quick button{min-height:95px;padding:12px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="bar">
+  <a class="brand" href="./" aria-label="WordDark Central do Mundo">
+    <div class="symbol">◈</div><div><div class="word">WORDDARK</div><div class="sub">CENTRAL DO MUNDO</div></div>
+  </a>
+  <div class="pill">● AMBIENTE DE DESENVOLVIMENTO</div>
+</header>
+<main>
+<section class="hero">
+  <div><div class="eyebrow">Um mundo. Várias capacidades.</div><h1>O mundo coordena.<br>Os setores executam.</h1><p>WordDark é a camada central que organiza necessidades, encaminha operações, conecta empresas e preserva resultados. Céu produz soluções. Terra opera negócios. A Rodovia conecta tudo por baixo da interface.</p></div>
+  <aside class="hero-note"><div class="eyebrow">Princípio operacional</div><div class="big">Intenção → Resultado</div><p>Todo pedido deve ter origem, destino, autorização, execução rastreável e resposta. O que ainda não está integrado aparece como desenvolvimento — nunca como sucesso inventado.</p></aside>
+</section>
+
+<div class="section-head"><h2>Visão geral</h2><span>ESTADO DA BASE · NÃO INDICA PRODUÇÃO REAL</span></div>
+<section class="stats">
+  <div class="stat"><label>CAMADA DE AUTORIDADE</label><strong>Em construção</strong><small>ADM Dono / ADM / DEV / Público</small></div>
+  <div class="stat"><label>NÚCLEO OPERACIONAL</label><strong>Base existente</strong><small>Contratos, runtime e registro</small></div>
+  <div class="stat"><label>PRODUÇÃO MODULAR</label><strong>Em integração</strong><small>Dark Factory e capacidades</small></div>
+  <div class="stat"><label>CONEXÕES REAIS</label><strong>Não ativadas aqui</strong><small>Sem publicação ou cobrança</small></div>
+</section>
+
+<section class="layout">
+  <div class="card">
+    <h3>As quatro camadas de autoridade</h3><div class="muted">Separadas por responsabilidade. Nenhuma camada inferior promove a si própria.</div>
+    <div class="layers">
+      <div class="layer"><div class="layer-icon">♛</div><div><strong>ADM Dono</strong><p>Autoridade soberana externa ao WordDark; define os limites do mundo.</p></div><span class="level">TOPO · EXTERNO</span></div>
+      <div class="layer"><div class="layer-icon">◈</div><div><strong>ADM</strong><p>Administração interna, configurações e supervisão dentro dos limites concedidos.</p></div><span class="level">GOVERNA</span></div>
+      <div class="layer"><div class="layer-icon">⌘</div><div><strong>DEV</strong><p>Constrói, mantém e testa; acesso ao código não concede autoridade administrativa.</p></div><span class="level">DESENVOLVE</span></div>
+      <div class="layer"><div class="layer-icon">↗</div><div><strong>Público</strong><p>Usa somente interfaces e serviços deliberadamente publicados.</p></div><span class="level">UTILIZA</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Entradas do mundo</h3><div class="muted">Navegação inicial para as áreas já organizadas no repositório.</div>
+    <div class="quick">
+      <a href="adm/levels/"><span class="qicon">◈</span><span><strong>Central ADM</strong><small>Áreas e setores internos</small></span></a>
+      <a href="worddark/runtime/world/core/"><span class="qicon">⌘</span><span><strong>Núcleo</strong><small>Runtime e operações</small></span></a>
+      <a href="worddark/runtime/world/sky/"><span class="qicon">✦</span><span><strong>Céu</strong><small>Produção e soluções</small></span></a>
+      <a href="worddark/runtime/world/earth/"><span class="qicon">⌂</span><span><strong>Terra</strong><small>Negócios e operação externa</small></span></a>
+      <button type="button" id="toggle-flow" aria-expanded="false"><span class="qicon">⇄</span><span><strong>Fluxo operacional</strong><small>Ver o caminho de uma solicitação</small></span></button>
+      <a href="worddark/runtime/world/WORLD-ARCHITECTURE.md"><span class="qicon">▤</span><span><strong>Mapa do mundo</strong><small>Arquitetura e responsabilidades</small></span></a>
+    </div>
+    <div class="panel-detail" id="flow-detail"><h4>Da necessidade à memória</h4><p>Solicitação → identificação → autorização → roteamento pela Rodovia → execução modular → validação → resultado → registro na Biblioteca → retorno ao solicitante. Se uma barreira falhar, a operação para ou aguarda revisão.</p></div>
+  </div>
+</section>
+
+<section class="layout">
+  <div class="card"><h3>Domínios funcionais</h3><div class="muted">Separação de responsabilidades para o mundo crescer sem virar um bloco único.</div>
+    <div class="feed">
+      <div class="event"><span class="dot"></span><div><strong>Mundo · coordenação</strong><p>Segurança, roteamento, biblioteca, auditoria, contratos e Central de Operações.</p></div></div>
+      <div class="event"><span class="dot"></span><div><strong>Céu · soluções</strong><p>Dark Factory, Marketing e capacidades de texto, imagem, áudio e vídeo.</p></div></div>
+      <div class="event"><span class="dot"></span><div><strong>Terra · operação externa</strong><p>Empresas, clientes, canais, produtos, fornecedores e comércio.</p></div></div>
+      <div class="event"><span class="dot"></span><div><strong>Rodovia · interconexão</strong><p>Transporte interno de mensagens e capacidades; sem painel público próprio.</p></div></div>
+    </div>
+  </div>
+  <div class="card"><h3>Estado honesto do projeto</h3><div class="muted">O painel já é navegável como interface estática. O backend não é declarado conectado só porque existe um botão.</div>
+    <div class="feed">
+      <div class="event"><span class="dot"></span><div><strong>Arquitetura e limites</strong><p>Documentados e versionados na branch de desenvolvimento.</p></div></div>
+      <div class="event"><span class="dot warn"></span><div><strong>Portão de autorização</strong><p>Módulo inicial implementado; depende de autenticação confiável e integração server-side.</p></div></div>
+      <div class="event"><span class="dot warn"></span><div><strong>Validação automatizada</strong><p>A suíte geral ainda apresenta falha preexistente no teste do runtime; não está aprovada.</p></div></div>
+      <div class="event"><span class="dot warn"></span><div><strong>Serviços externos</strong><p>Conexões reais, publicação e movimentação financeira permanecem desativadas nesta interface.</p></div></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="footer"><span>WORDDARK · CENTRAL DO MUNDO</span><span>AMBIENTE DE DESENVOLVIMENTO · NÃO É A PRODUÇÃO</span></footer>
+</div>
+<script>
+const toggle=document.getElementById("toggle-flow");
+const detail=document.getElementById("flow-detail");
+toggle.addEventListener("click",()=>{const open=detail.classList.toggle("open");toggle.setAttribute("aria-expanded",String(open));});
+</script>
+</body>
+</html>
