@@ -13,6 +13,12 @@ WordDark é um sistema de coordenação de operações e empresas, não apenas u
 
 A ordem não é uma cadeia de promoção de cargos. Nenhuma camada inferior pode criar permissões para uma camada superior. ADM, DEV e Público têm zonas e permissões separadas; por padrão, a decisão é negar.
 
+## Portão de autorização interno
+
+O módulo `core/world-gateway.mjs` funciona como uma camada de entrada para comandos autorizados. Ele usa uma lista fixa de comandos, resolve a identidade por um resolvedor confiável fornecido pela aplicação e consulta a fronteira de autoridade antes de chamar o executor. A decisão é negar quando a identidade não pode ser resolvida, o comando não existe, a permissão falta ou o executor não foi configurado.
+
+**Limite atual:** o gateway é uma camada pronta para integração, não um sistema completo de login. A aplicação hospedeira ainda precisa fornecer autenticação real, sessões seguras, armazenamento de identidades, registro de auditoria persistente e handlers conectados ao runtime. Não se deve confiar em cargos enviados diretamente pelo navegador nem publicar esse módulo como única proteção de uma API. ADM Ruan permanece uma fronteira soberana externa e não pode ser criado por comandos internos.
+
 ## Trindade funcional
 
 - **Mundo / WordDark:** coordenação, validação, segurança, biblioteca, roteamento, auditoria e supervisão.
