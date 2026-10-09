@@ -30,7 +30,7 @@ export function createConnectionStore({firestore,kms,keyName,collectionName="wor
     const record={
       providerId:provider,accountId,title:account.title||null,customUrl:account.customUrl||null,
       thumbnail:account.thumbnail||null,statistics:account.statistics||{},scope:scope||tokens.scope||null,
-      status:"CONNECTED",capabilities:["CHANNEL_READ","CONTENT_ROUTE"],
+      status:"PERSISTED",capabilities:[],
       encryptedTokenBundle,encryptionKey:keyName,createdAt:now,updatedAt:now
     };
     await collection.doc(documentId).set(record,{merge:true});
