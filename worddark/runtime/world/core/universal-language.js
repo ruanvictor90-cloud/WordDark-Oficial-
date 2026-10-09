@@ -9,12 +9,15 @@
   const ACTIONS={"trocar audio":"REPLACE_AUDIO","trocar áudio":"REPLACE_AUDIO","trocar o audio":"REPLACE_AUDIO","trocar o áudio":"REPLACE_AUDIO","substituir audio":"REPLACE_AUDIO","substituir áudio":"REPLACE_AUDIO","substituir o audio":"REPLACE_AUDIO","substituir o áudio":"REPLACE_AUDIO","publicar":"PUBLISH_CONTENT","postar":"PUBLISH_CONTENT","cortar video":"CUT_VIDEO","cortar vídeo":"CUT_VIDEO","editar foto":"EDIT_PHOTO","editar imagem":"EDIT_PHOTO","adicionar legenda":"ADD_SUBTITLE","criar video":"CREATE_CONTENT","criar vídeo":"CREATE_CONTENT","criar conteúdo":"CREATE_CONTENT","criar conteudo":"CREATE_CONTENT","renderizar":"RENDER_CONTENT","validar":"VALIDATE_CONTENT"};
   const text=v=>String(v||"").trim().toLowerCase();
   function findAction(input){
-    const t=text(input), dictionaryMatch=Dictionary?.match?.(t);
+    const t=text(input);
+    // Frases explícitas de operação isolada têm precedência sobre categorias amplas do dicionário.
+    // Ex.: "trocar o áudio" não deve ser classificado genericamente como EDIT_CONTENT.
+    for(const k of Object.keys(ACTIONS))if(t.includes(k))return ACTIONS[k];
+    const dictionaryMatch=Dictionary?.match?.(t);
     if(dictionaryMatch){
       const map={CONTENT_CREATE:"CREATE_CONTENT",CONTENT_EDIT:"EDIT_CONTENT",CONTENT_PUBLICATION:"PUBLISH_CONTENT",CONTENT_RENDER:"RENDER_CONTENT",CONTENT_VALIDATE:"VALIDATE_CONTENT",CONTENT_PACKAGE:"PACKAGE_CONTENT",CHANNEL_MANAGEMENT:"MANAGE_CHANNEL",MARKETING_MANAGEMENT:"MANAGE_MARKETING",BUSINESS_OPERATIONS:"OPERATE_BUSINESS"};
       return map[dictionaryMatch.capability]||null;
     }
-    for(const k of Object.keys(ACTIONS))if(t.includes(k))return ACTIONS[k];
     if(/public(ar|ação|acao|ar conteúdo|ar conteudo)|postar/.test(t))return"PUBLISH_CONTENT";
     if(/trocar|substituir|mudar/.test(t)&&/áudio|audio/.test(t))return"REPLACE_AUDIO";
     if(/cortar|recortar/.test(t)&&/vídeo|video/.test(t))return"CUT_VIDEO";
