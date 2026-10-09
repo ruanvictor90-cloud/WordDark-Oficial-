@@ -20,6 +20,7 @@ A interface agora envia o código de autorização de uso único para `codeEndpo
 - O bridge só confirma `persistence: PERSISTED` depois de gravar o registro no Firestore.
 - O pacote de tokens (incluindo refresh token) é criptografado com Cloud KMS antes de ser armazenado; tokens nunca são devolvidos à página.
 - A conexão fica com estado `PERSISTED`, sem capacidades operacionais, até que o registro persistente seja integrado ao gateway central.
+- O store de backend agora separa `load()` (somente metadados, sem ciphertext ou tokens) de `loadTokens()` (descriptografia explícita para uso exclusivamente server-side). A interface pública não tem rota para consultar essas credenciais.
 - Se o Google não emitir `refresh_token`, a operação para sem declarar a conexão ativa.
 - O navegador pede acesso offline e consentimento para permitir a emissão de refresh token.
 
