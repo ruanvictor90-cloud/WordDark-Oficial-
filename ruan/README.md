@@ -1,4 +1,4 @@
-# Ruan — Núcleo Pessoal Alfa 0.1
+# Ruan — Núcleo Pessoal Alfa 0.4
 
 O Ruan é o ambiente pessoal independente. WordDark é um aplicativo acessado a partir dele, não o proprietário do Ruan.
 
@@ -36,3 +36,11 @@ A partir da raiz publicada do repositório, a área fica em /ruan/. A instalaç�
 - Contagem de projetos ativos no painel inicial e na área de privacidade.
 - Os projetos são incluídos na exportação/restauração e na limpeza dos dados pessoais.
 - Cópias Alfa 0.2 continuam compatíveis: se não contiverem projetos, a restauração inicia essa lista vazia.
+
+
+## Alfa 0.4 — rotinas e progresso diário
+- Módulo Rotinas com criação, edição, exclusão e marcação diária de hábitos.
+- Histórico local de dias concluídos, sequência atual quando todos os hábitos foram feitos e taxa agregada dos últimos sete dias.
+- Painel inicial com rotinas concluídas, tarefas pendentes e projetos ativos.
+- Rotinas incluídas na exportação, restauração validada e limpeza local; cópias antigas sem este campo continuam compatíveis.
+- Os indicadores refletem apenas os registros deste navegador; não há notificações, sincronização ou lembretes automáticos.
