@@ -67,13 +67,18 @@
         note.textContent="O backend não confirmou a conexão. Verifique a configuração do endpoint e tente novamente. Código: "+String(result.status||"RESPOSTA_INVÁLIDA").slice(0,80);
         return;
       }
+      if(result.persistence==="PERSISTED"){
+        status.textContent="CONEXÃO SALVA · OPERAÇÃO PENDENTE";
+        note.textContent="Canal "+String(result.account?.title||"YouTube")+" salvo com tokens criptografados no backend. Ainda falta integrar este registro ao gateway operacional; nenhuma publicação automática está liberada.";
+        return;
+      }
       if(result.persistence!=="ACTIVE"){
-        status.textContent="AUTORIZAÇÃO CONFIRMADA · REGISTRO PENDENTE";
-        note.textContent="O Google reconheceu o canal "+String(result.account?.title||"autorizado")+". A conexão ainda não está operacional: falta persistir com segurança o vínculo no registro central.";
+        status.textContent="AUTORIZAÇÃO CONFIRMADA · ATIVAÇÃO PENDENTE";
+        note.textContent="O Google reconheceu o canal "+String(result.account?.title||"autorizado")+". O backend ainda não confirmou a ativação operacional.";
         return;
       }
       status.textContent="CONEXÃO ATIVA";
-      note.textContent="Canal autorizado: "+String(result.account?.title||"YouTube")+". A conexão foi confirmada pelo backend.";
+      note.textContent="Canal autorizado: "+String(result.account?.title||"YouTube")+". O backend confirmou persistência e ativação.";
     }catch{
       status.textContent="BACKEND INDISPONÍVEL";
       note.textContent="Não foi possível alcançar o backend seguro. Nenhum token foi salvo nesta página; confira se o serviço está publicado e acessível.";
