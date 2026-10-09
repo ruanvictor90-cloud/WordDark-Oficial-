@@ -22,7 +22,7 @@ export function createAuthorizedWorldGateway({ resolvePrincipal, handlers = {} }
   }
 
   return Object.freeze({
-    invoke({ identity, command, payload } = {}) {
+    async invoke({ identity, command, payload } = {}) {
       const requiredAction = WORLD_COMMANDS[command];
       if (!requiredAction) {
         return Object.freeze({ success: false, status: "BLOCKED", reason: "COMMAND_NOT_RECOGNIZED" });
@@ -55,7 +55,7 @@ export function createAuthorizedWorldGateway({ resolvePrincipal, handlers = {} }
       }
 
       try {
-        const result = handler(payload, Object.freeze({ principalId: decision.principalId, command, requiredAction }));
+        const result = await handler(payload, Object.freeze({ principalId: decision.principalId, command, requiredAction }));
         return Object.freeze({ success: true, status: "ACCEPTED", command, result });
       } catch {
         return Object.freeze({ success: false, status: "FAILED", reason: "HANDLER_FAILED", command });
