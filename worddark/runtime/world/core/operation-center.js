@@ -27,7 +27,7 @@
     toResult(value,meta={}){
       if(!Result)return value;
       if(value?.operationId)return value.status==="COMPLETED"?Result.success(value.result,{operationId:value.operationId,productionId:value.parentProductionId,moduleId:value.currentModuleId,action:value.action,meta}):Result.failure(value.result?.reason||value.result?.stage||"Operação não concluída.",{status:value.status||"FAILED",operationId:value.operationId,productionId:value.parentProductionId,moduleId:value.failedModule,action:value.action,reentry:value.status==="FAILED"||value.status==="WAITING",meta});
-      if(value?.productionId)return value.status==="COMPLETED"?Result.success(value.result,{productionId:value.productionId,meta}):Result.failure(value.result?.reason||"Produção não concluída.",{status:value.status||"FAILED",productionId:value.productionId,reentry:value.status==="PARTIAL"||value.status==="FAILED",meta});
+      if(value?.productionId){const diagnostics={...meta,executionResults:value.result?.results||value.results||[],operationPlan:(value.operationPlan||[]).map(op=>({operationId:op.operationId,action:op.action,status:op.status,destinationId:op.destinationId,service:op.service}))};return value.status==="COMPLETED"?Result.success(value.result,{productionId:value.productionId,meta:diagnostics}):Result.failure(value.result?.reason||"Produção não concluída.",{status:value.status||"FAILED",productionId:value.productionId,reentry:value.status==="PARTIAL"||value.status==="FAILED",meta:diagnostics});}
       return value;
     }
     getStatus(){return{status:"READY",defaultEnvironment:this.defaultEnvironment,hasOperationCoordinator:!!this.operationCoordinator,hasProductionEngine:!!this.productionEngine,hasContentDecisionEngine:!!this.contentDecisionEngine};}
