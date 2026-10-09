@@ -47,6 +47,38 @@
       document.head.appendChild(s);
     }else start(clientId);
   });
+  async function exchangeCode(code,clientId){
+    if(!cfg.codeEndpoint){
+      status.textContent="BACKEND NÃO CONFIGURADO";
+      note.textContent="O Google devolveu um código, mas a troca segura ainda não pode começar. Falta configurar e publicar o endpoint de backend do WordDark.";
+      return;
+    }
+    status.textContent="VALIDANDO CONEXÃO";
+    note.textContent="Enviando o código temporário ao backend seguro. Tokens não serão exibidos nesta página.";
+    try{
+      const response=await fetch(cfg.codeEndpoint,{
+        method:"POST",
+        headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8","X-Requested-With":"XmlHttpRequest"},
+        body:new URLSearchParams({code,client_id:clientId})
+      });
+      const result=await response.json().catch(()=>({}));
+      if(!response.ok||result.status!=="CONNECTED"){
+        status.textContent="CONEXÃO NÃO CONFIRMADA";
+        note.textContent="O backend não confirmou a conexão. Verifique a configuração do endpoint e tente novamente. Código: "+String(result.status||"RESPOSTA_INVÁLIDA").slice(0,80);
+        return;
+      }
+      if(result.persistence!=="ACTIVE"){
+        status.textContent="AUTORIZAÇÃO CONFIRMADA · REGISTRO PENDENTE";
+        note.textContent="O Google reconheceu o canal "+String(result.account?.title||"autorizado")+". A conexão ainda não está operacional: falta persistir com segurança o vínculo no registro central.";
+        return;
+      }
+      status.textContent="CONEXÃO ATIVA";
+      note.textContent="Canal autorizado: "+String(result.account?.title||"YouTube")+". A conexão foi confirmada pelo backend.";
+    }catch{
+      status.textContent="BACKEND INDISPONÍVEL";
+      note.textContent="Não foi possível alcançar o backend seguro. Nenhum token foi salvo nesta página; confira se o serviço está publicado e acessível.";
+    }
+  }
   function start(clientId){
     const client=google.accounts.oauth2.initCodeClient({
       client_id:clientId,
@@ -55,11 +87,10 @@
       callback:function(response){
         if(response.error){
           status.textContent="AUTORIZAÇÃO NÃO CONCLUÍDA";
-          note.textContent=response.error_description||response.error;
+          note.textContent="O Google não concluiu a autorização. Você pode tentar novamente quando estiver pronto.";
           return;
         }
-        status.textContent="CÓDIGO RECEBIDO — MUNDO AGUARDANDO";
-        note.textContent="O Google autorizou e devolveu um código. A troca segura desse código por tokens ainda depende do endpoint de backend do WordDark; nenhum token é gravado nesta página.";
+        exchangeCode(response.code,clientId);
       },
       error_callback:function(e){
         status.textContent=e?.type==="popup_closed"?"AUTORIZAÇÃO CANCELADA":"FALHA NA AUTORIZAÇÃO";
