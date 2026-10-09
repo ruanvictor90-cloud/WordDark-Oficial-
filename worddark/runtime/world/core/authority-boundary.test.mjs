@@ -7,9 +7,9 @@ const principal = (role, zone, extra = {}) => ({
   role, zone, authenticated: true, active: true, ...extra
 });
 
-test("sovereign ADM Ruan is explicitly outside internal roles", () => {
+test("sovereign ADM Dono is explicitly outside internal roles", () => {
   const boundary = describeWorldBoundary();
-  assert.equal(boundary.sovereignAuthority, "ADM_RUAN_EXTERNAL");
+  assert.equal(boundary.sovereignAuthority, "ADM_DONO_EXTERNAL");
   assert.equal(boundary.sovereignAuthorityIsInternalRole, false);
   assert.equal(normalizePrincipal({ role: "ADM-Ruan", zone: "ADM", authenticated: true, active: true }).role, null);
 });
