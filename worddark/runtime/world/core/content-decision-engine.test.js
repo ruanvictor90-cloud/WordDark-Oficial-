@@ -65,8 +65,8 @@ assert.ok(Array.isArray(constrained.decision.trace));
 console.log("content-decision-engine.test: OK");
 
 
-const constrained=Engine.choose(candidates,{constraints:{minFeasibility:90}});
-assert.equal(constrained.winner.id,"A");
+const constrainedByFeasibility=Engine.choose(candidates,{constraints:{minFeasibility:90}});
+assert.equal(constrainedByFeasibility.winner.id,"A");
 
 const blocked=Engine.choose(candidates,{constraints:{minFeasibility:99}});
 assert.equal(blocked.success,false);
