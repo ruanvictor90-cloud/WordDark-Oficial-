@@ -52,7 +52,7 @@ class WordDarkOperationCoordinator {
     if(!route.success)return{success:false,status:"BLOCKED",stage:"ROUTING",reason:route.reason};
     const returnRoute=this.ensureReturnRoute(origin,service,destination.destination);
     if(!returnRoute.success)return{success:false,status:"BLOCKED",stage:"RETURN_ROUTING",reason:returnRoute.reason};
-    const operation=this.engine.create({...source,originId:origin,destinationId:destination.destination,originSectorId:source.originSectorId||origin,executionSectorId:source.executionSectorId||destination.destination,detailLibraryId:source.detailLibraryId||null,service,operationType:source.operationType||source.action||service,capability,environment:source.environment||"TEST"});
+    const operation=this.engine.create({...source,originId:origin,destinationId:destination.destination,originSectorId:source.originSectorId||origin,executionSectorId:source.executionSectorId||destination.destination,detailLibraryId:source.detailLibraryId||null,service,serviceId:service,operationType:source.operationType||source.action||service,capability,environment:source.environment||"TEST"});
     return this.engine.run(operation);
   }
   getStatus(){return{status:this.engine?"READY":"OFFLINE",version:this.version,destination:this.destination||"CAPABILITY_ROUTED",capabilityRouting:!!this.companyRouter};}
