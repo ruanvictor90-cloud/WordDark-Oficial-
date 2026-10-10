@@ -41,6 +41,14 @@
     const sourceLanguage=str(requirements.sourceLanguage||options.sourceLanguage||input.sourceLanguage);
     const targetLanguage=str(requirements.targetLanguage||options.targetLanguage||input.targetLanguage);
     const id=String(moduleId||"").toUpperCase();
+    if(id==="TRANSCRIBE"){
+      const media=input.media||input.asset||input.mediaUrl||input.url||requirements.media||requirements.asset||requirements.mediaUrl;
+      if(!media)return{success:false,status:"NEEDS_MEDIA",module:id,reason:"SOURCE_MEDIA_REQUIRED"};
+      if(typeof adapters.transcribe!=="function")return{success:false,status:"NEEDS_PROVIDER",module:id,reason:"TRANSCRIPTION_PROVIDER_REQUIRED"};
+      const result=await adapters.transcribe({media,sourceLanguage:sourceLanguage||"auto",operationId:operation.operationId});
+      if(!result||result.success===false||!Array.isArray(result.segments)||!result.segments.length)return{success:false,status:"FAILED",module:id,reason:result?.reason||"TRANSCRIPTION_SEGMENTS_REQUIRED"};
+      return{success:true,status:"TRANSCRIBED",module:id,sourceLanguage:result.sourceLanguage||sourceLanguage||"auto",segments:normalizeSegments(result.segments),provider:result.provider||"injected"};
+    }
     if(id==="TRANSLATE"){
       if(!targetLanguage)return{success:false,status:"NEEDS_CONFIGURATION",module:id,reason:"TARGET_LANGUAGE_REQUIRED"};
       if(!sourceText&&!transcript.length)return{success:false,status:"NEEDS_TRANSCRIPT",module:id,reason:"TRANSCRIPT_OR_TEXT_REQUIRED"};
