@@ -10,6 +10,7 @@ class WordDarkResult {
     this.moduleId=source.moduleId||null;
     this.companyId=source.companyId||null;
     this.action=source.action||null;
+    this.operation=source.operation||null;
     this.output=source.output??source.result??null;
     this.artifacts=Array.isArray(source.artifacts)?source.artifacts:[];
     this.errors=Array.isArray(source.errors)?source.errors:[];
