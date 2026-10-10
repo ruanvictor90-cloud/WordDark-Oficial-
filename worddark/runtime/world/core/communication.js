@@ -12,7 +12,7 @@
     sendOperationRequest(operation){
       if(!this.road)return{success:false,reason:"Rodovia não configurada."};
       if(!WordDarkRequest||!WordDarkMessage||!WordDarkReceipt)return{success:false,reason:"Contratos de comunicação não carregados."};
-      const service=operation.service||operation.operationType;
+      const service=operation.service||operation.serviceId||operation.operationType;
       const request=new WordDarkRequest({requestId:"REQ-"+operation.operationId,operationId:operation.operationId,requesterId:operation.requesterId,originId:operation.originId,destinationId:operation.destinationId,service,task:operation.payload?.task||("Executar operação "+operation.operationType),payload:{...operation.payload,service,operationType:operation.operationType,action:operation.action,capability:operation.capability,clientId:operation.clientId}});
       const validation=request.validate(); if(!validation.valid)return{success:false,reason:"Pedido inválido.",errors:validation.errors};
       const message=new WordDarkMessage({messageId:"MSG-"+operation.operationId,requestId:request.requestId,type:"OPERATION_REQUEST",origin:request.originId,destination:request.destinationId,service:request.service,payload:request.toJSON()});
