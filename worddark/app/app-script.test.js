@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-9") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-10") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -74,7 +74,7 @@ assert.ok(source.includes("data-request-ready"), "The guided flow must provide a
 assert.ok(source.includes("clarificationStage:Number(worldQuestions?.dataset.stage||0)"), "The saved request must retain its clarification progress");
 assert.ok(source.includes("suggestedArea:profile.area,suggestedKind:profile.kind"), "The request must preserve the suggested route for later review");
 assert.ok(html.includes("/* Guided request flow:"), "The guided clarification interface must have dedicated responsive styling");
-assert.ok(sw.includes("worddark-app-v1-9"), "The request interface update must invalidate the old app cache");
+assert.ok(sw.includes("worddark-app-v1-10"), "The request interface update must invalidate the old app cache");
 
 assert.ok(source.includes("function routeRequest(id)"), "Requests must route to their suggested sector");
 assert.ok(source.includes("data-route-request"), "Non-factory requests must expose a sector handoff action");
@@ -82,7 +82,7 @@ assert.ok(source.includes("r.routedTo=label;r.routedAt="), "Local routing histor
 assert.ok(source.includes("Autenticação externa e OAuth continuam indisponíveis nesta versão."), "Unavailable external integrations must be stated clearly");
 assert.ok(source.includes("não há banco, cobrança, assinatura ou transferência real conectada."), "Financial real-world actions must remain explicitly unavailable");
 assert.ok(source.includes("Setor aberto: '+esc(r.routedTo)"), "The request list must show the last sector opened");
-assert.ok(sw.includes("worddark-app-v1-9"), "Sector routing must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-10"), "Sector routing must invalidate the previous app cache");
 
 
 assert.ok(source.includes("function recordJobEvent(j,type,detail)"), "Factory jobs must retain an explicit local event history");
@@ -94,7 +94,7 @@ assert.ok(source.includes("aprovação humana registrada"), "Approval events mus
 assert.ok(source.includes("r.status='Encaminhada à Dark Factory'"), "Dispatch must not falsely claim work has started");
 assert.ok(source.includes("linked.status=status==='Entregue'?'Concluída':status==='Aprovado'?'Aprovada para entrega'"), "Source requests must mirror the factory lifecycle");
 assert.ok(source.includes("Publicação externa continua desativada"), "Internal approval must not be represented as external publication");
-assert.ok(sw.includes("worddark-app-v1-9"), "Workflow changes must invalidate the previous service worker cache");
+assert.ok(sw.includes("worddark-app-v1-10"), "Workflow changes must invalidate the previous service worker cache");
 
 
 assert.ok(source.includes("## Histórico de etapas"), "Exported delivery packages must include the local workflow audit trail");
@@ -111,7 +111,7 @@ assert.ok(source.includes("WEBVTT\\n\\n"), "VTT export must include a WebVTT hea
 assert.ok(source.includes("Roteiro de dublagem / voice-over"), "The localization module must produce a dubbing script package");
 assert.ok(source.includes("Tradução automática, reconhecimento de fala e geração de voz ainda precisam"), "The app must disclose that automatic translation and voice engines are not connected");
 assert.ok(source.includes("HH:MM:SS,mmm --> HH:MM:SS,mmm"), "Subtitle export must validate timecodes");
-assert.ok(sw.includes("worddark-app-v1-9"), "Localization changes must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-10"), "Localization changes must invalidate the previous app cache");
 
 
 assert.ok(source.includes("j.localizationOnly&&['Em revisão','Aprovado','Entregue'].includes(status)&&!String(j.localization?.translatedTranscript||'').trim()"), "Localization cannot enter review without a saved target-language translation");
@@ -121,18 +121,22 @@ assert.ok(source.includes("Trabalho aprovado ou encerrado: volte para Em produç
 assert.ok(source.includes("function prepareJobAutomatically(id)"), "The local automation engine must prepare eligible content jobs");
 assert.ok(source.includes("function runAutomaticPreparation()"), "The automation center must process the eligible queue");
 assert.ok(source.includes("function automationCenter()"), "The app must expose a dedicated automation center");
+assert.ok(source.includes("function launchDesk()"), "The app must expose a zero-cost launch checklist");
+assert.ok(source.includes("launchChecklist:'worddark.launch.checklist.v1'"), "Launch progress must persist locally");
+assert.ok(source.includes("data-launch-check"), "Launch checklist items must be interactive");
+assert.ok(source.includes("Sem chave de API, sem hospedagem adicional"), "The launch path must be usable without paid AI infrastructure");
 assert.ok(source.includes("data-auto-prepare-all"), "The automation center must support batch preparation");
 assert.ok(source.includes("requiresHumanReview:true"), "Automatically prepared work must retain a human-review requirement");
 assert.ok(source.includes("Nenhum conteúdo foi publicado."), "Local automation must explicitly state that it did not publish content");
 assert.ok(source.includes("automation:automationCenter"), "The automation center must have a registered route");
 assert.ok(source.includes("function capabilities()"), "WordDark must expose a central capability registry");
 assert.ok(source.includes("module('capabilities','◈','Capacidades'"), "The capability registry must be reachable from the main overview");
-assert.ok(source.includes("const views={overview,management,sky,earth,finance,library,security,capabilities,"), "The capability registry must have a registered route");
+assert.ok(source.includes("const views={overview,launch:launchDesk,management,sky,earth,finance,library,security,capabilities,"), "The launch desk and capability registry must have registered routes");
 assert.ok(source.includes("Tradução, SRT e VTT"), "The capability registry must distinguish manual localization from automatic translation");
 assert.ok(source.includes("Publicação em redes sociais"), "External publishing must be explicitly inventoried");
 assert.ok(source.includes("Transações financeiras reais"), "Real financial transactions must be explicitly inventoried");
 assert.ok(source.includes("administrar a raiz da Área ADM Dono"), "Security copy must preserve the external sovereign boundary without placing the owner inside the world");
 assert.ok(!source.includes("núcleo pessoal do Ruan"), "The world UI must not place Ruan inside its architecture");
-assert.ok(sw.includes("worddark-app-v1-9"), "Capability registry changes must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-10"), "Capability registry changes must invalidate the previous app cache");
 
 console.log("worddark app script test: OK");
