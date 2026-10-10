@@ -36,7 +36,7 @@
     const operation=context.operation||{},requirements=operation.requirements||{},options=operation.options||{};
     const input=operation.input||requirements.input||{};
     const previous=Array.isArray(context.previous)?context.previous:[];
-    const previousSegments=previous.flatMap(x=>x.segments||x.result?.segments||[]);
+    const latestSegmentResult=[...previous].reverse().find(x=>Array.isArray(x.segments)&&x.segments.length)||null;\n    const previousSegments=latestSegmentResult?latestSegmentResult.segments:[];
     const transcript=previousSegments.length?previousSegments:(input.segments||input.transcriptSegments||requirements.segments||requirements.transcriptSegments||[]);
     const sourceText=str(input.text||input.transcript||requirements.text||requirements.transcript||transcript.map(x=>x.text).join(" "));
     const sourceLanguage=str(requirements.sourceLanguage||options.sourceLanguage||input.sourceLanguage);
