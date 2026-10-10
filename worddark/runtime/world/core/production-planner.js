@@ -30,7 +30,7 @@
     if(Array.isArray(explicit)&&explicit.length)return explicit.map(x=>typeof x==="string"?{action:x}:x);
     const t=re(production.goal);
     const actions=[];
-    if(/criar|produzir|gerar/.test(t)&&/conteúdo|conteudo|vídeo|video|imagem|foto/.test(t))actions.push("CREATE_CONTENT");
+    if(/criar|produzir|gerar|faz(?:er)?|prepara(?:r)?/.test(t)&&/conteúdo|conteudo|vídeo|video|imagem|foto|post|instagram/.test(t))actions.push("CREATE_CONTENT");
     if(/editar/.test(t)&&/foto|imagem/.test(t))actions.push("EDIT_PHOTO");
     if(/editar|alterar/.test(t)&&/vídeo|video|conteúdo|conteudo/.test(t))actions.push("EDIT_CONTENT");
     if(/cortar|recortar/.test(t)&&/vídeo|video/.test(t))actions.push("CUT_VIDEO");
@@ -38,7 +38,7 @@
     if(/legenda|subtítulo|subtitulo/.test(t))actions.push("ADD_SUBTITLE");
     if(/renderizar/.test(t))actions.push("RENDER_CONTENT");
     if(/validar|verificar/.test(t))actions.push("VALIDATE_CONTENT");
-    if(/publicar|postar/.test(t))actions.push("PUBLISH_CONTENT");
+    if(/publica(?:r)?|postar|posta|post\b|poste/.test(t))actions.push("PUBLISH_CONTENT");
     if(!actions.length)actions.push(actionFor(production.goal,production.requirements,production.options));
     return [...new Set(actions)];
   }
