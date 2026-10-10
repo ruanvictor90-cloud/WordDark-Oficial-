@@ -13,7 +13,7 @@ class DarkFactoryOperationBridge {
       requester:operation.requesterId,
       origin:operation.originId,
       destination:operation.destinationId,
-      task:operation.payload&&operation.payload.task||("Executar operação "+operation.operationType),
+      task:operation.payload&&(operation.payload.task||operation.payload.goal)||("Executar operação "+operation.operationType),
       taskType:this.getService(operation),
       permission:"approved",
       payload:operation.payload
