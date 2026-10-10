@@ -3,6 +3,8 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
+const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-3") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -59,6 +61,9 @@ assert.doesNotThrow(() => new vm.Script(source), "Inline app script must be vali
 assert.ok(source.includes("O que vamos resolver hoje?"), "Home must use a simple request-first launcher");
 assert.ok(source.includes("function updateWorldQuestions()"), "The request flow must ask clarifying questions proactively");
 assert.ok(source.includes("Ajustes internos (opcional)"), "Advanced routing controls must stay tucked away by default");
-assert.ok(html.includes("./assets/world-cosmos.svg") && html.includes("./assets/world-sky.svg") && html.includes("./assets/world-earth.svg"), "World sections must use dedicated atmospheric backgrounds");
+assert.ok(html.includes("/* Ruan interface foundation:"), "WordDark must share the Ruan app's restrained visual foundation");
+assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections must have a deliberate neutral fallback until the correct reference artwork is available");
+assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
+assert.ok(swCacheVersionForTest(html) === true, "Visual changes must be paired with the service worker cache version update");
 console.log("worddark app script test: OK");
