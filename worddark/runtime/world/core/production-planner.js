@@ -6,7 +6,7 @@
   if(typeof module==="object"&&module.exports)module.exports=factory(require("./capability-catalog"),require("../contracts/operation"));
   else{const r=root||(typeof window!=="undefined"?window:globalThis);r.WordDarkProductionPlanner=factory(r.WordDarkCapabilityCatalog,r.WordDarkOperation);}
 })(typeof globalThis!=="undefined"?globalThis:window,function(Catalog,WordDarkOperation){
-  const ACTIONS={CREATE_CONTENT:"CREATE_CONTENT",EDIT_CONTENT:"EDIT_CONTENT",EDIT_PHOTO:"EDIT_PHOTO",CUT_VIDEO:"CUT_VIDEO",REPLACE_AUDIO:"REPLACE_AUDIO",ADD_SUBTITLE:"ADD_SUBTITLE",RENDER_CONTENT:"RENDER_CONTENT",TRANSFORM_CONTENT:"TRANSFORM_CONTENT",VALIDATE_CONTENT:"VALIDATE_CONTENT",PACKAGE_CONTENT:"PACKAGE_CONTENT",PUBLISH_CONTENT:"PUBLISH_CONTENT",MANAGE_CHANNEL:"MANAGE_CHANNEL",OPERATE_BUSINESS:"OPERATE_BUSINESS",MANAGE_BUSINESS:"MANAGE_BUSINESS",MANAGE_MARKETING:"MANAGE_MARKETING",ANALYZE_MARKET:"ANALYZE_MARKET",ANALYZE_TRENDS:"ANALYZE_TRENDS",CREATE_BRAND:"CREATE_BRAND",PLAN_CAMPAIGN:"PLAN_CAMPAIGN",CONNECT_EXTERNAL:"CONNECT_EXTERNAL"};
+  const ACTIONS={CREATE_CONTENT:"CREATE_CONTENT",TRANSLATE_CONTENT:"TRANSLATE_CONTENT",DUB_CONTENT:"DUB_CONTENT",EDIT_CONTENT:"EDIT_CONTENT",EDIT_PHOTO:"EDIT_PHOTO",CUT_VIDEO:"CUT_VIDEO",REPLACE_AUDIO:"REPLACE_AUDIO",ADD_SUBTITLE:"ADD_SUBTITLE",RENDER_CONTENT:"RENDER_CONTENT",TRANSFORM_CONTENT:"TRANSFORM_CONTENT",VALIDATE_CONTENT:"VALIDATE_CONTENT",PACKAGE_CONTENT:"PACKAGE_CONTENT",PUBLISH_CONTENT:"PUBLISH_CONTENT",MANAGE_CHANNEL:"MANAGE_CHANNEL",OPERATE_BUSINESS:"OPERATE_BUSINESS",MANAGE_BUSINESS:"MANAGE_BUSINESS",MANAGE_MARKETING:"MANAGE_MARKETING",ANALYZE_MARKET:"ANALYZE_MARKET",ANALYZE_TRENDS:"ANALYZE_TRENDS",CREATE_BRAND:"CREATE_BRAND",PLAN_CAMPAIGN:"PLAN_CAMPAIGN",CONNECT_EXTERNAL:"CONNECT_EXTERNAL"};
   const re=(v)=>String(v||"").toLowerCase();
   function actionFor(goal,requirements={},options={}){
     if(options.action)return String(options.action).toUpperCase();
@@ -15,6 +15,8 @@
     if(/public(ar|ação|acao|ar conteúdo|ar conteudo)|postar/.test(t))return"PUBLISH_CONTENT";
     if(/trocar|substituir|mudar/.test(t)&&/áudio|audio/.test(t))return"REPLACE_AUDIO";
     if(/cortar|recortar/.test(t)&&/vídeo|video/.test(t))return"CUT_VIDEO";
+    if(/dubl|doblag|voice.?over|narração|narracao/.test(t))return"DUB_CONTENT";
+    if(/traduz|translation|translate/.test(t))return"TRANSLATE_CONTENT";
     if(/legenda|subtítulo|subtitulo/.test(t))return"ADD_SUBTITLE";
     if(/editar/.test(t)&&/foto|imagem/.test(t))return"EDIT_PHOTO";
     if(/editar|alterar/.test(t)&&/vídeo|video|conteúdo|conteudo/.test(t))return"EDIT_CONTENT";
@@ -35,8 +37,10 @@
     if(/editar|alterar/.test(t)&&/vídeo|video|conteúdo|conteudo/.test(t))actions.push("EDIT_CONTENT");
     if(/cortar|recortar/.test(t)&&/vídeo|video/.test(t))actions.push("CUT_VIDEO");
     if(/trocar|substituir|mudar/.test(t)&&/áudio|audio/.test(t))actions.push("REPLACE_AUDIO");
-    if(/legenda|subtítulo|subtitulo/.test(t))actions.push("ADD_SUBTITLE");
-    if(/renderizar/.test(t))actions.push("RENDER_CONTENT");
+    if(/traduz|translation|translate/.test(t))actions.push("TRANSLATE_CONTENT");
+    if(/legenda|legendar|subtítulo|subtitulo|caption/.test(t))actions.push("ADD_SUBTITLE");
+    if(/dubl|doblag|voice.?over|narração|narracao/.test(t))actions.push("DUB_CONTENT");
+    if(/renderizar|exportar/.test(t))actions.push("RENDER_CONTENT");
     if(/validar|verificar/.test(t))actions.push("VALIDATE_CONTENT");
     if(/publica(?:r)?|postar|posta|post\b|poste/.test(t))actions.push("PUBLISH_CONTENT");
     if(!actions.length)actions.push(actionFor(production.goal,production.requirements,production.options));
