@@ -27,13 +27,29 @@ export function createConnectionStore({firestore,kms,keyName,collectionName="wor
     const documentId=createHash("sha256").update(provider+":"+accountId).digest("hex");
     const encryptedTokenBundle=await encryptTokens(tokens);
     const now=clock().toISOString();
-    const record={
-      providerId:provider,accountId,title:account.title||null,customUrl:account.customUrl||null,
-      thumbnail:account.thumbnail||null,statistics:account.statistics||{},scope:scope||tokens.scope||null,
-      status:"PERSISTED",capabilities:[],
-      encryptedTokenBundle,encryptionKey:keyName,createdAt:now,updatedAt:now
+    const ref=collection.doc(documentId);
+    let record=null;
+    const write=previous=>{
+      record={
+        providerId:provider,accountId,title:account.title||null,customUrl:account.customUrl||null,
+        thumbnail:account.thumbnail||null,statistics:account.statistics||{},scope:scope||tokens.scope||null,
+        // Persistência/renovação nunca ativa uma conexão nem apaga aprovações existentes.
+        status:previous?.status||"PERSISTED",
+        capabilities:Array.isArray(previous?.capabilities)?previous.capabilities:[],
+        encryptedTokenBundle,encryptionKey:keyName,createdAt:previous?.createdAt||now,updatedAt:now
+      };
+      return record;
     };
-    await collection.doc(documentId).set(record,{merge:true});
+    if(typeof firestore.runTransaction==="function"){
+      await firestore.runTransaction(async transaction=>{
+        const snapshot=await transaction.get(ref);
+        const previous=snapshot?.exists?snapshot.data():null;
+        transaction.set(ref,write(previous),{merge:true});
+      });
+    }else{
+      const snapshot=typeof ref.get==="function"?await ref.get():null;
+      await ref.set(write(snapshot?.exists?snapshot.data():null),{merge:true});
+    }
     return {providerId:provider,accountId,title:record.title,status:record.status,updatedAt:now};
   }
   return Object.freeze({save,decryptTokens});
