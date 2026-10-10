@@ -117,7 +117,7 @@ const center=new Center({
   defaultEnvironment:"TEST"
 });
 
-const result=center.submit({
+center.submit({
   productionId:"OP-001",
   requesterId:"WD-TEST-OPERATOR-001",
   originId:"external/client-001",
@@ -139,7 +139,7 @@ const result=center.submit({
       task:"Produzir conteúdo solicitado por um cliente externo"
     }
   }
-});
+}).then(result=>{
 
 assert.strictEqual(result.success,true,JSON.stringify(result,null,2));
 assert.strictEqual(result.status,"COMPLETED");
@@ -153,3 +153,4 @@ assert.strictEqual(result.operation.clientId,"EXTERNAL-CLIENT-001");
 assert.strictEqual(result.operation.originId,"external/client-001");
 assert.strictEqual(result.operation.destinationId,"WD-COMP-DARK-FACTORY");
 console.log("OP-001 external-client integration: ok");
+}).catch(error=>{console.error(error);process.exitCode=1;});
