@@ -153,7 +153,7 @@ assert.ok(source.includes("pushRuanNotification('Publicação manual registrada'
 assert.ok(sw.includes("worddark-app-v1-13"), "Publication workflow changes must invalidate the previous service worker cache");
 assert.ok(source.includes("local-template-v2"), "Executor preparation must identify the improved profile-aware local template");
 assert.ok(source.includes("data-prepare-current-job"), "Executor workbench must offer direct preparation for an eligible job");
-assert.ok(source.includes("Três ganchos para escolher") && source.includes("ROTEIRO-BASE PARA VÍDEO CURTO"), "Prepared content must include selectable hooks and a short-video script outline");
+assert.ok(source.includes("TRÊS GANCHOS PARA ESCOLHER") && source.includes("ROTEIRO-BASE PARA VÍDEO CURTO"), "Prepared content must include selectable hooks and a short-video script outline");
 assert.ok(source.includes("requiresHumanReview:true"), "Automatically prepared content must retain mandatory human review");
 assert.ok(source.includes("pushRuanNotification('Pacote pronto para trabalhar'"), "Prepared executor packages must notify the Ruan gate");
 assert.ok(sw.includes("worddark-app-v1-13"), "Content-pack improvements must invalidate the previous service worker cache");
