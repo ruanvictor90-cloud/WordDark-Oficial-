@@ -24,8 +24,8 @@
       result:number(scores.result??candidate.resultScore),
       feasibility:number(scores.feasibility??candidate.feasibilityScore),
       history:number(scores.history??candidate.historyScore),
-      opportunity:number(scores.opportunity??candidate.opportunityScore),
-      learning:number(scores.learning??candidate.learningScore),
+      opportunity:number(scores.opportunity??candidate.opportunity??candidate.opportunityScore),
+      learning:number(scores.learning??candidate.learning??candidate.learningScore),
       risk:number(candidate.riskScore??scores.risk),
       available:candidate.available!==false,
       blocked:candidate.blocked===true,
@@ -37,6 +37,7 @@
     if(!c.available)return{ok:false,reason:"UNAVAILABLE"};
     if(c.blocked)return{ok:false,reason:"BLOCKED"};
     if(options.maxRisk!=null&&c.risk>number(options.maxRisk))return{ok:false,reason:"RISK_ABOVE_LIMIT"};
+    if(options.minFeasibility!=null&&c.feasibility<number(options.minFeasibility))return{ok:false,reason:"FEASIBILITY_BELOW_LIMIT"};
     if(options.minScore!=null){
       const minimum=number(options.minScore);
       const raw=Math.round(((c.objective+c.audience+c.channel+c.identity+c.feasibility)/5)*100)/100;
@@ -56,9 +57,10 @@
   }
   function rank(candidates=[],options={}){
     const mode=options.mode||MODES.BEST_KNOWN,weights={...DEFAULT_WEIGHTS,...(options.weights||{})};
+    const constraints={...options,...(options.constraints||{})};
     const eligibleCandidates=[],rejected=[];
     (Array.isArray(candidates)?candidates:[]).forEach((candidate,index)=>{
-      const normalized=normalizeCandidate(candidate,index),check=eligible(normalized,options);
+      const normalized=normalizeCandidate(candidate,index),check=eligible(normalized,constraints);
       if(!check.ok){rejected.push({...normalized,rejectionReason:check.reason});return;}
       eligibleCandidates.push(score(normalized,weights,mode));
     });
