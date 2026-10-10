@@ -1,5 +1,5 @@
-const CACHE = 'worddark-app-v1-2';
-const CORE = ['./', './index.html', './manifest.webmanifest', './app-icon.svg', './assets/world-cosmos.svg', './assets/world-sky.svg', './assets/world-earth.svg'];
+const CACHE = 'worddark-app-v1-3';
+const CORE = ['./', './index.html', './manifest.webmanifest', './app-icon.svg'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('worddark-app-') && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', event => {
