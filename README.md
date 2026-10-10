@@ -164,3 +164,10 @@ A aplicação pode ser usada como um **painel local de operação** sem contrata
 7. Exportar um backup JSON e guardá-lo em local seguro.
 
 O checklist é apenas um acompanhamento local. Os dados ficam no navegador deste dispositivo; não há sincronização automática, IA remota, publicação social automática, conexão bancária ou cobrança real ativadas. Não armazene senhas, tokens ou chaves de API no app. O primeiro ciclo não exige essas integrações.
+
+
+## Portão Principal e contas executoras
+
+A Área ADM pessoal tem uma entrada própria em `/ruan/`, com um emulador de telefone e três níveis de navegação: Área ADM pessoal, centro do WordDark e contas executoras externas. O painel exibe notificações locais registradas pelo WordDark na mesma origem do navegador. As notificações do sistema podem ser autorizadas enquanto a página está aberta; push em segundo plano ainda não existe.
+
+O centro **Contas executoras · Suco** registra os quatro perfis-piloto externos: SucoCast, SucoGeek, SucoComed e SucoEmpreendimento. É possível alterar o estado local e criar missões na Dark Factory. Nenhuma credencial é armazenada, nenhuma rede é conectada e nenhuma publicação é automática. Os estados e notificações locais não são confirmação independente de uma plataforma externa.
