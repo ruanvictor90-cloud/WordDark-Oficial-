@@ -131,7 +131,7 @@ assert.ok(source.includes("Nenhum conteúdo foi publicado."), "Local automation 
 assert.ok(source.includes("automation:automationCenter"), "The automation center must have a registered route");
 assert.ok(source.includes("function capabilities()"), "WordDark must expose a central capability registry");
 assert.ok(source.includes("module('capabilities','◈','Capacidades'"), "The capability registry must be reachable from the main overview");
-assert.ok(source.includes("const views={overview,management,sky,earth,finance,library,security,capabilities,"), "The capability registry must have a registered route");
+assert.ok(source.includes("const views={overview,launch:launchDesk,management,sky,earth,finance,library,security,capabilities,"), "The launch desk and capability registry must have registered routes");
 assert.ok(source.includes("Tradução, SRT e VTT"), "The capability registry must distinguish manual localization from automatic translation");
 assert.ok(source.includes("Publicação em redes sociais"), "External publishing must be explicitly inventoried");
 assert.ok(source.includes("Transações financeiras reais"), "Real financial transactions must be explicitly inventoried");
