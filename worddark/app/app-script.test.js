@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-10") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-11") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -122,6 +122,11 @@ assert.ok(source.includes("function prepareJobAutomatically(id)"), "The local au
 assert.ok(source.includes("function runAutomaticPreparation()"), "The automation center must process the eligible queue");
 assert.ok(source.includes("function automationCenter()"), "The app must expose a dedicated automation center");
 assert.ok(source.includes("function launchDesk()"), "The app must expose a zero-cost launch checklist");
+assert.ok(source.includes("function executors()"), "The app must expose the four external pilot accounts");
+assert.ok(source.includes("SucoEmpreendimento"), "The fourth external pilot profile must be registered");
+assert.ok(source.includes("ruan.world.notifications.v1"), "WordDark events must use the shared Ruan notification feed");
+assert.ok(source.includes("data-create-executor-job"), "Each pilot profile must support creating a mission");
+assert.ok(source.includes("executorProfiles:KEYS.executorProfiles"), "Executor states must be included in backups");
 assert.ok(source.includes("launchChecklist:'worddark.launch.checklist.v1'"), "Launch progress must persist locally");
 assert.ok(source.includes("data-launch-check"), "Launch checklist items must be interactive");
 assert.ok(source.includes("Sem chave de API, sem hospedagem adicional"), "The launch path must be usable without paid AI infrastructure");
@@ -131,7 +136,7 @@ assert.ok(source.includes("Nenhum conteúdo foi publicado."), "Local automation 
 assert.ok(source.includes("automation:automationCenter"), "The automation center must have a registered route");
 assert.ok(source.includes("function capabilities()"), "WordDark must expose a central capability registry");
 assert.ok(source.includes("module('capabilities','◈','Capacidades'"), "The capability registry must be reachable from the main overview");
-assert.ok(source.includes("const views={overview,launch:launchDesk,management,sky,earth,finance,library,security,capabilities,"), "The launch desk and capability registry must have registered routes");
+assert.ok(source.includes("const views={overview,launch:launchDesk,executors,management,sky,earth,finance,library,security,capabilities,"), "The launch desk, executor desk and capability registry must have registered routes");
 assert.ok(source.includes("Tradução, SRT e VTT"), "The capability registry must distinguish manual localization from automatic translation");
 assert.ok(source.includes("Publicação em redes sociais"), "External publishing must be explicitly inventoried");
 assert.ok(source.includes("Transações financeiras reais"), "Real financial transactions must be explicitly inventoried");
