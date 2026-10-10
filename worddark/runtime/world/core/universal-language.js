@@ -48,7 +48,7 @@
     if(type==="OPERATION"){
       return{type:"OPERATION",action:input.action||findAction(raw),intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,resourceId:base.resourceId,destinationId:base.destinationId,parameters:input.parameters||input.options||{},context:base,raw};
     }
-    return{type:"PRODUCTION",intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,goal:input.goal||raw,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,quantity:extractQuantity(input,t),requirements:{...(input.requirements||{}),capability:human?.capability||null,service:human?.service||null,action:human?.operations?.[0]||null,operations:human?.operations||input.requirements?.operations||null},options:{...(input.options||{}),environment:input.environment||input.options?.environment||"TEST"},context:base,raw};
+    return{type:"PRODUCTION",intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,goal:input.goal||raw,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,quantity:extractQuantity(input,t),requirements:{...(input.requirements||{}),capability:human?.capability||null,service:human?.service||null,action:input.requirements?.action||null,operations:input.operations||input.requirements?.operations||null},options:{...(input.options||{}),environment:input.environment||input.options?.environment||"TEST"},context:base,raw};
   }
   const api={ACTIONS,classify,parse,findAction,resolveHuman};
   if(typeof global!=="undefined")global.WordDarkUniversalLanguage=api;
