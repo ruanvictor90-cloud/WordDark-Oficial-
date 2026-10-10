@@ -50,3 +50,4 @@ assert.ok(html.includes("KEYS.routines,next.routines"));
 assert.ok(html.includes("homeRoutineDone"));
 assert.ok(html.includes("routineStreakCount"));
 console.log("Ruan routines tests passed.");
+\nassert.ok(html.includes('function normalizeOpportunityUrl(raw)'), 'Opportunity source URLs must be normalized before duplicate checks.');\nassert.ok(html.includes('const duplicate=jobs.find(j=>j.source&&normalizeOpportunityUrl(j.source)===normalizedSource)'), 'Duplicate source URLs must be blocked.');\nassert.ok(html.includes('function recordJobRevenue(id)'), 'Ruan must track actually received revenue separately.');\nassert.ok(html.includes('revenueReceived:Number(j.revenueReceived||0)'), 'The capture handoff must preserve manually reported received revenue.');\n
