@@ -40,17 +40,17 @@ registerCoreCompanies(registry);
 const router=new WordDarkCompanyIntentRouter({companyRegistry:registry});
 
 const security=new Security();
-const identity=new Identity({identityId:"OP-001-RUAN",type:"UNIT",parentId:"ADM-RUAN",metadata:{name:"OP-001"}});
+const identity=new Identity({identityId:"WD-TEST-OPERATOR-001",type:"UNIT",parentId:"WORDDARK-TEST-ROOT",metadata:{name:"OP-001"}});
 security.registerIdentity(identity);
 security.grant(new Access({
-  identityId:"OP-001-RUAN",
+  identityId:"WD-TEST-OPERATOR-001",
   capability:"CONTENT_CREATE",
   action:"request",
   environment:"TEST",
   scope:"WD-COMP-DARK-FACTORY"
 }));
 
-const localLibrary=new LocalLibrary({libraryId:"OP001-LOCAL",ownerId:"OP-001-RUAN"});
+const localLibrary=new LocalLibrary({libraryId:"OP001-LOCAL",ownerId:"WD-TEST-OPERATOR-001"});
 const centralLibrary=new CentralLibrary({libraryId:"OP001-CENTRAL"});
 const memory=new Memory({library:centralLibrary});
 const opRegistry=new OperationRegistry({localLibrary,centralLibrary,operationalMemory:memory});
@@ -112,14 +112,14 @@ const center=new Center({
   operationCoordinator:coordinator,
   productionEngine,
   planner:Planner,
-  requesterId:"OP-001-RUAN",
+  requesterId:"WD-TEST-OPERATOR-001",
   defaultOrigin:"world/earth/official",
   defaultEnvironment:"TEST"
 });
 
 const result=center.submit({
   productionId:"OP-001",
-  requesterId:"OP-001-RUAN",
+  requesterId:"WD-TEST-OPERATOR-001",
   originId:"external/client-001",
   clientId:"EXTERNAL-CLIENT-001",
   goal:"Produzir conteúdo solicitado por um cliente externo",
