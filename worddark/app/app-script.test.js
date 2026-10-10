@@ -96,4 +96,9 @@ assert.ok(source.includes("linked.status=status==='Entregue'?'Concluída':status
 assert.ok(source.includes("Publicação externa continua desativada"), "Internal approval must not be represented as external publication");
 assert.ok(sw.includes("worddark-app-v1-6"), "Workflow changes must invalidate the previous service worker cache");
 
+
+assert.ok(source.includes("## Histórico de etapas"), "Exported delivery packages must include the local workflow audit trail");
+assert.ok(source.includes("Aprovação humana interna:"), "Exported packages must preserve the human approval state");
+assert.ok(source.includes("j.history.map(e=>'- '+(e.at||'data indisponível')"), "Workflow events must be exportable for manual transfer");
+
 console.log("worddark app script test: OK");
