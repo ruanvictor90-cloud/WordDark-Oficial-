@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-6") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-7") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -74,7 +74,7 @@ assert.ok(source.includes("data-request-ready"), "The guided flow must provide a
 assert.ok(source.includes("clarificationStage:Number(worldQuestions?.dataset.stage||0)"), "The saved request must retain its clarification progress");
 assert.ok(source.includes("suggestedArea:profile.area,suggestedKind:profile.kind"), "The request must preserve the suggested route for later review");
 assert.ok(html.includes("/* Guided request flow:"), "The guided clarification interface must have dedicated responsive styling");
-assert.ok(sw.includes("worddark-app-v1-6"), "The request interface update must invalidate the old app cache");
+assert.ok(sw.includes("worddark-app-v1-7"), "The request interface update must invalidate the old app cache");
 
 assert.ok(source.includes("function routeRequest(id)"), "Requests must route to their suggested sector");
 assert.ok(source.includes("data-route-request"), "Non-factory requests must expose a sector handoff action");
@@ -82,7 +82,7 @@ assert.ok(source.includes("r.routedTo=label;r.routedAt="), "Local routing histor
 assert.ok(source.includes("Autenticação externa e OAuth continuam indisponíveis nesta versão."), "Unavailable external integrations must be stated clearly");
 assert.ok(source.includes("não há banco, cobrança, assinatura ou transferência real conectada."), "Financial real-world actions must remain explicitly unavailable");
 assert.ok(source.includes("Setor aberto: '+esc(r.routedTo)"), "The request list must show the last sector opened");
-assert.ok(sw.includes("worddark-app-v1-6"), "Sector routing must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-7"), "Sector routing must invalidate the previous app cache");
 
 
 assert.ok(source.includes("function recordJobEvent(j,type,detail)"), "Factory jobs must retain an explicit local event history");
@@ -94,11 +94,23 @@ assert.ok(source.includes("aprovação humana registrada"), "Approval events mus
 assert.ok(source.includes("r.status='Encaminhada à Dark Factory'"), "Dispatch must not falsely claim work has started");
 assert.ok(source.includes("linked.status=status==='Entregue'?'Concluída':status==='Aprovado'?'Aprovada para entrega'"), "Source requests must mirror the factory lifecycle");
 assert.ok(source.includes("Publicação externa continua desativada"), "Internal approval must not be represented as external publication");
-assert.ok(sw.includes("worddark-app-v1-6"), "Workflow changes must invalidate the previous service worker cache");
+assert.ok(sw.includes("worddark-app-v1-7"), "Workflow changes must invalidate the previous service worker cache");
 
 
 assert.ok(source.includes("## Histórico de etapas"), "Exported delivery packages must include the local workflow audit trail");
 assert.ok(source.includes("Aprovação humana interna:"), "Exported packages must preserve the human approval state");
 assert.ok(source.includes("j.history.map(e=>'- '+(e.at||'data indisponível')"), "Workflow events must be exportable for manual transfer");
+
+
+assert.ok(source.includes("function createLocalizationJob()"), "Dark Factory must create a dedicated localization job");
+assert.ok(source.includes("function saveLocalization(id)"), "Localization material must be saved per job");
+assert.ok(source.includes("function exportLocalizationAsset(id,format)"), "Translation and localization assets must be exportable");
+assert.ok(source.includes("data-create-localization-job"), "The workbench must expose a localization launcher");
+assert.ok(source.includes('data-format="srt"') && source.includes('data-format="vtt"'), "SRT and VTT export controls must exist");
+assert.ok(source.includes("WEBVTT\\n\\n"), "VTT export must include a WebVTT header");
+assert.ok(source.includes("Roteiro de dublagem / voice-over"), "The localization module must produce a dubbing script package");
+assert.ok(source.includes("Tradução automática, reconhecimento de fala e geração de voz ainda precisam"), "The app must disclose that automatic translation and voice engines are not connected");
+assert.ok(source.includes("HH:MM:SS,mmm --> HH:MM:SS,mmm"), "Subtitle export must validate timecodes");
+assert.ok(sw.includes("worddark-app-v1-7"), "Localization changes must invalidate the previous app cache");
 
 console.log("worddark app script test: OK");
