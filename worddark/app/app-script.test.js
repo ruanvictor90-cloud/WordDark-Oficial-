@@ -182,7 +182,7 @@ assert.ok(source.includes('data-capture-revenue'), 'Capture opportunities must s
 assert.ok(source.includes('revenueReceived||0'), 'Capture views must distinguish received revenue from potential value');
 assert.ok(sw.includes('worddark-app-v1-18'), 'Capture lifecycle changes must invalidate the old service worker cache');
 assert.ok(source.includes('function assessCaptureOpportunity(op)'), 'Capture triage must calculate a transparent readiness score.');
-assert.ok(source.includes('Preparação '+assessment.score), 'Capture queue must show score and readiness label.');
+assert.ok(source.includes("Preparação '+assessment.score"), 'Capture queue must show score and readiness label.');
 assert.ok(source.includes('prazo vencido'), 'Capture queue must flag expired deadlines.');
 
 assert.ok(source.includes("const CAPTURE_CATEGORIES="), "Capture should provide a category-based discovery catalog");
