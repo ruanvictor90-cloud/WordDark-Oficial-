@@ -11,6 +11,7 @@
   function findAction(input){
     const t=text(input), dictionaryMatch=Dictionary?.match?.(t);
     if(dictionaryMatch){
+      if(Array.isArray(dictionaryMatch.operations)&&dictionaryMatch.operations.length)return dictionaryMatch.operations[0];
       const map={CONTENT_CREATE:"CREATE_CONTENT",CONTENT_EDIT:"EDIT_CONTENT",CONTENT_PUBLICATION:"PUBLISH_CONTENT",CONTENT_RENDER:"RENDER_CONTENT",CONTENT_VALIDATE:"VALIDATE_CONTENT",CONTENT_PACKAGE:"PACKAGE_CONTENT",CHANNEL_MANAGEMENT:"MANAGE_CHANNEL",MARKETING_MANAGEMENT:"MANAGE_MARKETING",BUSINESS_OPERATIONS:"OPERATE_BUSINESS"};
       return map[dictionaryMatch.capability]||null;
     }
