@@ -17,12 +17,15 @@
    const routing=this.route(operation);if(!routing?.success)return this.block(operation,"ROUTING",routing?.reason||"Rota indisponível.");operation.transition("ROUTED",{routeId:routing.routeId||null});this.emit(operation,"OPERATION_ROUTED",{routeId:routing.routeId||null});
    operation.transition("EXECUTING");this.emit(operation,"MODULE_STARTED",{moduleId:operation.currentModuleId||null});
    const execution=this.execute(operation,{emergencyStop:this.emergencyStop});
-   if(execution?.status==="WAITING"){operation.transition("WAITING",execution);this.emit(operation,"OPERATION_PAUSED",execution);return operation;}
-   if(!execution?.success)return this.fail(operation,"MODULE_FAILED",execution?.reason||"Execução falhou.",execution?.failedModule);
-   const postStop=stop();if(!postStop.allowed)return this.cancel(operation,"POST_EXECUTION",postStop);
-   operation.transition("VALIDATING",{execution:execution.result||execution});this.emit(operation,"MODULE_COMPLETED",{moduleId:operation.currentModuleId||null});
-   if(execution.validated===false)return this.fail(operation,"MODULE_FAILED",execution.validationReason||"Resultado não validado.",execution.failedModule);
-   operation.transition("COMPLETED",{operationId:operation.operationId,output:execution.result||execution,artifacts:execution.artifacts||[],errors:execution.errors||[],nextAction:execution.nextAction||null});this.completedOperations.add(operation.operationId);this.operationalMemory?.rememberCompletion?.({operationId:operation.operationId,status:"COMPLETED",data:{destinationId:operation.destinationId}});this.emit(operation,"OPERATION_COMPLETED",{result:operation.result});return operation;
+   const finalize=result=>{
+    if(result?.status==="WAITING"){operation.transition("WAITING",result);this.emit(operation,"OPERATION_PAUSED",result);return operation;}
+    if(!result?.success)return this.fail(operation,"MODULE_FAILED",result?.reason||"Execução falhou.",result?.failedModule);
+    const postStop=stop();if(!postStop.allowed)return this.cancel(operation,"POST_EXECUTION",postStop);
+    operation.transition("VALIDATING",{execution:result.result||result});this.emit(operation,"MODULE_COMPLETED",{moduleId:operation.currentModuleId||null});
+    if(result.validated===false)return this.fail(operation,"MODULE_FAILED",result.validationReason||"Resultado não validado.",result.failedModule);
+    operation.transition("COMPLETED",{operationId:operation.operationId,output:result.result||result,artifacts:result.artifacts||[],errors:result.errors||[],nextAction:result.nextAction||null});this.completedOperations.add(operation.operationId);this.operationalMemory?.rememberCompletion?.({operationId:operation.operationId,status:"COMPLETED",data:{destinationId:operation.destinationId}});this.emit(operation,"OPERATION_COMPLETED",{result:operation.result});return operation;
+   };
+   return execution&&typeof execution.then==="function"?execution.then(finalize).catch(error=>this.fail(operation,"MODULE_FAILED",error.message||"Execução assíncrona falhou.")):finalize(execution);
   }
   reject(o,s,r){o.transition("REJECTED",{stage:s,reason:r});this.emit(o,"MODULE_FAILED",{stage:s,reason:r});return o;}
   block(o,s,r){o.transition("BLOCKED",{stage:s,reason:r});this.emit(o,"MODULE_FAILED",{stage:s,reason:r});return o;}
