@@ -6,7 +6,7 @@ class ContentFactory{
   const p=r?.payload||r||{};const params=p.parameters||r?.parameters||{};const ContentOperationClass=this.contentOperationClass;
   if(typeof ContentOperationClass!=="function")return{success:false,status:"FAILED",reason:"Content Operation contract not configured."};
   const op=new ContentOperationClass({
-    operationId:r?.operationId||p.operationId||null,parentOperationId:r?.parentOperationId||p.parentOperationId||r?.operationId||p.operationId||null,
+    operationId:r?.operationId||r?.id||p.operationId||p.requestId||null,parentOperationId:r?.parentOperationId||p.parentOperationId||r?.operationId||r?.id||p.operationId||p.requestId||null,
     requestId:r?.id||r?.requestId||p.requestId,action:r?.action||p.action||params.action||"CONTENT_CREATE",
     contentId:r?.contentId||p.contentId||params.contentId,contentType:r?.contentType||p.type||params.type||"MIXED",
     input:r?.input||p.input||params.input||null,requirements:r?.requirements||p.requirements||params.requirements||{},
