@@ -9,7 +9,7 @@
   const stamp=value=>{
     const n=Math.max(0,Math.round(Number(value)||0));
     const h=Math.floor(n/3600000),m=Math.floor(n%3600000/60000),s=Math.floor(n%60000/1000),ms=n%1000;
-    return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+(ms?"."+String(ms).padStart(3,"0"):",000");
+    return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")+","+String(ms).padStart(3,"0");
   };
   function normalizeSegments(input){
     const source=Array.isArray(input)?input:[];
@@ -27,7 +27,7 @@
     const vtt=String(format).toLowerCase()==="vtt";
     const body=normalized.map((s,i)=>{
       const text=translated?(s.translatedText||s.text):s.text;
-      return (vtt?String(i+1):String(i+1))+"\n"+stamp(s.startMs)+(vtt?".":",")+stamp(s.endMs)+"\n"+text;
+      return String(i+1)+"\n"+stamp(s.startMs).replace(",",vtt?".":",")+" --> "+stamp(s.endMs).replace(",",vtt?".":",")+"\n"+text;
     }).join("\n\n");
     const content=vtt?"WEBVTT\n\n"+body:body;
     return{success:true,status:"GENERATED",format:vtt?"vtt":"srt",mime:vtt?"text/vtt":"application/x-subrip",content,segments:normalized.length};
