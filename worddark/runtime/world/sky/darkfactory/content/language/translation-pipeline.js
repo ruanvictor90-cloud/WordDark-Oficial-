@@ -57,7 +57,7 @@
     }
     if(id==="DUBBING"){
       if(!targetLanguage)return{success:false,status:"NEEDS_CONFIGURATION",module:id,reason:"TARGET_LANGUAGE_REQUIRED"};
-      const textForVoice=sourceText||transcript.map(x=>str(x.translatedText||x.translation||x.text)).join(" ");
+      const textForVoice=transcript.map(x=>str(x.translatedText||x.translation||x.text)).join(" ")||sourceText;
       if(!textForVoice)return{success:false,status:"NEEDS_TRANSCRIPT",module:id,reason:"TRANSCRIPT_OR_TEXT_REQUIRED"};
       if(typeof adapters.dub!=="function")return{success:false,status:"NEEDS_PROVIDER",module:id,reason:"DUBBING_PROVIDER_REQUIRED",targetLanguage};
       const result=await adapters.dub({text:textForVoice,segments:normalizeSegments(transcript),sourceLanguage,targetLanguage,voice:requirements.voice||options.voice||null,operationId:operation.operationId});
