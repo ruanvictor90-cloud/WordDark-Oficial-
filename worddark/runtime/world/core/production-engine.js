@@ -23,7 +23,7 @@
       const results=[];
       for(const source of list){
         const result=this.operationCoordinator.submit({...((source?.toJSON instanceof Function)?source.toJSON():source),parentProductionId:production.productionId});
-        results.push({operationId:result?.operationId||source?.operationId||null,status:result?.status||"FAILED",success:result?.status==="COMPLETED",result:result?.result||result});
+        results.push({operationId:result?.operationId||source?.operationId||null,status:result?.status||"FAILED",success:result?.status==="COMPLETED",result:result?.result||result,operation:typeof result?.toJSON==="function"?result.toJSON():(result?.operation||null)});
         if(result?.status!=="COMPLETED")break;
       }
       const failed=results.filter(x=>!x.success);
