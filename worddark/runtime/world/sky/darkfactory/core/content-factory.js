@@ -5,9 +5,11 @@ class ContentFactory{
  receive(r){
   const p=r?.payload||r||{};const params=p.parameters||r?.parameters||{};const ContentOperationClass=this.contentOperationClass;
   if(typeof ContentOperationClass!=="function")return{success:false,status:"FAILED",reason:"Content Operation contract not configured."};
+  const requestedAction=String(r?.action||p.action||params.action||"CONTENT_CREATE").toUpperCase();
+  const actionMap={CREATE_CONTENT:"CONTENT_CREATE",EDIT_CONTENT:"CONTENT_EDIT",EDIT_PHOTO:"CONTENT_EDIT",CUT_VIDEO:"CONTENT_EDIT",REPLACE_AUDIO:"CONTENT_EDIT",ADD_SUBTITLE:"CONTENT_EDIT",RENDER_CONTENT:"CONTENT_RENDER",TRANSFORM_CONTENT:"CONTENT_TRANSFORM",VALIDATE_CONTENT:"CONTENT_VALIDATE",PACKAGE_CONTENT:"CONTENT_PACKAGE"};
   const op=new ContentOperationClass({
     operationId:r?.operationId||r?.id||p.operationId||p.requestId||null,parentOperationId:r?.parentOperationId||p.parentOperationId||r?.operationId||r?.id||p.operationId||p.requestId||null,
-    requestId:r?.id||r?.requestId||p.requestId,action:r?.action||p.action||params.action||"CONTENT_CREATE",
+    requestId:r?.id||r?.requestId||p.requestId,action:actionMap[requestedAction]||requestedAction,
     contentId:r?.contentId||p.contentId||params.contentId,contentType:r?.contentType||p.type||params.type||"MIXED",
     input:r?.input||p.input||params.input||null,requirements:r?.requirements||p.requirements||params.requirements||{},
     options:{...(r?.options||p.options||{}),title:r?.title||p.title||params.title||null,
