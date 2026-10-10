@@ -169,4 +169,9 @@ assert.ok(source.includes("requiresHumanReview:true"), "Automatically prepared c
 assert.ok(source.includes("pushRuanNotification('Pacote pronto para trabalhar'"), "Prepared executor packages must notify the Ruan gate");
 assert.ok(sw.includes("worddark-app-v1-14"), "Content-pack improvements must invalidate the previous service worker cache");
 console.log("worddark app script test: OK");
-\nassert.ok(source.includes('data-capture-start'), 'Capture opportunities must support an explicit execution start state');\nassert.ok(source.includes('data-capture-complete'), 'Capture opportunities must support marking an operational stage complete');\nassert.ok(source.includes('data-capture-revenue'), 'Capture opportunities must support manually recording received revenue');\nassert.ok(source.includes('revenueReceived||0'), 'Capture views must distinguish received revenue from potential value');\nassert.ok(sw.includes('worddark-app-v1-15'), 'Capture lifecycle changes must invalidate the old service worker cache');\n
+
+assert.ok(source.includes('data-capture-start'), 'Capture opportunities must support an explicit execution start state');
+assert.ok(source.includes('data-capture-complete'), 'Capture opportunities must support marking an operational stage complete');
+assert.ok(source.includes('data-capture-revenue'), 'Capture opportunities must support manually recording received revenue');
+assert.ok(source.includes('revenueReceived||0'), 'Capture views must distinguish received revenue from potential value');
+assert.ok(sw.includes('worddark-app-v1-15'), 'Capture lifecycle changes must invalidate the old service worker cache');\n
