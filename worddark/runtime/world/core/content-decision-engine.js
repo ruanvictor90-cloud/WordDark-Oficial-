@@ -52,7 +52,7 @@
     const weighted=(c.objective*Number(weights.objective||0)+c.audience*Number(weights.audience||0)+c.channel*Number(weights.channel||0)+c.trend*Number(weights.trend||0)+c.identity*Number(weights.identity||0)+c.result*Number(weights.result||0)+c.feasibility*Number(weights.feasibility||0)+c.history*Number(weights.history||0))/totalWeight;
     let final=weighted;
     if(mode===MODES.BEST_OPPORTUNITY)final=weighted*0.75+c.opportunity*0.25;
-    if(mode===MODES.BEST_LEARNING)final=weighted*0.65+c.learning*0.35;
+    if(mode===MODES.BEST_LEARNING)final=weighted*0.35+c.learning*0.65;
     return{...c,baseScore:Number(weighted.toFixed(2)),score:Number(final.toFixed(2)),mode};
   }
   function rank(candidates=[],options={}){
