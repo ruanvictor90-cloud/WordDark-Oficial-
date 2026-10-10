@@ -1,0 +1,37 @@
+name: WordDark Security Baseline
+
+on:
+  push:
+    branches: [main, develop, staging]
+  pull_request:
+    branches: [main, develop, staging]
+
+permissions:
+  contents: read
+
+jobs:
+  runtime-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Run runtime tests
+        run: npm test
+
+      - name: Check tracked secret-like files
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-files | grep -E '(^|/)(\.env|secrets?|credentials?|tokens?)(/|$)|\.(pem|key|p12|pfx)$'; then
+            echo "Potential secret-bearing tracked file detected."
+            exit 1
+          fi

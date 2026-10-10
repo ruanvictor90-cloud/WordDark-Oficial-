@@ -77,6 +77,14 @@ Depois:
 
 Não é necessário repetir o que já foi concluído.
 
+## Área pessoal do proprietário
+
+**Ruan** é uma área pessoal privada, não uma empresa. Tarefas, lembretes, ideias e projetos pessoais ficam isolados do conhecimento operacional do mundo. A comunicação é iniciada por Ruan: o WordDark não entra nessa área nem compartilha seus dados automaticamente.
+
+Fluxo autorizado:
+
+`Ruan → solicitação explícita → WordDark → resposta → Ruan`
+
 ## Empresas
 
 ### Terra

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">
+<rect width="1280" height="720" fill="#08080c"/>
+<rect x="52" y="52" width="1176" height="616" rx="32" fill="none" stroke="#34353e" stroke-width="4"/>
+<circle cx="1080" cy="120" r="48" fill="none" stroke="#f5f5f5" stroke-width="8"/>
+<path d="M1040 120h80M1080 80v80" stroke="#f5f5f5" stroke-width="6"/>
+<text x="90" y="330" fill="#f5f5f5" font-family="Arial,Helvetica,sans-serif" font-size="92" font-weight="700">TÍTULO</text>
+<text x="94" y="430" fill="#a7a8b0" font-family="Arial,Helvetica,sans-serif" font-size="46">2–4 PALAVRAS · FOCO ÚNICO</text>
+<text x="94" y="600" fill="#666872" font-family="Arial,Helvetica,sans-serif" font-size="28" letter-spacing="6">WORDDARK</text>
+</svg>

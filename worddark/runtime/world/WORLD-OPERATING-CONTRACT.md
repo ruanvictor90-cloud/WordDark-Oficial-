@@ -1,80 +1,59 @@
-# WordDark — Contrato Operacional Atual
+# WORDDARK — CONTRATO OPERACIONAL DO MUNDO
 
 ## Regra central
-**WordDark coordena. As empresas operam. Os setores executam.**
 
-## Mundo
-- Terra: empresas e operações próximas às necessidades reais.
-- Céu: empresas especializadas e fábricas.
-- Rodovia: transporte interno invisível; não decide, não autoriza e não executa.
-- Portões: entrada, contexto, identidade, permissão e saída.
-- Central de Operações: ciclo de pedidos, operações, suboperações e resultados.
-- Biblioteca: histórico, memória operacional, experimentos e conhecimento validado.
-- Financeiro: recursos, movimentos, planos, assinaturas e estado econômico.
-- Conexões Externas: adaptadores para o mundo externo; credenciais ficam isoladas.
+O Mundo possui três grandes setores de entrada:
 
-## Empresas atuais
-### Terra
-1. Empresa de Gestão de Negócios
-2. Empresa de Gestão de Conteúdos e Canais
+1. **WordDark** — organiza, coordena, protege, conecta, registra e governa.
+2. **Céu** — resolve, produz e executa.
+3. **Terra** — apresenta necessidades, intenções, entidades e operações do mundo externo.
 
-### Céu
-1. Empresa de Marketing
-2. Dark Factory — Empresa de Produção de Conteúdo
+A entrada é simples. A arquitetura interna é ampla.
 
-Central de Conexões Externas é infraestrutura compartilhada, não empresa.
+## Linguagem oficial
 
-## Linguagem
-Pedidos não escolhem diretamente outra empresa. Eles expressam:
-- intenção;
-- necessidade;
-- capacidade;
-- serviço;
-- contexto.
+- **Mundo** = conjunto completo.
+- **Setor** = divisão funcional do Mundo.
+- **Módulo** = capacidade específica de um setor.
+- **Operação** = trabalho executável.
+- **Pedido** = intenção/necessidade recebida.
+- **Informação** = dado recebido ou produzido.
+- **Conexão** = relação controlada com uma entidade, conta, serviço ou sistema externo.
+- **Capacidade** = algo que o Mundo sabe fazer.
+- **Resultado** = resposta produzida por uma operação.
+- **Registro** = evidência persistente do que aconteceu.
+- **Portão** = entrada/saída controlada.
+- **Rodovia** = transporte interno entre capacidades.
+- **Véu** = fronteira de proteção entre ambientes.
 
-O catálogo canônico transforma serviços/intents em capacidades. O registro encontra quem possui a capacidade. O coordenador resolve o endpoint operacional. Só então a Rodovia transporta.
+## Regra de execução
 
-## Ciclo
-```
-INTENÇÃO
-  ↓
-NECESSIDADE
-  ↓
-CAPACIDADE
-  ↓
-EMPRESA
-  ↓
-ENDPOINT
-  ↓
-PORTÃO
-  ↓
-RODOVIA
-  ↓
-OPERAÇÃO
-  ↓
-SUBOPERAÇÕES/MÓDULOS
-  ↓
-RESULTADO
-  ↓
-MEMÓRIA
-  ↓
-RETORNO
-```
+Nenhum setor deve exigir que uma operação inteira seja repetida quando apenas uma capacidade precisa ser corrigida.
 
-## Memória operacional
-Cada operação pode registrar:
-- eventos;
-- falhas;
-- módulo afetado;
-- resolução;
-- conclusão;
-- histórico local;
-- promoção de conhecimento para a Biblioteca Central.
+Uma operação pode entrar, ser interpretada, ser dividida em capacidades, executar somente as capacidades necessárias, registrar cada etapa, retornar ao ponto correto e produzir resultado.
 
-Falhas modulares devem permitir reentrada a partir do módulo afetado, sem repetir etapas já concluídas.
+## Regra de informação
 
-## Regra de crescimento
-Novas empresas, módulos e integrações entram por capacidade/registro. A arquitetura central não deve ser redesenhada para cada novo negócio.
+Toda informação recebida deve possuir origem, destino, tipo, finalidade, contexto, estado, timestamp, referência da operação quando houver e política de acesso.
 
-## Estado atual
-A prioridade é provar um circuito operacional ponta a ponta antes de adicionar novas empresas ou integrações desnecessárias.
+O Mundo não deve aceitar informação sem saber **de onde veio, para que serve e quem pode usá-la**.
+
+## Regra de conexão
+
+Uma conexão representa: **entidade externa → identidade → autorização → capacidades → informação → operação → resultado → registro**.
+
+Segredos, tokens e credenciais pertencem à camada protegida de conexão. Setores consumidores recebem apenas a capacidade necessária.
+
+## Regra de conhecimento
+
+**evento → resultado → avaliação → correção → validação → conhecimento**.
+
+Conhecimento não substitui a execução; ele melhora decisões futuras.
+
+## Regra de interface
+
+A interface mostra a responsabilidade do nível atual. A complexidade operacional permanece no núcleo.
+
+## Estado
+
+Este documento é a referência canônica para a organização funcional do Mundo.

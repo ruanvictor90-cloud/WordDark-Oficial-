@@ -9,30 +9,31 @@ function normalizeStages(input={}){
   if(!requested||!requested.length)return STAGES.map(x=>x[0]);
   return requested.map(x=>ALIASES[String(x).toUpperCase()]||String(x).toLowerCase()).filter(x=>find(x));
 }
+function latestArtifact(packages){const order=["learning","control","testing","audio","video","image"];for(const key of order){const value=packages[key];if(value?.artifact)return value.artifact;}return null;}
 function dependencies(stage,input,packages){
   if(stage==="content.script"&&packages.intelligence)return{intelligence:packages.intelligence};
   if(stage==="content.identity")return{brief:input.brief||packages.intelligence?.summary,content:packages.script||input.content};
   if(stage==="content.image")return{script:packages.script||input.script,identity:packages.identity||input.identity};
-  return{asset:input.asset||packages.image||packages.video,script:packages.script||input.script,result:packages};
+  const previous=latestArtifact(packages);return{asset:input.asset||previous||packages.image||packages.video,artifact:input.artifact||previous||null,script:packages.script||input.script,result:packages};
 }
 function runSector(stage,input,operationId,packages){
   const found=find(stage);if(!found)return{success:false,status:"SECTOR_NOT_FOUND",stage};
   return found[1].run({...input,...dependencies(stage,input,packages),operationId});
 }
-function run(input={}){
+async function run(input={}){
   const operationId=id(input),history=[],packages={},pipeline=normalizeStages(input);
   for(const stage of pipeline){
-    const r=runSector(stage,input,operationId,packages);
+    const r=await runSector(stage,input,operationId,packages);
     history.push({stage,status:r.status,result:r.result||r.record||r.variants||null,reason:r.reason||null});
     if(!r.success)return{success:false,status:"FAILED",operationId,stoppedAt:stage,history,pipeline,packages,reason:r.reason||null};
-    packages[stage.split(".")[1]]=r.result||r.record||r.variants||r;
+    packages[stage.split(".")[1]]=r.artifact?{...(r.result||{}),artifact:r.artifact}:r.result||r.record||r.variants||r;
   }
-  return{success:true,status:"READY",operationId,pipeline,history,packages,next:"external.connection"};
+  const finalArtifact=latestArtifact(packages);return{success:true,status:"READY",operationId,pipeline,history,packages,output:finalArtifact?{type:finalArtifact.type,mime:finalArtifact.mime||null,format:finalArtifact.format||null,duration:finalArtifact.duration||null,width:finalArtifact.width||null,height:finalArtifact.height||null,blob:finalArtifact.blob||null}:null,next:"external.connection"};
 }
-function runOne(input={}){
+async function runOne(input={}){
   const stage=normalizeStages({...input,sectors:[input.sector||input.module]})[0];
   if(!stage)return{success:false,status:"SECTOR_REQUIRED"};
-  return run({...input,sectors:[stage]});
+  return await run({...input,sectors:[stage]});
 }
 function listSectors(){return STAGES.map(x=>({id:x[0],alias:Object.keys(ALIASES).find(k=>ALIASES[k]===x[0])||x[0].split(".")[1],independent:true}));}
 return{VERSION,run,runOne,listSectors,normalizeStages};

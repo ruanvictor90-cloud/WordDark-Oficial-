@@ -47,7 +47,7 @@
         capability:requested,
         intent:intent||null,
         need:need||null,
-        candidates:companies.map(x=>({id:x.id,name:x.name,area:x.area,type:x.type}))
+        candidates:companies.map(x=>({id:x.id,name:x.name,area:x.area,type:x.type,endpoint:x.endpoint||null}))
       };
     }
 
@@ -65,7 +65,7 @@
       const resolution=this.resolve(request);
       if(!resolution.success)return resolution;
       const target=resolution.candidates[0];
-      return{...resolution,status:"ROUTE_READY",destinationCompanyId:target.id,destinationCompany:target,destination:target.endpoint||target.id};
+      return{...resolution,status:"ROUTE_READY",destinationCompanyId:target.id,destinationCompany:target,destination:target.id,endpoint:target.endpoint||null};
     }
   }
 
