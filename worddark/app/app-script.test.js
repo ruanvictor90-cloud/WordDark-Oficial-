@@ -174,4 +174,4 @@ assert.ok(source.includes('data-capture-start'), 'Capture opportunities must sup
 assert.ok(source.includes('data-capture-complete'), 'Capture opportunities must support marking an operational stage complete');
 assert.ok(source.includes('data-capture-revenue'), 'Capture opportunities must support manually recording received revenue');
 assert.ok(source.includes('revenueReceived||0'), 'Capture views must distinguish received revenue from potential value');
-assert.ok(sw.includes('worddark-app-v1-15'), 'Capture lifecycle changes must invalidate the old service worker cache');\n
+assert.ok(sw.includes('worddark-app-v1-15'), 'Capture lifecycle changes must invalidate the old service worker cache');
