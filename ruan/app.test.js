@@ -12,6 +12,14 @@ assert.ok(html.includes("KEYS.projects,next.projects"));
 assert.ok(html.includes("KEYS.routines,next.routines"));
 assert.ok(html.includes("privacyProjects"));
 assert.ok(html.includes("ALFA 0.4"));
+assert.ok(html.includes('id="portaoPage"'));
+assert.ok(html.includes("Nível 1 · Área ADM"));
+assert.ok(html.includes("Nível 2 · Portão do mundo"));
+assert.ok(html.includes("Nível 3 · Contas executoras"));
+assert.ok(html.includes("SucoEmpreendimento"));
+assert.ok(html.includes("ruan.world.notifications.v1"));
+assert.ok(html.includes("function renderWorldNotifications()"));
+assert.ok(html.includes("enableWorldNotifications"));
 console.log("Ruan projects tests passed.");
 
 assert.ok(html.includes('id="rotinasPage"'));
