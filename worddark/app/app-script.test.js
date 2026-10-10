@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-3") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-4") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
