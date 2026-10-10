@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-5") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-6") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -74,7 +74,7 @@ assert.ok(source.includes("data-request-ready"), "The guided flow must provide a
 assert.ok(source.includes("clarificationStage:Number(worldQuestions?.dataset.stage||0)"), "The saved request must retain its clarification progress");
 assert.ok(source.includes("suggestedArea:profile.area,suggestedKind:profile.kind"), "The request must preserve the suggested route for later review");
 assert.ok(html.includes("/* Guided request flow:"), "The guided clarification interface must have dedicated responsive styling");
-assert.ok(sw.includes("worddark-app-v1-5"), "The request interface update must invalidate the old app cache");
+assert.ok(sw.includes("worddark-app-v1-6"), "The request interface update must invalidate the old app cache");
 
 assert.ok(source.includes("function routeRequest(id)"), "Requests must route to their suggested sector");
 assert.ok(source.includes("data-route-request"), "Non-factory requests must expose a sector handoff action");
@@ -82,6 +82,18 @@ assert.ok(source.includes("r.routedTo=label;r.routedAt="), "Local routing histor
 assert.ok(source.includes("Autenticação externa e OAuth continuam indisponíveis nesta versão."), "Unavailable external integrations must be stated clearly");
 assert.ok(source.includes("não há banco, cobrança, assinatura ou transferência real conectada."), "Financial real-world actions must remain explicitly unavailable");
 assert.ok(source.includes("Setor aberto: '+esc(r.routedTo)"), "The request list must show the last sector opened");
-assert.ok(sw.includes("worddark-app-v1-5"), "Sector routing must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-6"), "Sector routing must invalidate the previous app cache");
+
+
+assert.ok(source.includes("function recordJobEvent(j,type,detail)"), "Factory jobs must retain an explicit local event history");
+assert.ok(source.includes("function renderJobHistory(j)"), "The job editor must display the event history");
+assert.ok(source.includes("jHumanApproval"), "Approval must require an explicit human confirmation control");
+assert.ok(source.includes("status==='Aprovado'&&!['Em revisão','Aprovado'].includes(j.status)"), "Approval must not skip the review stage");
+assert.ok(source.includes("status==='Entregue'&&j.status!=='Aprovado'"), "A job cannot be marked delivered before internal approval");
+assert.ok(source.includes("aprovação humana registrada"), "Approval events must be retained in the local history");
+assert.ok(source.includes("r.status='Encaminhada à Dark Factory'"), "Dispatch must not falsely claim work has started");
+assert.ok(source.includes("linked.status=status==='Entregue'?'Concluída':status==='Aprovado'?'Aprovada para entrega'"), "Source requests must mirror the factory lifecycle");
+assert.ok(source.includes("Publicação externa continua desativada"), "Internal approval must not be represented as external publication");
+assert.ok(sw.includes("worddark-app-v1-6"), "Workflow changes must invalidate the previous service worker cache");
 
 console.log("worddark app script test: OK");
