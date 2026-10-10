@@ -65,5 +65,5 @@ assert.ok(html.includes("/* Ruan interface foundation:"), "WordDark must share t
 assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections must have a deliberate neutral fallback until the correct reference artwork is available");
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
-assert.ok(swCacheVersionForTest(html) === true, "Visual changes must be paired with the service worker cache version update");
+assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
 console.log("worddark app script test: OK");
