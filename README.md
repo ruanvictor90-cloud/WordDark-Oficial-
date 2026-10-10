@@ -149,3 +149,18 @@ Todo desenvolvimento estrutural deve ser integrado e testado no repositório ofi
 `npm test`
 
 A suíte Node valida o runtime central e os contratos. A Central de Testes valida também o comportamento no navegador/GitHub Pages.
+
+
+## Início com investimento zero
+
+A aplicação pode ser usada como um **painel local de operação** sem contratar uma API de IA ou um servidor adicional. Abra a página do app, entre em **Lançamento sem custo** e siga o checklist. O primeiro ciclo recomendado é:
+
+1. Conferir a conta oficial e seus elementos de identidade.
+2. Criar a missão de estreia na Dark Factory.
+3. Preparar e exportar o pacote local.
+4. Revisar roteiro, fatos, direitos autorais e regras da plataforma.
+5. Publicar manualmente na conta oficial, se e quando estiver aprovado.
+6. Registrar o link e os aprendizados na Biblioteca.
+7. Exportar um backup JSON e guardá-lo em local seguro.
+
+O checklist é apenas um acompanhamento local. Os dados ficam no navegador deste dispositivo; não há sincronização automática, IA remota, publicação social automática, conexão bancária ou cobrança real ativadas. Não armazene senhas, tokens ou chaves de API no app. O primeiro ciclo não exige essas integrações.
