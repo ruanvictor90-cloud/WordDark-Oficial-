@@ -118,6 +118,13 @@ assert.ok(source.includes("j.localizationOnly&&['Em revisão','Aprovado','Entreg
 assert.ok(source.includes("Trabalho aprovado ou encerrado: volte para Em produção antes de alterar"), "Approved and completed outputs must not be silently edited");
 
 
+assert.ok(source.includes("function prepareJobAutomatically(id)"), "The local automation engine must prepare eligible content jobs");
+assert.ok(source.includes("function runAutomaticPreparation()"), "The automation center must process the eligible queue");
+assert.ok(source.includes("function automationCenter()"), "The app must expose a dedicated automation center");
+assert.ok(source.includes("data-auto-prepare-all"), "The automation center must support batch preparation");
+assert.ok(source.includes("requiresHumanReview:true"), "Automatically prepared work must retain a human-review requirement");
+assert.ok(source.includes("Nenhum conteúdo foi publicado."), "Local automation must explicitly state that it did not publish content");
+assert.ok(source.includes("automation:automationCenter"), "The automation center must have a registered route");
 assert.ok(source.includes("function capabilities()"), "WordDark must expose a central capability registry");
 assert.ok(source.includes("module('capabilities','◈','Capacidades'"), "The capability registry must be reachable from the main overview");
 assert.ok(source.includes("const views={overview,management,sky,earth,finance,library,security,capabilities,"), "The capability registry must have a registered route");
