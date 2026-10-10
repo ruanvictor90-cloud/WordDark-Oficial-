@@ -151,7 +151,7 @@ assert.ok(source.includes("data-capture-mission"), "Capture items must expose a 
 assert.ok(source.includes("function readCaptureInbox()"), "The capture queue must be read from shared local storage");
 assert.ok(source.includes("originRuanId:item.id"), "A capture-created mission must preserve its Ruan source reference");
 assert.ok(source.includes("else if(area.includes('Central de Captação'))"), "Capture missions must route to the capture center");
-assert.ok(source.includes("item.status='concluida'"), "Completing a capture mission must update the shared queue");
+assert.ok(source.includes("updateCaptureItem(r.captureOriginId,'concluida'"), "Completing a capture mission must update the shared queue");
 assert.ok(source.includes("captureInbox:KEYS.captureInbox"), "Capture queue must be included in WordDark backups");
 assert.ok(source.includes("payload.collections[name]===undefined"), "Old backups must remain restorable without the new capture queue");
 assert.ok(source.includes("window.addEventListener('storage'"), "Open WordDark capture view must refresh when Ruan updates the shared queue");
