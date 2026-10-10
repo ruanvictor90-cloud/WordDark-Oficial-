@@ -78,7 +78,7 @@ assert.ok(sw.includes("worddark-app-v1-5"), "The request interface update must i
 
 assert.ok(source.includes("function routeRequest(id)"), "Requests must route to their suggested sector");
 assert.ok(source.includes("data-route-request"), "Non-factory requests must expose a sector handoff action");
-assert.ok(source.includes("r.routedTo=label,r.routedAt="), "Local routing history must be retained on the request");
+assert.ok(source.includes("r.routedTo=label;r.routedAt="), "Local routing history must be retained on the request");
 assert.ok(source.includes("Autenticação externa e OAuth continuam indisponíveis nesta versão."), "Unavailable external integrations must be stated clearly");
 assert.ok(source.includes("não há banco, cobrança, assinatura ou transferência real conectada."), "Financial real-world actions must remain explicitly unavailable");
 assert.ok(source.includes("Setor aberto: '+esc(r.routedTo)"), "The request list must show the last sector opened");
