@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-4") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-5") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -74,5 +74,14 @@ assert.ok(source.includes("data-request-ready"), "The guided flow must provide a
 assert.ok(source.includes("clarificationStage:Number(worldQuestions?.dataset.stage||0)"), "The saved request must retain its clarification progress");
 assert.ok(source.includes("suggestedArea:profile.area,suggestedKind:profile.kind"), "The request must preserve the suggested route for later review");
 assert.ok(html.includes("/* Guided request flow:"), "The guided clarification interface must have dedicated responsive styling");
-assert.ok(sw.includes("worddark-app-v1-4"), "The request interface update must invalidate the old app cache");
+assert.ok(sw.includes("worddark-app-v1-5"), "The request interface update must invalidate the old app cache");
+
+assert.ok(source.includes("function routeRequest(id)"), "Requests must route to their suggested sector");
+assert.ok(source.includes("data-route-request"), "Non-factory requests must expose a sector handoff action");
+assert.ok(source.includes("r.routedTo=label,r.routedAt="), "Local routing history must be retained on the request");
+assert.ok(source.includes("Autenticação externa e OAuth continuam indisponíveis nesta versão."), "Unavailable external integrations must be stated clearly");
+assert.ok(source.includes("não há banco, cobrança, assinatura ou transferência real conectada."), "Financial real-world actions must remain explicitly unavailable");
+assert.ok(source.includes("Setor aberto: '+esc(r.routedTo)"), "The request list must show the last sector opened");
+assert.ok(sw.includes("worddark-app-v1-5"), "Sector routing must invalidate the previous app cache");
+
 console.log("worddark app script test: OK");
