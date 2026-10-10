@@ -26,7 +26,7 @@
     processOperation(operation,executor){
       const pending=this.pending.get(operation.operationId); if(!pending)return{success:false,reason:"Pedido não encontrado para execução."};
       const execution=executor(pending.request);
-      if(!execution||execution.success!==true)return{success:false,stage:"EXECUTION",reason:(execution&&execution.reason)||"Execução falhou.",result:execution};
+      if(!execution||execution.success!==true){const detail=execution?.reason||execution?.message||(Array.isArray(execution?.errors)?execution.errors.join("; "):null);return{success:false,stage:"EXECUTION",reason:detail||"Execução falhou.",result:execution};}
       const response=new WordDarkMessage({messageId:"RMSG-"+operation.operationId,requestId:pending.request.requestId,type:"OPERATION_RESPONSE",origin:pending.request.destinationId,destination:pending.request.originId,service:pending.request.service,responseTo:pending.message.messageId,status:"PROCESSED",payload:execution.result||execution});
       const delivery=this.road.send(response); if(!delivery.success)return{success:false,stage:"RETURN_ROAD",reason:delivery.reason,result:execution};
       this.messages.push(response.toJSON());
