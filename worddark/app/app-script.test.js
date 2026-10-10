@@ -113,4 +113,8 @@ assert.ok(source.includes("Tradução automática, reconhecimento de fala e gera
 assert.ok(source.includes("HH:MM:SS,mmm --> HH:MM:SS,mmm"), "Subtitle export must validate timecodes");
 assert.ok(sw.includes("worddark-app-v1-7"), "Localization changes must invalidate the previous app cache");
 
+
+assert.ok(source.includes("j.localizationOnly&&['Em revisão','Aprovado','Entregue'].includes(status)&&!String(j.localization?.translatedTranscript||'').trim()"), "Localization cannot enter review without a saved target-language translation");
+assert.ok(source.includes("Trabalho aprovado ou encerrado: volte para Em produção antes de alterar"), "Approved and completed outputs must not be silently edited");
+
 console.log("worddark app script test: OK");
