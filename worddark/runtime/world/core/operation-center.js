@@ -15,13 +15,15 @@
       if(parsed.type==="OPERATION"){
         const operation=new Operation({operationId:input.operationId||("OP-CENTER-"+Date.now().toString(36).toUpperCase()),requesterId:input.requesterId||this.requesterId,originId:input.originId||this.defaultOrigin,destinationId:parsed.destinationId,operationType:parsed.action,action:parsed.action,environment:env,resourceId:parsed.resourceId,clientId:parsed.clientId,context:parsed.context,payload:{...(parsed.parameters||{}),contentDecision:decision},intent:input.intent,need:input.need});
         const result=this.operationCoordinator?.submit?.(operation);
-        return this.toResult(result,{action:parsed.action,environment:env});
+        const finish=value=>this.toResult(value,{action:parsed.action,environment:env});
+        return result&&typeof result.then==="function"?result.then(finish).catch(error=>Result.failure(error.message||"Execução assíncrona falhou.")):finish(result);
       }
       if(!this.productionEngine)return Result.failure("Production Engine não configurado.");
       const production=this.productionEngine.create({productionId:input.productionId,requesterId:input.requesterId||this.requesterId,originId:input.originId||this.defaultOrigin,clientId:parsed.clientId,goal:parsed.goal,resourceId:parsed.resourceId,destinationId:parsed.destinationId,quantity:parsed.quantity||input.quantity||1,requirements:parsed.requirements,context:{...parsed.context,contentDecision:decision},options:{...parsed.options,environment:env,contentDecision:decision}});
       const planned=this.productionEngine.plan(production,input.operations||[]);
       const executed=this.productionEngine.execute(planned);
-      return this.toResult(executed,{productionId:executed.productionId,environment:env});
+      const finish=value=>this.toResult(value,{productionId:value.productionId,environment:env});
+      return executed&&typeof executed.then==="function"?executed.then(finish).catch(error=>Result.failure(error.message||"Produção assíncrona falhou.")):finish(executed);
     }
     reenter(operation,moduleId){if(!operation||!this.operationCoordinator?.engine?.reenter)return Result.failure({status:"FAILED",errors:["Reentrada indisponível."]});const result=this.operationCoordinator.engine.reenter(operation,moduleId);return this.toResult(result,{action:operation.action});}
     toResult(value,meta={}){
