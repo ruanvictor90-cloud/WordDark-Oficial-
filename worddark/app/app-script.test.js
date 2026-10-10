@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-3") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-4") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -66,4 +66,13 @@ assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections 
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
+
+assert.ok(source.includes("function classifyRequestIntent(value)"), "Requests must receive an explicit intent classification");
+assert.ok(source.includes("data-question-next"), "Clarification must advance one question at a time");
+assert.ok(source.includes("data-question-back"), "Users must be able to revisit a previous clarification");
+assert.ok(source.includes("data-request-ready"), "The guided flow must provide a clear registration action");
+assert.ok(source.includes("clarificationStage:Number(worldQuestions?.dataset.stage||0)"), "The saved request must retain its clarification progress");
+assert.ok(source.includes("suggestedArea:profile.area,suggestedKind:profile.kind"), "The request must preserve the suggested route for later review");
+assert.ok(html.includes("/* Guided request flow:"), "The guided clarification interface must have dedicated responsive styling");
+assert.ok(sw.includes("worddark-app-v1-4"), "The request interface update must invalidate the old app cache");
 console.log("worddark app script test: OK");
