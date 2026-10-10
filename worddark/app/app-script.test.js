@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-19") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-20") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -74,7 +74,7 @@ assert.ok(source.includes("data-request-ready"), "The guided flow must provide a
 assert.ok(source.includes("clarificationStage:Number(worldQuestions?.dataset.stage||0)"), "The saved request must retain its clarification progress");
 assert.ok(source.includes("suggestedArea:profile.area,suggestedKind:profile.kind"), "The request must preserve the suggested route for later review");
 assert.ok(html.includes("/* Guided request flow:"), "The guided clarification interface must have dedicated responsive styling");
-assert.ok(sw.includes("worddark-app-v1-19"), "The request interface update must invalidate the old app cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "The request interface update must invalidate the old app cache");
 
 assert.ok(source.includes("function routeRequest(id)"), "Requests must route to their suggested sector");
 assert.ok(source.includes("data-route-request"), "Non-factory requests must expose a sector handoff action");
@@ -82,7 +82,7 @@ assert.ok(source.includes("r.routedTo=label;r.routedAt="), "Local routing histor
 assert.ok(source.includes("Autenticação externa e OAuth continuam indisponíveis nesta versão."), "Unavailable external integrations must be stated clearly");
 assert.ok(source.includes("não há banco, cobrança, assinatura ou transferência real conectada."), "Financial real-world actions must remain explicitly unavailable");
 assert.ok(source.includes("Setor aberto: '+esc(r.routedTo)"), "The request list must show the last sector opened");
-assert.ok(sw.includes("worddark-app-v1-19"), "Sector routing must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Sector routing must invalidate the previous app cache");
 
 
 assert.ok(source.includes("function recordJobEvent(j,type,detail)"), "Factory jobs must retain an explicit local event history");
@@ -94,7 +94,7 @@ assert.ok(source.includes("aprovação humana registrada"), "Approval events mus
 assert.ok(source.includes("r.status='Encaminhada à Dark Factory'"), "Dispatch must not falsely claim work has started");
 assert.ok(source.includes("linked.status=status==='Entregue'?'Concluída':status==='Aprovado'?'Aprovada para entrega'"), "Source requests must mirror the factory lifecycle");
 assert.ok(source.includes("Publicação externa continua desativada"), "Internal approval must not be represented as external publication");
-assert.ok(sw.includes("worddark-app-v1-19"), "Workflow changes must invalidate the previous service worker cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Workflow changes must invalidate the previous service worker cache");
 
 
 assert.ok(source.includes("## Histórico de etapas"), "Exported delivery packages must include the local workflow audit trail");
@@ -111,7 +111,7 @@ assert.ok(source.includes("WEBVTT\\n\\n"), "VTT export must include a WebVTT hea
 assert.ok(source.includes("Roteiro de dublagem / voice-over"), "The localization module must produce a dubbing script package");
 assert.ok(source.includes("Tradução automática, reconhecimento de fala e geração de voz ainda precisam"), "The app must disclose that automatic translation and voice engines are not connected");
 assert.ok(source.includes("HH:MM:SS,mmm --> HH:MM:SS,mmm"), "Subtitle export must validate timecodes");
-assert.ok(sw.includes("worddark-app-v1-19"), "Localization changes must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Localization changes must invalidate the previous app cache");
 
 
 assert.ok(source.includes("j.localizationOnly&&['Em revisão','Aprovado','Entregue'].includes(status)&&!String(j.localization?.translatedTranscript||'').trim()"), "Localization cannot enter review without a saved target-language translation");
@@ -142,7 +142,7 @@ assert.ok(source.includes("Publicação em redes sociais"), "External publishing
 assert.ok(source.includes("Transações financeiras reais"), "Real financial transactions must be explicitly inventoried");
 assert.ok(source.includes("administrar a raiz da Área ADM Dono"), "Security copy must preserve the external sovereign boundary without placing the owner inside the world");
 assert.ok(!source.includes("núcleo pessoal do Ruan"), "The world UI must not place Ruan inside its architecture");
-assert.ok(sw.includes("worddark-app-v1-19"), "Capability registry changes must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Capability registry changes must invalidate the previous app cache");
 
 assert.ok(source.includes("function captureCenter()"), "WordDark must expose a dedicated capture center");
 assert.ok(source.includes("function renderCaptureAcceptance(id)"), "Capture opportunities must expose an acceptance preparation panel");
@@ -167,20 +167,20 @@ assert.ok(source.includes("worddark.executors.publications.v1"), "Manual publica
 assert.ok(source.includes("verification:'declaração manual não verificada'"), "Manual publication records must not claim platform verification");
 assert.ok(source.includes("executorPublications:KEYS.executorPublications"), "Publication records must be included in local backups");
 assert.ok(source.includes("pushRuanNotification('Publicação manual registrada'"), "Manual publication recording must notify the Ruan gate");
-assert.ok(sw.includes("worddark-app-v1-19"), "Publication workflow changes must invalidate the previous service worker cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Publication workflow changes must invalidate the previous service worker cache");
 assert.ok(source.includes("local-template-v2"), "Executor preparation must identify the improved profile-aware local template");
 assert.ok(source.includes("data-prepare-current-job"), "Executor workbench must offer direct preparation for an eligible job");
 assert.ok(source.includes("TRÊS GANCHOS PARA ESCOLHER") && source.includes("ROTEIRO-BASE PARA VÍDEO CURTO"), "Prepared content must include selectable hooks and a short-video script outline");
 assert.ok(source.includes("requiresHumanReview:true"), "Automatically prepared content must retain mandatory human review");
 assert.ok(source.includes("pushRuanNotification('Pacote pronto para trabalhar'"), "Prepared executor packages must notify the Ruan gate");
-assert.ok(sw.includes("worddark-app-v1-19"), "Content-pack improvements must invalidate the previous service worker cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Content-pack improvements must invalidate the previous service worker cache");
 console.log("worddark app script test: OK");
 
 assert.ok(source.includes('data-capture-start'), 'Capture opportunities must support an explicit execution start state');
 assert.ok(source.includes('data-capture-complete'), 'Capture opportunities must support marking an operational stage complete');
 assert.ok(source.includes('data-capture-revenue'), 'Capture opportunities must support manually recording received revenue');
 assert.ok(source.includes('revenueReceived||0'), 'Capture views must distinguish received revenue from potential value');
-assert.ok(sw.includes('worddark-app-v1-19'), 'Capture lifecycle changes must invalidate the old service worker cache');
+assert.ok(sw.includes('worddark-app-v1-20'), 'Capture lifecycle changes must invalidate the old service worker cache');
 assert.ok(source.includes('function assessCaptureOpportunity(op)'), 'Capture triage must calculate a transparent readiness score.');
 assert.ok(source.includes("Preparação '+assessment.score"), 'Capture queue must show score and readiness label.');
 assert.ok(source.includes('prazo vencido'), 'Capture queue must flag expired deadlines.');
@@ -194,7 +194,7 @@ assert.ok(source.includes("data-capture-category"), "Capture catalog must expose
 assert.ok(source.includes("data-capture-sort"), "Capture catalog must offer sorting");
 assert.ok(source.includes("data-capture-search-form"), "Capture catalog must offer a searchable discovery experience");
 assert.ok(source.includes("CAPTURE_REQUEST_TYPES"), "Capture request intake must distinguish user intent types");
-assert.ok(sw.includes("worddark-app-v1-19"), "Streaming catalog changes must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Streaming catalog changes must invalidate the previous app cache");
 
 assert.ok(source.includes("const CAPTURE_SOURCE_LIBRARY="), "Capture must include a curated source directory");
 assert.ok(source.includes("function captureSourceLibrary(items)"), "Capture must render the recommended source directory");
@@ -204,4 +204,12 @@ assert.ok(source.includes("workana.com/pt/work/freelancers"), "Source directory 
 assert.ok(source.includes("hotmart.com/pt-br/afiliados"), "Source directory must include Hotmart's official affiliate page");
 assert.ok(source.includes("support.google.com/youtube/answer/72851"), "Source directory must link to official YouTube monetization requirements");
 assert.ok(source.includes("oportunidade individual não verificada"), "Source review must not imply each listed opportunity is verified");
-assert.ok(sw.includes("worddark-app-v1-19"), "Source library changes must invalidate the previous app cache");
+assert.ok(sw.includes("worddark-app-v1-20"), "Source library changes must invalidate the previous app cache");
+
+assert.ok(source.includes("function scoreCapturePriority(item)"), "Capture must score opportunity execution priority separately from completeness");
+assert.ok(source.includes("function capturePriorityRail(items)"), "Capture must render a dedicated priority queue");
+assert.ok(source.includes("function captureCostEstimate(text)"), "Priority engine must parse explicit costs conservatively");
+assert.ok(source.includes("Estimativa simples após custo identificado"), "Priority cards must separate estimated value from identified cost");
+assert.ok(source.includes("não prevê contratação nem renda"), "Priority score must disclose that it is not a guarantee");
+assert.ok(source.includes("Prazo vencido: não priorizar até confirmar"), "Expired opportunities must be deprioritized");
+assert.ok(sw.includes("worddark-app-v1-20"), "Priority engine must invalidate the previous app cache");
