@@ -33,6 +33,7 @@
     <label class="wd-field">Origem<input class="wd-input" id="origin" value="world/earth/example-operation"></label>
   </div>
   <label class="wd-field" style="margin-top:12px">Requerimento<textarea class="wd-textarea" id="task">Produzir material de teste do circuito WordDark.</textarea></label>
+  <label class="wd-field" style="margin-top:12px">Mídia de origem (opcional: URL ou ID do arquivo)<input class="wd-input" id="mediaSource" placeholder="URL segura ou identificador da mídia"></label>
   <div class="wd-form-grid" style="margin-top:12px">
     <label class="wd-field">ID do conteúdo<input class="wd-input" id="contentId" value="CONTENT-EXAMPLE-001"></label>
     <label class="wd-field">Título<input class="wd-input" id="contentTitle" value="WordDark — circuito operacional"></label>
@@ -190,6 +191,7 @@
         payload:{
           content:true,contentId,action:"CONTENT_CREATE",contentType:"VIDEO",
           requesterId:$("requester").value.trim(),originId,task:$("task").value.trim(),
+          input:$("mediaSource").value.trim()?{mediaUrl:$("mediaSource").value.trim()}:null,
           title:$("contentTitle").value.trim(),type:"VIDEO",requirements:$("requirements").value.trim(),
           destination:binding.status==="ACCOUNT_BOUND"?{network,accountId}:null
         }
