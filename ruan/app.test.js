@@ -55,3 +55,6 @@ assert.ok(html.includes('function normalizeOpportunityUrl(raw)'), 'Opportunity s
 assert.ok(html.includes('const duplicate=jobs.find(j=>j.source&&normalizeOpportunityUrl(j.source)===normalizedSource)'), 'Duplicate source URLs must be blocked.');
 assert.ok(html.includes('function recordJobRevenue(id)'), 'Ruan must track actually received revenue separately.');
 assert.ok(html.includes('revenueReceived:Number(j.revenueReceived||0)'), 'The capture handoff must preserve manually reported received revenue.');
+assert.ok(html.includes('function assessOpportunity(j)'), 'Ruan must calculate a transparent rule-based readiness score.');
+assert.ok(html.includes('Índice de preparação:'), 'Ruan must show readiness score and reasons.');
+assert.ok(html.includes('Prazo vencido'), 'Expired deadlines must be flagged.');

@@ -1,4 +1,4 @@
-const CACHE = 'ruan-shell-alpha-v4';
+const CACHE = 'ruan-shell-alpha-v5';
 const CORE = ['./', './index.html', './manifest.webmanifest', './app-icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
