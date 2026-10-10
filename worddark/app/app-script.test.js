@@ -56,4 +56,9 @@ assert.ok(source.includes("item.status='Cancelada'"), "Cancellation must preserv
 assert.ok(source.includes("requests=requests.filter(x=>x.id!==b.dataset.deleteRequest)"), "Deletion must remove the selected local operation");
 assert.ok(source.includes("contentJobs=contentJobs.filter(x=>x.id!==b.dataset.deleteJob)"), "Deletion must remove the selected local content job");
 assert.doesNotThrow(() => new vm.Script(source), "Inline app script must be valid JavaScript syntax");
+assert.ok(source.includes("O que vamos resolver hoje?"), "Home must use a simple request-first launcher");
+assert.ok(source.includes("function updateWorldQuestions()"), "The request flow must ask clarifying questions proactively");
+assert.ok(source.includes("Ajustes internos (opcional)"), "Advanced routing controls must stay tucked away by default");
+assert.ok(html.includes("./assets/world-cosmos.svg") && html.includes("./assets/world-sky.svg") && html.includes("./assets/world-earth.svg"), "World sections must use dedicated atmospheric backgrounds");
+assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
 console.log("worddark app script test: OK");
