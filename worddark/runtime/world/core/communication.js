@@ -25,15 +25,20 @@
     }
     processOperation(operation,executor){
       const pending=this.pending.get(operation.operationId); if(!pending)return{success:false,reason:"Pedido não encontrado para execução."};
-      const execution=executor(pending.request);
-      if(!execution||execution.success!==true){const detail=execution?.reason||execution?.message||(Array.isArray(execution?.errors)?execution.errors.join("; "):null);return{success:false,stage:"EXECUTION",reason:detail||"Execução falhou.",result:execution};}
-      const response=new WordDarkMessage({messageId:"RMSG-"+operation.operationId,requestId:pending.request.requestId,type:"OPERATION_RESPONSE",origin:pending.request.destinationId,destination:pending.request.originId,service:pending.request.service,responseTo:pending.message.messageId,status:"PROCESSED",payload:execution.result||execution});
-      const delivery=this.road.send(response); if(!delivery.success)return{success:false,stage:"RETURN_ROAD",reason:delivery.reason,result:execution};
-      this.messages.push(response.toJSON());
-      const responseReceipt=new WordDarkReceipt({receiptId:this.generateId("RCT"),messageId:response.messageId,requestId:pending.request.requestId,operationId:operation.operationId,receiverId:pending.request.originId,senderId:pending.request.destinationId,routeId:delivery.routeId,status:"RECEIVED",metadata:{responseTo:pending.message.messageId}});
-      this.receipts.push(responseReceipt.toJSON());this.pending.delete(operation.operationId);
-      this.record(operation,"RESPONSE_SENT",{message:response.toJSON(),delivery:delivery.delivery});this.record(operation,"RESPONSE_RECEIVED",{receipt:responseReceipt.toJSON()});
-      return{success:true,validated:true,result:execution.result||execution,response:response.toJSON(),responseReceipt:responseReceipt.toJSON(),routeId:pending.delivery.routeId,returnRouteId:delivery.routeId};
+      const finish=execution=>{
+        if(!execution||execution.success!==true){const detail=execution?.reason||execution?.message||(Array.isArray(execution?.errors)?execution.errors.join("; "):null);return{success:false,stage:"EXECUTION",reason:detail||"Execução falhou.",result:execution};}
+        const response=new WordDarkMessage({messageId:"RMSG-"+operation.operationId,requestId:pending.request.requestId,type:"OPERATION_RESPONSE",origin:pending.request.destinationId,destination:pending.request.originId,service:pending.request.service,responseTo:pending.message.messageId,status:"PROCESSED",payload:execution.result||execution});
+        const delivery=this.road.send(response); if(!delivery.success)return{success:false,stage:"RETURN_ROAD",reason:delivery.reason,result:execution};
+        this.messages.push(response.toJSON());
+        const responseReceipt=new WordDarkReceipt({receiptId:this.generateId("RCT"),messageId:response.messageId,requestId:pending.request.requestId,operationId:operation.operationId,receiverId:pending.request.originId,senderId:pending.request.destinationId,routeId:delivery.routeId,status:"RECEIVED",metadata:{responseTo:pending.message.messageId}});
+        this.receipts.push(responseReceipt.toJSON());this.pending.delete(operation.operationId);
+        this.record(operation,"RESPONSE_SENT",{message:response.toJSON(),delivery:delivery.delivery});this.record(operation,"RESPONSE_RECEIVED",{receipt:responseReceipt.toJSON()});
+        return{success:true,validated:true,result:execution.result||execution,response:response.toJSON(),responseReceipt:responseReceipt.toJSON(),routeId:pending.delivery.routeId,returnRouteId:delivery.routeId};
+      };
+      let execution;
+      try{execution=executor(pending.request);}catch(error){return{success:false,stage:"EXECUTION",reason:error.message||"Execução falhou."};}
+      if(execution&&typeof execution.then==="function")return execution.then(finish).catch(error=>({success:false,stage:"EXECUTION",reason:error.message||"Execução assíncrona falhou."}));
+      return finish(execution);
     }
     record(operation,type,data){if(this.registry&&typeof this.registry.recordEvent==="function")this.registry.recordEvent(operation,type,data);}
     getStatus(){return{messages:this.messages.length,receipts:this.receipts.length,pending:this.pending.size};}
