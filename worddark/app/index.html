@@ -16,9 +16,9 @@
 :root{--bg:#080d18;--surface:rgba(12,18,31,.78);--surface2:rgba(24,32,52,.76);--line:rgba(185,203,244,.19);--text:#f3f6ff;--muted:#b2bdd2;--gold:#c7d6ff;--green:#8fddc3;--red:#f0a4ad;--blue:#a8c8ff}
 html{background:#080d18}
 body{position:relative;isolation:isolate;background:#080d18;color:var(--text)}
-body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(180deg,rgba(5,9,18,.38),rgba(5,9,18,.72)),url("./assets/world-cosmos.svg");background-position:center;background-size:cover;background-repeat:no-repeat;opacity:1}
-body[data-page="sky"]::before{background-image:linear-gradient(180deg,rgba(6,10,24,.28),rgba(5,9,20,.78)),url("./assets/world-sky.svg")}
-body[data-page="earth"]::before{background-image:linear-gradient(180deg,rgba(5,12,19,.35),rgba(4,10,16,.8)),url("./assets/world-earth.svg")}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(ellipse at 50% -20%,rgba(36,37,42,.98),rgba(9,10,13,1) 58%);background-position:center;background-size:cover;background-repeat:no-repeat;opacity:1}
+body[data-page="sky"]::before{background-image:radial-gradient(ellipse at 55% 0%,rgba(38,43,54,.95),rgba(9,10,13,1) 62%)}
+body[data-page="earth"]::before{background-image:radial-gradient(ellipse at 45% 0%,rgba(42,39,31,.8),rgba(9,10,13,1) 62%)}
 .layout{grid-template-columns:minmax(0,1fr)}
 .side{display:none!important}
 .main{min-height:100vh;background:transparent}
