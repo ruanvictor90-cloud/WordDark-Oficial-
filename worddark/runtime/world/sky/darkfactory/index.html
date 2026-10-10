@@ -91,7 +91,7 @@
   const socialFactory=new SocialFactory({connectionBridge:connectionGateway});
   const contentModules=new ContentModuleRegistry();
   ["INGEST","SCRIPT","ASSET","EDIT","AUDIO","TIMELINE","TRANSFORM","RENDER","VALIDATE","PACKAGE"].forEach(moduleId=>contentModules.register(moduleId,async context=>({success:true,status:"MODULE_COMPLETED",module:moduleId,contentId:context.operation.contentId,executedAt:new Date().toISOString()})));
-  ["TRANSLATE","SUBTITLE","DUBBING"].forEach(moduleId=>contentModules.register(moduleId,context=>WordDarkTranslationPipeline.execute(moduleId,context,window.WordDarkMediaAdapters||{})));
+  ["TRANSCRIBE","TRANSLATE","SUBTITLE","DUBBING"].forEach(moduleId=>contentModules.register(moduleId,context=>WordDarkTranslationPipeline.execute(moduleId,context,window.WordDarkMediaAdapters||{})));
   const contentFactory=new ContentFactory({executor:contentExecutor,moduleRegistry:contentModules});
   installContentReentry(contentFactory);
   serviceRegistry.register({serviceId:"DF-SERVICE-CONTENT-PRODUCE",name:"Content Production",type:"content.produce",status:"READY",executor:contentExecutor});
@@ -195,7 +195,7 @@
         }
       };
       $("runStatus").textContent="Terra → controles WordDark → Rodovia → Céu...";
-      const operation=coordinator.submit(request);
+      const operation=await coordinator.submit(request);
       renderOperation(operation);
       $("lastResult").textContent=JSON.stringify(operation,null,2);
       $("runStatus").textContent=operation.status==="COMPLETED"?"Operação concluída e resposta devolvida à Terra.":"Operação terminou em "+operation.status+".";
