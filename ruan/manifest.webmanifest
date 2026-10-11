@@ -1,15 +1,14 @@
 {
-  "id": "./",
-  "name": "Ruan — Ambiente Pessoal",
+  "name": "Ruan — Central de Operação",
   "short_name": "Ruan",
-  "description": "Seu espaço pessoal modular para aplicativos, agenda e ferramentas.",
+  "description": "Central privada de operação com widgets informativos e gaveta de aplicativos.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#090a0d",
-  "theme_color": "#0a0b0e",
+  "background_color": "#09070f",
+  "theme_color": "#09070f",
   "icons": [
     {
       "src": "./app-icon.svg",
