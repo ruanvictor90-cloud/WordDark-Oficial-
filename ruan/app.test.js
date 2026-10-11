@@ -11,7 +11,7 @@ assert.ok(html.includes("payload.data.routines!==undefined"));
 assert.ok(html.includes("KEYS.projects,next.projects"));
 assert.ok(html.includes("KEYS.routines,next.routines"));
 assert.ok(html.includes("privacyProjects"));
-assert.ok(html.includes("ALFA 0.5"));
+assert.ok(html.includes("ALFA 0.6"));
 assert.ok(html.includes('id="portaoPage"'));
 assert.ok(html.includes("Nível 1 · Área ADM"));
 assert.ok(html.includes("Nível 2 · Portão do mundo"));
@@ -58,3 +58,9 @@ assert.ok(html.includes('revenueReceived:Number(j.revenueReceived||0)'), 'The ca
 assert.ok(html.includes('function assessOpportunity(j)'), 'Ruan must calculate a transparent rule-based readiness score.');
 assert.ok(html.includes('Índice de preparação:'), 'Ruan must show readiness score and reasons.');
 assert.ok(html.includes('Prazo vencido'), 'Expired deadlines must be flagged.');
+
+assert.ok(html.includes('id="widgetsPage"'));
+assert.ok(html.includes('id="sideDrawer"'));
+assert.ok(html.includes('id="drawerBackdrop"'));
+assert.ok(html.includes('id="homeWidgetsTitle"'));
+assert.ok(html.includes('id="homeAppsTitle"'));
