@@ -4,3 +4,19 @@
 body[data-screen="gate"] .mobile-dock,body[data-screen="app"] .mobile-dock{display:flex}
 @media(max-width:370px){.shell{padding-left:13px;padding-right:13px}.pinned-grid{gap:3px}.pinned-icon{width:48px;height:48px;border-radius:15px}.home-widget{gap:9px;padding:12px}.home-widget-symbol{flex-basis:33px;width:33px;height:33px}.widget-state{display:none}.app-grid{gap:8px}.app-card{padding:12px;min-height:148px}.metric-widget{padding:12px}}
 @media(min-width:620px){body[data-screen="gate"] .mobile-dock,body[data-screen="app"] .mobile-dock{display:none}}
+
+/* Portão principal: somente os três níveis de entrada. */
+.top-actions{display:flex}
+.icon-button{display:grid}
+.gate-screen{gap:15px}
+.gate-screen .page-top{margin-bottom:0}
+.ruan-return{align-self:flex-start;display:inline-flex;align-items:center;min-height:36px;padding:5px 0;color:#d0a6ff;font-size:12px}
+.gate-level-card{display:flex;align-items:center;gap:13px;min-width:0;padding:17px;border:1px solid #38264b;border-radius:17px;background:linear-gradient(115deg,#1a1126,#100b17);transition:border-color .15s,transform .15s}
+.gate-level-card:hover{border-color:#8958b5}
+.gate-level-card:active{transform:scale(.99)}
+.gate-level-number{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;border:1px solid #69438b;border-radius:14px;background:#281637;color:#dfc2ff;font-size:15px;font-weight:800}
+.gate-level-copy{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+.gate-level-copy strong{font-size:13px;line-height:1.35}
+.gate-level-copy small{font-size:11px;line-height:1.5;color:var(--muted)}
+.gate-arrow{color:#cba7ef;font-size:19px}
+@media(min-width:620px){.gate-screen{max-width:720px;width:100%;align-self:center;flex:1}.gate-level-card{padding:20px}}
