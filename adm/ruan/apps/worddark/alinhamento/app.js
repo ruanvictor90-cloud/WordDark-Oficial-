@@ -73,6 +73,8 @@ $("menuButton").addEventListener("click",()=>{openGate();$("menuButton").setAttr
 $("appSearch").addEventListener("input",filterApps);
 $("clearSearch").addEventListener("click",()=>{$("appSearch").value="";filterApps();$("appSearch").focus()});
 document.querySelectorAll("[data-dock-app]").forEach(b=>b.addEventListener("click",()=>openApp(b.dataset.dockApp)));
+document.querySelectorAll("[data-open-security]").forEach(b=>b.addEventListener("click",()=>openApp("security")));
+document.querySelectorAll("[data-open-operations]").forEach(b=>b.addEventListener("click",()=>openApp("operations")));
 const hash=location.hash.slice(1);
 if(hash==="portao")openGate();else if(hash.startsWith("app/"))openApp(hash.slice(4));else goHome();
 })();
