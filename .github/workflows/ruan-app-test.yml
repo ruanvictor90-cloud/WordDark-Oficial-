@@ -1,0 +1,25 @@
+name: Ruan UI tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - "adm/ruan/app/**"
+      - "adm/ruan/apps/organize/**"
+      - "package.json"
+      - ".github/workflows/ruan-app-test.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "adm/ruan/app/**"
+      - "adm/ruan/apps/organize/**"
+      - "package.json"
+      - ".github/workflows/ruan-app-test.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm run ruan:ui:test
