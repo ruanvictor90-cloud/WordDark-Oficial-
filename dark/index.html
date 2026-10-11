@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#09070f">
 <meta name="description" content="Dark — camada de organização e distribuição operacional.">
+<meta name="robots" content="noindex,nofollow,noarchive">
 <title>Dark · Tapete operacional</title>
 <style>
 :root{color-scheme:dark;--bg:#09070f;--panel:#120d1b;--line:#332141;--text:#f7f1ff;--muted:#aa9bb9;--accent:#b98aff;--green:#91c9a5;--amber:#e0c18a;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}
@@ -127,6 +128,17 @@ function sendTaskToWorld(id){personalTasks=readArray(personalKey);const task=per
 $('taskForm').addEventListener('submit',function(event){event.preventDefault();const title=$('taskTitle').value.trim();if(!title)return;const now=new Date().toISOString();const kind=$('taskKind').value;const selectedArea=isRuan?'Ruan':$('taskArea').value;const detail=$('taskDetail').value.trim();const due=$('taskDue').value;const priority=$('taskPriority').value;const id='DARK-'+Date.now().toString(36).toUpperCase();if(isRuan){personalTasks=readArray(personalKey);personalTasks.unshift({id,title,kind,area:'Ruan',detail,due,priority,status:'Aberta',origin:'Ruan / Dark',createdAt:now});if(!writeArray(personalKey,personalTasks))return;toast('Tarefa salva somente na Área Pessoal. Envie ao WordDark apenas se decidir.');}else{const requests=readArray(requestsKey);requests.push({id,title,kind,area:selectedArea,date:due,detail,status:'Aberta',priority,origin:'Dark / '+cfg.title,suggestedArea:selectedArea,suggestedKind:kind,createdAt:now,updatedAt:now,source:'Dark'});if(!writeArray(requestsKey,requests.slice(-500)))return;toast('Pedido registrado na fila local do mundo. Nenhuma ação externa foi executada.');$('taskArea').value=area==='ceu'?'Céu':area==='terra'?'Terra':'WordDark';}this.reset();if(isRuan){$('taskKind').value='Pessoal';$('taskArea').value='WordDark'}else{$('taskArea').value=area==='ceu'?'Céu':area==='terra'?'Terra':'WordDark'}renderTasks();});
 function setup(){ $('backLink').href=cfg.back;$('brandSub').textContent=cfg.sub;$('contextPill').textContent=isRuan?'PESSOAL · SEPARADO':'INTERNO · '+area.toUpperCase();$('heroKicker').textContent=cfg.kicker;$('heroTitle').textContent=isRuan?'Seu espaço, organizado sem abrir mão do controle.':'Tudo no lugar. Cada tarefa no setor certo.';$('heroText').textContent=cfg.desc;$('modulesTitle').textContent=isRuan?'Ferramentas pessoais':'Recursos desta área';$('requestTitle').textContent=isRuan?'Tarefas e oportunidades pessoais':'Captação e desenvolvimento';$('requestSubtitle').textContent=isRuan?'Registre no Ruan. O envio ao mundo é sempre manual.':'Transforme uma intenção em uma tarefa clara, com destino e contexto.';$('submitTask').textContent=isRuan?'Salvar na Área Pessoal':'Organizar e registrar pedido';$('formHelper').textContent=isRuan?'Os dados ficam sob uma chave de armazenamento pessoal neste navegador. Nada é enviado ao WordDark sem clicar em “Enviar ao WordDark”.':'O registro local organiza o pedido; não executa publicação, pagamento ou ação externa automaticamente.';$('tasksTitle').textContent=isRuan?'Fila pessoal':'Pedidos recentes do Dark';$('privacyNote').innerHTML=isRuan?'<strong>Limite da Área ADM:</strong> este Dark não dá ao WordDark controle sobre o Ruan. O envio de um pedido é uma ação explícita e unidirecional. Como a publicação é estática, isso não substitui autenticação nem separação real de origem; não guarde segredos aqui.':'<strong>Camada interna:</strong> o Dark organiza e distribui pedidos, mas não transforma uma sugestão em execução autorizada. A página estática não oferece autenticação real; não coloque senhas, tokens ou segredos aqui.';$('footerContext').textContent=cfg.footer;if(isRuan){$('taskKind').value='Pessoal';$('taskArea').value='WordDark';$('taskArea').closest('.field').classList.add('hidden');$('modePill').textContent='Pessoal · sem envio automático';}else{$('modePill').textContent='Operação local · conectores não presumidos';$('taskArea').value=area==='ceu'?'Céu':area==='terra'?'Terra':'WordDark';}renderModules();renderTasks();}
 setup();
+let areaWasManuallySet=false;
+if(!isRuan){
+  $('taskArea').addEventListener('change',()=>{areaWasManuallySet=true;});
+  $('taskTitle').addEventListener('input',()=>{
+    if(areaWasManuallySet)return;
+    const value=$('taskTitle').value.toLocaleLowerCase('pt-BR');
+    if(/vídeo|video|short|reel|roteiro|legenda|dubl|tradu|conteúdo|conteudo|marketing|campanha|imagem/.test(value))$('taskArea').value='Céu';
+    else if(/produto|loja|venda|cliente|fornecedor|pedido|canal|oportunidade|captação|captacao|ecommerce|e-commerce/.test(value))$('taskArea').value='Terra';
+    else if(/conexão|conectar|api|segurança|direito|financeiro|sistema|automação|automacao|auditoria|erro|bug/.test(value))$('taskArea').value='WordDark';
+  });
+}
 })();
 </script>
 </body>
