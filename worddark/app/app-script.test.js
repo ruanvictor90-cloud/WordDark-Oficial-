@@ -213,3 +213,10 @@ assert.ok(source.includes("Estimativa simples após custo identificado"), "Prior
 assert.ok(source.includes("não prevê contratação nem renda"), "Priority score must disclose that it is not a guarantee");
 assert.ok(source.includes("Prazo vencido: não priorizar até confirmar"), "Expired opportunities must be deprioritized");
 assert.ok(sw.includes("worddark-app-v1-20"), "Priority engine must invalidate the previous app cache");
+
+
+assert.ok(source.includes("function draftSubtitleSrt(text)"), "Localization must generate an editable subtitle timing draft from translated text");
+assert.ok(source.includes("function formatSubtitleTime(ms)"), "Subtitle drafts must format SRT timecodes");
+assert.ok(source.includes("data-draft-subtitles"), "Localization workbench must expose subtitle draft generation");
+assert.ok(source.includes("sincronize com o áudio"), "Estimated subtitle timing must be disclosed as requiring audio synchronization");
+assert.ok(sw.includes("worddark-app-v1-21"), "Subtitle draft changes must invalidate the previous app cache");
