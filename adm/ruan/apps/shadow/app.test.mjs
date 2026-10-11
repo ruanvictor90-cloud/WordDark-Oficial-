@@ -17,6 +17,8 @@ test("Dark contains the central structural line and modular catalog",async()=>{
  const html=await read("dark","index.html");
  const js=await read("dark","app.js");
  assert.match(html,/Linha Central/);
+ assert.match(html,/Coleta ampla\. Conexões mínimas\./);
+ assert.match(html,/Mapa desmontado para triagem/);
  assert.match(html,/Ruan ADM/);
  assert.match(html,/Rodovia/);
  assert.match(html,/Em desenvolvimento/);
@@ -24,6 +26,8 @@ test("Dark contains the central structural line and modular catalog",async()=>{
  assert.match(js,/Dark Factory/);
  assert.match(js,/DarkCommerce/);
  assert.match(js,/Ruan ADM permanece fora do controle do WordDark/);
+ for(const item of ["Núcleo de Operações","Motor de aprendizagem","Parada de emergência","Adaptadores OAuth e APIs","Dublagem e vozes","Inventário de branches e versões","Caixa de ideias antigas"]){assert.ok(js.includes(item),`missing triage item: ${item}`)}
+ assert.ok((js.match(/\{id:/g)||[]).length>=80,"expected a broad, disassembled triage catalog");
  assert.ok((js.match(/statusText:/g)||[]).length>=20,"expected a broad catalog with explicit states");
 });
 test("Shadow and Dark scripts parse and Shadow manifest remains valid",async()=>{
