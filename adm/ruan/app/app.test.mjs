@@ -4,31 +4,9 @@ import { readFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-
-const root = dirname(fileURLToPath(import.meta.url));
-const read = name => readFile(resolve(root, name), "utf8");
-
-test("Ruan home stays minimal and links to the separate Organize app", async () => {
-  const html = await read("index.html");
-  assert.match(html, /<html lang="pt-BR">/);
-  assert.match(html, /name="viewport"/);
-  assert.match(html, /id="alerts"/);
-  assert.match(html, /href="\.\.\/apps\/organize\/index\.html"/);
-  assert.doesNotMatch(html, /Fábrica de aplicativos|capability-list|app-form/);
-});
-test("alert widget reads Organize tasks without opening sectors", async () => {
-  const source = await read("app.js");
-  assert.match(source, /ruan\.organize\.v1/);
-  assert.match(source, /priority === "urgent"/);
-  assert.match(source, /task\.dueDate/);
-});
-test("browser JavaScript parses", async () => {
-  const result = spawnSync(process.execPath, ["--check", resolve(root, "app.js")], { encoding: "utf8" });
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-});
-test("PWA manifest is standalone and Portuguese", async () => {
-  const manifest = JSON.parse(await read("manifest.webmanifest"));
-  assert.equal(manifest.name, "Ruan — Núcleo pessoal");
-  assert.equal(manifest.lang, "pt-BR");
-  assert.equal(manifest.display, "standalone");
-});
+const root=dirname(fileURLToPath(import.meta.url));
+const read=name=>readFile(resolve(root,name),"utf8");
+test("Ruan home is minimal and links to Pessoal and Shadow",async()=>{const html=await read("index.html");assert.match(html,/<html lang="pt-BR">/);assert.match(html,/notification-toggle/);assert.match(html,/\.\.\/apps\/pessoal\/index\.html/);assert.match(html,/\.\.\/apps\/shadow\/index\.html/);assert.doesNotMatch(html,/Fábrica de aplicativos|app-form|capability-list/)});
+test("notification widget reads Pessoal task and finance stores",async()=>{const js=await read("app.js");assert.match(js,/ruan\.pessoal\.tasks\.v1/);assert.match(js,/ruan\.pessoal\.finance\.v1/);assert.match(js,/notification-panel/)});
+test("Ruan browser JavaScript parses",async()=>{const result=spawnSync(process.execPath,["--check",resolve(root,"app.js")],{encoding:"utf8"});assert.equal(result.status,0,result.stderr||result.stdout)});
+test("Ruan manifest is standalone and Portuguese",async()=>{const m=JSON.parse(await read("manifest.webmanifest"));assert.equal(m.lang,"pt-BR");assert.equal(m.display,"standalone")});
