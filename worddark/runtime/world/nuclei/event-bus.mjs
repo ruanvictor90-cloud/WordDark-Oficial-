@@ -5,6 +5,7 @@ export class WordDarkEventBus {
     this.listeners = new Map();
     this.history = [];
     this.listenerErrors = [];
+    this.sequence = 0;
   }
   subscribe(type, listener) {
     if (typeof type !== "string" || !type.trim()) throw new TypeError("O tipo do evento é obrigatório.");
@@ -16,7 +17,7 @@ export class WordDarkEventBus {
   publish(type, detail = {}) {
     if (typeof type !== "string" || !type.trim()) throw new TypeError("O tipo do evento é obrigatório.");
     const event = Object.freeze({
-      eventId: "EVT-" + (this.history.length + 1) + "-" + (Date.parse(this.clock()) || 0),
+      eventId: "EVT-" + (++this.sequence) + "-" + (Date.parse(this.clock()) || 0),
       type, occurredAt: this.clock(),
       detail: structuredClone(detail && typeof detail === "object" ? detail : { value: detail })
     });
