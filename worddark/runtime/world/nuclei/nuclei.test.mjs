@@ -53,10 +53,15 @@ test("kernel blocks production until explicit approval and delegates execution t
   const waiting = await kernel.submit(request);
   assert.equal(waiting.status, "WAITING_APPROVAL");
   assert.equal(dispatched.length, 0);
+  const repeatedWaiting = await kernel.submit(request);
+  assert.equal(repeatedWaiting.status, "WAITING_APPROVAL");
+  assert.equal(repeatedWaiting.approvalId, waiting.approvalId);
+  assert.equal(repeatedWaiting.reused, true);
   approvals.decide(waiting.approvalId, { decision: "APPROVE", actorId: "reviewer-b" });
   const completed = await kernel.submit({ ...request, requestId: "REQ-2", approvalId: waiting.approvalId });
   assert.equal(completed.status, "COMPLETED");
   assert.equal(dispatched.length, 1);
+  assert.equal((await kernel.submit({ ...request, requestId: "REQ-3", approvalId: waiting.approvalId })).reason, "OPERATION_IDEMPOTENCY_BLOCKED");
   assert.equal(kernel.snapshot().operationEngineConnected, true);
 });
 
