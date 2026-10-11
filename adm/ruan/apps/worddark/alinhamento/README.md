@@ -1,6 +1,6 @@
-# WordDark — Base Unificada por Apps (prévia v0.1)
+# WordDark — Base Unificada por Apps (v0.2)
 
-Esta pasta apresenta uma nova camada de interface e catálogo de setores. A versão atual do portal e os módulos anteriores foram mantidos sem substituição.
+Esta pasta apresenta uma camada de interface e catálogo de setores. A home agora tem somente apps fixados no topo e widgets informativos abaixo. A versão anterior do portal e os módulos anteriores foram mantidos sem substituição.
 
 ## Abrir a prévia
 
@@ -43,6 +43,12 @@ Esta pasta apresenta uma nova camada de interface e catálogo de setores. A vers
 - GitHub Pages é uma camada pública/estática; não deve guardar segredos nem ser a autoridade final para permissões ou ações irreversíveis.
 - A Área ADM/Ruan permanece separada e fora do controle do WordDark.
 - A Rodovia e o Véu não viram apps visíveis só para preencher a tela.
+
+## Núcleos centrais adicionados
+
+A fundação inicial está em `worddark/runtime/world/nuclei/`. Ela contém contrato de pedido, Event Bus, registro de setores, central de aprovações com decisão de uso único, composição sobre o motor operacional existente e testes. O motor existente não foi duplicado. A aprovação humana não executa a operação; apenas autoriza o pedido correspondente a seguir para o motor.
+
+A nova fundação passou pelos testes de CI do próprio diretório. A integração de cada adaptador ao runtime completo continua gradual e precisa ser validada antes de tratar o mundo como produção.
 
 ## Próximos passos depois da revisão visual
 
