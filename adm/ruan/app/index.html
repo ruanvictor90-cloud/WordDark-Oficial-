@@ -4,99 +4,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#111318">
-  <meta name="description" content="Ruan — núcleo pessoal para organizar e coordenar aplicativos independentes.">
+  <meta name="description" content="Ruan — núcleo pessoal simples, com alertas e aplicativos independentes.">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./app.css">
-  <title>Ruan — Central pessoal</title>
+  <title>Ruan — Núcleo pessoal</title>
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <a class="brand" href="#inicio" aria-label="Ruan início"><span class="brand-mark">R</span><span><strong>ruan</strong><small>central pessoal</small></span></a>
-      <nav class="side-nav" aria-label="Navegação principal">
-        <button class="nav-item active" data-view="inicio"><span>⌂</span> Visão geral</button>
-        <button class="nav-item" data-view="apps"><span>▦</span> Meus aplicativos</button>
-        <button class="nav-item" data-view="fabrica"><span>✳</span> Fábrica de apps</button>
-        <button class="nav-item" data-view="tarefas"><span>☷</span> Tarefas</button>
-        <button class="nav-item" data-view="notas"><span>▤</span> Biblioteca pessoal</button>
-        <button class="nav-item" data-view="conexoes"><span>⇄</span> Conexões e acesso</button>
-      </nav>
-      <div class="sidebar-bottom"><span class="status-dot"></span><span>Raiz pessoal protegida</span><small>Motor local · v0.1</small></div>
-    </aside>
-
-    <main class="main">
-      <header class="topbar">
-        <div><p class="eyebrow" id="section-eyebrow">ÁREA PESSOAL</p><h1 id="page-title">Visão geral</h1></div>
-        <div class="top-actions"><span class="local-pill"><span class="status-dot"></span> Dados neste dispositivo</span><button class="avatar" aria-label="Área pessoal Ruan">R</button></div>
-      </header>
-
-      <section class="view active" id="view-inicio">
-        <div class="welcome-panel">
-          <div class="welcome-copy"><span class="overline">SEU NÚCLEO, SUAS REGRAS</span><h2>Um centro.<br><em>Aplicativos independentes.</em></h2><p>Organize suas ferramentas sem entregar o controle do Ruan a cada aplicativo.</p><button class="primary-btn" data-go="fabrica">＋ Criar um aplicativo</button></div>
-          <div class="orbit" aria-hidden="true"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="orbit-core">R</div><span class="orbit-node node-a">APP</span><span class="orbit-node node-b">WD</span><span class="orbit-node node-c">+</span></div>
-        </div>
-        <div class="section-heading"><div><p class="eyebrow">PAINEL DE CONTROLE</p><h2>Seu espaço</h2></div><span class="subtle">Visão local</span></div>
-        <div class="stats-grid">
-          <article class="stat-card"><span class="stat-icon purple">▦</span><span class="stat-label">Aplicativos</span><strong id="stat-apps">0</strong><small>módulos cadastrados</small></article>
-          <article class="stat-card"><span class="stat-icon blue">☷</span><span class="stat-label">Tarefas abertas</span><strong id="stat-tasks">0</strong><small>para organizar</small></article>
-          <article class="stat-card"><span class="stat-icon green">⇄</span><span class="stat-label">Conexões externas</span><strong>0</strong><small>nenhuma ativa</small></article>
-        </div>
-        <div class="content-grid">
-          <section class="panel"><div class="panel-heading"><div><p class="eyebrow">ATALHOS</p><h3>Continuar trabalhando</h3></div></div><div class="quick-actions"><button class="quick-action" data-go="apps"><span class="quick-icon">▦</span><span><strong>Abrir biblioteca</strong><small>Gerencie seus módulos</small></span><b>→</b></button><button class="quick-action" data-go="tarefas"><span class="quick-icon">☷</span><span><strong>Organizar tarefas</strong><small>Registre o próximo passo</small></span><b>→</b></button><button class="quick-action" data-go="conexoes"><span class="quick-icon">⇄</span><span><strong>Revisar permissões</strong><small>Controle o que cada app recebe</small></span><b>→</b></button></div></section>
-          <section class="panel principle-panel"><span class="principle-icon">◈</span><p class="eyebrow">PRINCÍPIO FUNDAMENTAL</p><h3>Conectar não é entregar o controle.</h3><p>Um aplicativo recebe apenas as capacidades que você autorizar. Ele não recebe acesso automático à raiz pessoal, aos outros aplicativos ou ao telefone inteiro.</p><div class="principle-footer"><span class="status-dot"></span> Acesso de entrada ao Ruan bloqueado</div></section>
-        </div>
-        <div class="notice"><span>ⓘ</span><p><strong>Primeira versão:</strong> este painel salva os dados localmente neste navegador. A ligação com o motor Node.js e o WordDark será feita por uma camada explícita, depois de protegida e testada.</p></div>
-      </section>
-
-      <section class="view" id="view-apps">
-        <div class="view-intro"><div><p class="eyebrow">MÓDULOS INDEPENDENTES</p><h2>Meus aplicativos</h2><p>Cada módulo tem identidade, permissões e exportação próprias.</p></div><button class="primary-btn" data-go="fabrica">＋ Novo app</button></div>
-        <div id="apps-list" class="apps-grid"></div>
-      </section>
-
-      <section class="view" id="view-fabrica">
-        <div class="view-intro"><div><p class="eyebrow">CONSTRUTOR DE MÓDULOS</p><h2>Fábrica de aplicativos</h2><p>Cadastre uma nova linha de aplicativo. A geração de código e pacotes instaláveis virá nas próximas etapas.</p></div></div>
-        <form id="app-form" class="panel form-panel">
-          <div class="form-title"><span class="form-step">01</span><div><h3>Identidade do aplicativo</h3><p>Defina como ele será reconhecido dentro do Ruan.</p></div></div>
-          <div class="form-grid"><label>Nome do aplicativo<input name="name" required maxlength="60" placeholder="Ex.: Organizador de projetos"></label><label>ID exclusivo<input name="id" required pattern="[a-z0-9][a-z0-9._-]{1,63}" maxlength="64" placeholder="Ex.: projetos.ruan"><small>Use letras minúsculas, números, ponto, hífen ou sublinhado.</small></label><label class="full">Descrição<textarea name="description" rows="3" maxlength="240" placeholder="O que este aplicativo deve fazer?"></textarea></label></div>
-          <div class="form-title permissions-title"><span class="form-step">02</span><div><h3>O que ele precisa acessar?</h3><p>Solicitar uma permissão não significa recebê-la. A autorização é uma etapa separada.</p></div></div>
-          <div class="capability-list">
-            <label class="capability"><input type="checkbox" name="capabilities" value="tasks.read"><span><strong>Ler tarefas</strong><small>Consultar tarefas autorizadas</small></span><code>tasks.read</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="tasks.write"><span><strong>Gerenciar tarefas</strong><small>Criar ou atualizar tarefas</small></span><code>tasks.write</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="notes.read"><span><strong>Ler notas</strong><small>Consultar notas que forem compartilhadas</small></span><code>notes.read</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="notes.write"><span><strong>Criar notas</strong><small>Adicionar notas à área autorizada</small></span><code>notes.write</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="calendar.read"><span><strong>Ler calendário</strong><small>Consultar eventos permitidos</small></span><code>calendar.read</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="calendar.write"><span><strong>Gerenciar calendário</strong><small>Criar ou alterar eventos permitidos</small></span><code>calendar.write</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="files.read.selected"><span><strong>Ler arquivos selecionados</strong><small>Não libera acesso geral aos arquivos</small></span><code>files.read.selected</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="notifications.send"><span><strong>Enviar notificações</strong><small>Requer integração e autorização do sistema</small></span><code>notifications.send</code></label>
-            <label class="capability"><input type="checkbox" name="capabilities" value="world.request"><span><strong>Solicitar operações ao WordDark</strong><small>Somente por solicitação explícita e autorizada</small></span><code>world.request</code></label>
-          </div>
-          <div class="form-actions"><p>O novo módulo começa sem permissões concedidas.</p><button class="primary-btn" type="submit">Criar registro do app →</button></div>
-        </form>
-      </section>
-
-      <section class="view" id="view-tarefas">
-        <div class="view-intro"><div><p class="eyebrow">ORGANIZAÇÃO PESSOAL</p><h2>Tarefas</h2><p>Uma base simples para organizar o que precisa ser feito.</p></div></div>
-        <form id="task-form" class="panel inline-form"><label class="grow">Nova tarefa<input name="title" required maxlength="120" placeholder="Qual é o próximo passo?"></label><label>Prioridade<select name="priority"><option value="normal">Normal</option><option value="low">Baixa</option><option value="high">Alta</option><option value="urgent">Urgente</option></select></label><button class="primary-btn" type="submit">Adicionar</button></form>
-        <div id="tasks-list" class="task-list"></div>
-      </section>
-
-      <section class="view" id="view-notas">
-        <div class="view-intro"><div><p class="eyebrow">MEMÓRIA ORGANIZADA</p><h2>Biblioteca pessoal</h2><p>Notas e ideias salvas localmente neste dispositivo.</p></div></div>
-        <form id="note-form" class="panel form-panel"><label>Título<input name="title" required maxlength="100" placeholder="Nome da nota"></label><label>Conteúdo<textarea name="content" rows="4" placeholder="Registre uma ideia, decisão ou referência…"></textarea></label><button class="primary-btn" type="submit">Salvar nota</button></form>
-        <div id="notes-list" class="notes-grid"></div>
-      </section>
-
-      <section class="view" id="view-conexoes">
-        <div class="view-intro"><div><p class="eyebrow">SEGURANÇA E LIMITES</p><h2>Conexões e acesso</h2><p>O núcleo pessoal não é uma porta de entrada para o ecossistema.</p></div></div>
-        <div class="security-grid"><article class="panel security-card"><span class="security-symbol">↗</span><span class="status-label allowed">PERMITIDO COM APROVAÇÃO</span><h3>Ruan → WordDark</h3><p>O Ruan poderá iniciar solicitações específicas quando a integração estiver configurada e houver aprovação explícita.</p></article><article class="panel security-card"><span class="security-symbol">↙</span><span class="status-label blocked">BLOQUEADO</span><h3>WordDark → raiz do Ruan</h3><p>O WordDark não inicia conexões para ler ou administrar a raiz pessoal. Essa separação faz parte da arquitetura.</p></article><article class="panel security-card"><span class="security-symbol">▣</span><span class="status-label neutral">ISOLAMENTO EM EVOLUÇÃO</span><h3>Aplicativos independentes</h3><p>Esta interface registra pedidos de permissão. O isolamento real de aplicativos externos exigirá execução separada, autenticação e validação no servidor.</p></article><article class="panel security-card"><span class="security-symbol">⇩</span><span class="status-label neutral">EXPORTAÇÃO</span><h3>Leve só o necessário</h3><p>Você pode exportar o manifesto de um módulo individual sem exportar os outros módulos ou a configuração inteira do Ruan.</p><button class="secondary-btn" id="export-all">Exportar biblioteca local</button></article></div>
-      </section>
-
-      <footer class="app-footer"><span>RUAN · NÚCLEO PESSOAL</span><span>Separado por padrão. Conectado por autorização.</span></footer>
-    </main>
-  </div>
-  <nav class="mobile-nav" aria-label="Navegação móvel"><button class="active" data-view="inicio"><span>⌂</span>Início</button><button data-view="apps"><span>▦</span>Apps</button><button data-view="fabrica"><span>✳</span>Criar</button><button data-view="tarefas"><span>☷</span>Tarefas</button><button data-view="conexoes"><span>⇄</span>Acesso</button></nav>
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Ruan início"><span class="brand-mark">R</span><span><strong>ruan</strong><small>núcleo pessoal</small></span></a>
+      <span class="privacy"><i></i> Área pessoal</span>
+    </header>
+    <section class="welcome">
+      <p class="eyebrow">SEU ESPAÇO</p>
+      <h1>Bom ter você aqui.</h1>
+      <p class="muted">O essencial, sem complicar.</p>
+    </section>
+    <section class="section">
+      <div class="section-title"><h2>Alertas</h2><span id="alert-count" class="count">0</span></div>
+      <div id="alerts" class="alerts" aria-live="polite">
+        <div class="empty"><span class="empty-mark">✓</span><div><strong>Tudo tranquilo por aqui</strong><p>Quando houver algo pedindo atenção, aparecerá aqui.</p></div></div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-title"><h2>Seus aplicativos</h2></div>
+      <a class="app-launch" href="../apps/organize/index.html">
+        <span class="app-icon">O</span>
+        <span class="app-copy"><strong>Organize</strong><small>Tarefas, projetos e setores pessoais</small></span>
+        <span class="launch-arrow">↗</span>
+      </a>
+    </section>
+    <footer><span>RUAN</span><span>Separado por padrão.</span></footer>
+  </main>
   <script src="./app.js" defer></script>
 </body>
 </html>
