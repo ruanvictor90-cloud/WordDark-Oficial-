@@ -24,14 +24,21 @@
 </div>
 </div>
 </header>
-<section class="welcome"><p class="eyebrow">WORDDARK APP</p><h1>WordDark</h1><p class="muted">Escolha uma área para entrar.</p></section>
-<section class="info-widget info-summary" aria-label="Resumo"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></span><div><strong>Áreas disponíveis</strong><small>WordDark · Céu · Terra</small></div><b>03</b></section>
-<section id="sector-home" class="section">
-<div class="section-title"><h2>Áreas</h2><span class="section-caption">SETORES</span></div>
-<div class="sector-grid">
-<button class="sector-card sector-world" type="button" data-sector="worddark"><span class="sector-symbol"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M7 15h10l7 27 8-19h6l8 19 7-27h10L52 51h-9l-8-18-8 18h-9Z"/></svg></span><span class="sector-copy"><strong>WordDark</strong><small>Área principal</small></span><span class="card-arrow">↗</span></button>
-<button class="sector-card sector-sky" type="button" data-sector="ceu"><span class="sector-symbol"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 43h31a10 10 0 0 0 1-20 17 17 0 0 0-32-3 12 12 0 0 0 0 23Z"/><path d="m23 34 7 7 13-15"/></svg></span><span class="sector-copy"><strong>Céu</strong><small>Área Céu</small></span><span class="card-arrow">↗</span></button>
-<button class="sector-card sector-earth" type="button" data-sector="terra"><span class="sector-symbol"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="24"/><path d="M8 32h48M32 8c8 8 12 16 12 24S40 48 32 56M32 8c-8 8-12 16-12 24s4 16 12 24M13 19h38M13 45h38"/></svg></span><span class="sector-copy"><strong>Terra</strong><small>Área Terra</small></span><span class="card-arrow">↗</span></button>
+<section id="sector-home" class="portal-home">
+<div class="portal-heading"><span class="eyebrow">WORDDARK</span><p>Escolha seu caminho.</p></div>
+<div class="portal-grid">
+<button class="portal-card portal-world" type="button" data-sector="worddark">
+<span class="portal-orbit orbit-world" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M7 15h10l7 27 8-19h6l8 19 7-27h10L52 51h-9l-8-18-8 18h-9Z"/><path d="M15 8h34"/></svg></span>
+<span class="portal-index">01 / MUNDO</span><strong>WordDark</strong><small>O centro do mundo</small><span class="portal-enter">Entrar <b>↗</b></span>
+</button>
+<button class="portal-card portal-sky" type="button" data-sector="ceu">
+<span class="portal-orbit orbit-sky" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M17 43h31a10 10 0 0 0 1-20 17 17 0 0 0-32-3 12 12 0 0 0 0 23Z"/><path d="m23 34 7 7 13-15"/></svg></span>
+<span class="portal-index">02 / CRIAÇÃO</span><strong>Céu</strong><small>Onde as soluções ganham forma</small><span class="portal-enter">Entrar <b>↗</b></span>
+</button>
+<button class="portal-card portal-earth" type="button" data-sector="terra">
+<span class="portal-orbit orbit-earth" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M8 32h48M32 8c8 8 12 16 12 24S40 48 32 56M32 8c-8 8-12 16-12 24s4 16 12 24M13 19h38M13 45h38"/></svg></span>
+<span class="portal-index">03 / OPERAÇÃO</span><strong>Terra</strong><small>Onde as operações se conectam</small><span class="portal-enter">Entrar <b>↗</b></span>
+</button>
 </div>
 </section>
 <section id="sector-view" class="sector-view" hidden aria-live="polite">
