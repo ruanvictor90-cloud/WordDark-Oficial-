@@ -1,0 +1,10 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+const root=dirname(fileURLToPath(import.meta.url));
+const read=name=>readFile(resolve(root,name),"utf8");
+test("Shadow uses the common shell and keeps AI disconnected",async()=>{const html=await read("index.html");assert.match(html,/notification-toggle/);assert.match(html,/info-widget/);assert.match(html,/Central de aplicativos/);assert.match(html,/ainda não ativadas/);});
+test("Shadow browser JavaScript parses and PWA manifest is valid",async()=>{const result=spawnSync(process.execPath,["--check",resolve(root,"app.js")],{encoding:"utf8"});assert.equal(result.status,0,result.stderr||result.stdout);const manifest=JSON.parse(await read("manifest.webmanifest"));assert.equal(manifest.short_name,"Shadow");assert.equal(manifest.display,"standalone")});
