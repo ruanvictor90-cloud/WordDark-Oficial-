@@ -220,3 +220,10 @@ assert.ok(source.includes("function formatSubtitleTime(ms)"), "Subtitle drafts m
 assert.ok(source.includes("data-draft-subtitles"), "Localization workbench must expose subtitle draft generation");
 assert.ok(source.includes("sincronize com o áudio"), "Estimated subtitle timing must be disclosed as requiring audio synchronization");
 assert.ok(sw.includes("worddark-app-v1-21"), "Subtitle draft changes must invalidate the previous app cache");
+
+
+assert.ok(source.includes("function validateSubtitleSrt(text)"), "Localization must validate SRT structure");
+assert.ok(source.includes("sobreposição com a legenda anterior"), "SRT validation must detect overlapping cues");
+assert.ok(source.includes("data-validate-subtitles"), "Localization workbench must expose SRT validation");
+assert.ok(source.includes("A validação não confirma sincronização com o áudio"), "SRT validation must disclose its timing limitation");
+assert.ok(sw.includes("worddark-app-v1-22"), "SRT validation changes must invalidate the previous app cache");
