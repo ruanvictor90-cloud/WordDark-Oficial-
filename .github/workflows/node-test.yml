@@ -13,3 +13,5 @@ jobs:
         with:
           node-version: "20"
       - run: npm test
+      - name: Test WordDark nucleus foundation
+        run: npm test --prefix worddark/runtime/world/nuclei
