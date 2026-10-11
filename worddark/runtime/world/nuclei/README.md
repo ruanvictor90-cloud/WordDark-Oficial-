@@ -23,7 +23,7 @@ Fluxo da fundação:
 
 pedido → validação do contrato → registro do setor/capacidade → aprovação quando necessária → parada de emergência → motor operacional existente → resultado e eventos.
 
-Qualquer operação em PROD exige aprovação. Aprovação não executa a operação: apenas permite que o pedido correspondente avance. A decisão é vinculada à operação, ação, ambiente e escopo e só pode ser consumida uma vez.
+Qualquer operação em PROD exige aprovação. Aprovação não executa a operação: apenas permite que o pedido correspondente avance. A decisão é vinculada à operação, ação, ambiente e escopo e só pode ser consumida uma vez. O kernel também reaproveita o pedido de aprovação já aberto e bloqueia reenvio de uma operação cujo ciclo já terminou.
 
 ## Interface
 
@@ -38,7 +38,7 @@ Os widgets são leitura e não inventam contagens ou estados externos. A home n�
 
 No diretório worddark/runtime/world/nuclei/, execute npm test.
 
-Os testes cobrem identidade única dos setores, infraestrutura invisível, isolamento de falhas do Event Bus, aprovação humana, bloqueio de PROD e delegação ao motor operacional.
+Os testes cobrem identidade única dos setores, infraestrutura invisível, isolamento de falhas do Event Bus, aprovação humana, bloqueio de PROD, idempotência e delegação ao motor operacional.
 
 ## Limites
 
