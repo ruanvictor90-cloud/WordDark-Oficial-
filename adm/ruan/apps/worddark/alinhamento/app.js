@@ -66,14 +66,10 @@ function toggleSearch(force){
  $("searchRow").hidden=!searchOpen;
  if(searchOpen){$("appSearch").focus();}else{$("appSearch").value="";filterApps();}
 }
-renderCards();
 document.querySelectorAll("[data-open-gate],[data-dock-gate]").forEach(b=>b.addEventListener("click",openGate));
 document.querySelectorAll("[data-go-home],[data-dock-home]").forEach(b=>b.addEventListener("click",goHome));
 $("backToGate").addEventListener("click",openGate);
-$("searchToggle").addEventListener("click",()=>toggleSearch());
 $("menuButton").addEventListener("click",()=>{openGate();$("menuButton").setAttribute("aria-expanded","true")});
-$("appSearch").addEventListener("input",filterApps);
-$("clearSearch").addEventListener("click",()=>{$("appSearch").value="";filterApps();$("appSearch").focus()});
 document.querySelectorAll("[data-dock-app]").forEach(b=>b.addEventListener("click",()=>openApp(b.dataset.dockApp)));
 document.querySelectorAll("[data-open-security]").forEach(b=>b.addEventListener("click",()=>openApp("security")));
 document.querySelectorAll("[data-open-operations]").forEach(b=>b.addEventListener("click",()=>openApp("operations")));
