@@ -11,3 +11,14 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 @media(min-width:560px){.info-grid,.app-grid{gap:12px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 
 .info-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.info-widget{padding:12px;gap:9px}.info-symbol{width:32px;height:32px;flex-basis:32px}.widget-copy strong{font-size:11px}.widget-copy small{font-size:9px}.data-widget p{font-size:clamp(14px,3.5vw,19px)}.widget-arrow{display:none}.bottom-apps{background:linear-gradient(135deg,#2a1b3df5,#120d1bf5);border-color:#704b94;color:#eee1ff;box-shadow:0 8px 32px #0008,0 0 24px #8c4ed522}.bottom-apps:hover{border-color:#bd91ff;box-shadow:0 8px 32px #0008,0 0 26px #9d5cff44}.apps-drawer{background:#130e1cf5;border-color:#5b3c75}.app-launch .brand-mark{background:linear-gradient(145deg,#21152f,#100c18)}@media(max-width:370px){.info-widget{padding:9px;gap:6px}.info-symbol{width:28px;height:28px;flex-basis:28px}.widget-copy strong{font-size:10px}.widget-copy small{font-size:8px}.data-widget p{font-size:13px}}
+
+/* Revisão da Central: widgets amplos e identidade própria por setor */
+.info-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.info-widget{min-height:112px;padding:17px 16px;align-items:flex-start;flex-wrap:wrap;gap:10px 12px;border-radius:17px}
+.info-symbol{width:42px;height:42px;flex-basis:42px;font-size:17px}
+.widget-copy{padding-top:2px}.widget-copy strong{font-size:13px;line-height:1.35}.widget-copy small{font-size:11px;white-space:normal;line-height:1.4}
+.data-widget p{width:100%;margin:2px 0 0 auto;font-size:clamp(20px,5vw,25px);text-align:left}
+.widget-arrow{margin-left:auto;margin-top:-28px}
+.brand-mark svg{width:33px;height:33px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ruan-logo{color:#d4b0ff}.pessoal-logo{color:#c3a1ff}.shadow-logo{color:#c4a0ff}.eye-core{fill:#f4eaff;stroke:none}
+@media(max-width:370px){.info-grid{gap:8px}.info-widget{min-height:106px;padding:12px 10px;gap:8px}.info-symbol{width:34px;height:34px;flex-basis:34px}.widget-copy strong{font-size:11px}.widget-copy small{font-size:10px}.data-widget p{font-size:18px}}
