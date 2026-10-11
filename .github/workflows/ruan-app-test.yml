@@ -6,6 +6,8 @@ on:
       - "adm/ruan/app/**"
       - "adm/ruan/apps/pessoal/**"
       - "adm/ruan/apps/shadow/**"
+      - "adm/ruan/apps/_template/**"
+      - "adm/ruan/apps/APP-ARCHITECTURE.md"
       - "package.json"
       - ".github/workflows/ruan-app-test.yml"
   pull_request:
