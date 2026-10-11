@@ -37,6 +37,7 @@ function renderCards(){
 }
 function setScreen(name){
  currentScreen=name;
+ document.body.dataset.screen=name;
  Object.keys(screenNames).forEach(key=>$(screenNames[key]).hidden=key!==name);
  document.querySelectorAll(".dock-item").forEach(b=>b.classList.toggle("active",(name==="launcher"&&b.hasAttribute("data-dock-home"))||(name==="gate"&&b.hasAttribute("data-dock-gate"))||(name==="app"&&b.dataset.dockApp==="approvals"&&activeApp==="approvals")||(name==="app"&&b.dataset.dockApp==="bank"&&activeApp==="bank")));
  window.scrollTo({top:0,behavior:"smooth"});
