@@ -8,45 +8,27 @@ import { dirname, resolve } from "node:path";
 const root = dirname(fileURLToPath(import.meta.url));
 const read = name => readFile(resolve(root, name), "utf8");
 
-test("Ruan app shell references local assets and is Portuguese mobile-first", async () => {
+test("Ruan home stays minimal and links to the separate Organize app", async () => {
   const html = await read("index.html");
   assert.match(html, /<html lang="pt-BR">/);
   assert.match(html, /name="viewport"/);
-  assert.match(html, /href="\.\/app\.css"/);
-  assert.match(html, /src="\.\/app\.js"/);
-  assert.match(html, /rel="manifest"/);
-  assert.match(html, /id="view-fabrica"/);
-  assert.match(html, /id="view-conexoes"/);
+  assert.match(html, /id="alerts"/);
+  assert.match(html, /href="\.\.\/apps\/organize\/index\.html"/);
+  assert.doesNotMatch(html, /Fábrica de aplicativos|capability-list|app-form/);
 });
-
-test("browser application JavaScript parses without syntax errors", () => {
+test("alert widget reads Organize tasks without opening sectors", async () => {
+  const source = await read("app.js");
+  assert.match(source, /ruan\.organize\.v1/);
+  assert.match(source, /priority === "urgent"/);
+  assert.match(source, /task\.dueDate/);
+});
+test("browser JavaScript parses", async () => {
   const result = spawnSync(process.execPath, ["--check", resolve(root, "app.js")], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });
-
-test("PWA manifest declares a standalone Portuguese application", async () => {
+test("PWA manifest is standalone and Portuguese", async () => {
   const manifest = JSON.parse(await read("manifest.webmanifest"));
-  assert.equal(manifest.name, "Ruan — Central pessoal");
+  assert.equal(manifest.name, "Ruan — Núcleo pessoal");
   assert.equal(manifest.lang, "pt-BR");
   assert.equal(manifest.display, "standalone");
-  assert.equal(manifest.start_url, "./index.html");
-});
-
-test("new apps start without grants and individual export stays separate", async () => {
-  const source = await read("app.js");
-  assert.match(source, /grantedCapabilities:\[\]/);
-  assert.match(source, /Manifesto individual exportado/);
-  assert.match(source, /ruan-app-/);
-  assert.match(source, /localStorage\.setItem\(STORE_KEY/);
-  assert.match(source, /world\.request/);
-  assert.match(source, /not-yet-packaged/);
-});
-
-test("interface clearly documents that browser grants are not a security sandbox", async () => {
-  const html = await read("index.html");
-  const readme = await read("README.md");
-  const source = await read("app.js");
-  assert.match(source, /ainda sem enforcement de runtime/i);
-  assert.match(readme, /não é um sandbox de segurança/i);
-  assert.match(readme, /não chama diretamente.*RuanEngine/i);
 });
