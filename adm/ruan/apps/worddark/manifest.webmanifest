@@ -1,0 +1,11 @@
+{
+  "name": "WordDark app",
+  "short_name": "WordDark",
+  "description": "WordDark, Céu e Terra.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09070f",
+  "theme_color": "#09070f"
+}
