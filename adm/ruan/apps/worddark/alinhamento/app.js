@@ -43,8 +43,8 @@ function setScreen(name){
  window.scrollTo({top:0,behavior:"smooth"});
 }
 let activeApp=null;
-function openGate(){setScreen("gate");history.replaceState(null,"","#portao");}
-function goHome(){activeApp=null;setScreen("launcher");history.replaceState(null,"","#inicio");}
+function openGate(){setScreen("gate");$("menuButton").setAttribute("aria-expanded","true");history.replaceState(null,"","#portao");}
+function goHome(){activeApp=null;setScreen("launcher");$("menuButton").setAttribute("aria-expanded","false");history.replaceState(null,"","#inicio");}
 function openApp(id){
  const app=apps.find(a=>a.id===id);if(!app)return;activeApp=id;
  $("appCategory").textContent=app.category;$("appTitle").textContent=app.name;$("appMark").textContent=app.icon;$("appDescription").textContent=app.desc;
@@ -69,7 +69,7 @@ function toggleSearch(force){
 document.querySelectorAll("[data-open-gate],[data-dock-gate]").forEach(b=>b.addEventListener("click",openGate));
 document.querySelectorAll("[data-go-home],[data-dock-home]").forEach(b=>b.addEventListener("click",goHome));
 $("backToGate").addEventListener("click",openGate);
-$("menuButton").addEventListener("click",()=>{openGate();$("menuButton").setAttribute("aria-expanded","true")});
+$("menuButton").addEventListener("click",openGate);
 document.querySelectorAll("[data-dock-app]").forEach(b=>b.addEventListener("click",()=>openApp(b.dataset.dockApp)));
 document.querySelectorAll("[data-open-security]").forEach(b=>b.addEventListener("click",()=>openApp("security")));
 document.querySelectorAll("[data-open-operations]").forEach(b=>b.addEventListener("click",()=>openApp("operations")));
