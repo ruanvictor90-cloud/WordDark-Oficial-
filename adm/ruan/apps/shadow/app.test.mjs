@@ -21,7 +21,7 @@ test("Dark contains the central structural line and modular catalog",async()=>{
  assert.match(html,/Rodovia/);
  assert.match(html,/Em desenvolvimento/);
  assert.match(js,/Central de Conexões/);
- assert.match(js,/DarkFactory/);
+ assert.match(js,/Dark Factory/);
  assert.match(js,/DarkCommerce/);
  assert.match(js,/Ruan ADM permanece fora do controle do WordDark/);
  assert.ok((js.match(/statusText:/g)||[]).length>=20,"expected a broad catalog with explicit states");
