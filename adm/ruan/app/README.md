@@ -1,30 +1,19 @@
-# Ruan — Central pessoal (interface v0.1)
+# Ruan — Núcleo pessoal
 
-Interface web mobile-first da Área ADM/Ruan, separada do motor Node.js e dos módulos que serão construídos depois.
+Página inicial mobile-first da Área ADM/Ruan. A tela inicial foi reduzida ao essencial: alertas e acesso ao aplicativo independente Organize.
 
-## Abrir localmente
-Sirva esta pasta por HTTP, por exemplo:
-`python -m http.server 8080`
-Depois abra `http://localhost:8080` dentro desta pasta. O service worker/PWA exige localhost ou HTTPS.
+## Abrir
+Publicação web: `/adm/ruan/app/`
+Organize: `/adm/ruan/apps/organize/`
 
-## O que já funciona nesta versão
-- Navegação entre painel, biblioteca de aplicativos, fábrica de registros, tarefas, notas e acesso.
-- Cadastro local de aplicativos com ID, nome, descrição e capacidades solicitadas.
-- Autorização de capacidades como etapa separada; novos apps começam sem permissões concedidas.
-- Exportação individual de manifesto de aplicativo em JSON e exportação do catálogo local.
-- Tarefas e notas persistidas no armazenamento local do navegador.
-- Layout responsivo e manifesto PWA com cache básico para abertura offline.
+## O que funciona nesta etapa
+- Painel inicial limpo e adaptado para celular.
+- Widget de alertas que lê tarefas urgentes e tarefas com prazo de hoje/atrasado no armazenamento local compartilhado com Organize.
+- Link para abrir Organize como um módulo separado, com seus próprios arquivos HTML, CSS, JavaScript e manifesto PWA.
+- O app Organize terá um lançador de setores e quadro de tarefas no estilo kanban.
 
-## Limites importantes
-- Esta interface é um primeiro MVP visual/funcional. Ela ainda não chama diretamente `RuanEngine`; a persistência do navegador é separada da memória do motor Node.js.
-- A lista de permissões é uma interface de política, não um sandbox de segurança. Não instale código de terceiros nem interprete um manifesto como prova de isolamento.
-- Não há ainda gerador de código executável, empacotamento Android/iOS, sincronização, login, servidor ou conexão ativa com WordDark.
-- A raiz pessoal não expõe endpoint de entrada. Qualquer futura integração WordDark deve continuar sendo uma solicitação iniciada pelo Ruan, limitada e aprovada explicitamente.
-- Os dados desta versão ficam no navegador/dispositivo atual. Limpar os dados do site pode apagá-los.
-
-## Próximas etapas sugeridas
-1. Testar a interface em celular e validar o fluxo de registro/exportação.
-2. Criar um adaptador de aplicação entre a interface e o motor, com validação e testes.
-3. Construir a fábrica de código a partir de modelos seguros e testáveis, começando por módulos simples.
-4. Implementar empacotamento e distribuição independentes somente depois de definir o runtime e os limites de isolamento.
-5. Conectar WordDark por uma ponte de saída explícita, sem permissões administrativas sobre Ruan.
+## Limites
+- Dados guardados no armazenamento local do navegador deste dispositivo e desta origem.
+- Os widgets atualizam ao abrir/voltar para a página e quando outra aba atualiza o armazenamento. Não são notificações push do sistema.
+- A arquitetura de instalação e isolamento está preservada como direção, mas não implementada aqui: ainda não há APK/iOS, login, sincronização ou sandbox de execução.
+- Ruan não expõe endpoint de entrada nem permite que WordDark administre a raiz pessoal. Nenhuma conexão externa está ativa.
