@@ -1,14 +1,11 @@
 {
-  "id": "./",
-  "name": "Ruan — Central pessoal",
+  "name": "Ruan — Núcleo pessoal",
   "short_name": "Ruan",
-  "description": "Central pessoal para organizar aplicativos independentes e suas permissões.",
+  "description": "Núcleo pessoal simples com alertas e aplicativos independentes.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "theme_color": "#111318",
-  "background_color": "#0c0e12",
-  "categories": ["productivity", "utilities"]
+  "background_color": "#101114",
+  "theme_color": "#101114"
 }
