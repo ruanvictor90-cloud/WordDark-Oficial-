@@ -6,6 +6,7 @@ export class WordDarkKernel {
     this.sectorRegistry = sectorRegistry; this.eventBus = eventBus; this.approvalCenter = approvalCenter;
     this.operationEngine = operationEngine || null; this.emergencyStop = emergencyStop;
     this.audit = typeof audit === "function" ? audit : () => {}; this.clock = clock; this.submitted = 0;
+    this.operationStates = new Map();
   }
   async submit(source = {}) {
     const request = createWorldRequest(source);
@@ -13,6 +14,16 @@ export class WordDarkKernel {
     if (!validation.valid) {
       this.#emit("request.rejected", { requestId: request.requestId, errors: validation.errors });
       return { success: false, status: "REJECTED", reason: "INVALID_WORLD_REQUEST", errors: validation.errors };
+    }
+    const prior = this.operationStates.get(request.operationId);
+    if (prior) {
+      if (prior.status === "WAITING_APPROVAL" && request.approvalId === prior.approvalId) {
+        // A matching approved request may continue below.
+      } else if (prior.status === "WAITING_APPROVAL" && !request.approvalId) {
+        return { success: true, status: "WAITING_APPROVAL", requestId: request.requestId, operationId: request.operationId, approvalId: prior.approvalId, reused: true };
+      } else {
+        return { success: false, status: "REJECTED", reason: "OPERATION_IDEMPOTENCY_BLOCKED", priorStatus: prior.status };
+      }
     }
     const sector = this.sectorRegistry.get(request.targetSectorId);
     if (!sector || sector.status !== "ACTIVE") {
@@ -31,6 +42,7 @@ export class WordDarkKernel {
         action: request.action, environment: request.environment, scope: request.scope, reason: source.approvalReason || "Autorização necessária para " + request.action + ".",
         risk: source.risk || (request.environment === "PROD" ? "PRODUCTION" : "REVIEW") });
       if (!approvalResult.success) return { success: false, status: "REJECTED", reason: approvalResult.reason, fields: approvalResult.fields };
+      this.operationStates.set(request.operationId, { status: "WAITING_APPROVAL", approvalId: approvalResult.approval.approvalId });
       this.#emit("approval.required", { requestId: request.requestId, operationId: request.operationId, approvalId: approvalResult.approval.approvalId, sectorId: sector.sectorId });
       return { success: true, status: "WAITING_APPROVAL", requestId: request.requestId, operationId: request.operationId, approvalId: approvalResult.approval.approvalId };
     }
@@ -57,10 +69,12 @@ export class WordDarkKernel {
       const status = result?.status || operation?.status || "UNKNOWN";
       this.#emit("operation.dispatched", { requestId: request.requestId, operationId: request.operationId, sectorId: sector.sectorId, status });
       this.audit({ type: "WORLD_OPERATION_DISPATCHED", requestId: request.requestId, operationId: request.operationId, sectorId: sector.sectorId, status, occurredAt: this.clock() });
+      this.operationStates.set(request.operationId, { status, resultStatus: status });
       return { success: status === "COMPLETED", status, requestId: request.requestId, operationId: request.operationId, result };
     } catch (error) {
       this.#emit("operation.failed", { requestId: request.requestId, operationId: request.operationId, reason: "OPERATION_ENGINE_ERROR" });
       this.audit({ type: "WORLD_OPERATION_FAILED", requestId: request.requestId, operationId: request.operationId, reason: String(error?.message || error), occurredAt: this.clock() });
+      this.operationStates.set(request.operationId, { status: "FAILED" });
       return { success: false, status: "FAILED", reason: "OPERATION_ENGINE_ERROR" };
     }
   }
