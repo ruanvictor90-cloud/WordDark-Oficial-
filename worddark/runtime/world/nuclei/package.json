@@ -1,0 +1,8 @@
+{
+  "name": "worddark-nuclei-foundation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test nuclei.test.mjs"
+  }
+}
