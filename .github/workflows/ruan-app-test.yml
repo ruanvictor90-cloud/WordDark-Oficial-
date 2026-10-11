@@ -1,17 +1,19 @@
-name: Ruan UI tests
+name: Ruan app tests
 on:
   push:
     branches: [main]
     paths:
       - "adm/ruan/app/**"
-      - "adm/ruan/apps/organize/**"
+      - "adm/ruan/apps/pessoal/**"
+      - "adm/ruan/apps/shadow/**"
       - "package.json"
       - ".github/workflows/ruan-app-test.yml"
   pull_request:
     branches: [main]
     paths:
       - "adm/ruan/app/**"
-      - "adm/ruan/apps/organize/**"
+      - "adm/ruan/apps/pessoal/**"
+      - "adm/ruan/apps/shadow/**"
       - "package.json"
       - ".github/workflows/ruan-app-test.yml"
 jobs:
