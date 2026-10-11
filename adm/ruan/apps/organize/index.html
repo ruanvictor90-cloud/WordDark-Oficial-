@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111318">
+  <meta name="description" content="Organize — área de organização pessoal do Ruan.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./app.css">
+  <title>Organize — Ruan</title>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="../../app/index.html"><span class="brand-mark">O</span><span><strong>Organize</strong><small>um app do Ruan</small></span></a>
+      <a class="back-link" href="../../app/index.html">← Ruan</a>
+    </header>
+    <section id="home-view">
+      <div class="intro"><p class="eyebrow">ÁREA DE ORGANIZAÇÃO</p><h1>O que vamos organizar?</h1><p>Abra um setor para ver seus cartões e acompanhar o andamento.</p></div>
+      <section class="widget">
+        <div class="section-title"><h2>Precisa de atenção</h2><span id="alert-count" class="count">0</span></div>
+        <div id="alerts" class="alerts" aria-live="polite"></div>
+      </section>
+      <section class="section">
+        <div class="section-title"><h2>Setores</h2><span class="subtle">Seu espaço</span></div>
+        <div class="sector-grid">
+          <button class="sector-card sector-inbox" data-sector="Entrada"><span class="sector-symbol">↳</span><span><strong>Entrada</strong><small>Ideias e coisas para classificar</small></span><span class="sector-count" data-sector-count="Entrada">0</span></button>
+          <button class="sector-card sector-projects" data-sector="Projetos"><span class="sector-symbol">▦</span><span><strong>Projetos</strong><small>Objetivos e entregas</small></span><span class="sector-count" data-sector-count="Projetos">0</span></button>
+          <button class="sector-card sector-routine" data-sector="Rotina"><span class="sector-symbol">◷</span><span><strong>Rotina</strong><small>Compromissos e tarefas recorrentes</small></span><span class="sector-count" data-sector-count="Rotina">0</span></button>
+          <button class="sector-card sector-ideas" data-sector="Ideias"><span class="sector-symbol">✳</span><span><strong>Ideias</strong><small>Notas para desenvolver depois</small></span><span class="sector-count" data-sector-count="Ideias">0</span></button>
+        </div>
+      </section>
+    </section>
+    <section id="board-view" hidden>
+      <button id="back-sectors" class="back-link board-back">← Todos os setores</button>
+      <div class="board-heading"><div><p class="eyebrow">SETOR DE ORGANIZAÇÃO</p><h1 id="board-title">Projetos</h1><p id="board-subtitle">Acompanhe seus cartões.</p></div><button id="new-task-open" class="primary-btn">＋ Novo cartão</button></div>
+      <form id="task-form" class="task-form" hidden>
+        <label>Título<input name="title" required maxlength="120" placeholder="O que precisa ser feito?"></label>
+        <label>Detalhes<textarea name="description" rows="2" maxlength="500" placeholder="Opcional"></textarea></label>
+        <div class="form-row"><label>Prioridade<select name="priority"><option value="normal">Normal</option><option value="low">Baixa</option><option value="high">Alta</option><option value="urgent">Urgente</option></select></label><label>Prazo<input name="dueDate" type="date"></label></div>
+        <div class="form-actions"><button id="cancel-task" type="button" class="secondary-btn">Cancelar</button><button class="primary-btn" type="submit">Salvar cartão</button></div>
+      </form>
+      <div class="board" aria-label="Quadro de organização">
+        <section class="board-column"><div class="column-heading"><span class="column-dot todo"></span><h2>A fazer</h2><span id="count-todo" class="count">0</span></div><div id="cards-todo" class="cards"></div></section>
+        <section class="board-column"><div class="column-heading"><span class="column-dot doing"></span><h2>Em andamento</h2><span id="count-doing" class="count">0</span></div><div id="cards-doing" class="cards"></div></section>
+        <section class="board-column"><div class="column-heading"><span class="column-dot done"></span><h2>Concluído</h2><span id="count-done" class="count">0</span></div><div id="cards-done" class="cards"></div></section>
+      </div>
+    </section>
+    <footer><span>ORGANIZE · RUAN</span><span>Seus dados ficam neste navegador.</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
