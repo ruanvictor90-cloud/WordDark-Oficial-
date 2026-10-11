@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f">
+<meta name="description" content="Aplicativo WordDark.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="stylesheet" href="./app.css">
+<title>WordDark app</title>
+</head>
+<body>
+<main class="shell">
+<header class="topbar">
+<a class="brand" href="./index.html" aria-label="WordDark início">
+<span class="brand-mark worddark-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M7 15h10l7 27 8-19h6l8 19 7-27h10L52 51h-9l-8-18-8 18h-9Z"/><path d="M15 8h34"/></svg></span>
+<span class="brand-copy"><strong>WordDark</strong><small>Aplicativo</small></span>
+</a>
+<div class="top-actions">
+<a class="back-link" href="../../app/index.html" aria-label="Voltar para Ruan" title="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7M8 12h12"/></svg></a>
+<div class="notification-wrap">
+<button id="notification-toggle" class="bell" aria-label="Notificações" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span id="notification-badge" class="notification-badge" hidden>0</span></button>
+<section id="notification-panel" class="notification-panel" hidden><div class="notification-head"><strong>Notificações</strong><button id="notification-close" aria-label="Fechar">×</button></div><p class="empty-note">Nenhuma notificação nesta área.</p></section>
+</div>
+</div>
+</header>
+<section class="welcome"><p class="eyebrow">WORDDARK APP</p><h1>WordDark</h1><p class="muted">Escolha uma área para entrar.</p></section>
+<section class="info-widget info-summary" aria-label="Resumo"><span class="summary-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></span><div><strong>Áreas disponíveis</strong><small>WordDark · Céu · Terra</small></div><b>03</b></section>
+<section id="sector-home" class="section">
+<div class="section-title"><h2>Áreas</h2><span class="section-caption">SETORES</span></div>
+<div class="sector-grid">
+<button class="sector-card sector-world" type="button" data-sector="worddark"><span class="sector-symbol"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M7 15h10l7 27 8-19h6l8 19 7-27h10L52 51h-9l-8-18-8 18h-9Z"/></svg></span><span class="sector-copy"><strong>WordDark</strong><small>Área principal</small></span><span class="card-arrow">↗</span></button>
+<button class="sector-card sector-sky" type="button" data-sector="ceu"><span class="sector-symbol"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M17 43h31a10 10 0 0 0 1-20 17 17 0 0 0-32-3 12 12 0 0 0 0 23Z"/><path d="m23 34 7 7 13-15"/></svg></span><span class="sector-copy"><strong>Céu</strong><small>Área Céu</small></span><span class="card-arrow">↗</span></button>
+<button class="sector-card sector-earth" type="button" data-sector="terra"><span class="sector-symbol"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="24"/><path d="M8 32h48M32 8c8 8 12 16 12 24S40 48 32 56M32 8c-8 8-12 16-12 24s4 16 12 24M13 19h38M13 45h38"/></svg></span><span class="sector-copy"><strong>Terra</strong><small>Área Terra</small></span><span class="card-arrow">↗</span></button>
+</div>
+</section>
+<section id="sector-view" class="sector-view" hidden aria-live="polite">
+<button id="sector-back" class="back-link sector-back" type="button" aria-label="Voltar às áreas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7M8 12h12"/></svg></button>
+<div id="sector-view-mark" class="sector-view-mark" aria-hidden="true"></div>
+<p class="eyebrow">WORDDARK APP</p><h1 id="sector-view-title">WordDark</h1>
+</section>
+<footer><span>WORDDARK</span><span>WordDark · Céu · Terra</span></footer>
+</main>
+<script src="./app.js" defer></script>
+</body>
+</html>
