@@ -1,1 +1,226 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WordDark — Portão de Entrada</title><link rel="stylesheet" href="world/ui/worddark-ui.css"></head><body class="wd-body"><button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false">☰</button><div class="wd-shell"><aside id="wd-sidebar" class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Portão de Entrada</small></div></div><nav class="wd-nav"><a class="active" href="./">◈ Portão</a><a href="world/sky/">☁ Céu</a><a href="world/earth/">◉ Terra</a><a href="world/core/">◈ WordDark · Central</a></nav><div class="wd-footer">PORTÃO · identidade → acesso → contexto</div></aside><main class="wd-main"><div class="wd-surface"><section class="wd-entry"><div class="wd-entry-content"><div class="wd-sector-mark">◈</div><div class="wd-location"><b>WORDDARK</b><span>→</span><span>PORTÃO PRINCIPAL</span></div><h1 class="wd-title">Bem-vindo ao mundo.</h1><p class="wd-sub">O Portão identifica a entrada e revela somente o contexto que existe e que sua autorização permite acessar.</p></div></section><section class="wd-grid"><article class="wd-card full"><div class="wd-eyebrow">Entrada</div><h2>Escolha a camada necessária</h2><p class="wd-muted">A entrada encaminha para o contexto. A Central WordDark reúne os setores internos que governam, aprendem, testam e organizam o mundo.</p><div class="wd-entry-grid"><a class="wd-entry-card" href="world/earth/"><div class="wd-card-icon">◉</div><strong>Terra</strong><small>Onde necessidades e operações ganham forma.</small></a><a class="wd-entry-card" href="world/sky/"><div class="wd-card-icon">☁</div><strong>Céu</strong><small>Infraestrutura e serviços compartilhados.</small></a><a class="wd-entry-card" href="world/core/"><div class="wd-card-icon">◎</div><strong>WordDark · Central</strong><small>Governança, segurança, memória, operações e coordenação do mundo.</small></a></div></article><article class="wd-card full"><div class="wd-eyebrow">Regra da interface</div><h2>Uma página. Um contexto. Um setor responsável.</h2><div class="wd-flow"><span>Portão</span><i class="wd-arrow">→</i><span>Identidade</span><i class="wd-arrow">→</i><span>Acesso</span><i class="wd-arrow">→</i><span>Contexto</span><i class="wd-arrow">→</i><span>Setor</span><i class="wd-arrow">→</i><span>Área</span><i class="wd-arrow">→</i><span>Ação</span></div><p class="wd-muted">Estruturas como Escola e Conselho aparecem dentro da Central WordDark. Estruturas da Terra só aparecem quando uma necessidade real as cria.</p></article></section><footer class="wd-footer">WORDDARK · o mundo cresce conforme necessidades reais.</footer></div></main></div><script src="world/ui/worddark-ui.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WordDark</title>
+<link rel="stylesheet" href="world/ui/worddark-ui.css">
+<style>
+:root{--wd-gap:14px}
+body.wd-body{min-height:100vh}
+.wd-main.wd-home{margin-left:0!important}
+.wd-app{max-width:1120px;margin:0 auto;padding:18px 16px 42px}
+.wd-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 20px}
+.wd-brand{font-size:25px;font-weight:800;letter-spacing:-.04em}
+.wd-top-actions{display:flex;gap:8px}
+.wd-icon-btn{border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.045);color:inherit;border-radius:999px;padding:9px 13px;cursor:pointer}
+.wd-view{display:none}.wd-view.active{display:block}
+.wd-welcome{min-height:calc(100vh - 120px);display:flex;flex-direction:column;justify-content:center;text-align:center;max-width:980px;margin:auto}
+.wd-welcome-mark{font-size:54px;margin-bottom:8px}
+.wd-welcome h1{font-size:clamp(30px,6vw,52px);margin:0 0 10px}
+.wd-welcome p{max-width:620px;margin:0 auto 28px;font-size:17px}
+.wd-account-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;text-align:left}
+.wd-account-card{min-height:160px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));padding:18px;color:inherit;text-decoration:none;display:flex;flex-direction:column;justify-content:space-between;transition:.18s}
+.wd-account-card:hover{transform:translateY(-2px);background:rgba(255,255,255,.09)}
+.wd-account-icon{font-size:30px}.wd-account-card strong{font-size:19px}.wd-account-card small{opacity:.62}
+.wd-home-title{font-size:clamp(27px,5vw,42px);margin:12px 0 4px}.wd-home-sub{margin:0 0 22px;opacity:.7}
+.wd-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--wd-gap);margin:18px 0}
+.wd-stat{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.045);border-radius:16px;padding:16px;min-height:100px}
+.wd-stat b{font-size:27px;display:block;margin-bottom:4px}.wd-stat span{font-size:13px;opacity:.65}
+.wd-section{margin-top:18px}.wd-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.wd-section h2{font-size:20px;margin:0}.wd-link{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;opacity:.75}
+.wd-panel{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.035);border-radius:16px;padding:16px}
+.wd-account-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.07)}.wd-account-row:last-child{border-bottom:0}
+.wd-avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);font-size:20px}.wd-row-main{flex:1}.wd-row-main strong{display:block}.wd-row-main small{opacity:.6}.wd-ok{font-size:12px}
+.wd-two{display:grid;grid-template-columns:1.1fr .9fr;gap:var(--wd-gap)}
+.wd-list-item{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.07)}.wd-list-item:last-child{border-bottom:0}.wd-list-item small{display:block;opacity:.58;margin-top:4px}
+.wd-empty{text-align:center;padding:25px 10px;opacity:.62}
+.wd-analytics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--wd-gap)}
+.wd-metric{border:1px solid rgba(255,255,255,.09);border-radius:15px;padding:15px;background:rgba(255,255,255,.025)}.wd-metric label{display:block;font-size:12px;opacity:.58;margin-bottom:7px}.wd-metric strong{font-size:23px}.wd-metric small{display:block;margin-top:5px;opacity:.55}
+.wd-new{position:fixed;right:20px;bottom:20px;border:0;border-radius:999px;padding:14px 18px;font-weight:700;cursor:pointer;box-shadow:0 12px 35px rgba(0,0,0,.35)}
+.wd-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:50;padding:20px;align-items:center;justify-content:center}.wd-modal.open{display:flex}
+.wd-modal-card{width:min(680px,100%);border:1px solid rgba(255,255,255,.12);background:#111;border-radius:20px;padding:20px}.wd-modal-head{display:flex;justify-content:space-between;align-items:center}.wd-modal h2{margin:0}.wd-request{width:100%;min-height:125px;margin-top:16px;padding:16px;font-size:17px;box-sizing:border-box}.wd-examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.wd-example{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);color:inherit;border-radius:999px;padding:9px 12px;cursor:pointer}.wd-send{width:100%;margin-top:13px;padding:13px}.wd-answer{display:none;margin-top:13px;padding:13px;border-radius:13px;background:rgba(255,255,255,.05)}.wd-answer strong{display:block;margin-bottom:4px}
+.wd-setup-note{margin:18px auto 0;max-width:620px;font-size:13px;opacity:.55}
+@media(max-width:760px){.wd-stat-grid{grid-template-columns:repeat(2,1fr)}.wd-two{grid-template-columns:1fr}.wd-analytics-grid{grid-template-columns:repeat(2,1fr)}.wd-app{padding:12px 12px 36px}.wd-top{padding-bottom:12px}}
+@media(max-width:430px){.wd-analytics-grid{grid-template-columns:1fr}.wd-stat b{font-size:23px}.wd-new{right:14px;bottom:14px}}
+</style>
+</head>
+<body class="wd-body">
+<main class="wd-main wd-home">
+<div class="wd-app">
+<header class="wd-top">
+  <div class="wd-brand">◈ WordDark</div>
+  <div class="wd-top-actions"><button class="wd-icon-btn" id="accountsTop" type="button">Contas</button></div>
+</header>
+
+<section id="connectView" class="wd-view">
+  <div class="wd-welcome">
+    <div class="wd-welcome-mark">◈</div>
+    <div class="wd-eyebrow">WORDDARK</div>
+    <h1>Vamos começar.</h1>
+    <p>Conecte suas redes e deixe o WordDark cuidar das operações para você.</p>
+    <div class="wd-account-grid">
+      <a class="wd-account-card" href="world/core/connections/"><span class="wd-account-icon">▶</span><strong>YouTube</strong><small>Conectar conta →</small></a>
+      <a class="wd-account-card" href="world/core/connections/"><span class="wd-account-icon">◎</span><strong>Instagram</strong><small>Conectar conta →</small></a>
+      <a class="wd-account-card" href="world/core/connections/"><span class="wd-account-icon">♪</span><strong>TikTok</strong><small>Conectar conta →</small></a>
+      <a class="wd-account-card" href="world/core/connections/"><span class="wd-account-icon">f</span><strong>Facebook</strong><small>Conectar conta →</small></a>
+    </div>
+    <div class="wd-setup-note">Você pode conectar mais contas depois.</div>
+  </div>
+</section>
+
+<section id="homeView" class="wd-view">
+  <div class="wd-eyebrow">WORDDARK</div>
+  <h1 class="wd-home-title">Tudo em um só lugar.</h1>
+  <p class="wd-home-sub">Veja suas redes, acompanhe o que está acontecendo e faça um novo pedido.</p>
+
+  <div class="wd-stat-grid">
+    <div class="wd-stat"><b id="statAccounts">0</b><span>Contas conectadas</span></div>
+    <div class="wd-stat"><b id="statPublish">0</b><span>Esperando para publicar</span></div>
+    <div class="wd-stat"><b id="statComments">0</b><span>Comentários</span></div>
+    <div class="wd-stat"><b id="statWorking">0</b><span>Em operação</span></div>
+  </div>
+
+  <section class="wd-section">
+    <div class="wd-section-head"><h2>Suas contas</h2><button class="wd-link" id="manageAccounts" type="button">Gerenciar</button></div>
+    <div class="wd-panel" id="accountList"></div>
+  </section>
+
+  <section class="wd-section">
+    <div class="wd-section-head"><h2>Analytics</h2><button class="wd-link" id="analyticsAll" type="button">Ver tudo</button></div>
+    <div class="wd-panel">
+      <div class="wd-analytics-grid">
+        <div class="wd-metric"><label>Visualizações gerais</label><strong id="metricViews">—</strong><small id="metricViewsNote">Aguardando dados das redes</small></div>
+        <div class="wd-metric"><label>Visualizações únicas</label><strong id="metricUnique">—</strong><small>Todos os perfis juntos</small></div>
+        <div class="wd-metric"><label>Vídeo mais visto</label><strong id="metricTopVideo">—</strong><small id="metricTopVideoNote">Ainda sem dados</small></div>
+        <div class="wd-metric"><label>Mais curtido</label><strong id="metricLikes">—</strong><small>Conteúdo com mais curtidas</small></div>
+        <div class="wd-metric"><label>Mais comentado</label><strong id="metricComments">—</strong><small>Conteúdo com mais comentários</small></div>
+        <div class="wd-metric"><label>Melhor conta</label><strong id="metricBestAccount">—</strong><small>Por desempenho geral</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wd-section">
+    <div class="wd-two">
+      <div>
+        <div class="wd-section-head"><h2>Esperando para publicar</h2><button class="wd-link" type="button">Ver tudo</button></div>
+        <div class="wd-panel" id="publishList"><div class="wd-empty">Nada esperando para publicar.</div></div>
+      </div>
+      <div>
+        <div class="wd-section-head"><h2>Comentários</h2><button class="wd-link" type="button">Ver tudo</button></div>
+        <div class="wd-panel" id="commentList"><div class="wd-empty">Nenhum comentário pendente.</div></div>
+      </div>
+    </div>
+  </section>
+</section>
+</div>
+</main>
+
+<button class="wd-new" id="newRequest" type="button">＋ Novo pedido</button>
+
+<div class="wd-modal" id="requestModal">
+  <div class="wd-modal-card">
+    <div class="wd-modal-head"><h2>O que você quer fazer?</h2><button class="wd-icon-btn" id="closeRequest" type="button">Fechar</button></div>
+    <textarea class="wd-textarea wd-request" id="humanRequest" placeholder="Fale do seu jeito..."></textarea>
+    <div class="wd-examples">
+      <button class="wd-example" data-example="Gera um conteúdo pros canais">🎬 Criar conteúdo</button>
+      <button class="wd-example" data-example="Faz um conteúdo pra postar no Insta">📱 Criar e postar</button>
+      <button class="wd-example" data-example="Edita uma foto">🖼️ Editar foto</button>
+      <button class="wd-example" data-example="Corta esse vídeo">✂️ Cortar vídeo</button>
+      <button class="wd-example" data-example="Troca o áudio">🔊 Trocar áudio</button>
+      <button class="wd-example" data-example="Coloca legenda">💬 Colocar legenda</button>
+    </div>
+    <button class="wd-btn primary wd-send" id="humanSubmit" type="button">Fazer pedido →</button>
+    <div class="wd-answer" id="humanAnswer"></div>
+  </div>
+</div>
+
+<script src="world/ui/worddark-ui.js"></script>
+<script src="world/contracts/identity.js"></script>
+<script src="world/contracts/access.js"></script>
+<script src="world/security/security-manager.js"></script>
+<script src="world/contracts/operation.js"></script>
+<script src="world/contracts/message.js"></script>
+<script src="world/contracts/request.js"></script>
+<script src="world/contracts/receipt.js"></script>
+<script src="world/contracts/route.js"></script>
+<script src="world/contracts/environment.js"></script>
+<script src="world/core/operation-engine.js"></script>
+<script src="world/core/capability-catalog.js"></script>
+<script src="world/core/operation-coordinator.js"></script>
+<script src="world/core/company-registry.js"></script>
+<script src="world/core/company-registry-seed.js"></script>
+<script src="world/core/company-intent-router.js"></script>
+<script src="world/core/world-company-bootstrap.js"></script>
+<script src="world/core/environment-guard.js"></script>
+<script src="world/core/road.js"></script>
+<script src="world/core/communication.js"></script>
+<script src="world/core/operation-registry.js?v=20260930-2"></script>
+<script src="world/contracts/emergency-stop.js?v=20260930-2"></script>
+<script src="world/core/emergency-stop-manager.js?v=20260930-2"></script>
+<script src="world/security/account-manager.js"></script>
+<script src="world/core/world-runtime.js"></script>
+<script src="world/library/local-library.js"></script>
+<script src="world/library/central-library.js"></script>
+<script src="world/library/hierarchical-library.js"></script>
+<script src="world/core/operational-memory.js"></script>
+<script src="world/core/operational-dictionary.js"></script>
+<script src="world/core/universal-language.js"></script>
+<script src="world/contracts/production.js"></script>
+<script src="world/contracts/result.js"></script>
+<script src="world/core/production-planner.js"></script>
+<script src="world/core/production-engine.js"></script>
+<script src="world/core/operation-center.js"></script>
+<script src="world/core/social-analytics.js"></script>
+
+<script>
+(()=> {
+  const CONNECTION_KEY="wd.external.connections";
+  const readConnections=()=>{try{return JSON.parse(localStorage.getItem(CONNECTION_KEY)||"[]")}catch{return[]}};
+  const escapeHtml=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const connectView=document.getElementById("connectView"),homeView=document.getElementById("homeView"),newRequest=document.getElementById("newRequest"),modal=document.getElementById("requestModal");
+
+  function render(){
+    const accounts=readConnections();
+    const connected=accounts.filter(x=>x.status==="CONNECTED");
+    const analytics=window.WordDarkSocialAnalytics?new window.WordDarkSocialAnalytics():null;
+    const overview=analytics?.overview(accounts)||{};
+    connectView.classList.toggle("active",connected.length===0);
+    homeView.classList.toggle("active",connected.length>0);
+    newRequest.style.display=connected.length?"block":"none";
+    document.getElementById("statAccounts").textContent=connected.length;
+    document.getElementById("metricViews").textContent=overview.views?Number(overview.views).toLocaleString("pt-BR"):"—";
+    document.getElementById("metricUnique").textContent=overview.uniqueViews?Number(overview.uniqueViews).toLocaleString("pt-BR"):"—";
+    document.getElementById("metricLikes").textContent=overview.mostLiked?.title||"—";
+    document.getElementById("metricLikes").title=overview.mostLiked?.likes?Number(overview.mostLiked.likes).toLocaleString("pt-BR")+" curtidas":"";
+    document.getElementById("metricComments").textContent=overview.mostCommented?.title||"—";
+    document.getElementById("metricComments").title=overview.mostCommented?.comments?Number(overview.mostCommented.comments).toLocaleString("pt-BR")+" comentários":"";
+    document.getElementById("metricTopVideo").textContent=overview.mostViewed?.title||"—";
+    document.getElementById("metricTopVideoNote").textContent=overview.mostViewed?.views?Number(overview.mostViewed.views).toLocaleString("pt-BR")+" visualizações · "+(overview.mostViewed.accountName||""):"Ainda sem dados";
+    document.getElementById("metricBestAccount").textContent=overview.bestAccount?.displayName||overview.bestAccount?.accountId||"—";
+    document.getElementById("accountList").innerHTML=connected.length?connected.map(x=>
+      '<div class="wd-account-row"><div class="wd-avatar">'+(x.providerId==="YOUTUBE"?"▶":x.providerId==="INSTAGRAM"?"◎":x.providerId==="TIKTOK"?"♪":"f")+'</div><div class="wd-row-main"><strong>'+escapeHtml(x.displayName||x.accountId||x.providerId)+'</strong><small>'+escapeHtml(x.providerId)+' · conectado</small></div><span class="wd-ok">● Ativa</span></div>'
+    ).join(""):'<div class="wd-empty">Conecte uma conta para começar.</div>';
+    
+    document.getElementById("metricViewsNote").textContent=overview.updatedAt?"Atualizado "+new Date(overview.updatedAt).toLocaleString("pt-BR"):(connected.length?"Sincronizando dados das redes":"Aguardando contas");
+  }
+
+  document.getElementById("accountsTop").onclick=()=>{location.href="world/core/connections/"};
+  document.getElementById("manageAccounts").onclick=()=>{location.href="world/core/connections/"};
+  document.getElementById("analyticsAll").onclick=()=>document.querySelector(".wd-analytics-grid")?.scrollIntoView({behavior:"smooth"});
+  newRequest.onclick=()=>{modal.classList.add("open");document.getElementById("humanRequest").focus()};
+  document.getElementById("closeRequest").onclick=()=>modal.classList.remove("open");
+  modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("open")});
+  document.querySelectorAll("[data-example]").forEach(b=>b.onclick=()=>{document.getElementById("humanRequest").value=b.dataset.example;document.getElementById("humanRequest").focus()});
+  document.getElementById("humanSubmit").onclick=()=>{
+    const input=document.getElementById("humanRequest"),answer=document.getElementById("humanAnswer"),text=input.value.trim();
+    answer.style.display="block";
+    if(!text){answer.innerHTML="<strong>Escreva o que você quer.</strong><span>Pode falar normalmente, sem palavras técnicas.</span>";return}
+    const hit=window.WordDarkUniversalLanguage?.resolveHuman(text);
+    answer.innerHTML="<strong>✓ Pedido recebido</strong><span>"+escapeHtml(hit?.label||"Entendi o que você quer. O pedido pode seguir.")+"</span>";
+  };
+  window.addEventListener("storage",render);
+  render();
+})();
+</script>
+</body>
+</html>

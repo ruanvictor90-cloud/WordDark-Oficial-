@@ -35,6 +35,9 @@ function deps(overrides = {}) {
       recordEvent: () => {}
     },
     operationEngine,
+    communication: { sendOperationRequest: () => ({ success: true }), processOperation: () => ({ success: true }) },
+    operationCoordinator: { submit: operation => operation },
+    hierarchicalLibrary: { save: () => ({}), summarize: () => ({}) },
     entityRegistry: { entities: new Map(), register: entity => entity },
     permissionSet: { authorize: () => true, grant: rule => rule },
     serviceRegistry: { services: new Map(), register: service => service },

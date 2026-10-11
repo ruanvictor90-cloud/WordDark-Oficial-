@@ -1,0 +1,25 @@
+const assert=require("node:assert/strict");
+const Pipeline=require("./translation-pipeline");
+(async()=>{
+  const segments=[{start:0,end:1.25,text:"Hello world"},{start:1.25,end:2.5,text:"How are you?"}];
+  const srt=Pipeline.renderSubtitles(segments,{format:"srt"});
+  assert.equal(srt.success,true);
+  assert.match(srt.content,/00:00:00,000 --> 00:00:01,250/);
+  assert.match(srt.content,/Hello world/);
+  const vtt=Pipeline.renderSubtitles(segments,{format:"vtt"});
+  assert.match(vtt.content,/^WEBVTT/);
+  assert.match(vtt.content,/00:00:00.000 --> 00:00:01.250/);
+  const missing=await Pipeline.execute("TRANSLATE",{operation:{requirements:{targetLanguage:"es",text:"Hello"}}},{});
+  assert.equal(missing.status,"NEEDS_PROVIDER");
+  const translated=await Pipeline.execute("TRANSLATE",{operation:{operationId:"T1",requirements:{sourceLanguage:"en",targetLanguage:"es"},input:{segments}}},{translate:async({segments,targetLanguage})=>({success:true,provider:"test-provider",segments:segments.map(s=>({...s,translatedText:"Hola mundo"})),targetLanguage})});
+  assert.equal(translated.status,"TRANSLATED");
+  assert.equal(translated.segments[0].translatedText,"Hola mundo");
+  const translatedSrt=Pipeline.renderSubtitles(translated.segments,{format:"srt",translated:true});
+  assert.match(translatedSrt.content,/Hola mundo/);
+  const noDubbing=await Pipeline.execute("DUBBING",{operation:{requirements:{targetLanguage:"pt-BR",text:"Olá"}}},{});
+  assert.equal(noDubbing.reason,"DUBBING_PROVIDER_REQUIRED");
+  const dubbed=await Pipeline.execute("DUBBING",{operation:{operationId:"D1",requirements:{targetLanguage:"pt-BR",text:"Olá"}}},{dub:async()=>({success:true,provider:"test-tts",artifact:{type:"AUDIO",mime:"audio/mpeg",url:"test://audio"}})});
+  assert.equal(dubbed.status,"DUBBED");
+  assert.equal(dubbed.artifact.mime,"audio/mpeg");
+  console.log("translation-pipeline: ok");
+})().catch(error=>{console.error(error);process.exit(1);});

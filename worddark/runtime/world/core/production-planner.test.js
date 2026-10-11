@@ -25,4 +25,12 @@ const video=new Production({
 const videoPlan=Planner.plan(video);
 assert.strictEqual(videoPlan.action,"CUT_VIDEO");
 
+const languageProduction=new Production({
+  productionId:"TEST-PROD-LANGUAGE",requesterId:"TEST-USER",originId:"TEST-CENTRAL",
+  goal:"traduzir vídeo para inglês com legendas e dublagem",resourceId:"VIDEO-LANGUAGE-001",options:{environment:"TEST"}
+});
+const languagePlan=Planner.plan(languageProduction);
+assert.deepStrictEqual(languagePlan.actions,["TRANSLATE_CONTENT","ADD_SUBTITLE","DUB_CONTENT"]);
+assert.strictEqual(languagePlan.operations.length,3);
+
 console.log("production-planner: ok");

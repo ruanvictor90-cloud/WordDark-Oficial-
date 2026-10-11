@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dark Factory — WordDark</title><link rel="stylesheet" href="../../ui/worddark-ui.css"></head>
-<body class="wd-body">
+<title>Dark Factory — WordDark</title><link rel="stylesheet" href="../../ui/worddark-ui.css"><style>.wd-internal{display:none!important}.wd-debug{display:none!important}</style></head>
+<body class="wd-body"><button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false" aria-label="Abrir menu">☰</button><div class="wd-menu-backdrop" data-wd-menu-close></div>
 <div class="wd-shell">
-<aside class="wd-sidebar">
+<aside id="wd-sidebar" class="wd-sidebar">
   <div class="wd-brand"><div class="wd-mark">◈</div><div><strong>WORDDARK</strong><small>Céu · Dark Factory</small></div></div>
   <nav class="wd-nav" aria-label="Navegação">
-    <a href="../../../">◈ WordDark</a><a href="../">☁ Céu</a><a class="active" href="./">⚙ Dark Factory</a>
-    <a href="../../earth/">◉ Terra</a><a href="../../core/">◎ Operações</a>
+    <a href="../../../">◈ Mundo</a><a href="../">☁ Céu</a><a class="active" href="./">⚙ Dark Factory</a>
+    <a href="../dark-channels/">◉ Dark Channels</a><a href="../marketing/">📣 Marketing</a><a href="../../core/connections/">🔗 Conexões</a>
   </nav>
-  <div class="wd-footer">EMPRESA · PRODUÇÃO DE CONTEÚDO<br>Operation Engine conectado</div>
+  <div class="wd-footer">EMPRESA · PRODUÇÃO MODULAR<br>Céu · Dark Channels</div>
 </aside>
 <main class="wd-main">
 <div class="wd-top">
-  <div><div class="wd-eyebrow">Céu · serviço compartilhado</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade e decide o destino. O circuito abaixo usa a infraestrutura operacional do WordDark para transportar, executar, validar e registrar a produção.</p></div>
-  <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><button class="wd-btn danger" id="emergencyButton" type="button">🚨 Socorro Deus</button></div>
+  <div><div class="wd-eyebrow">Céu · empresa de execução</div><h1 class="wd-title">Dark Factory</h1><p class="wd-sub">A fábrica produz. A Terra define a necessidade. O WordDark organiza a rota e o destino. O circuito abaixo usa a infraestrutura operacional do WordDark para transportar, executar, validar e registrar a produção.</p></div>
+  <div class="wd-actions"><button class="wd-btn" data-wd-theme type="button">Modo claro</button><button class="wd-btn danger" id="emergencyButton" type="button">🚨 Parada de emergência</button></div>
 </div>
 
 <section class="wd-card full">
@@ -24,8 +24,8 @@
 </section>
 
 <section class="wd-grid">
-<article class="wd-card full"><div class="wd-eyebrow">Serviço · social.operation</div><h2>Operação para rede social</h2><p class="wd-muted">A fábrica aceita a intenção da operação e prepara o pedido. OAuth, tokens e comunicação com a plataforma permanecem exclusivamente na Central de Conexões.</p><div class="wd-form-grid"><label class="wd-field">Rede<input class="wd-input" id="socialNetwork" value="YOUTUBE" placeholder="YOUTUBE"></label><label class="wd-field">Ação<input class="wd-input" id="socialAction" value="CONTENT_PUBLISH" placeholder="CONTENT_PUBLISH"></label><label class="wd-field">Conta externa<input class="wd-input" id="socialAccount" placeholder="ID da conta conectada"></label></div><label class="wd-field" style="margin-top:12px">Payload da operação<textarea class="wd-textarea" id="socialPayload">{"title":"Teste WordDark","description":"Operação de teste"}</textarea></label><button class="wd-btn primary" id="runSocial" type="button" style="margin-top:14px">Preparar operação social</button><pre id="socialResult" style="margin-top:12px">Nenhuma operação social.</pre></article>
-<article class="wd-card wide">
+<article class="wd-card full wd-internal"><div class="wd-eyebrow">Serviço · social.operation</div><h2>Operação para rede social</h2><p class="wd-muted">A fábrica aceita a intenção da operação e prepara o pedido. OAuth, tokens e comunicação com a plataforma permanecem exclusivamente na Central de Conexões.</p><div class="wd-form-grid"><label class="wd-field">Rede<input class="wd-input" id="socialNetwork" value="YOUTUBE" placeholder="YOUTUBE"></label><label class="wd-field">Ação<input class="wd-input" id="socialAction" value="CONTENT_PUBLISH" placeholder="CONTENT_PUBLISH"></label><label class="wd-field">Conta externa<input class="wd-input" id="socialAccount" placeholder="ID da conta conectada"></label></div><label class="wd-field" style="margin-top:12px">Dados da operação<textarea class="wd-textarea" id="socialPayload">{"title":"Teste WordDark","description":"Operação de teste"}</textarea></label><button class="wd-btn primary" id="runSocial" type="button" style="margin-top:14px">Preparar operação social</button><pre id="socialResult" style="margin-top:12px">Nenhuma operação social.</pre></article>
+<article class="wd-card wide wd-internal">
   <div class="wd-eyebrow">Serviço · content.produce</div><h2>Solicitação de produção</h2>
   <p class="wd-muted">Pedido originado na Terra. A fábrica produz e devolve o resultado à operação solicitante; publicação externa pertence à linha de postagem e exige autorização humana.</p>
   <div class="wd-form-grid">
@@ -33,6 +33,7 @@
     <label class="wd-field">Origem<input class="wd-input" id="origin" value="world/earth/example-operation"></label>
   </div>
   <label class="wd-field" style="margin-top:12px">Requerimento<textarea class="wd-textarea" id="task">Produzir material de teste do circuito WordDark.</textarea></label>
+  <label class="wd-field" style="margin-top:12px">Mídia de origem (opcional: URL ou ID do arquivo)<input class="wd-input" id="mediaSource" placeholder="URL segura ou identificador da mídia"></label>
   <div class="wd-form-grid" style="margin-top:12px">
     <label class="wd-field">ID do conteúdo<input class="wd-input" id="contentId" value="CONTENT-EXAMPLE-001"></label>
     <label class="wd-field">Título<input class="wd-input" id="contentTitle" value="WordDark — circuito operacional"></label>
@@ -55,18 +56,18 @@
 </section>
 
 <section class="wd-grid">
-<article class="wd-card wide"><div class="wd-eyebrow">Operação</div><h2 id="operationId">Nenhuma</h2><span id="operationState" class="wd-badge">AGUARDANDO</span><pre id="lastResult">Nenhuma operação executada.</pre></article>
-<article class="wd-card"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Receipts</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
+<article class="wd-card wide wd-internal"><div class="wd-eyebrow">Operação</div><h2 id="operationId">Nenhuma</h2><span id="operationState" class="wd-badge">AGUARDANDO</span><pre id="lastResult">Nenhuma operação executada.</pre></article>
+<article class="wd-card wd-internal"><div class="wd-eyebrow">Comunicação</div><div class="wd-list"><div class="wd-item"><span>Mensagens</span><strong id="messageCount">0</strong></div><div class="wd-item"><span>Recibos</span><strong id="receiptCount">0</strong></div><div class="wd-item"><span>Pendentes</span><strong id="pendingCount">0</strong></div></div></article>
 </section>
 
-<section class="wd-card full">
-<div class="wd-eyebrow">Segurança</div><h2>🚨 Socorro Deus</h2>
-<p class="wd-muted">A parada é global por operationId. Qualquer setor que acione o mecanismo impede a continuação nos checkpoints cooperativos do núcleo e da fábrica.</p>
+<section class="wd-card full wd-internal">
+<div class="wd-eyebrow">Segurança</div><h2>🚨 Parada de emergência</h2>
+<p class="wd-muted">A parada é controlada por ID da operação. Qualquer setor que acione o mecanismo impede a continuação nos checkpoints cooperativos do núcleo e da fábrica.</p>
 <div class="wd-actions"><button class="wd-btn danger" id="triggerStop" type="button">Acionar parada na operação atual</button><button class="wd-btn" id="releaseStop" type="button">Liberar operação atual</button></div>
 <pre id="emergencyResult">Nenhuma parada.</pre>
 </section>
 
-<section class="wd-card full">
+<section class="wd-card full wd-internal">
 <div class="wd-eyebrow">Registro</div><h2>Biblioteca e auditoria</h2><pre id="auditResult">Aguardando operação.</pre>
 </section>
 </main></div>
@@ -76,18 +77,22 @@
 <script src="../../contracts/operation.js"></script><script src="../../contracts/message.js"></script><script src="../../contracts/request.js"></script><script src="../../contracts/receipt.js"></script><script src="../../contracts/route.js"></script><script src="../../contracts/environment.js"></script>
 <script src="../../core/operation-engine.js"></script><script src="../../core/capability-catalog.js"></script><script src="../../core/company-registry.js"></script><script src="../../core/company-registry-seed.js"></script><script src="../../core/company-intent-router.js"></script><script src="../../core/world-company-bootstrap.js"></script><script src="../../core/operation-coordinator.js"></script><script src="../../core/environment-guard.js"></script><script src="../../core/road.js"></script><script src="../../core/communication.js"></script><script src="../../core/operation-registry.js?v=20260930-2"></script>
 <script src="../../contracts/emergency-stop.js?v=20260930-2"></script><script src="../../core/emergency-stop-manager.js?v=20260930-2"></script><script src="../../security/account-manager.js"></script><script src="../../core/world-runtime.js"></script>
-<script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script>
-<script src="core/social-factory.js"></script><script src="core/account-operation.js"></script><script src="../connections/connection-registry.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="core/content-factory.js"></script><script src="core/content-reentry-adapter.js"></script>
+<script src="../../library/local-library.js"></script><script src="../../library/central-library.js"></script><script src="../../library/hierarchical-library.js"></script>
+<script src="core/social-factory.js"></script><script src="core/account-operation.js"></script><script src="../../core/connections/connection-registry.js"></script><script src="../../core/connections/connection-contract.js"></script><script src="../../core/connections/connection-gateway.js"></script><script src="core/content-operation.js"></script><script src="core/content-module-registry.js"></script><script src="content/language/translation-pipeline.js"></script><script src="core/content-factory.js"></script><script src="core/content-reentry-adapter.js"></script>
 <script src="core/request.js"></script><script src="core/service-registry.js"></script><script src="core/production-validator.js"></script><script src="core/production-pipeline.js"></script><script src="core/content-publication-executor.js"></script><script src="core/factory.js"></script><script src="core/operation-bridge.js"></script>
 <script>
 (() => {
   const emergencyStop=new WordDarkEmergencyStopManager();
+  const connectionRegistry=new ExternalConnectionRegistry();
+  const connectionGateway=new ExternalConnectionGateway({registry:connectionRegistry});
+  window.WordDarkConnectionBridge=connectionGateway;
   const companyWorld=bootstrapWordDarkCompanies({registry:new WordDarkCompanyRegistry()});
   const serviceRegistry=new DarkFactoryServiceRegistry();
   const contentExecutor=new DarkFactoryContentExecutor();
-  const socialFactory=new SocialFactory({connectionBridge:window.WordDarkConnectionBridge||null});
+  const socialFactory=new SocialFactory({connectionBridge:connectionGateway});
   const contentModules=new ContentModuleRegistry();
   ["INGEST","SCRIPT","ASSET","EDIT","AUDIO","TIMELINE","TRANSFORM","RENDER","VALIDATE","PACKAGE"].forEach(moduleId=>contentModules.register(moduleId,async context=>({success:true,status:"MODULE_COMPLETED",module:moduleId,contentId:context.operation.contentId,executedAt:new Date().toISOString()})));
+  ["TRANSCRIBE","TRANSLATE","SUBTITLE","DUBBING"].forEach(moduleId=>contentModules.register(moduleId,context=>WordDarkTranslationPipeline.execute(moduleId,context,window.WordDarkMediaAdapters||{})));
   const contentFactory=new ContentFactory({executor:contentExecutor,moduleRegistry:contentModules});
   installContentReentry(contentFactory);
   serviceRegistry.register({serviceId:"DF-SERVICE-CONTENT-PRODUCE",name:"Content Production",type:"content.produce",status:"READY",executor:contentExecutor});
@@ -121,21 +126,22 @@
     record:()=>{}
   });
   const accountManager=new WordDarkAccountManager({security});
+  const coordinator=new WordDarkOperationCoordinator({engine,road,companyRouter:companyWorld.router});
   const runtime=WordDarkWorldRuntime.compose({
     accountManager,
     security,
     environmentGuard:guard,
     road,
     registry,
-    operationEngine:engine
+    operationEngine:engine,
+    communication,
+    operationCoordinator:coordinator
   });
   runtime.assertReady();
 
   let activeOperationId=null;
   const $=id=>document.getElementById(id);
-  const connectionRegistry=new ExternalConnectionRegistry();
   const accountBinding=new AccountOperationBinding(connectionRegistry);
-  const coordinator=new WordDarkOperationCoordinator({engine,road,companyRouter:companyWorld.router});
   function refreshAccounts(){const network=$("productionNetwork").value;const accounts=connectionRegistry.list().filter(c=>c.status==="CONNECTED"&&c.providerId===network);$("productionAccount").innerHTML="<option value=\"\">Nenhuma conta selecionada</option>"+accounts.map(c=>"<option value=\""+c.accountId+"\">"+(c.displayName||c.accountId)+"</option>").join("");}
   $("productionNetwork").addEventListener("change",refreshAccounts);refreshAccounts();
   $("serviceCount").textContent=serviceRegistry.list().length;
@@ -185,12 +191,13 @@
         payload:{
           content:true,contentId,action:"CONTENT_CREATE",contentType:"VIDEO",
           requesterId:$("requester").value.trim(),originId,task:$("task").value.trim(),
+          input:$("mediaSource").value.trim()?{mediaUrl:$("mediaSource").value.trim()}:null,
           title:$("contentTitle").value.trim(),type:"VIDEO",requirements:$("requirements").value.trim(),
           destination:binding.status==="ACCOUNT_BOUND"?{network,accountId}:null
         }
       };
       $("runStatus").textContent="Terra → controles WordDark → Rodovia → Céu...";
-      const operation=coordinator.submit(request);
+      const operation=await coordinator.submit(request);
       renderOperation(operation);
       $("lastResult").textContent=JSON.stringify(operation,null,2);
       $("runStatus").textContent=operation.status==="COMPLETED"?"Operação concluída e resposta devolvida à Terra.":"Operação terminou em "+operation.status+".";
@@ -208,7 +215,7 @@
   $("emergencyButton").addEventListener("click",()=> $("triggerStop").click());
   $("releaseStop").addEventListener("click",()=>{
     if(!activeOperationId){$("emergencyResult").textContent=JSON.stringify({success:false,reason:"NO_ACTIVE_OPERATION"},null,2);return;}
-    $("emergencyResult").textContent=JSON.stringify(emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Liberação manual de teste"}),null,2);
+    $("emergencyResult").textContent=JSON.stringify(emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Liberação manual da operação"}),null,2);
   });
 })();
 </script>

@@ -3,16 +3,17 @@
  * A Dark Factory executa apenas depois que a operação chega ao Céu.
  */
 class DarkFactoryOperationBridge {
-  constructor({factory,communication,serviceMap={}}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;}
+  constructor({factory,communication,serviceMap={},requestClass=null}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;this.requestClass=requestClass||this.resolveRequestClass();}
+  resolveRequestClass(){if(typeof module==="object"&&module.exports){const R=require("./request");return typeof R==="function"?R:(R&&typeof R.DarkFactoryRequest==="function"?R.DarkFactoryRequest:null);}const R=typeof globalThis!=="undefined"?globalThis.DarkFactoryRequest:null;return typeof R==="function"?R:null;}
 
   getService(operation){return this.serviceMap[operation.operationType]||operation.operationType;}
 
   createRequest(operation){
-    return new DarkFactoryRequest({
+    return new this.requestClass({
       requester:operation.requesterId,
       origin:operation.originId,
       destination:operation.destinationId,
-      task:operation.payload&&operation.payload.task||("Executar operação "+operation.operationType),
+      task:operation.payload&&(operation.payload.task||operation.payload.goal)||("Executar operação "+operation.operationType),
       taskType:this.getService(operation),
       permission:"approved",
       payload:operation.payload
@@ -46,15 +47,24 @@ class DarkFactoryOperationBridge {
 
   createRequestFromGlobal(request){
     const p=request.payload||{};
-    return new DarkFactoryRequest({
+    return {
+      id:request.requestId||request.operationId,
       requester:request.requesterId,
       origin:request.originId,
       destination:request.destinationId,
       task:request.task,
       taskType:request.service,
       permission:"approved",
-      payload:p
-    });
+      payload:p,
+      content:p.content||p.parameters?.content||false,
+      contentId:p.contentId||p.parameters?.contentId||null,
+      action:p.action||p.parameters?.action||null,
+      network:p.network||p.parameters?.network||null,
+      accountId:p.accountId||p.parameters?.accountId||null,
+      createdAt:request.createdAt||new Date().toISOString(),
+      validate(){return {valid:!!(this.requester&&this.origin&&this.destination&&this.task&&this.taskType),errors:[]};},
+      toJSON(){return {...this};}
+    };
   }
 }
 if(typeof module!=="undefined")module.exports=DarkFactoryOperationBridge;

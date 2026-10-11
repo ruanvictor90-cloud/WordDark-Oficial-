@@ -21,14 +21,21 @@
       if(!this.operationCoordinator?.submit){production.transition("FAILED",{reason:"Operation Coordinator não configurado."});return production;}
       production.transition("EXECUTING");
       const results=[];
-      for(const source of list){
-        const result=this.operationCoordinator.submit({...((source?.toJSON instanceof Function)?source.toJSON():source),parentProductionId:production.productionId});
-        results.push({operationId:result?.operationId||source?.operationId||null,status:result?.status||"FAILED",success:result?.status==="COMPLETED",result:result?.result||result});
-        if(result?.status!=="COMPLETED")break;
-      }
-      const failed=results.filter(x=>!x.success);
-      production.transition(failed.length?(results.some(x=>x.success)?"PARTIAL":"FAILED"):"COMPLETED",{results});
-      return production;
+      const accept=(result,source,index)=>{
+        results.push({operationId:result?.operationId||source?.operationId||null,status:result?.status||"FAILED",success:result?.status==="COMPLETED",result:result?.result||result,operation:typeof result?.toJSON==="function"?result.toJSON():(result?.operation||null)});
+        if(result?.status!=="COMPLETED"){production.transition(results.some(x=>x.success)?"PARTIAL":"FAILED",{results});return production;}
+        return runAt(index+1);
+      };
+      const runAt=index=>{
+        if(index>=list.length){production.transition("COMPLETED",{results});return production;}
+        let result;
+        try{result=this.operationCoordinator.submit({...((list[index]?.toJSON instanceof Function)?list[index].toJSON():list[index]),parentProductionId:production.productionId});}
+        catch(error){production.transition(results.length?"PARTIAL":"FAILED",{results,reason:error.message});return production;}
+        return result&&typeof result.then==="function"
+          ?result.then(value=>accept(value,list[index],index)).catch(error=>{production.transition(results.length?"PARTIAL":"FAILED",{results,reason:error.message});return production;})
+          :accept(result,list[index],index);
+      };
+      return runAt(0);
     }
   }
   return WordDarkProductionEngine;

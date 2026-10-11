@@ -1,0 +1,16 @@
+{
+  "system": "WORDDARK-INTELLECTUAL-PROPERTY",
+  "version": "0.2.0",
+  "ownerAuthority": "WORDDARK-ADM",
+  "projectStartDate": "24/09",
+  "responsibleYear": "2002",
+  "officialWorldAccount": "WORDDARK-OFFICIAL",
+  "scope": ["INTERNAL", "EXTERNAL"],
+  "assetTypes": ["TRADEMARK","BRAND_IDENTITY","SOFTWARE","ARCHITECTURE","DOCUMENTATION","PROCESS","METHOD","CONTENT","VISUAL","AUDIO","VIDEO","EXPERIMENT","DOMAIN","SOCIAL_IDENTITY","ACCOUNT","CONTRACT","LICENSE","EVIDENCE","OTHER"],
+  "rightsStatuses": ["UNKNOWN","INTERNAL","OWNED","LICENSED","AUTHORIZED","THIRD_PARTY","MIXED","PENDING_REVIEW","RESTRICTED"],
+  "lifecycle": ["DRAFT","RECORDED","VALIDATED","PROTECTED","PUBLISHED","ARCHIVED"],
+  "externalRegistrationStatuses": ["NOT_STARTED","PENDING","FILED","REGISTERED","REFUSED","EXPIRED","CANCELLED"],
+  "requiredFields": ["ipId","name","type","scope","ownerId","creatorId","origin","rightsStatus","version","status","createdAt"],
+  "evidencePolicy": {"recordCreationDate":true,"recordVersion":true,"recordSource":true,"recordHashWhenApplicable":true,"preserveHistoryAfterPublication":true},
+  "governance": {"automaticExternalRegistration":false,"automaticPublication":false,"automaticRightsTransfer":false,"ownerAuthorityCanOverride":true,"externalAssetsAreNotAutomaticallyOwned":true}
+}
