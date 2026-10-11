@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f">
+<meta name="description" content="WordDark — base visual unificada por aplicativos e setores.">
+<title>WordDark · Alinhamento</title>
+<link rel="stylesheet" href="./app.css">
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<main class="shell">
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="WordDark início">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M7 15h10l7 27 8-19h6l8 19 7-27h10L52 51h-9l-8-18-8 18h-9Z"/><path d="M15 8h34"/></svg></span>
+      <span class="brand-copy"><strong>WORDDARK</strong><small>MUNDO OPERACIONAL</small></span>
+    </a>
+    <div class="top-actions">
+      <span class="env-pill"><i></i> Base visual</span>
+      <button class="icon-button" id="menuButton" aria-label="Abrir navegação" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <section id="inicio" class="screen launcher-screen">
+    <div class="welcome">
+      <p class="eyebrow">AMBIENTE DE ENTRADA</p>
+      <h1>Um mundo.<br><span>Setores conectados.</span></h1>
+      <p class="muted">Entre no WordDark para abrir o Portão e acessar cada setor como um aplicativo independente.</p>
+    </div>
+
+    <section class="launcher-widget feature-widget">
+      <div class="widget-symbol">✦</div>
+      <div class="widget-copy">
+        <span class="widget-kicker">VISÃO DO MUNDO</span>
+        <strong>Estrutura em alinhamento</strong>
+        <small>Identidade, navegação e responsabilidades em uma base comum.</small>
+      </div>
+      <span class="widget-arrow" aria-hidden="true">↗</span>
+    </section>
+
+    <div class="section-heading">
+      <div><p class="eyebrow">SEUS APLICATIVOS</p><h2>Entrar no mundo</h2></div>
+      <span class="section-meta">01 APP</span>
+    </div>
+
+    <button class="world-launcher" data-open-gate>
+      <span class="world-launcher-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M7 15h10l7 27 8-19h6l8 19 7-27h10L52 51h-9l-8-18-8 18h-9Z"/><path d="M15 8h34"/></svg></span>
+      <span class="world-launcher-copy"><span class="app-overline">APP PRINCIPAL · PORTÃO</span><strong>WordDark</strong><small>Coordenação, decisões e setores do mundo</small></span>
+      <span class="launch-arrow" aria-hidden="true">↗</span>
+    </button>
+
+    <div class="launcher-note"><span class="note-dot"></span><span>Esta área é separada do Ruan. Nenhuma conexão pessoal é criada por esta interface.</span></div>
+  </section>
+
+  <section id="portao" class="screen gate-screen" hidden>
+    <div class="page-top">
+      <button class="back-button" data-go-home aria-label="Voltar à entrada">←</button>
+      <div><p class="eyebrow">WORDDARK / PORTÃO</p><h1>Centro do mundo</h1></div>
+      <button class="icon-button" id="searchToggle" aria-label="Pesquisar aplicativos">⌕</button>
+    </div>
+    <p class="muted page-intro">Os widgets mostram informações. Cada card abre um app com uma responsabilidade própria.</p>
+
+    <div class="widget-grid" aria-label="Widgets de informação">
+      <article class="metric-widget widget-primary"><span class="metric-icon">◈</span><span class="metric-label">ESTRUTURA</span><strong>Em alinhamento</strong><small>Base unificada em preparação</small></article>
+      <article class="metric-widget"><span class="metric-icon">✓</span><span class="metric-label">APROVAÇÕES</span><strong>Central única</strong><small>Fila a consolidar com as fontes</small></article>
+      <article class="metric-widget"><span class="metric-icon">▤</span><span class="metric-label">BANCO</span><strong>Gestão financeira</strong><small>Registros e planos separados</small></article>
+      <article class="metric-widget"><span class="metric-icon">⛨</span><span class="metric-label">SEGURANÇA</span><strong>Portões e permissões</strong><small>Regras centrais existentes; integração a validar</small></article>
+    </div>
+
+    <div class="search-row" id="searchRow" hidden>
+      <label class="search-box"><span aria-hidden="true">⌕</span><input id="appSearch" type="search" placeholder="Buscar um aplicativo..." autocomplete="off"><button id="clearSearch" type="button" aria-label="Limpar busca">×</button></label>
+    </div>
+
+    <section class="app-shelf" data-shelf="central">
+      <div class="section-heading"><div><p class="eyebrow">CENTRO DE DECISÃO</p><h2>Administrar o mundo</h2></div><span class="section-meta">CENTRAL</span></div>
+      <div class="app-grid" id="centralApps"></div>
+    </section>
+    <section class="app-shelf" data-shelf="ceu">
+      <div class="section-heading"><div><p class="eyebrow">CÉU</p><h2>Soluções e produção</h2></div><span class="section-meta">CRIAR</span></div>
+      <div class="app-grid" id="skyApps"></div>
+    </section>
+    <section class="app-shelf" data-shelf="terra">
+      <div class="section-heading"><div><p class="eyebrow">TERRA</p><h2>Pedidos e operações</h2></div><span class="section-meta">OPERAR</span></div>
+      <div class="app-grid" id="earthApps"></div>
+    </section>
+    <section class="app-shelf" data-shelf="infra">
+      <div class="section-heading"><div><p class="eyebrow">SUPORTE AO MUNDO</p><h2>Ferramentas de controle</h2></div><span class="section-meta">SUPORTE</span></div>
+      <div class="app-grid" id="infraApps"></div>
+    </section>
+    <div class="internal-note"><span>◌</span><div><strong>Infraestrutura mantida nos bastidores</strong><p>A Rodovia encaminha operações; o Véu protege a fronteira. Eles não precisam virar aplicativos visíveis para cumprir suas funções.</p></div></div>
+  </section>
+
+  <section id="appScreen" class="screen app-screen" hidden aria-live="polite">
+    <div class="page-top">
+      <button class="back-button" id="backToGate" aria-label="Voltar ao Portão">←</button>
+      <div><p class="eyebrow" id="appCategory">APLICATIVO WORDDARK</p><h1 id="appTitle">Aplicativo</h1></div>
+      <span class="app-screen-mark" id="appMark" aria-hidden="true">◈</span>
+    </div>
+    <p class="muted page-intro" id="appDescription"></p>
+    <div class="app-status-panel"><span class="status-orb"></span><div><strong id="appStatusTitle">Em alinhamento</strong><p id="appStatusText">Responsabilidade e conexões serão validadas.</p></div></div>
+    <section class="detail-section"><div class="section-heading"><div><p class="eyebrow">RESPONSABILIDADE</p><h2>O que este app faz</h2></div></div><ul class="detail-list" id="appResponsibilities"></ul></section>
+    <section class="detail-section"><div class="section-heading"><div><p class="eyebrow">ALINHAMENTO</p><h2>Estado da base atual</h2></div></div><div class="detail-card" id="appCurrent"></div></section>
+    <section class="detail-section" id="existingLinkSection" hidden><div class="section-heading"><div><p class="eyebrow">INTERFACE EXISTENTE</p><h2>Abrir versão atual</h2></div></div><div class="detail-card"><p id="existingLinkText"></p><a id="existingLink" class="primary-link" href="#">Abrir interface atual <span>↗</span></a></div></section>
+    <section class="detail-section"><div class="section-heading"><div><p class="eyebrow">PRÓXIMA CAMADA</p><h2>Como evolui</h2></div></div><div class="detail-card"><p id="appNext"></p></div></section>
+  </section>
+
+  <footer><span>WORDDARK · BASE UNIFICADA</span><span>Estrutura visual · v0.1</span></footer>
+</main>
+<nav class="mobile-dock" aria-label="Navegação principal">
+  <button class="dock-item active" data-dock-home><span>⌂</span><small>Início</small></button>
+  <button class="dock-item" data-dock-gate><span>◈</span><small>Portão</small></button>
+  <button class="dock-item" data-dock-app="approvals"><span>✓</span><small>Aprovações</small></button>
+  <button class="dock-item" data-dock-app="bank"><span>▤</span><small>Banco</small></button>
+</nav>
+<script src="./app.js" defer></script>
+</body>
+</html>
