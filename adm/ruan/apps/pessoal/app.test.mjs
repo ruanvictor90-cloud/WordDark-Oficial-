@@ -7,6 +7,6 @@ import { dirname, resolve } from "node:path";
 const root=dirname(fileURLToPath(import.meta.url));
 const read=name=>readFile(resolve(root,name),"utf8");
 test("Pessoal home has Financeiro, Tarefas, info widgets and notification bell",async()=>{const html=await read("index.html");assert.match(html,/financeiro\.html/);assert.match(html,/tarefas\.html/);assert.match(html,/notification-toggle/);assert.match(html,/info-widget/)});
-test("Tarefas supports selectable weekdays and monthly days",async()=>{const html=await read("tarefas.html");assert.match(html,/value="weekly"/);assert.match(html,/value="monthly"/);assert.match(html,/name="weekdays"/);assert.match(html,/name="monthDays"/)});
+test("Tarefas supports selectable weekdays and monthly days",async()=>{const html=await read("tarefas.html");assert.match(html,/value="weekly"/);assert.match(html,/value="monthly"/);assert.match(html,/name="weekdays"/);assert.match(await read("tarefas.js"),/name="monthDays"/)});
 test("Pessoal browser scripts parse",async()=>{for(const name of ["shared.js","tarefas.js","financeiro.js"]){const result=spawnSync(process.execPath,["--check",resolve(root,name)],{encoding:"utf8"});assert.equal(result.status,0,name+": "+(result.stderr||result.stdout))}});
 test("Financeiro stores entries locally",async()=>{const js=await read("financeiro.js");assert.match(js,/ruan\.pessoal\.finance\.v1/);assert.match(js,/localStorage\.setItem/)});
