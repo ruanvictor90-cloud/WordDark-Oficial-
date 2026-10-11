@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f"><meta name="description" content="Pessoal — financeiro e tarefas no ambiente Ruan.">
+<link rel="stylesheet" href="../../app.css"><link rel="stylesheet" href="./pessoal.css">
+<title>Pessoal · Ruan</title>
+</head>
+<body>
+<main class="shell">
+<header class="topbar">
+<a class="back-button" href="../../index.html" aria-label="Voltar para Ruan" title="Voltar para Ruan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+<a class="brand brand-centered" href="./index.html" aria-label="Pessoal — início"><span class="brand-mark pessoal-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><rect x="13" y="13" width="29" height="38" rx="5"/><path d="M21 24h13M21 32h13M21 40h8"/><path d="m39 43 6 6 10-13"/></svg></span></a>
+<div class="top-actions"><span class="online-dot" aria-label="Aplicativo pronto"></span><a class="bell" href="../../index.html" aria-label="Voltar à central Ruan">⌂</a></div>
+</header>
+<section class="welcome"><p class="eyebrow">APLICATIVO PESSOAL</p><h1 id="greeting">Seu espaço.</h1><p class="muted phrase">Organize o que entra, o que precisa ser feito e o próximo passo.</p></section>
+<section class="section"><div class="section-title"><h2>Informações</h2><span class="section-caption">VISÃO GERAL</span></div>
+<div class="info-grid personal-widgets">
+<a class="info-widget data-widget finance-widget" href="./financeiro.html"><span class="info-symbol green">R$</span><div class="widget-copy"><strong>Saldo registrado</strong><small id="balance-detail">Registre entradas e saídas</small></div><p id="balance-value">R$ 0,00</p></a>
+<a class="info-widget data-widget tasks-widget" href="./tarefas.html"><span class="info-symbol">✓</span><div class="widget-copy"><strong>Tarefas em aberto</strong><small id="task-detail">Tudo sob controle</small></div><p id="task-value">0</p></a>
+<a class="info-widget data-widget bills-widget" href="./financeiro.html"><span class="info-symbol">!</span><div class="widget-copy"><strong>Contas pendentes</strong><small id="bill-detail">Pagamentos a acompanhar</small></div><p id="bill-value">0</p></a>
+<a class="info-widget data-widget" href="./tarefas.html"><span class="info-symbol">◷</span><div class="widget-copy"><strong>Prazos próximos</strong><small id="deadline-detail">Tarefas com vencimento</small></div><p id="deadline-value">0</p></a>
+</div></section>
+<section id="apps-drawer" class="apps-drawer" hidden><div class="drawer-head"><div><p class="eyebrow">ACESSO RÁPIDO</p><strong>Aplicativos</strong></div><button id="apps-close" aria-label="Fechar aplicativos">×</button></div><div class="drawer-grid">
+<a class="app-launch" href="./financeiro.html"><span class="brand-mark pessoal-logo">R$</span><span class="app-copy"><strong>Financeiro</strong><small>Entradas, saídas e contas</small></span><span class="launch-arrow">↗</span></a>
+<a class="app-launch" href="./tarefas.html"><span class="brand-mark pessoal-logo">✓</span><span class="app-copy"><strong>Tarefas</strong><small>Lista e prazos</small></span><span class="launch-arrow">↗</span></a>
+<a class="app-launch" href="../shadow/index.html"><span class="brand-mark shadow-logo">◉</span><span class="app-copy"><strong>Shadow</strong><small>DarkEye e ferramentas</small></span><span class="launch-arrow">↗</span></a>
+</div></section>
+<button id="apps-toggle" class="bottom-apps" aria-label="Abrir gaveta de aplicativos" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Aplicativos</span><span class="dock-chevron">⌃</span></button>
+<footer><span>PESSOAL · RUAN</span><span>Seus dados permanecem neste dispositivo.</span></footer>
+</main><script type="module" src="./app.js"></script></body></html>
