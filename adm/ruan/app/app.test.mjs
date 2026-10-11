@@ -38,14 +38,15 @@ test("new apps start without grants and individual export stays separate", async
   assert.match(source, /Manifesto individual exportado/);
   assert.match(source, /ruan-app-/);
   assert.match(source, /localStorage\.setItem\(STORE_KEY/);
-  assert.match(source, /RUAN_APP/);
+  assert.match(source, /world\.request/);
   assert.match(source, /not-yet-packaged/);
 });
 
 test("interface clearly documents that browser grants are not a security sandbox", async () => {
   const html = await read("index.html");
   const readme = await read("README.md");
-  assert.match(html, /ainda sem enforcement de runtime/i);
+  const source = await read("app.js");
+  assert.match(source, /ainda sem enforcement de runtime/i);
   assert.match(readme, /não é um sandbox de segurança/i);
   assert.match(readme, /não chama diretamente.*RuanEngine/i);
 });
