@@ -1,46 +1,31 @@
-# Ruan — Núcleo Pessoal Alfa 0.4
+# Ruan — Central de Operação
 
-O Ruan é o ambiente pessoal independente. WordDark é um aplicativo acessado a partir dele, não o proprietário do Ruan.
+Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém somente widgets informativos e a gaveta de aplicativos. **A Área ADM foi retirada da estrutura atual.**
 
-## O que existe nesta alfa
-- Tela inicial mobile-first com atalhos de aplicativos.
-- Atalho para a Central do WordDark.
-- Agenda pessoal com criação, conclusão e exclusão de compromissos.
-- Cofre de laboratório com lançamentos locais ilustrativos.
-- Biblioteca pessoal de notas.
-- Manifesto PWA e cache básico para instalação/abertura como app.
-- Módulos em áreas independentes para facilitar a futura extração de cada aplicativo.
+## Estrutura atual
+
+- `index.html`: Central de Operação.
+- `app.css` / `app.js`: identidade visual atual, widgets, notificações locais e gaveta de aplicativos.
+- `engine/central-engine.js`: motor compartilhado por widgets, Financeiro e Tarefas.
+- `apps/pessoal/`: app Pessoal com os módulos Financeiro e Tarefas.
+- `apps/shadow/`: app Shadow.
+- `apps/shadow/darkeye/`: protótipo de interface para o navegador DarkEye.
+
+## Motor central
+
+O motor oferece operações locais para tarefas, entradas, saídas e contas a pagar. Os widgets leem o mesmo estado usado pelos módulos pessoais. Os dados ficam no armazenamento do navegador/dispositivo e não sincronizam entre aparelhos nesta versão.
+
+## Testes
+
+```bash
+node ruan/engine/central-engine.test.js
+node ruan/apps/shadow/darkeye/darkeye-core.test.js
+node ruan/app.test.js
+```
 
 ## Limites atuais
-- Dados salvos no armazenamento local do navegador, sem sincronização entre dispositivos, login ou backup.
-- Cofre é apenas um registro local; não é banco, não movimenta dinheiro e não substitui contabilidade.
-- O atalho WordDark abre a interface disponível no repositório pai; isso não significa que o runtime do WordDark esteja concluído.
-- Não há integração com IA, calendário do sistema, notificações garantidas ou ações externas autorizadas nesta versão.
-- O cache offline pode servir a interface, mas não substitui sincronização nem recuperação de dados.
 
-## Regra de arquitetura
-Ruan é o contêiner pessoal. Aplicativos são módulos independentes registrados no launcher. WordDark pode solicitar acesso a recursos específicos por meio de contratos e autorizações explícitas; não recebe controle da raiz pessoal, dos dados ou das permissões de Ruan.
-
-## Publicação
-A partir da raiz publicada do repositório, a área fica em /ruan/. A instalação PWA depende de HTTPS e suporte do navegador. O caminho de produção deve ser validado após a publicação.
-
-## Alfa 0.3 — controle dos dados pessoais
-- Área Privacidade com contagem dos registros locais.
-- Exportação de compromissos, lançamentos e notas em arquivo JSON.
-- Restauração com validação de formato, versão, tamanho e estrutura.
-- Limpeza explícita dos dados locais do Ruan, sem apagar dados do WordDark.
-- Limitações de privacidade informadas: ainda não existe login, criptografia ou sincronização.
-
-## Alfa 0.3 — gestão pessoal por projetos
-- Projetos com área, prazo opcional, próximo passo e estados Planejamento / Em andamento / Pausado / Concluído.
-- Contagem de projetos ativos no painel inicial e na área de privacidade.
-- Os projetos são incluídos na exportação/restauração e na limpeza dos dados pessoais.
-- Cópias Alfa 0.2 continuam compatíveis: se não contiverem projetos, a restauração inicia essa lista vazia.
-
-
-## Alfa 0.4 — rotinas e progresso diário
-- Módulo Rotinas com criação, edição, exclusão e marcação diária de hábitos.
-- Histórico local de dias concluídos, sequência atual quando todos os hábitos foram feitos e taxa agregada dos últimos sete dias.
-- Painel inicial com rotinas concluídas, tarefas pendentes e projetos ativos.
-- Rotinas incluídas na exportação, restauração validada e limpeza local; cópias antigas sem este campo continuam compatíveis.
-- Os indicadores refletem apenas os registros deste navegador; não há notificações, sincronização ou lembretes automáticos.
+- Não há autenticação nem sincronização; a premissa atual é uso privado e individual no dispositivo.
+- Os registros financeiros são anotações, não movimentam dinheiro e não conectam a bancos.
+- DarkEye tem uma interface experimental e tenta mostrar uma prévia em iframe. Alguns sites bloqueiam incorporação. Não é ainda um motor de navegador nativo; links podem ser abertos no navegador externo.
+- O modo Privado do DarkEye evita gravar novas entradas de histórico local; não torna a navegação anônima na internet.
