@@ -77,3 +77,13 @@ body.ruan-launcher .app-launch .brand-mark{width:clamp(42px,12vw,62px);height:cl
 body.ruan-launcher .app-launch .brand-mark svg{width:70%;height:70%}
 body.ruan-launcher .app-copy,body.ruan-launcher .launch-arrow,body.ruan-launcher .drawer-head{display:none!important}
 @media(max-width:360px){body.ruan-launcher .apps-drawer{bottom:76px;padding:12px}.ruan-launcher .drawer-grid{gap:7px}}
+
+
+/* Refinamento dos ícones: identidade mais nítida, sem alterar a gaveta só com logos. */
+.brand-mark svg,.pessoal-app-icon svg,.darkeye-mark svg{stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+body.ruan-launcher .app-launch .brand-mark{position:relative;overflow:hidden;background:radial-gradient(circle at 30% 18%,#3a2453 0,#21152f 48%,#100c18 100%);border-color:#76539b;box-shadow:inset 0 1px #ffffff12,0 8px 24px #0005,0 0 22px #a879ff12}
+body.ruan-launcher .app-launch .pessoal-logo{color:#a4f0cf;border-color:#3b7965;background:radial-gradient(circle at 30% 18%,#245b45,#153329 55%,#0c1915)}
+body.ruan-launcher .app-launch .shadow-logo{color:#c9b3ff;border-color:#7659b3}
+body.ruan-launcher .app-launch .hub-logo{color:#d7baff;border-color:#7950ad}
+body.ruan-launcher .app-launch .brand-mark svg{filter:drop-shadow(0 0 3px currentColor)}
+body.ruan-launcher .app-launch:focus-visible{outline:2px solid #c49aff;outline-offset:3px}
