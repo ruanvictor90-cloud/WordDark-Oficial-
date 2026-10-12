@@ -11,7 +11,7 @@ Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um
 - `apps/shadow/`: app Shadow.
 - `apps/shadow/darkeye/`: protótipo de interface para o navegador DarkEye.
 
-## Motor central
+## Fronteira estrutural\n\n- A Central Ruan é a única tela que possui a gaveta global de aplicativos.\n- Cada aplicativo mantém sua navegação interna própria, sem duplicar a gaveta global.\n- Rotas, scripts, estilos e ícones locais devem permanecer dentro de `ruan/`; o runtime não importa módulos de outros projetos.\n- A estrutura continua local ao dispositivo nesta fase, sem autenticação ou sincronização entre aparelhos.\n\n## Motor central
 
 O motor oferece operações locais para tarefas, entradas, saídas e contas a pagar. Os widgets leem o mesmo estado usado pelos módulos pessoais. Os dados ficam no armazenamento do navegador/dispositivo e não sincronizam entre aparelhos nesta versão.
 
