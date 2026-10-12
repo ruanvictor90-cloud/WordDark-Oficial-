@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-6") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-7") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -68,4 +68,8 @@ assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must s
 assert.ok(html.includes('<span class="clean-app-name">') && html.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), "App launchers must show names beneath icons in a three-column grid");
 assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("showPage('overview')"), "Every in-app screen must have a working return path");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
+
+assert.ok(html.includes("Navegação corrigida: sem barra lateral e com retorno sempre visível"), "The global sidebar must stay hidden and the return control must remain visible");
+assert.ok(html.includes(".app-topbar .back-top{display:grid!important;visibility:visible!important"), "The back button must override older rules that hid it");
+assert.ok(html.includes("#screen.clean-launcher{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))"), "Area launchers must remain three columns");
 console.log("worddark app script test: OK");
