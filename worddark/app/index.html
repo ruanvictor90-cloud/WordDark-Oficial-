@@ -135,17 +135,17 @@ body[data-page="earth"] .clean-app-icon{color:#d5c1f5;border-color:#59416e;backg
 .clean-app-icon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-width:0}
 .clean-app-name{margin-top:2px}
 @media(max-width:360px){#screen.clean-launcher,.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.app-topbar .back-top{left:8px;width:36px;height:36px}}
-/* Apps como botões da própria página: sem gaveta lateral nem cartões apertados. */
-#screen.clean-launcher{display:block!important;width:min(100%,760px)!important;margin:0 auto;align-content:initial}
-.clean-app-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important;margin:0 auto}
-.clean-app-icon{aspect-ratio:auto!important;min-height:66px;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:13px!important;padding:14px 16px!important;border-radius:15px!important;text-align:left;box-shadow:inset 0 1px #ffffff08;transition:border-color .18s,background .18s,transform .18s}
-.clean-app-icon svg{width:30px!important;height:30px!important;flex:0 0 30px!important}
-.clean-app-name{margin:0!important;font-size:12px!important;line-height:1.35!important;text-align:left!important;overflow-wrap:anywhere}
+/* Apps como botões de aplicativo: ícone acima, nome abaixo, sem aparência de linha/lista. */
+#screen.clean-launcher{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-content:center;width:min(100%,680px)!important;margin:0 auto;gap:12px!important}
+.clean-app-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;width:100%!important;margin:0 auto}
+.clean-app-icon{aspect-ratio:1!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:10px!important;padding:10px!important;border:1px solid #49315d!important;border-radius:19px!important;background:linear-gradient(145deg,#21152f,#100c18)!important;text-align:center!important;box-shadow:inset 0 1px #ffffff08!important;transition:border-color .18s,background .18s,transform .18s!important}
+.clean-app-icon svg{width:clamp(34px,9vw,48px)!important;height:clamp(34px,9vw,48px)!important;flex:0 0 auto!important}
+.clean-app-name{display:block!important;margin:0!important;font-size:clamp(10px,2.6vw,12px)!important;font-weight:700!important;line-height:1.25!important;text-align:center!important;overflow-wrap:anywhere!important}
 .app-topbar{display:grid!important;grid-template-columns:1fr auto 1fr!important;align-items:center!important;justify-content:initial!important}
 .app-topbar .world-brand-centered{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;justify-self:center!important;max-width:calc(100% - 112px);white-space:nowrap}
 .app-topbar .back-top{left:12px!important;top:50%!important;transform:translateY(-50%)!important}
-@media(max-width:430px){.clean-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}.clean-app-icon{min-height:62px;padding:11px 10px!important;gap:9px!important}.clean-app-icon svg{width:25px!important;height:25px!important;flex-basis:25px!important}.clean-app-name{font-size:11px!important}}
-@media(max-width:340px){.clean-app-grid{grid-template-columns:1fr!important}.clean-app-icon{min-height:58px}}
+@media(max-width:430px){#screen.clean-launcher,.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.clean-app-icon{gap:7px!important;padding:6px!important;border-radius:15px!important}.clean-app-icon svg{width:clamp(27px,8vw,36px)!important;height:clamp(27px,8vw,36px)!important}.clean-app-name{font-size:10px!important}}
+@media(max-width:320px){#screen.clean-launcher,.clean-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style></head>
 <body>
 <div class="layout">
@@ -194,9 +194,11 @@ function exportWorldBackup(){const collections={};for(const [name,key] of Object
 async function restoreWorldBackupFile(file){if(!file)return;if(file.size>5*1024*1024){toast('Arquivo acima de 5 MB. Restauração recusada.');return}let payload;try{payload=JSON.parse(await file.text())}catch{toast('Arquivo inválido: não é um JSON legível.');return}if(!payload||payload.app!=='WordDark'||payload.formatVersion!==1||!payload.collections||typeof payload.collections!=='object'){toast('Backup incompatível. Nenhum dado foi alterado.');return}for(const name of Object.keys(BACKUP_COLLECTIONS)){if(!Array.isArray(payload.collections[name])){toast('Backup incompleto ou inválido: '+name+'. Nenhum dado foi alterado.');return}}if(!confirm('Restaurar este backup WordDark? Isso substituirá as coleções locais atuais neste navegador. Exporte um backup atual antes se quiser preservá-lo.'))return;const previous={};try{for(const [name,key] of Object.entries(BACKUP_COLLECTIONS)){previous[key]=localStorage.getItem(key);localStorage.setItem(key,JSON.stringify(payload.collections[name]))}}catch{for(const [key,value] of Object.entries(previous)){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value)}catch{}}toast('Falha ao restaurar. Foi tentada a recuperação dos dados anteriores.');return}toast('Backup restaurado. Recarregando os dados locais.');location.reload()}
 const pageHistory=[];
 function showPage(p){page=p in names?p:'overview';document.body.dataset.page=page;$('crumbName').textContent=names[page];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));render();window.scrollTo({top:0,behavior:'smooth'})}
-function navigate(p,options={}){const next=p in names?p:'overview';if(next!==page&&!options.back)pageHistory.push(page);showPage(next)}
-function goBack(){if(pageHistory.length){const previous=pageHistory.pop();navigate(previous,{back:true});return}if(page!=='overview'){showPage('overview');return}location.href='../../index.html'}
+function navigate(p,options={}){const next=p in names?p:'overview';if(next===page)return;if(!options.back)pageHistory.push(page);showPage(next)}
+function goBack(){while(pageHistory.length&&pageHistory[pageHistory.length-1]===page)pageHistory.pop();if(pageHistory.length){showPage(pageHistory.pop());return}if(page!=='overview'){showPage('overview');return}location.href='../../index.html'}
 window.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();goBack()}});
+window.addEventListener('popstate',()=>{if(pageHistory.length){showPage(pageHistory.pop())}else if(page!=='overview'){showPage('overview')}});
+
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
 $('worldBrandHome')?.addEventListener('click',()=>navigate('overview'));
 $('worldBrandHome')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate('overview')}});
