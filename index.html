@@ -3,11 +3,26 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#090a0d">
+<meta name="theme-color" content="#09070f">
 <meta name="description" content="WordDark — entrada para WordDark, Céu e Terra.">
 <title>WordDark</title>
 <style>
-:root{color-scheme:dark;--bg:#090a0d;--line:#292d37;--text:#f1f2f4;--accent:#d8ff70;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}html,body{min-height:100%;margin:0}body{min-height:100svh;background:radial-gradient(ellipse at 50% -18%,#242b1b 0,transparent 44%),var(--bg);color:var(--text);display:grid;place-items:center;padding:24px}.world-entry{width:min(100%,540px);display:grid;gap:12px}.world-option{min-height:108px;display:flex;align-items:center;gap:18px;padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(110deg,#14171b,#0f1115);color:var(--text);text-decoration:none;transition:border-color .2s,transform .2s,background .2s}.world-option:hover,.world-option:focus-visible{border-color:#6d7847;background:linear-gradient(110deg,#191f15,#11140f);transform:translateY(-2px);outline:none}.world-symbol{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:1px solid #40483a;border-radius:15px;background:#171c13;color:var(--accent)}.world-symbol svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.world-option strong{font-size:clamp(18px,4.5vw,22px);font-weight:650;letter-spacing:-.025em}.world-option:first-child{border-color:#4c5835}.world-option:first-child .world-symbol{background:#202817;border-color:#697c43}.world-option:nth-child(2) .world-symbol{color:#c9d9ff;border-color:#39465f;background:#141a26}.world-option:nth-child(3) .world-symbol{color:#c8d5ad;border-color:#454b35;background:#191c14}@media(max-width:360px){body{padding:16px}.world-option{min-height:92px;padding:17px;gap:13px}.world-symbol{width:42px;height:42px;flex-basis:42px}}
+:root{color-scheme:dark;--bg:#09070f;--line:#382647;--text:#f4efff;--muted:#a69bb8;--accent:#c49aff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{min-height:100svh;padding:max(20px,env(safe-area-inset-top)) 20px max(22px,env(safe-area-inset-bottom));background:radial-gradient(ellipse at 14% -8%,#392052 0,transparent 39%),radial-gradient(ellipse at 95% 100%,#211333 0,transparent 36%),var(--bg);color:var(--text);display:grid;place-items:center}
+.world-entry{width:min(100%,540px);display:grid;gap:12px}
+.world-option{min-height:108px;display:flex;align-items:center;gap:18px;padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(110deg,#1c1527,#120e19);color:var(--text);transition:border-color .2s,transform .2s,background .2s,box-shadow .2s}
+.world-option:hover,.world-option:focus-visible{border-color:#9667c7;background:linear-gradient(110deg,#261a35,#171020);transform:translateY(-2px);box-shadow:0 8px 28px #0004,0 0 22px #9d5cff12;outline:none}
+.world-symbol{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:1px solid #5a3b70;border-radius:15px;background:linear-gradient(145deg,#21152f,#100c18);color:var(--accent)}
+.world-symbol svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.world-option strong{font-size:clamp(18px,4.5vw,22px);font-weight:700;letter-spacing:-.025em}
+.world-option:first-child{border-color:#704b94}
+.world-option:first-child .world-symbol{background:#2b1b3d;border-color:#875bb0;color:#e0caff}
+.world-option:nth-child(2) .world-symbol{color:#b9caff;border-color:#39465f;background:#141a26}
+.world-option:nth-child(3) .world-symbol{color:#d5c1f5;border-color:#59416e;background:#1b1425}
+@media(max-width:360px){body{padding-left:15px;padding-right:15px}.world-option{min-height:92px;padding:17px;gap:13px}.world-symbol{width:42px;height:42px;flex-basis:42px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 </style>
 </head>
 <body>
