@@ -10,7 +10,7 @@ assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
 assert.ok(source.includes("function workbench()"), "Content workbench must be registered");
 assert.ok(source.includes("function publishHubNotice(title,message,level='important')"), 'Important world events must be published to the Hub');
-assert.ok(html.includes('#screen.clean-launcher{display:block!important'), 'Area launchers must not be squeezed into a three-column outer grid');
+assert.ok(html.includes('#screen.clean-launcher{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important'), 'Area launchers must use app tiles directly on the page');
 assert.ok(html.includes('#screen.clean-launcher{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important'), 'Area app launcher must use square three-column app buttons');
 assert.ok(html.includes('flex-direction:column!important') && html.includes('text-align:center!important'), 'App buttons must stack icon above its label, not look like a horizontal list');
 assert.ok(html.includes('left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important'), 'WordDark logo must remain centered at the top');
