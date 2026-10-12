@@ -33,20 +33,23 @@ assert.equal(engine.status().externalSideEffectsEnabled, false);
 assert.ok(engine.auditTrail().some(event => event.event === "REQUEST_RECEIVED"));
 assert.throws(() => engine.submit({ type: "unknown", requesterId: "x", payload: {} }), /Tipo de solicitação desconhecido/);
 
-const sector = engine.registerSector({ sectorId: "earth", name: "Terra", owner: "worddark", description: "Demandas e empresas." });
+const sector = engine.getSector("earth");
 assert.equal(sector.sectorId, "earth");
-const company = engine.registerCompany({ companyId: "channels", name: "Gestão de canais", sectorId: "earth" });
+assert.equal(engine.listSectors().length, 3);
+const company = engine.getCompany("channels");
 assert.equal(company.sectorId, "earth");
+assert.equal(engine.listCompanies().length, 1);
 const work = engine.createCompanyWorkOrder({ companyId: "channels", requesterId: "client-2", title: "Prepare channel plan", category: "content", recurrence: "MONTHLY" });
 assert.equal(work.status, "RECEIVED");
 assert.equal(engine.getSector("earth").workOrders.length, 1);
 assert.equal(engine.transitionCompanyWorkOrder({ companyId: "channels", workOrderId: work.workOrderId, nextStatus: "TRIAGED", actorId: "operator" }).status, "TRIAGED");
 assert.equal(engine.getSector("earth").workOrders[0].status, "TRIAGED");
 assert.equal(engine.getCompany("channels").workOrders[0].executionEnabled, false);
-assert.equal(engine.listSectors().length, 1);
+assert.equal(engine.listSectors().length, 3);
 assert.equal(engine.listCompanies().length, 1);
 assert.equal(engine.status().companies, 1);
 assert.throws(() => engine.registerCompany({ companyId: "bad", name: "Unknown", sectorId: "missing" }), /Registre o setor/);
+assert.throws(() => engine.registerSector({ sectorId: "earth", name: "Duplicado" }), /Setor já registrado/);
 assert.throws(() => engine.createCompanyWorkOrder({ companyId: "missing", requesterId: "x", title: "No company", category: "x" }), /Empresa não encontrada/);
 
 console.log("WordDark world engine tests passed.");
