@@ -20,6 +20,10 @@ assert.ok(html.includes('./apps/pessoal/index.html'));
 assert.ok(html.includes('./apps/shadow/index.html'));
 assert.ok(html.includes('href="../hub/index.html"'));
 assert.ok(html.includes('WordDark Hub'));
+assert.ok(read('engine/notifications.js').includes('ruan.important.notifications.v1'));
+assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'));
+assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
+assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
@@ -59,5 +63,5 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v13'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v14'"));
 console.log('Ruan app structure tests passed.');
