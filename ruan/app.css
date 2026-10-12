@@ -48,3 +48,6 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 .brand-mark svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 .finance-logo{color:#9ee6b6}.tasks-logo{color:#d3b0ff}.darkeye-logo{color:#a8b5ff}
 @media(max-width:360px){.brand-centered{gap:7px;max-width:calc(100% - 94px)}.brand-mark{width:40px;height:40px;flex-basis:40px}.brand-copy strong{font-size:9px}.brand-copy small{font-size:8px}}
+
+/* Atalho do Hub: somente no lançador central do Ruan. */
+.hub-launch{border-color:#7650a0;background:linear-gradient(110deg,#21162f,#120e1b)}.hub-launch:hover{border-color:#c49aff}.hub-logo{color:#d9baff;background:linear-gradient(145deg,#302044,#130d1d);border-color:#9861e866}.hub-logo svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}

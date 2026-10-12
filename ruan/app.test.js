@@ -8,6 +8,8 @@ assert.ok(html.includes('Informações'));
 assert.ok(html.includes('apps-drawer'));
 assert.ok(html.includes('./apps/pessoal/index.html'));
 assert.ok(html.includes('./apps/shadow/index.html'));
+assert.ok(html.includes('href="../hub/index.html"'));
+assert.ok(html.includes('WordDark Hub'));
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
@@ -40,5 +42,5 @@ for (const page of areaPages) {
   assert.equal((page.match(/<nav class="area-nav"/g) || []).length, 1, 'Each app page must have exactly one area navigation row');
 }
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v6'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v8'"));
 console.log('Ruan app structure tests passed.');
