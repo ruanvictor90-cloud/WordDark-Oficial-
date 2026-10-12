@@ -8,6 +8,8 @@ assert.ok(html.includes('Informações'));
 assert.ok(html.includes('apps-drawer'));
 assert.ok(html.includes('./apps/pessoal/index.html'));
 assert.ok(html.includes('./apps/shadow/index.html'));
+assert.ok(html.includes('href="../hub/index.html"'));
+assert.ok(html.includes('WordDark Hub'));
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
