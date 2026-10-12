@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
-import { createSkyEngine } from "./sky-engine.js";
+const assert = require("node:assert/strict");
+const { createSkyEngine } = require("./sky-engine.js");
 const sky = createSkyEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "plan-1" });
 const plan = sky.prepare({ requestId: "req-1", objective: "Promote a product", deliverables: ["script", "short video"], proposedSteps: [{ action: "draft" }] });
 assert.equal(plan.status, "PREPARED_FOR_REVIEW");
