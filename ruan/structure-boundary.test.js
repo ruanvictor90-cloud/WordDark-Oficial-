@@ -51,7 +51,7 @@ for (const file of htmlFiles) {
 for (const file of files.filter(file => /\.(?:html|js|css|webmanifest)$/.test(file) && !file.endsWith('.test.js'))) {
   const source = readFileSync(file, 'utf8');
   const permittedHubShortcut = file === path.join(root, 'index.html')
-    ? source.replace(/<a class="app-launch hub-launch"[\\s\\S]*?<\\/a>/, '')
+    ? source.replace(/<a class="app-launch hub-launch"[\s\S]*?<\/a>/, '')
     : source;
   assert.ok(!/worddark/i.test(permittedHubShortcut), `Ruan runtime must not depend on another project's naming except the explicit Hub launcher shortcut: ${path.relative(root, file)}`);
   if (file.endsWith('.js')) {
