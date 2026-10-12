@@ -1,0 +1,12 @@
+const assert=require("node:assert/strict");const {createCompanyEngine}=require("./company-engine.js");
+const company=createCompanyEngine({companyId:"channels",name:"Gestão de canais",sectorId:"earth",idFactory:()=>"work-1"});
+const order=company.openWorkOrder({requesterId:"client-1",title:"Prepare a channel plan",category:"content",recurrence:"MONTHLY"});
+assert.equal(order.status,"RECEIVED");assert.equal(order.executionEnabled,false);
+assert.equal(company.transitionWorkOrder("work-1","TRIAGED","operator").status,"TRIAGED");
+assert.equal(company.transitionWorkOrder("work-1","PREPARING","operator").status,"PREPARING");
+assert.equal(company.transitionWorkOrder("work-1","REVIEW","operator").status,"REVIEW");
+assert.throws(()=>company.transitionWorkOrder("work-1","APPROVED","operator"),/aprovação explícita/);
+const approved=company.transitionWorkOrder("work-1","APPROVED","owner",{confirmed:true});assert.equal(approved.approvedBy,"owner");assert.equal(approved.executionEnabled,false);
+assert.equal(company.transitionWorkOrder("work-1","DELIVERED","operator").status,"DELIVERED");
+assert.throws(()=>company.transitionWorkOrder("work-1","PREPARING","operator"),/Transição de estado não permitida/);
+assert.equal(company.status().externalSideEffectsEnabled,false);assert.equal(company.auditTrail().length,6);console.log("Company engine tests passed.");

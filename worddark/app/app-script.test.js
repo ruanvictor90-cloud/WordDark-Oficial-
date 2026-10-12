@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-9") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return /worddark-app-v1-\d+/.test(source) && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -48,10 +48,9 @@ assert.ok(source.includes("Falha ao restaurar. Foi tentada a recuperação dos d
 assert.ok(source.includes("data-export-backup"), "The library must expose a backup export action");
 assert.ok(source.includes('id="importBackupFile"'), "The library must expose a backup restore file picker");
 assert.ok(source.includes("function businessStore(kind)"), "Commercial submodules must have distinct screens");
-assert.ok(source.includes("catalog:()=>businessStore('catalog')"), "Catalog route must resolve to its own module");
-assert.ok(source.includes("suppliers:()=>businessStore('suppliers')"), "Supplier route must resolve to its own module");
-assert.ok(source.includes("orders:()=>businessStore('orders')"), "Order route must resolve to its own module");
-assert.ok(source.includes("customers:()=>businessStore('customers')"), "Customer route must resolve to its own module");
+assert.ok(source.includes("function businessStore(kind)"), "Archived commercial module code must remain available for existing data compatibility");
+assert.ok(!source.includes("commerce:()=>businessStore"), "Retired commercial company must not be an active route");
+assert.ok(!html.includes('data-page="commerce"'), "Retired commercial company must not appear in the active navigation");
 assert.ok(source.includes("function marketing()"), "Marketing must have a distinct screen");
 assert.ok(source.includes("module('workbench','▧','Dark Factory'"), "Sky must link directly to the content workbench");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
@@ -70,7 +69,7 @@ assert.ok(html.includes("/* Ruan interface foundation:"), "WordDark must share t
 assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections must have a deliberate neutral fallback until the correct reference artwork is available");
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
-assert.ok(html.includes('<span class="clean-app-name">') && html.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), "App launchers must show names beneath icons in a three-column grid");
+assert.ok(source.includes("function cleanLauncher(area)") && source.includes("operation-rail") && source.includes("operation-app-copy"), "World sections must use dynamic, named operational cards grouped by category");
 assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("showPage(pageHistory.pop())"), "Back must pop the most recent in-app page rather than jump to a fixed page");
 assert.ok(source.includes("window.addEventListener('popstate'"), "Browser back gestures must follow the in-app navigation stack");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");

@@ -10,6 +10,10 @@ const clean = (value, field) => {
   return value.trim();
 };
 const clone = value => JSON.parse(JSON.stringify(value ?? {}));
+import sectorModule from "../runtime/world/core/sector-engine.js";
+import companyModule from "../runtime/world/core/company-engine.js";
+const { createSectorEngine } = sectorModule;
+const { createCompanyEngine } = companyModule;
 const TYPES = Object.freeze({ DEMAND: "DEMAND", PREPARE: "PREPARE", COORDINATE: "COORDINATE", REVENUE_MODEL: "REVENUE_MODEL" });
 
 export function createWordDarkWorldEngine({
@@ -27,6 +31,8 @@ export function createWordDarkWorldEngine({
   const requests = new Map();
   const revenueModels = new Map();
   const audit = [];
+  const sectors = new Map();
+  const companies = new Map();
 
   function record(event, data) { audit.push({ event, at: now(), data: clone(data) }); }
   function submit(input = {}) {
@@ -78,6 +84,67 @@ export function createWordDarkWorldEngine({
     return clone(model);
   }
 
+  function registerSector(input = {}) {
+    const sectorId = clean(input.sectorId, "Identificador do setor");
+    if (sectors.has(sectorId)) throw new Error("Setor já registrado.");
+    const engine = createSectorEngine({ sectorId, name: input.name, owner: input.owner || "worddark", now });
+    const sector = { sectorId, name: clean(input.name, "Nome do setor"), owner: input.owner || "worddark", description: typeof input.description === "string" ? input.description.trim() : "", status: "ACTIVE", createdAt: now(), engine };
+    sectors.set(sectorId, sector);
+    record("SECTOR_REGISTERED", { sectorId, name: sector.name, owner: sector.owner });
+    return { sectorId, name: sector.name, owner: sector.owner, description: sector.description, status: sector.status, createdAt: sector.createdAt };
+  }
+
+  function registerCompany(input = {}) {
+    const companyId = clean(input.companyId, "Identificador da empresa");
+    const sectorId = clean(input.sectorId, "Identificador do setor");
+    if (companies.has(companyId)) throw new Error("Empresa já registrada no mundo.");
+    const sector = sectors.get(sectorId);
+    if (!sector) throw new Error("Registre o setor antes de registrar a empresa.");
+    const name = clean(input.name, "Nome da empresa");
+    sector.engine.registerCompany({ companyId, name });
+    const engine = createCompanyEngine({ companyId, name, sectorId, now, idFactory });
+    const company = { companyId, name, sectorId, description: typeof input.description === "string" ? input.description.trim() : "", status: "ACTIVE", createdAt: now(), engine };
+    companies.set(companyId, company);
+    record("COMPANY_REGISTERED", { companyId, name, sectorId });
+    return { companyId, name, sectorId, description: company.description, status: company.status, createdAt: company.createdAt };
+  }
+
+  function createCompanyWorkOrder(input = {}) {
+    const companyId = clean(input.companyId, "Identificador da empresa");
+    const company = companies.get(companyId);
+    if (!company) throw new Error("Empresa não encontrada.");
+    const order = company.engine.openWorkOrder(input);
+    const sector = sectors.get(company.sectorId);
+    sector.engine.recordWorkOrder({ workOrderId: order.workOrderId, companyId, title: order.title, status: order.status });
+    record("COMPANY_WORK_ORDER_OPENED", { workOrderId: order.workOrderId, companyId, sectorId: company.sectorId });
+    return clone(order);
+  }
+
+  function transitionCompanyWorkOrder(input = {}) {
+    const companyId = clean(input.companyId, "Identificador da empresa");
+    const company = companies.get(companyId);
+    if (!company) throw new Error("Empresa não encontrada.");
+    const order = company.engine.transitionWorkOrder(input.workOrderId, input.nextStatus, input.actorId, input.approval || {});
+    sectors.get(company.sectorId).engine.updateWorkOrder({ workOrderId: order.workOrderId, status: order.status });
+    record("COMPANY_WORK_ORDER_STATUS_CHANGED", { workOrderId: order.workOrderId, companyId, status: order.status, actorId: order.lastActorId });
+    return clone(order);
+  }
+
+  function listSectors() {
+    return [...sectors.values()].map(({ engine, ...sector }) => ({ ...clone(sector), operations: engine.status().workOrders, companies: engine.status().companies }));
+  }
+  function listCompanies() {
+    return [...companies.values()].map(({ engine, ...company }) => ({ ...clone(company), operations: engine.status().workOrders }));
+  }
+  function getSector(sectorId) {
+    const sector = sectors.get(sectorId);
+    return sector ? { sectorId: sector.sectorId, name: sector.name, owner: sector.owner, description: sector.description, status: sector.status, engine: sector.engine.status(), companies: sector.engine.listCompanies(), workOrders: sector.engine.listWorkOrders() } : null;
+  }
+  function getCompany(companyId) {
+    const company = companies.get(companyId);
+    return company ? { companyId: company.companyId, name: company.name, sectorId: company.sectorId, description: company.description, status: company.status, engine: company.engine.status(), workOrders: company.engine.listWorkOrders(), audit: company.engine.auditTrail() } : null;
+  }
+
   function approveForExecution(requestId, approval) {
     const request = requests.get(clean(requestId, "Identificador da solicitação"));
     if (!request) throw new Error("Solicitação não encontrada.");
@@ -94,14 +161,30 @@ export function createWordDarkWorldEngine({
     return { ...request, payload: clone(request.payload), sideEffectsEnabled: false };
   }
 
+  // Bootstrap the three permanent sectors and the first company as isolated instances.
+  for (const sector of [
+    { sectorId: "worddark", name: "WordDark", owner: "world" },
+    { sectorId: "sky", name: "Céu", owner: "worddark" },
+    { sectorId: "earth", name: "Terra", owner: "worddark" }
+  ]) registerSector(sector);
+  registerCompany({ companyId: "channels", name: "Gestão de canais", sectorId: "earth", description: "Empresa inicial de gestão de canais e conteúdo." });
+
   return Object.freeze({
     submit,
     approveForExecution,
+    registerSector,
+    registerCompany,
+    createCompanyWorkOrder,
+    transitionCompanyWorkOrder,
+    listSectors,
+    listCompanies,
+    getSector,
+    getCompany,
     registerRevenueModel,
     getRequest(id) { const item = requests.get(id); return item ? { ...item, payload: clone(item.payload) } : null; },
     listRequests() { return [...requests.values()].map(item => ({ ...item, payload: clone(item.payload) })); },
     listRevenueModels() { return [...revenueModels.values()].map(clone); },
     auditTrail() { return audit.map(clone); },
-    status() { return { engine: "WORDDARK_WORLD_CORE", status: "READY", requests: requests.size, revenueModels: revenueModels.size, domainEngines: ["WORDDARK", "SKY", "EARTH"], defaultMode: "PLANNING_ONLY", externalSideEffectsEnabled: false }; }
+    status() { return { engine: "WORDDARK_WORLD_CORE", status: "READY", requests: requests.size, revenueModels: revenueModels.size, domainEngines: ["WORDDARK", "SKY", "EARTH"], sectors: sectors.size, companies: companies.size, companyWorkOrders: [...companies.values()].reduce((total, company) => total + company.engine.status().workOrders, 0), defaultMode: "PLANNING_ONLY", externalSideEffectsEnabled: false }; }
   });
 }
