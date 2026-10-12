@@ -33,8 +33,9 @@ const htmlFiles = files.filter(file => file.endsWith('.html'));
 assert.ok(htmlFiles.includes(path.join(root, 'index.html')), 'Ruan central page must exist');
 
 const centralHtml = readFileSync(path.join(root, 'index.html'), 'utf8');
-assert.equal((centralHtml.match(/id="apps-drawer"/g) || []).length, 1, 'Only the Ruan central page owns the app drawer');
-assert.equal((centralHtml.match(/id="apps-toggle"/g) || []).length, 1, 'Ruan central must have exactly one app drawer toggle');
+assert.equal((centralHtml.match(/class="ruan-home-grid"/g) || []).length, 1, 'Ruan central must expose one app grid');
+assert.equal((centralHtml.match(/class="ruan-home-app"/g) || []).length, 3, 'Ruan central must expose three named app shortcuts');
+assert.ok(!centralHtml.includes('apps-drawer') && !centralHtml.includes('apps-toggle'), 'The Ruan app drawer is temporarily removed');
 
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
