@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#09070f">
-<meta name="description" content="WordDark Hub — ponto de entrada e aplicativos fixados do WordDark.">
+<meta name="description" content="WordDark Hub — informações e avisos para entrar no mundo.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./app-icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="./app.css">
@@ -13,40 +13,20 @@
 <body>
 <main class="shell">
 <header class="topbar">
-<a class="brand" href="./index.html" aria-label="WordDark Hub — início">
-<span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path class="mark-frame" d="M32 5 55 18v28L32 59 9 46V18Z"/><path class="mark-path" d="M20 21v22l12-12 12 12V21"/><circle class="mark-core" cx="32" cy="31" r="4"/></svg></span>
-<span class="brand-copy"><strong>WORDDARK <i>HUB</i></strong><small>Ponto de entrada</small></span>
-</a>
-<span class="status"><span></span> HUB INDEPENDENTE</span>
+<a class="brand" href="./index.html" aria-label="WordDark Hub — início"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path class="mark-frame" d="M32 5 55 18v28L32 59 9 46V18Z"/><path class="mark-path" d="M20 21v22l12-12 12 12V21"/><circle class="mark-core" cx="32" cy="31" r="4"/></svg></span><span class="brand-copy"><strong>WORDDARK <i>HUB</i></strong><small>Portão de entrada do mundo</small></span></a>
+<button id="notice-toggle" class="notice-toggle" aria-label="Abrir avisos" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span id="notice-count" hidden>0</span></button>
 </header>
-<section class="welcome">
-<p class="eyebrow">SEU PONTO DE PARTIDA</p>
-<h1>Um lugar.<br><span>Seus aplicativos.</span></h1>
-<p class="intro">Acesso simples ao WordDark e informações essenciais do Hub — sem misturar áreas ou assumir operações por conta própria.</p>
-</section>
-<section class="section" aria-labelledby="info-title">
-<div class="section-heading"><h2 id="info-title">Informações</h2><span>VISÃO GERAL</span></div>
+<section class="welcome"><p class="eyebrow">PORTÃO DE ENTRADA</p><h1>O mundo começa<br><span>por aqui.</span></h1></section>
+<section class="section" aria-labelledby="info-title"><div class="section-heading"><h2 id="info-title">Informações</h2><span>VISÃO GERAL</span></div>
 <div class="info-grid">
-<article class="info-widget"><span class="symbol symbol-violet">◈</span><div class="widget-copy"><strong>WordDark Hub</strong><small>Central de acesso independente</small></div><span class="widget-state">ATIVO</span></article>
-<article class="info-widget"><span class="symbol symbol-blue">↗</span><div class="widget-copy"><strong>App oficial</strong><small>Entrada principal do WordDark</small></div><span class="widget-state">DISPONÍVEL</span></article>
-<article class="info-widget"><span class="symbol symbol-green">▦</span><div class="widget-copy"><strong>Apps fixados</strong><small id="pinned-count">1 aplicativo disponível</small></div><span class="widget-state">HUB</span></article>
-</div>
-</section>
-<section class="section pinned-section" aria-labelledby="pinned-title">
-<div class="section-heading"><h2 id="pinned-title">Aplicativos fixados</h2><span>ACESSO RÁPIDO</span></div>
-<a class="app-card official-app" href="../index.html" aria-label="Abrir o aplicativo oficial WordDark">
-<span class="app-icon official-icon" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
-<span class="app-copy"><span class="app-label">APLICATIVO OFICIAL</span><strong>WordDark</strong><small>Central do Mundo · Coordenação e operações</small></span>
-<span class="open-arrow" aria-hidden="true">↗</span>
-</a>
-<p class="section-note">O Hub apenas oferece o acesso. O WordDark abre separadamente, mantendo sua própria estrutura e suas próprias responsabilidades.</p>
-</section>
-<footer><span>WORDDARK HUB</span><span>Uma entrada clara. Cada app no seu lugar.</span></footer>
+<article class="info-widget"><span class="symbol symbol-violet">◈</span><div class="widget-copy"><strong>WordDark</strong><small>Entrada principal do mundo</small></div><span class="widget-state">PRONTO</span></article>
+<article class="info-widget"><span class="symbol symbol-blue">☁</span><div class="widget-copy"><strong>Céu</strong><small>Setor de soluções e produção</small></div></article>
+<article class="info-widget"><span class="symbol symbol-green">⌂</span><div class="widget-copy"><strong>Terra</strong><small>Setor de necessidades e negócios</small></div></article>
+</div></section>
+<section id="notice-panel" class="notice-panel" hidden aria-live="polite"><div class="section-heading"><h2>Avisos</h2><button id="notice-close" class="close-button" aria-label="Fechar avisos">×</button></div><div id="notice-list"></div></section>
+<footer><span>WORDDARK HUB</span><span>Informações e avisos do mundo</span></footer>
 <a class="launch-dock" href="../index.html" aria-label="Abrir o aplicativo oficial WordDark">
-<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 21 8v8l-9 5.2L3 16V8Z"/><path d="M8 8v8l4-4 4 4V8"/></svg>
-<span>Abrir WordDark</span><span class="dock-arrow">↗</span>
+<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg><span>Abrir WordDark</span><span class="dock-arrow">↗</span>
 </a>
-</main>
-<script src="./app.js" defer></script>
-</body>
-</html>
+</main><script src="./app.js" defer></script>
+</body></html>
