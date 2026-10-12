@@ -10,7 +10,12 @@ assert.ok(!html.includes('carousel-phrase'));
 assert.ok(!html.includes('finance-widget-value'));
 assert.ok(!html.includes('tasks-widget-value'));
 assert.ok(!html.includes('bills-widget-value'));
-assert.ok(html.includes('apps-drawer'));
+assert.ok(html.includes('class="ruan-home-grid"'));
+assert.ok(!html.includes('apps-drawer'));
+assert.ok(!html.includes('apps-toggle'));
+assert.ok(html.includes('class="home-app-name">Pessoal</span>'));
+assert.ok(html.includes('class="home-app-name">Shadow</span>'));
+assert.ok(html.includes('class="home-app-name">WordDark Hub</span>'));
 assert.ok(html.includes('./apps/pessoal/index.html'));
 assert.ok(html.includes('./apps/shadow/index.html'));
 assert.ok(html.includes('href="../hub/index.html"'));
@@ -54,5 +59,5 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v12'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v13'"));
 console.log('Ruan app structure tests passed.');
