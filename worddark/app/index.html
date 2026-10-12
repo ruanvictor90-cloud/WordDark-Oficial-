@@ -155,6 +155,60 @@ body[data-page="earth"] .clean-app-icon{color:#d5c1f5;border-color:#59416e;backg
 .clean-app-name{font-size:clamp(11px,2.8vw,13px)!important}
 @media(max-width:430px){#screen.clean-launcher{width:100%!important;padding:0!important}.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}.clean-app-icon{padding:8px!important;gap:9px!important;border-radius:17px!important}.clean-app-icon svg{width:clamp(42px,13vw,56px)!important;height:clamp(42px,13vw,56px)!important}.clean-app-name{font-size:clamp(10px,3vw,12px)!important}}
 @media(max-width:320px){.clean-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Interfaces internas: uma única tela de conteúdo, sem comportamento de gaveta. */
+.content:has(#screen:not(.clean-launcher)){
+  display:block!important;
+  width:100%!important;
+  min-height:calc(100svh - 72px)!important;
+  padding:24px clamp(14px,3vw,30px) 40px!important;
+  margin:0!important;
+  align-items:initial!important;
+  justify-content:initial!important;
+}
+#screen:not(.clean-launcher){
+  display:block!important;
+  width:100%!important;
+  max-width:1120px!important;
+  min-width:0!important;
+  margin:0 auto!important;
+  padding:0!important;
+}
+#screen:not(.clean-launcher) .page-head{
+  width:100%;
+  margin-bottom:22px;
+}
+#screen:not(.clean-launcher) .request-layout{
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%;
+}
+#screen:not(.clean-launcher) .request-side{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+#screen:not(.clean-launcher) .grid.two{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+#screen:not(.clean-launcher) .form-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+#screen:not(.clean-launcher) .card,
+#screen:not(.clean-launcher) .form-card{
+  min-width:0;
+}
+@media(max-width:700px){
+  .content:has(#screen:not(.clean-launcher)){
+    min-height:calc(100svh - 58px)!important;
+    padding:18px 14px 34px!important;
+  }
+  #screen:not(.clean-launcher) .request-side,
+  #screen:not(.clean-launcher) .grid.two,
+  #screen:not(.clean-launcher) .form-grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  #screen:not(.clean-launcher) .page-head{
+    margin-bottom:18px;
+  }
+}
 </style></head>
 <body>
 <div class="layout">
