@@ -25,7 +25,7 @@ assert.equal(route.status, "ROUTE_PROPOSED");
 const model = engine.submit({ type: "REVENUE_MODEL", requesterId: "worddark", payload: { name: "Monthly content package", type: "SERVICE_SUBSCRIPTION", ownerSector: "sky", pricingModel: "MONTHLY_TIER" } });
 assert.equal(model.result.status, "PROPOSED");
 assert.equal(model.result.realPaymentsEnabled, false);
-assert.throws(() => engine.approveForExecution(demand.requestId, { confirmed: true, approverId: "owner" }), /Política de autorização negou/);
+assert.throws(() => engine.approveForExecution(demand.requestId, { confirmed: true, approverId: "intruder" }), /Política de autorização negou/);
 const approved = engine.approveForExecution(plan.requestId, { confirmed: true, approverId: "owner" });
 assert.equal(approved.status, "APPROVED_FOR_EXECUTION");
 assert.equal(approved.sideEffectsEnabled, false);
