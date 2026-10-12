@@ -22,3 +22,11 @@ body.pessoal-launcher .pessoal-app-icon:first-child{color:#9ee6b6;border-color:#
 body.pessoal-launcher .pessoal-app-icon:hover,body.pessoal-launcher .pessoal-app-icon:focus-visible{transform:translateY(-2px);border-color:#b58aff;outline:none}
 body.pessoal-launcher .pessoal-app-icon svg{width:clamp(42px,14vw,64px);height:clamp(42px,14vw,64px);fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 body.pessoal-launcher .shell{min-height:100svh;padding-bottom:max(18px,env(safe-area-inset-bottom))}
+
+/* Pessoal launcher: logo + one short app name, with a working return arrow. */
+body.pessoal-launcher .topbar{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;justify-content:stretch}
+body.pessoal-launcher .back-button{display:grid!important;grid-column:1;grid-row:1;z-index:2}
+body.pessoal-launcher .brand-centered{grid-column:2;grid-row:1;justify-self:center}
+body.pessoal-launcher .pessoal-app-icon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;aspect-ratio:1}
+body.pessoal-launcher .pessoal-app-icon svg{width:clamp(42px,12vw,58px);height:clamp(42px,12vw,58px);flex:0 0 auto}
+body.pessoal-launcher .pessoal-app-name{font-size:12px;font-weight:700;line-height:1.2;color:#f4efff}
