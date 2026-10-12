@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
-import { createEarthEngine } from "./earth-engine.js";
+const assert = require("node:assert/strict");
+const { createEarthEngine } = require("./earth-engine.js");
 const earth = createEarthEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "demand-1" });
 const demand = earth.captureDemand({ requester: "client-1", need: "Promote a product", category: "content", budget: 500, recurrence: "MONTHLY", businessContext: { product: "example" } });
 assert.equal(demand.status, "CAPTURED");
