@@ -161,6 +161,14 @@ export function createWordDarkWorldEngine({
     return { ...request, payload: clone(request.payload), sideEffectsEnabled: false };
   }
 
+  // Bootstrap the three permanent sectors and the first company as isolated instances.
+  for (const sector of [
+    { sectorId: "worddark", name: "WordDark", owner: "world" },
+    { sectorId: "sky", name: "Céu", owner: "worddark" },
+    { sectorId: "earth", name: "Terra", owner: "worddark" }
+  ]) registerSector(sector);
+  registerCompany({ companyId: "channels", name: "Gestão de canais", sectorId: "earth", description: "Empresa inicial de gestão de canais e conteúdo." });
+
   return Object.freeze({
     submit,
     approveForExecution,
