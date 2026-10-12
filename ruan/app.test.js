@@ -4,7 +4,12 @@ const root = new URL('./', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8');
 const html = read('index.html');
 assert.ok(html.includes('RUAN · CENTRAL'));
-assert.ok(html.includes('Informações'));
+assert.ok(!html.includes('Informações'));
+assert.ok(!html.includes('info-grid'));
+assert.ok(!html.includes('carousel-phrase'));
+assert.ok(!html.includes('finance-widget-value'));
+assert.ok(!html.includes('tasks-widget-value'));
+assert.ok(!html.includes('bills-widget-value'));
 assert.ok(html.includes('apps-drawer'));
 assert.ok(html.includes('./apps/pessoal/index.html'));
 assert.ok(html.includes('./apps/shadow/index.html'));
@@ -42,5 +47,5 @@ for (const page of areaPages) {
   assert.equal((page.match(/<nav class="area-nav"/g) || []).length, 1, 'Each app page must have exactly one area navigation row');
 }
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v8'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v9'"));
 console.log('Ruan app structure tests passed.');
