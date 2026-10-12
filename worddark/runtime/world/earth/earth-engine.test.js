@@ -1,0 +1,11 @@
+const assert = require("node:assert/strict");
+const { createEarthEngine } = require("./earth-engine.js");
+const earth = createEarthEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "demand-1" });
+const demand = earth.captureDemand({ requester: "client-1", need: "Promote a product", category: "content", budget: 500, recurrence: "MONTHLY", businessContext: { product: "example" } });
+assert.equal(demand.status, "CAPTURED");
+assert.equal(demand.quoteApproved, false);
+assert.equal(demand.executionAuthorized, false);
+assert.equal(earth.getDemand("demand-1").recurrence, "MONTHLY");
+assert.equal(earth.status().salesEnabled, false);
+assert.throws(() => earth.captureDemand({ requester: "client-2", category: "content" }), /Necessidade é obrigatório/);
+console.log("Earth demand engine tests passed.");
