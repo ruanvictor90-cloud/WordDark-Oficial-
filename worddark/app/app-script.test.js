@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-5") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-6") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
@@ -65,5 +65,7 @@ assert.ok(html.includes("/* Ruan interface foundation:"), "WordDark must share t
 assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections must have a deliberate neutral fallback until the correct reference artwork is available");
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
+assert.ok(source.includes('<span class="clean-app-name">'+label+'</span>') || source.includes('<span class="clean-app-name">'+label+'</span>'), "App launchers must display each app name beneath its icon");
+assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("navigate('overview')"), "Every in-app screen must have a working return path");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
 console.log("worddark app script test: OK");
