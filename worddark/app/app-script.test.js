@@ -4,14 +4,15 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-8") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-9") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
 assert.ok(source.includes("function workbench()"), "Content workbench must be registered");
 assert.ok(source.includes("function publishHubNotice(title,message,level='important')"), 'Important world events must be published to the Hub');
 assert.ok(html.includes('#screen.clean-launcher{display:block!important'), 'Area launchers must not be squeezed into a three-column outer grid');
-assert.ok(html.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important'), 'Area apps must use spacious two-column buttons');
+assert.ok(html.includes('#screen.clean-launcher{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important'), 'Area app launcher must use square three-column app buttons');
+assert.ok(html.includes('flex-direction:column!important') && html.includes('text-align:center!important'), 'App buttons must stack icon above its label, not look like a horizontal list');
 assert.ok(html.includes('left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important'), 'WordDark logo must remain centered at the top');
 assert.ok(source.includes("data-save-review"), "Review controls must be present");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
@@ -70,7 +71,8 @@ assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections 
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
 assert.ok(html.includes('<span class="clean-app-name">') && html.includes('grid-template-columns:repeat(3,minmax(0,1fr))'), "App launchers must show names beneath icons in a three-column grid");
-assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("showPage('overview')"), "Every in-app screen must have a working return path");
+assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("showPage(pageHistory.pop())"), "Back must pop the most recent in-app page rather than jump to a fixed page");
+assert.ok(source.includes("window.addEventListener('popstate'"), "Browser back gestures must follow the in-app navigation stack");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
 
 assert.ok(html.includes("Navegação corrigida: sem barra lateral e com retorno sempre visível"), "The global sidebar must stay hidden and the return control must remain visible");
