@@ -19,9 +19,10 @@ assert.ok(!hub.includes("info-widget") && !hub.includes("info-grid") && !hub.inc
 assert.ok(hub.includes('class="topbar"') && hub.includes('class="launch-dock"'), "Hub must keep only the header and bottom app launch on its home");
 assert.ok(css.includes("--bg:#09070f") && css.includes("--accent:#c49aff"), "Hub must preserve its original dark-purple identity");
 assert.ok(css.includes(".brand-mark") && css.includes(".launch-dock") && !css.includes("#54c8ff"), "Header and bottom app launch must use the original purple identity, not blue");
-assert.ok(sw.includes("worddark-hub-v6"), "Hub cache must refresh for the restored design");
-assert.ok(hub.includes("app.css?v=20261012-2") && hub.includes("app.js?v=20261012-2"), "Hub must request fresh versioned assets");
+assert.ok(sw.includes("worddark-hub-v7"), "Hub cache must refresh for the restored design");
+assert.ok(hub.includes("app.css?v=20261012-3") && hub.includes("app.js?v=20261012-3"), "Hub must request fresh versioned assets");
 assert.ok(sw.includes("event.request.mode===\"navigate\""), "Hub navigation should prefer the latest published HTML");
+assert.ok(script.includes('worddark.hub.notices.v1') && script.includes('createdAt'), 'Hub must receive and order world notifications');
 assert.doesNotThrow(() => new vm.Script(script), "Hub script must be valid JavaScript");
 assert.doesNotThrow(() => new vm.Script(sw), "Hub service worker must be valid JavaScript");
 assert.ok(!script.includes('$("notice-open")'), "Notice behavior must not depend on a removed information-section button");
