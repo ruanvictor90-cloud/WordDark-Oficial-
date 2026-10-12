@@ -4,41 +4,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#09070f">
-<meta name="description" content="WordDark — entrada para WordDark, Céu e Terra.">
+<meta name="description" content="WordDark — acesso às áreas do mundo.">
 <title>WordDark</title>
 <style>
-:root{color-scheme:dark;--bg:#09070f;--line:#382647;--text:#f4efff;--muted:#a69bb8;--accent:#c49aff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-*{box-sizing:border-box}
-html,body{min-height:100%;margin:0}
-body{min-height:100svh;padding:max(20px,env(safe-area-inset-top)) 20px max(22px,env(safe-area-inset-bottom));background:radial-gradient(ellipse at 14% -8%,#392052 0,transparent 39%),radial-gradient(ellipse at 95% 100%,#211333 0,transparent 36%),var(--bg);color:var(--text);display:grid;place-items:center}
-.world-entry{width:min(100%,540px);display:grid;gap:12px}
-.world-option{min-height:108px;display:flex;align-items:center;gap:18px;padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(110deg,#1c1527,#120e19);color:var(--text);transition:border-color .2s,transform .2s,background .2s,box-shadow .2s}
-.world-option:hover,.world-option:focus-visible{border-color:#9667c7;background:linear-gradient(110deg,#261a35,#171020);transform:translateY(-2px);box-shadow:0 8px 28px #0004,0 0 22px #9d5cff12;outline:none}
-.world-symbol{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border:1px solid #5a3b70;border-radius:15px;background:linear-gradient(145deg,#21152f,#100c18);color:var(--accent)}
-.world-symbol svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.world-option strong{font-size:clamp(18px,4.5vw,22px);font-weight:700;letter-spacing:-.025em}
-.world-option:first-child{border-color:#704b94}
-.world-option:first-child .world-symbol{background:#2b1b3d;border-color:#875bb0;color:#e0caff}
-.world-option:nth-child(2) .world-symbol{color:#b9caff;border-color:#39465f;background:#141a26}
-.world-option:nth-child(3) .world-symbol{color:#d5c1f5;border-color:#59416e;background:#1b1425}
-@media(max-width:360px){body{padding-left:15px;padding-right:15px}.world-option{min-height:92px;padding:17px;gap:13px}.world-symbol{width:42px;height:42px;flex-basis:42px}}
+:root{color-scheme:dark;--bg:#09070f;--line:#382647;--text:#f4efff;--accent:#c49aff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html,body{min-height:100%;margin:0}body{min-height:100svh;padding:max(14px,env(safe-area-inset-top)) 18px max(20px,env(safe-area-inset-bottom));background:radial-gradient(ellipse at 14% -8%,#392052 0,transparent 39%),radial-gradient(ellipse at 95% 100%,#211333 0,transparent 36%),var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center}
+.brand{height:66px;width:min(100%,520px);display:flex;align-items:center;justify-content:center;border-bottom:1px solid #382647aa}
+.brand-mark{width:43px;height:43px;display:grid;place-items:center;border:1px solid #9861e866;border-radius:14px;background:linear-gradient(145deg,#21152f,#100c18);box-shadow:0 0 26px #9d5cff20}
+.brand-mark svg{width:31px;height:31px;fill:none;stroke:#d9baff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.world-entry{width:min(100%,520px);margin:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:30px 0}
+.world-option{aspect-ratio:1;display:grid;place-items:center;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#1c1527,#120e19);color:var(--accent);transition:border-color .2s,transform .2s,box-shadow .2s}
+.world-option svg{width:clamp(35px,10vw,54px);height:clamp(35px,10vw,54px);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.world-option:nth-child(2){color:#b9caff;border-color:#39465f;background:linear-gradient(145deg,#171d2a,#10131c)}
+.world-option:nth-child(3){color:#d5c1f5;border-color:#59416e;background:linear-gradient(145deg,#1b1425,#100c17)}
+.world-option:hover,.world-option:focus-visible{border-color:#c49aff;transform:translateY(-2px);box-shadow:0 8px 28px #0005,0 0 22px #9d5cff18;outline:none}
+@media(max-width:360px){body{padding-left:13px;padding-right:13px}.world-entry{gap:8px}.world-option{border-radius:16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 </style>
 </head>
 <body>
-<main class="world-entry" aria-label="Entradas do mundo">
-<div class="world-option" aria-label="WordDark">
-<span class="world-symbol" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 2.8 28 9.6v12.8L16 29.2 4 22.4V9.6Z"/><path d="M10 10.5v11l6-5.5 6 5.5v-11"/><circle cx="16" cy="16" r="2.2"/></svg></span>
-<strong>WordDark</strong>
-</div>
-<div class="world-option" aria-label="Céu">
-<span class="world-symbol" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M8 22.5h16a5 5 0 0 0 .4-10 8.5 8.5 0 0 0-16.3 2A5 5 0 0 0 8 22.5Z"/><path d="m12 26-1.5 3M20 26l-1.5 3"/></svg></span>
-<strong>Céu</strong>
-</div>
-<div class="world-option" aria-label="Terra">
-<span class="world-symbol" aria-hidden="true"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path d="m5.5 12 6 1.5 2.5-3 5 1 1.5 4-3 2-1 5-4-1-1-4-4-2M19 4.8l1 4.2 4 1.5 3.2-1.3"/></svg></span>
-<strong>Terra</strong>
-</div>
+<header class="brand" aria-label="WordDark"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span></header>
+<main class="world-entry" aria-label="Áreas do WordDark">
+<a class="world-option" href="./worddark/app/index.html?area=overview" aria-label="Abrir WordDark" title="WordDark"><svg viewBox="0 0 32 32"><path d="M16 2.8 28 9.6v12.8L16 29.2 4 22.4V9.6Z"/><path d="M10 10.5v11l6-5.5 6 5.5v-11"/><circle cx="16" cy="16" r="2.2"/></svg></a>
+<a class="world-option" href="./worddark/app/index.html?area=sky" aria-label="Abrir Céu" title="Céu"><svg viewBox="0 0 32 32"><path d="M8 22.5h16a5 5 0 0 0 .4-10 8.5 8.5 0 0 0-16.3 2A5 5 0 0 0 8 22.5Z"/><path d="m12 26-1.5 3M20 26l-1.5 3"/></svg></a>
+<a class="world-option" href="./worddark/app/index.html?area=earth" aria-label="Abrir Terra" title="Terra"><svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12"/><path d="m5.5 12 6 1.5 2.5-3 5 1 1.5 4-3 2-1 5-4-1-1-4-4-2M19 4.8l1 4.2 4 1.5 3.2-1.3"/></svg></a>
 </main>
 </body>
 </html>
