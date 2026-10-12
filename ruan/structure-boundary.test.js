@@ -22,6 +22,7 @@ function resolveLocalReference(sourceFile, rawReference) {
   const clean = reference.split(/[?#]/, 1)[0];
   if (!clean) return;
   assert.ok(!clean.startsWith('/'), `Use a relative app path, not a site-root path: ${reference}`);
+  if (sourceFile === path.join(root, 'index.html') && reference === '../hub/index.html') return;
   const resolved = path.resolve(path.dirname(sourceFile), decodeURIComponent(clean));
   assert.ok(insideRuan(resolved), `Reference escapes the Ruan app boundary: ${path.relative(repositoryRoot, sourceFile)} -> ${reference}`);
   assert.ok(existsSync(resolved), `Missing local reference: ${path.relative(repositoryRoot, sourceFile)} -> ${reference}`);
@@ -49,7 +50,10 @@ for (const file of htmlFiles) {
 
 for (const file of files.filter(file => /\.(?:html|js|css|webmanifest)$/.test(file) && !file.endsWith('.test.js'))) {
   const source = readFileSync(file, 'utf8');
-  assert.ok(!/worddark/i.test(source), `Ruan runtime must not depend on another project's naming: ${path.relative(root, file)}`);
+  const permittedHubShortcut = file === path.join(root, 'index.html')
+    ? source.replace(/<a class="app-launch hub-launch" href="\\.\\.\\/hub\\/index\\.html" aria-label="Abrir WordDark Hub">[\\s\\S]*?<\\/a>/, '')
+    : source;
+  assert.ok(!/worddark/i.test(permittedHubShortcut), `Ruan runtime must not depend on another project's naming except the explicit Hub launcher shortcut: ${path.relative(root, file)}`);
   if (file.endsWith('.js')) {
     for (const match of source.matchAll(/\b(?:from\s*|import\s*\()\s*["']([^"']+)["']/g)) {
       resolveLocalReference(file, match[1]);
