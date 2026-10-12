@@ -40,5 +40,5 @@ for (const page of areaPages) {
   assert.equal((page.match(/<nav class="area-nav"/g) || []).length, 1, 'Each app page must have exactly one area navigation row');
 }
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v6'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v8'"));
 console.log('Ruan app structure tests passed.');
