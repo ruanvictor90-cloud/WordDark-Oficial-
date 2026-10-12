@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
-import { createWordDarkEngine } from "./worddark-engine.js";
+const assert = require("node:assert/strict");
+const { createWordDarkEngine } = require("./worddark-engine.js");
 let n = 0;
 const engine = createWordDarkEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "route-" + (++n) });
 const route = engine.coordinate({ requestId: "req-1", demandId: "demand-1", intent: "Prepare promotion content", destination: "sky", context: { clientType: "external" } });
