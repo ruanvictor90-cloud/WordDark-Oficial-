@@ -439,7 +439,6 @@ body[data-page="earth"]::before{
 </nav>
 <div class="nav-label">Aplicativos empresariais</div><nav class="nav">
 <button data-page="channels"><span class="ico">▶</span>Gestão de canais</button>
-<button data-page="commerce"><span class="ico">◇</span>Empresa comercial</button>
 </nav>
 <div class="side-bottom"><strong>ESTADO DO MUNDO</strong><p>Alfa operacional local. Sem conectores externos ativos, sem publicação automática e sem movimentação financeira real.</p></div>
 </aside>
@@ -463,7 +462,7 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const money=n=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const date=s=>s?new Date(s+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'}):'Sem data';
 let requests=read(KEYS.requests),ledger=read(KEYS.ledger),transfers=read(KEYS.transfers),notes=read(KEYS.notes),tasks=read(KEYS.tasks),contentJobs=read(KEYS.contentJobs),catalog=read(KEYS.catalog),suppliers=read(KEYS.suppliers),orders=read(KEYS.orders),customers=read(KEYS.customers),page=['overview','sky','earth'].includes(new URLSearchParams(location.search).get('area'))?new URLSearchParams(location.search).get('area'):'overview';
-const names={overview:'Visão geral',management:'Gerenciamento',sky:'Céu',earth:'Terra',finance:'Financeira',library:'Biblioteca',security:'Segurança',channels:'Gestão de canais',workbench:'Bancada de conteúdo',marketing:'Marketing',catalog:'Catálogo de produtos',suppliers:'Fornecedores',orders:'Pedidos',customers:'Clientes',costs:'Custos e margem',commercialRules:'Regras comerciais'};
+const names={overview:'Visão geral',management:'Gerenciamento',sky:'Céu',earth:'Terra',finance:'Financeira',library:'Biblioteca',security:'Segurança',channels:'Gestão de canais',workbench:'Bancada de conteúdo',marketing:'Marketing'};
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2300)}
 function persist(){write(KEYS.requests,requests);write(KEYS.ledger,ledger);write(KEYS.transfers,transfers);write(KEYS.notes,notes);write(KEYS.tasks,tasks);write(KEYS.contentJobs,contentJobs)}
 const BACKUP_COLLECTIONS={requests:KEYS.requests,ledger:KEYS.ledger,transfers:KEYS.transfers,notes:KEYS.notes,tasks:KEYS.tasks,contentJobs:KEYS.contentJobs,catalog:KEYS.catalog,suppliers:KEYS.suppliers,orders:KEYS.orders,customers:KEYS.customers};
