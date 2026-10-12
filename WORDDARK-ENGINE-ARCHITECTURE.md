@@ -3,6 +3,7 @@
 ## Fronteira soberana
 
 - Ruan é o motor central pessoal e permanece soberano.
+- `ruan/engine/ruan-central.js` compõe o motor pessoal existente (`central-engine.js`) com a fronteira soberana, sem renomear nem substituir suas APIs.
 - WordDark, Céu, Terra e conectores externos não recebem acesso à raiz nem métodos de escrita de Ruan.
 - Sistemas conectados a Ruan recebem uma porta de solicitação: podem pedir uma capacidade e fornecer contexto, mas não aprovar pedidos, executar comandos pessoais ou alterar o estado pessoal.
 - Ruan pode iniciar mensagens para sistemas conectados. A resposta de um sistema é informação, não autoridade sobre Ruan.
@@ -42,6 +43,7 @@ O catálogo aceita modelos propostos, incluindo serviços avulsos, pacotes recor
 
 ```bash
 node ruan/engine/sovereign-core.test.js
+node ruan/engine/ruan-central.test.js
 node worddark/core-central/world-engine.test.js
 node worddark/runtime/world/core/worddark-engine.test.js
 node worddark/runtime/world/sky/sky-engine.test.js
