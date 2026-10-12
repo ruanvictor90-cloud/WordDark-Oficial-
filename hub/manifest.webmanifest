@@ -1,7 +1,7 @@
 {
   "name": "WordDark Hub",
   "short_name": "WD Hub",
-  "description": "Ponto de entrada independente e aplicativos fixados do WordDark.",
+  "description": "Portão de entrada do mundo com informações e avisos.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
