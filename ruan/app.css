@@ -51,3 +51,19 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 
 /* Atalho do Hub: somente no lançador central do Ruan. */
 .hub-launch{border-color:#7650a0;background:linear-gradient(110deg,#21162f,#120e1b)}.hub-launch:hover{border-color:#c49aff}.hub-logo{color:#d9baff;background:linear-gradient(145deg,#302044,#130d1d);border-color:#9861e866}.hub-logo svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Clean sovereign Ruan launcher: one brand mark and app logos only. */
+body.ruan-launcher .shell{width:min(100% - 28px,620px);min-height:100svh;padding-bottom:max(18px,env(safe-area-inset-bottom))}
+body.ruan-launcher .topbar{height:76px;flex:0 0 76px;justify-content:center;border-bottom-color:#49315d88}
+body.ruan-launcher .back-button,body.ruan-launcher .top-actions,body.ruan-launcher .brand-copy,body.ruan-launcher footer,body.ruan-launcher .drawer-head,body.ruan-launcher .bottom-apps{display:none!important}
+body.ruan-launcher .brand-centered{position:static;transform:none;max-width:none;gap:0}
+body.ruan-launcher .brand-mark{width:43px;height:43px;flex-basis:43px}
+body.ruan-launcher .apps-drawer{position:static;left:auto;bottom:auto;transform:none;width:100%;margin:auto;padding:18px 0;background:transparent;border:0;box-shadow:none;backdrop-filter:none;animation:none}
+body.ruan-launcher .drawer-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+body.ruan-launcher .app-launch{aspect-ratio:1;min-height:0;display:grid;place-items:center;gap:0;padding:12px;border-radius:19px;background:linear-gradient(145deg,#21152f,#100c18);border-color:#49315d;box-shadow:none}
+body.ruan-launcher .app-launch:hover{transform:translateY(-2px);border-color:#b58aff}
+body.ruan-launcher .app-launch .brand-mark{width:clamp(42px,12vw,62px);height:clamp(42px,12vw,62px);flex-basis:auto;border-radius:17px}
+body.ruan-launcher .app-launch .brand-mark svg{width:70%;height:70%}
+body.ruan-launcher .app-copy,body.ruan-launcher .launch-arrow{display:none!important}
+body.ruan-launcher .hub-launch{background:linear-gradient(145deg,#302044,#130d1d);border-color:#7650a0}
+@media(max-width:360px){body.ruan-launcher .drawer-grid{gap:8px}body.ruan-launcher .app-launch{border-radius:15px;padding:8px}}
