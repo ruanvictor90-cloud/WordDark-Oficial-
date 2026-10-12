@@ -27,6 +27,8 @@ assert.ok(!pessoal.includes('apps/shadow'));
 assert.ok(pessoal.includes('class="pessoal-app-grid"'));
 assert.ok(pessoal.includes('class="pessoal-app-name">Financeiro</span>'));
 assert.ok(pessoal.includes('class="pessoal-app-name">Tarefas</span>'));
+assert.ok(pessoal.includes('circle cx="41" cy="37" r="7"'), 'Financeiro must use its dedicated money icon');
+assert.ok(pessoal.includes('M21 36l3 3 5-6'), 'Tarefas must use a distinct checklist icon');
 assert.ok(pessoal.includes('href="./financeiro.html"'));
 assert.ok(pessoal.includes('href="./tarefas.html"'));
 const pessoalScript = read('apps/pessoal/app.js');
@@ -36,6 +38,7 @@ const shadow = read('apps/shadow/index.html');
 assert.ok(!shadow.includes('apps/shadow/index.html'));
 assert.ok(shadow.includes('class="shadow-card"'));
 assert.ok(shadow.includes('href="./darkeye/index.html"'));
+assert.ok(shadow.includes('circle cx="27" cy="27" r="7"'), 'DarkEye launcher must use the refined lens icon');
 assert.ok(shadow.includes('href="./darkeye/index.html"'));
 const finance = read('apps/pessoal/financeiro.html');
 const tasks = read('apps/pessoal/tarefas.html');
@@ -51,5 +54,5 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v11'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v12'"));
 console.log('Ruan app structure tests passed.');
