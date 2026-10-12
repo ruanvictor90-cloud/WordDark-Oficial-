@@ -146,6 +146,15 @@ body[data-page="earth"] .clean-app-icon{color:#d5c1f5;border-color:#59416e;backg
 .app-topbar .back-top{left:12px!important;top:50%!important;transform:translateY(-50%)!important}
 @media(max-width:430px){#screen.clean-launcher,.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}.clean-app-icon{gap:7px!important;padding:6px!important;border-radius:15px!important}.clean-app-icon svg{width:clamp(27px,8vw,36px)!important;height:clamp(27px,8vw,36px)!important}.clean-app-name{font-size:10px!important}}
 @media(max-width:320px){#screen.clean-launcher,.clean-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Corrige o contêiner: só a grade interna distribui os apps em botões, como no Ruan. */
+#screen.clean-launcher{display:block!important;width:min(100%,760px)!important;max-width:760px!important;margin:0 auto!important;padding:0!important;align-content:initial!important}
+.clean-app-grid{display:grid!important;width:100%!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;margin:0 auto!important}
+.clean-app-icon{aspect-ratio:1/1!important;min-width:0!important;min-height:0!important;padding:10px!important;gap:10px!important}
+.clean-app-icon svg{width:clamp(42px,12vw,62px)!important;height:clamp(42px,12vw,62px)!important}
+.clean-app-name{font-size:clamp(11px,2.8vw,13px)!important}
+@media(max-width:430px){#screen.clean-launcher{width:100%!important;padding:0!important}.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}.clean-app-icon{padding:8px!important;gap:9px!important;border-radius:17px!important}.clean-app-icon svg{width:clamp(42px,13vw,56px)!important;height:clamp(42px,13vw,56px)!important}.clean-app-name{font-size:clamp(10px,3vw,12px)!important}}
+@media(max-width:320px){.clean-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style></head>
 <body>
 <div class="layout">
