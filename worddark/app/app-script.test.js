@@ -4,11 +4,15 @@ import vm from "node:vm";
 
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
 const sw = readFileSync(new URL("./sw.js", import.meta.url), "utf8");
-function swCacheVersionForTest(source){return source.includes("worddark-app-v1-7") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
+function swCacheVersionForTest(source){return source.includes("worddark-app-v1-8") && !source.includes("world-cosmos.svg") && !source.includes("world-sky.svg") && !source.includes("world-earth.svg");}
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
 assert.ok(scripts.length > 0, "WordDark app must contain its client script");
 const source = scripts.at(-1)[1];
 assert.ok(source.includes("function workbench()"), "Content workbench must be registered");
+assert.ok(source.includes("function publishHubNotice(title,message,level='important')"), 'Important world events must be published to the Hub');
+assert.ok(html.includes('#screen.clean-launcher{display:block!important'), 'Area launchers must not be squeezed into a three-column outer grid');
+assert.ok(html.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important'), 'Area apps must use spacious two-column buttons');
+assert.ok(html.includes('left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important'), 'WordDark logo must remain centered at the top');
 assert.ok(source.includes("data-save-review"), "Review controls must be present");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
 assert.ok(source.includes("function dispatchRequest(id)"), "Content requests must dispatch into the Dark Factory");
