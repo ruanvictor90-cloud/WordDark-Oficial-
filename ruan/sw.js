@@ -1,4 +1,4 @@
-const CACHE='ruan-central-v4';
+const CACHE='ruan-central-v5';
 const CORE=['./','./index.html','./app.css','./app.js','./manifest.webmanifest','./app-icon.svg','./engine/central-engine.js','./apps/pessoal/index.html','./apps/pessoal/financeiro.html','./apps/pessoal/tarefas.html','./apps/pessoal/app.js','./apps/pessoal/pessoal.css','./apps/pessoal/financeiro.js','./apps/pessoal/tarefas.js','./apps/shadow/index.html','./apps/shadow/shadow.js','./apps/shadow/shadow.css','./apps/shadow/darkeye/index.html','./apps/shadow/darkeye/darkeye.js','./apps/shadow/darkeye/darkeye-core.js','./apps/shadow/darkeye/darkeye.css'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('ruan-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
