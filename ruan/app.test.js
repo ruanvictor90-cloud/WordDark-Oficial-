@@ -35,4 +35,10 @@ assert.ok(tasks.includes('task-form'));
 assert.ok(browser.includes('DarkEye'));
 assert.ok(browser.includes('web-preview'));
 assert.ok(browser.includes('aria-label="Áreas do Shadow"'));
+const areaPages = [finance, tasks, shadow, browser];
+for (const page of areaPages) {
+  assert.equal((page.match(/<nav class="area-nav"/g) || []).length, 1, 'Each app page must have exactly one area navigation row');
+}
+const serviceWorker = read('sw.js');
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v6'"));
 console.log('Ruan app structure tests passed.');
