@@ -102,3 +102,12 @@ body.ruan-launcher .ruan-home-app .hub-logo{color:#d7baff;border-color:#7950ad}
 body.ruan-launcher .ruan-home-app.hub-launch{background:linear-gradient(145deg,#302044,#130d1d);border-color:#7650a0}
 body.ruan-launcher .apps-drawer,body.ruan-launcher .bottom-apps{display:none!important}
 @media(max-width:360px){body.ruan-launcher .ruan-home-grid{gap:8px;padding:16px 0}body.ruan-launcher .ruan-home-app{border-radius:15px;gap:8px;padding:6px}}
+
+/* Keep Ruan's own alert bell visible on the sovereign home screen. */
+body.ruan-launcher .topbar{position:relative}
+body.ruan-launcher .top-actions{display:flex!important;position:absolute;right:0;top:50%;transform:translateY(-50%);align-items:center;gap:7px}
+body.ruan-launcher .online-dot{display:block!important;width:5px;height:5px}
+body.ruan-launcher .notification-wrap{display:block}
+body.ruan-launcher .bell{display:grid!important;width:36px;height:36px;border:1px solid #5b3b73;border-radius:12px;background:linear-gradient(145deg,#21172d,#15101e);color:#d8b5ff;opacity:1}
+body.ruan-launcher .notification-panel{right:0;top:42px}
+@media(max-width:360px){body.ruan-launcher .top-actions{gap:4px}body.ruan-launcher .bell{width:33px;height:33px}}
