@@ -21,6 +21,7 @@ assert.ok(css.includes("--bg:#09070f") && css.includes("--accent:#c49aff"), "Hub
 assert.ok(css.includes(".brand-mark") && css.includes(".launch-dock") && !css.includes("#54c8ff"), "Header and bottom app launch must use the original purple identity, not blue");
 assert.ok(sw.includes("worddark-hub-v5"), "Hub cache must refresh for the restored design");
 assert.doesNotThrow(() => new vm.Script(script), "Hub script must be valid JavaScript");
+assert.doesNotThrow(() => new vm.Script(sw), "Hub service worker must be valid JavaScript");
 assert.ok(!script.includes('$("notice-open")'), "Notice behavior must not depend on a removed information-section button");
 assert.equal((worldEntry.match(/<strong>(?:WordDark|Céu|Terra)<\/strong>/g) || []).length, 3, "Official entry page must keep exactly WordDark, Céu and Terra");
 
