@@ -24,7 +24,7 @@
 
 - `worddark/runtime/world/core/sector-engine.js` cria uma instância isolada por setor, registra as empresas vinculadas e mantém uma visão resumida das operações e uma trilha de auditoria.
 - `worddark/runtime/world/core/company-engine.js` cria uma instância isolada por empresa. Cada empresa mantém suas próprias ordens de trabalho, recorrência, orçamento/prazo, transições de estado e aprovações.
-- O núcleo `worddark/core-central/world-engine.js` registra setores e empresas, encaminha operações para a instância da empresa e mantém o resumo do estado no setor. Uma empresa precisa pertencer a um setor registrado.
+- O núcleo `worddark/core-central/world-engine.js` inicia os três setores permanentes (WordDark, Céu e Terra) e a empresa prioritária de gestão de canais. Também permite registrar novos setores e empresas, encaminha operações para a instância da empresa e mantém o resumo do estado no setor. Uma empresa precisa pertencer a um setor registrado.
 - O fluxo de uma operação empresarial é `RECEIVED → TRIAGED → PREPARING → REVIEW → APPROVED → DELIVERED`; cancelamento e retorno de revisão são estados explícitos. A aprovação exige confirmação explícita e identidade do responsável.
 - Cada instância é isolada por identificador. Nenhum motor executa publicação, cobrança, compra ou chamada externa; o estado aprovado não liga execução real.
 
