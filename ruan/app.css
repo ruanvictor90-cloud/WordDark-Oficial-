@@ -87,3 +87,18 @@ body.ruan-launcher .app-launch .shadow-logo{color:#c9b3ff;border-color:#7659b3}
 body.ruan-launcher .app-launch .hub-logo{color:#d7baff;border-color:#7950ad}
 body.ruan-launcher .app-launch .brand-mark svg{filter:drop-shadow(0 0 3px currentColor)}
 body.ruan-launcher .app-launch:focus-visible{outline:2px solid #c49aff;outline-offset:3px}
+
+
+/* Ruan home shelf: app shortcuts are now on the page, not inside a drawer. */
+body.ruan-launcher .ruan-home-grid{width:100%;margin:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:20px 0}
+body.ruan-launcher .ruan-home-app{aspect-ratio:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;padding:9px;border:1px solid #49315d;border-radius:19px;background:linear-gradient(145deg,#21152f,#100c18);color:#d8c2f5;transition:transform .18s,border-color .18s,box-shadow .18s}
+body.ruan-launcher .ruan-home-app:hover,body.ruan-launcher .ruan-home-app:focus-visible{transform:translateY(-2px);border-color:#b58aff;box-shadow:0 8px 25px #0005;outline:none}
+body.ruan-launcher .ruan-home-app .brand-mark{width:clamp(42px,12vw,62px);height:clamp(42px,12vw,62px);flex:0 0 auto;border-radius:17px}
+body.ruan-launcher .ruan-home-app .brand-mark svg{width:70%;height:70%;filter:drop-shadow(0 0 3px currentColor)}
+body.ruan-launcher .ruan-home-app .home-app-name{display:block!important;font-size:clamp(10px,2.8vw,12px);font-weight:750;line-height:1.2;text-align:center;color:#f4efff;overflow-wrap:anywhere}
+body.ruan-launcher .ruan-home-app .pessoal-logo{color:#a4f0cf;border-color:#3b7965;background:radial-gradient(circle at 30% 18%,#245b45,#153329 55%,#0c1915)}
+body.ruan-launcher .ruan-home-app .shadow-logo{color:#c9b3ff;border-color:#7659b3}
+body.ruan-launcher .ruan-home-app .hub-logo{color:#d7baff;border-color:#7950ad}
+body.ruan-launcher .ruan-home-app.hub-launch{background:linear-gradient(145deg,#302044,#130d1d);border-color:#7650a0}
+body.ruan-launcher .apps-drawer,body.ruan-launcher .bottom-apps{display:none!important}
+@media(max-width:360px){body.ruan-launcher .ruan-home-grid{gap:8px;padding:16px 0}body.ruan-launcher .ruan-home-app{border-radius:15px;gap:8px;padding:6px}}
