@@ -67,3 +67,13 @@ body.ruan-launcher .app-launch .brand-mark svg{width:70%;height:70%}
 body.ruan-launcher .app-copy,body.ruan-launcher .launch-arrow{display:none!important}
 body.ruan-launcher .hub-launch{background:linear-gradient(145deg,#302044,#130d1d);border-color:#7650a0}
 @media(max-width:360px){body.ruan-launcher .drawer-grid{gap:8px}body.ruan-launcher .app-launch{border-radius:15px;padding:8px}}
+
+/* Refinement: keep the app drawer collapsed and reachable from the bottom dock. */
+body.ruan-launcher .apps-drawer{position:fixed;z-index:8;left:50%;bottom:82px;transform:translateX(-50%);width:min(520px,calc(100vw - 24px));margin:0;padding:16px;background:#100c19f5;border:1px solid #49315d;border-radius:20px;box-shadow:0 18px 60px #000b;backdrop-filter:blur(20px);animation:drawer-in .2s ease-out}
+body.ruan-launcher .bottom-apps{display:flex!important;z-index:10;border-color:#7650a0;background:linear-gradient(135deg,#302044f5,#130d1df5);color:#f4efff;box-shadow:0 8px 32px #0007,0 0 22px #9d5cff22}
+body.ruan-launcher .drawer-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+body.ruan-launcher .app-launch{aspect-ratio:1;min-height:0;display:grid;place-items:center;gap:0;padding:10px;border-radius:17px;background:linear-gradient(145deg,#21152f,#100c18);border-color:#49315d;box-shadow:none}
+body.ruan-launcher .app-launch .brand-mark{width:clamp(42px,12vw,62px);height:clamp(42px,12vw,62px);flex-basis:auto;border-radius:17px}
+body.ruan-launcher .app-launch .brand-mark svg{width:70%;height:70%}
+body.ruan-launcher .app-copy,body.ruan-launcher .launch-arrow,body.ruan-launcher .drawer-head{display:none!important}
+@media(max-width:360px){body.ruan-launcher .apps-drawer{bottom:76px;padding:12px}.ruan-launcher .drawer-grid{gap:7px}}

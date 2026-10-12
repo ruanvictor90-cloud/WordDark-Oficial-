@@ -24,7 +24,9 @@ const pessoal = read('apps/pessoal/index.html');
 assert.ok(!pessoal.includes('apps-drawer'));
 assert.ok(!pessoal.includes('apps-toggle'));
 assert.ok(!pessoal.includes('apps/shadow'));
-assert.ok(pessoal.includes('aria-label="Áreas do Pessoal"'));
+assert.ok(pessoal.includes('class="pessoal-app-grid"'));
+assert.ok(pessoal.includes('class="pessoal-app-name">Financeiro</span>'));
+assert.ok(pessoal.includes('class="pessoal-app-name">Tarefas</span>'));
 assert.ok(pessoal.includes('href="./financeiro.html"'));
 assert.ok(pessoal.includes('href="./tarefas.html"'));
 const pessoalScript = read('apps/pessoal/app.js');
@@ -32,7 +34,8 @@ assert.ok(!pessoalScript.includes('apps-drawer'));
 assert.ok(!pessoalScript.includes('apps-toggle'));
 const shadow = read('apps/shadow/index.html');
 assert.ok(!shadow.includes('apps/shadow/index.html'));
-assert.ok(shadow.includes('aria-label="Áreas do Shadow"'));
+assert.ok(shadow.includes('class="shadow-card"'));
+assert.ok(shadow.includes('href="./darkeye/index.html"'));
 assert.ok(shadow.includes('href="./darkeye/index.html"'));
 const finance = read('apps/pessoal/financeiro.html');
 const tasks = read('apps/pessoal/tarefas.html');
@@ -41,11 +44,12 @@ assert.ok(finance.includes('finance-form'));
 assert.ok(tasks.includes('task-form'));
 assert.ok(browser.includes('DarkEye'));
 assert.ok(browser.includes('web-preview'));
-assert.ok(browser.includes('aria-label="Áreas do Shadow"'));
-const areaPages = [finance, tasks, shadow, browser];
-for (const page of areaPages) {
-  assert.equal((page.match(/<nav class="area-nav"/g) || []).length, 1, 'Each app page must have exactly one area navigation row');
+assert.ok(!browser.includes('class="area-nav"'));
+const appPagesWithoutDuplicateNav = [finance, tasks, browser];
+for (const page of appPagesWithoutDuplicateNav) {
+  assert.equal((page.match(/<nav class="area-nav"/g) || []).length, 0, 'Individual app pages must not repeat the area navigation row');
 }
+assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v10'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v11'"));
 console.log('Ruan app structure tests passed.');
