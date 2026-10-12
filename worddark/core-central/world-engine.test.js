@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
 import { createWordDarkWorldEngine } from "./world-engine.js";
-import { createWordDarkEngine } from "../runtime/world/core/worddark-engine.js";
-import { createSkyEngine } from "../runtime/world/sky/sky-engine.js";
-import { createEarthEngine } from "../runtime/world/earth/earth-engine.js";
+import worddarkModule from "../runtime/world/core/worddark-engine.js";
+const { createWordDarkEngine } = worddarkModule;
+import skyModule from "../runtime/world/sky/sky-engine.js";
+const { createSkyEngine } = skyModule;
+import earthModule from "../runtime/world/earth/earth-engine.js";
+const { createEarthEngine } = earthModule;
 let n = 0;
 const engine = createWordDarkWorldEngine({
   worddark: createWordDarkEngine({ idFactory: () => "route-" + (++n) }),
