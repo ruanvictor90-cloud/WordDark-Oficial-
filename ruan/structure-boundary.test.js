@@ -47,7 +47,7 @@ for (const file of htmlFiles) {
   }
 }
 
-for (const file of files.filter(file => /\.(?:js|css|webmanifest)$/.test(file) && !file.endsWith('.test.js'))) {
+for (const file of files.filter(file => /\.(?:html|js|css|webmanifest)$/.test(file) && !file.endsWith('.test.js'))) {
   const source = readFileSync(file, 'utf8');
   assert.ok(!/worddark/i.test(source), `Ruan runtime must not depend on another project's naming: ${path.relative(root, file)}`);
   if (file.endsWith('.js')) {
