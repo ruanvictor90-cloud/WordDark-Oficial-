@@ -30,3 +30,11 @@ body.pessoal-launcher .brand-centered{grid-column:2;grid-row:1;justify-self:cent
 body.pessoal-launcher .pessoal-app-icon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;aspect-ratio:1}
 body.pessoal-launcher .pessoal-app-icon svg{width:clamp(42px,12vw,58px);height:clamp(42px,12vw,58px);flex:0 0 auto}
 body.pessoal-launcher .pessoal-app-name{font-size:12px;font-weight:700;line-height:1.2;color:#f4efff}
+
+
+/* Ícones dos aplicativos Pessoal: leitura rápida e acabamento consistente. */
+body.pessoal-launcher .pessoal-app-icon{position:relative;overflow:hidden;box-shadow:inset 0 1px #ffffff0b,0 10px 28px #0003}
+body.pessoal-launcher .pessoal-app-icon:first-child{background:radial-gradient(circle at 50% 20%,#214b37 0,#153329 55%,#0c1915 100%)}
+body.pessoal-launcher .pessoal-app-icon:last-child{background:radial-gradient(circle at 50% 20%,#35204b 0,#1c1527 60%,#120e19 100%)}
+body.pessoal-launcher .pessoal-app-icon svg{filter:drop-shadow(0 0 5px currentColor)}
+body.pessoal-launcher .pessoal-app-name{letter-spacing:.01em;text-shadow:0 1px 8px #0008}
