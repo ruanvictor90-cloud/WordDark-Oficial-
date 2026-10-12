@@ -423,6 +423,11 @@ body[data-page="earth"]::before{
 @media(min-width:900px){.operation-rail{grid-auto-columns:minmax(250px,1fr)}}
 @media(max-width:600px){.operation-home{gap:22px}.operation-hero{padding:23px 18px;border-radius:22px}.operation-hero h1{font-size:31px}.operation-metrics{gap:7px;margin-top:22px}.operation-metric span{font-size:9px}.operation-metric strong{font-size:22px}.operation-rail{grid-auto-columns:minmax(240px,82%);gap:10px}.operation-app{min-height:128px;padding:15px}.operation-section-head h2{font-size:14px}}
 
+
+/* A central dinâmica usa a largura da tela; somente os cartões dentro das categorias rolam. */
+.content:has(#screen.clean-launcher){display:block!important;width:100%!important;min-height:calc(100svh - 74px)!important;padding:clamp(18px,3vw,34px) clamp(14px,3.4vw,38px) 48px!important;margin:0!important;align-items:initial!important;justify-content:initial!important}
+#screen.clean-launcher{display:block!important;width:100%!important;max-width:1160px!important;min-width:0!important;margin:0 auto!important;padding:0!important;align-content:initial!important}
+
 </style></head>
 <body>
 <div class="layout">
