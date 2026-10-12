@@ -1,0 +1,1 @@
+(()=>{"use strict";const count=document.getElementById("pinned-count");if(count)count.textContent="1 aplicativo disponível";if("serviceWorker"in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});})();
