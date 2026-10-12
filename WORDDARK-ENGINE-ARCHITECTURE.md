@@ -19,6 +19,15 @@
 - **Céu** — prepara soluções, planos, conteúdos e entregáveis para revisão; não publica por conta própria.
 - **Terra** — registra necessidades de clientes/negócios e recorrência; registrar demanda não significa aceitar orçamento nem prometer resultado.
 
+
+## Motores de setores e empresas
+
+- `worddark/runtime/world/core/sector-engine.js` cria uma instância isolada por setor, registra as empresas vinculadas e mantém uma visão resumida das operações e uma trilha de auditoria.
+- `worddark/runtime/world/core/company-engine.js` cria uma instância isolada por empresa. Cada empresa mantém suas próprias ordens de trabalho, recorrência, orçamento/prazo, transições de estado e aprovações.
+- O núcleo `worddark/core-central/world-engine.js` registra setores e empresas, encaminha operações para a instância da empresa e mantém o resumo do estado no setor. Uma empresa precisa pertencer a um setor registrado.
+- O fluxo de uma operação empresarial é `RECEIVED → TRIAGED → PREPARING → REVIEW → APPROVED → DELIVERED`; cancelamento e retorno de revisão são estados explícitos. A aprovação exige confirmação explícita e identidade do responsável.
+- Cada instância é isolada por identificador. Nenhum motor executa publicação, cobrança, compra ou chamada externa; o estado aprovado não liga execução real.
+
 ## Fluxo padrão
 
 `DEMANDA → REGISTRO EM TERRA → COORDENAÇÃO WORDDARK → PREPARAÇÃO EM CÉU → REVISÃO/APROVAÇÃO → EXECUTOR AUTORIZADO`
@@ -46,6 +55,8 @@ node ruan/engine/sovereign-core.test.js
 node ruan/engine/ruan-central.test.js
 node worddark/core-central/world-engine.test.js
 node worddark/runtime/world/core/worddark-engine.test.js
+node worddark/runtime/world/core/sector-engine.test.js
+node worddark/runtime/world/core/company-engine.test.js
 node worddark/runtime/world/sky/sky-engine.test.js
 node worddark/runtime/world/earth/earth-engine.test.js
 ```
