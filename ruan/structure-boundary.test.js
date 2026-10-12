@@ -41,7 +41,7 @@ for (const file of htmlFiles) {
   if (file !== path.join(root, 'index.html')) {
     assert.ok(!html.includes('apps-drawer'), `App drawer leaked into ${path.relative(root, file)}`);
     assert.ok(!html.includes('apps-toggle'), `App drawer toggle leaked into ${path.relative(root, file)}`);
-    assert.equal((html.match(/<nav class="area-nav"/g) || []).length, 1, `Each app page must have exactly one area navigation row: ${path.relative(root, file)}`);
+    assert.equal((html.match(/<nav class="area-nav"/g) || []).length, 0, `Individual app pages must not repeat an area navigation row: ${path.relative(root, file)}`);
   }
   for (const match of html.matchAll(/\b(?:href|src|action)\s*=\s*["']([^"']+)["']/gi)) {
     resolveLocalReference(file, match[1]);
