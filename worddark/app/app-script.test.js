@@ -48,10 +48,9 @@ assert.ok(source.includes("Falha ao restaurar. Foi tentada a recuperação dos d
 assert.ok(source.includes("data-export-backup"), "The library must expose a backup export action");
 assert.ok(source.includes('id="importBackupFile"'), "The library must expose a backup restore file picker");
 assert.ok(source.includes("function businessStore(kind)"), "Commercial submodules must have distinct screens");
-assert.ok(source.includes("catalog:()=>businessStore('catalog')"), "Catalog route must resolve to its own module");
-assert.ok(source.includes("suppliers:()=>businessStore('suppliers')"), "Supplier route must resolve to its own module");
-assert.ok(source.includes("orders:()=>businessStore('orders')"), "Order route must resolve to its own module");
-assert.ok(source.includes("customers:()=>businessStore('customers')"), "Customer route must resolve to its own module");
+assert.ok(source.includes("function businessStore(kind)"), "Archived commercial module code must remain available for existing data compatibility");
+assert.ok(!source.includes("commerce:()=>businessStore"), "Retired commercial company must not be an active route");
+assert.ok(!html.includes('data-page="commerce"'), "Retired commercial company must not appear in the active navigation");
 assert.ok(source.includes("function marketing()"), "Marketing must have a distinct screen");
 assert.ok(source.includes("module('workbench','▧','Dark Factory'"), "Sky must link directly to the content workbench");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
