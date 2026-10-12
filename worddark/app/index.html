@@ -122,6 +122,19 @@ body[data-page="earth"] .clean-app-icon{color:#d5c1f5;border-color:#59416e;backg
 .clean-app-name{display:block;font-size:clamp(10px,2.6vw,12px);font-weight:700;line-height:1.2;text-align:center;color:#f0f1f4;overflow-wrap:anywhere}
 @media(max-width:360px){.clean-app-grid{gap:7px}.clean-app-icon{gap:7px;padding:6px;border-radius:15px}.clean-app-name{font-size:10px}}
 @media(max-width:360px){#screen.clean-launcher{gap:8px}.clean-app-icon{border-radius:15px}}
+
+/* Navegação corrigida: sem barra lateral e com retorno sempre visível. */
+.side{display:none!important}
+.layout{display:block;grid-template-columns:minmax(0,1fr)}
+.app-topbar .back-top{display:grid!important;visibility:visible!important;position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:8;place-items:center;width:40px;height:40px;padding:0;border-radius:13px;font-size:23px}
+.app-topbar{position:sticky;top:0;z-index:7;display:flex;align-items:center;justify-content:center}
+.app-topbar .world-brand-centered{position:absolute;left:50%;transform:translateX(-50%)}
+.app-topbar .top-actions{display:none!important}
+#screen.clean-launcher{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,620px);gap:12px;align-content:center}
+.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.clean-app-icon{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-width:0}
+.clean-app-name{margin-top:2px}
+@media(max-width:360px){#screen.clean-launcher,.clean-app-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.app-topbar .back-top{left:8px;width:36px;height:36px}}
 </style></head>
 <body>
 <div class="layout">
@@ -170,7 +183,7 @@ async function restoreWorldBackupFile(file){if(!file)return;if(file.size>5*1024*
 const pageHistory=[];
 function showPage(p){page=p in names?p:'overview';document.body.dataset.page=page;$('crumbName').textContent=names[page];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));render();window.scrollTo({top:0,behavior:'smooth'})}
 function navigate(p,options={}){const next=p in names?p:'overview';if(next!==page&&!options.back)pageHistory.push(page);showPage(next)}
-function goBack(){if(pageHistory.length){navigate(pageHistory.pop(),{back:true});return}if(page!=='overview'){showPage('overview');return}location.href='../../index.html'}
+function goBack(){if(pageHistory.length){const previous=pageHistory.pop();navigate(previous,{back:true});return}if(page!=='overview'){showPage('overview');return}location.href='../../index.html'}
 window.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();goBack()}});
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
 $('worldBrandHome')?.addEventListener('click',()=>navigate('overview'));
