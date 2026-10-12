@@ -38,3 +38,13 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 .app-launch{align-items:center}
 .app-launch .brand-mark{width:44px;height:44px;flex-basis:44px;border-radius:14px}
 @media(max-width:360px){.topbar{gap:8px}.back-button,.bell{width:35px;height:35px}.brand-mark{width:42px;height:42px}}
+
+/* Wordmarks: logo e nome pertencem somente à página atual. */
+.brand-centered{gap:10px;width:max-content;max-width:calc(100% - 112px);justify-content:flex-start;text-align:left}
+.brand-copy{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:3px;min-width:0;line-height:1.2}
+.brand-copy strong{display:block;color:#f4efff;font-size:10px;font-weight:850;letter-spacing:.16em;white-space:nowrap}
+.brand-copy small{display:block;color:#a69bb8;font-size:9px;letter-spacing:.015em;white-space:nowrap}
+.brand-mark{width:46px;height:46px;flex:0 0 46px;border-radius:14px;display:grid;place-items:center}
+.brand-mark svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.finance-logo{color:#9ee6b6}.tasks-logo{color:#d3b0ff}.darkeye-logo{color:#a8b5ff}
+@media(max-width:360px){.brand-centered{gap:7px;max-width:calc(100% - 94px)}.brand-mark{width:40px;height:40px;flex-basis:40px}.brand-copy strong{font-size:9px}.brand-copy small{font-size:8px}}
