@@ -25,6 +25,6 @@ assert.ok(sw.includes("event.request.mode===\"navigate\""), "Hub navigation shou
 assert.doesNotThrow(() => new vm.Script(script), "Hub script must be valid JavaScript");
 assert.doesNotThrow(() => new vm.Script(sw), "Hub service worker must be valid JavaScript");
 assert.ok(!script.includes('$("notice-open")'), "Notice behavior must not depend on a removed information-section button");
-assert.equal((worldEntry.match(/<strong>(?:WordDark|Céu|Terra)<\/strong>/g) || []).length, 3, "Official entry page must keep exactly WordDark, Céu and Terra");
+assert.equal((worldEntry.match(/aria-label="Abrir (?:WordDark|Céu|Terra)"/g) || []).length, 3, "Official entry page must keep exactly three accessible logo-only areas: WordDark, Céu and Terra");
 
 console.log("WordDark Hub empty purple home tests passed.");
