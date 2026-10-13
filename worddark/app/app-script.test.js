@@ -61,7 +61,7 @@ assert.ok(source.includes("function marketing()"), "Marketing must have a distin
 assert.ok(source.includes("['workbench','Dark Factory'"), "Sky must list its own production apps");
 assert.ok(source.includes("['social','Empresa social'") && source.includes("['channels','Empresa comercial'"), "Terra must keep both social and commercial companies as separate apps");
 assert.ok(source.includes("function social()") && source.includes("social:'Empresa social'"), "Empresa social must have its own screen and route");
-assert.ok(source.includes("operation-app-copy"><strong>'+label+'</strong></span>") && !source.includes("operation-app-copy"><strong>'+label+'</strong><small>"), "World app tiles must show only icon and name");
+assert.ok(source.includes(`operation-app-copy"><strong>'+label+'</strong></span>`) && !source.includes(`operation-app-copy"><strong>'+label+'</strong><small>`), "World app tiles must show only icon and name");
 assert.ok(source.includes("const navigationStack=[]") && source.includes("history.pushState({worddarkApp:'WordDark',worddarkPage:next}") && source.includes("window.addEventListener('popstate',event=>"), "Back must use synchronized in-app navigation history");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
 assert.ok(source.includes("data-cancel-request"), "Queued operations must support cancellation");
