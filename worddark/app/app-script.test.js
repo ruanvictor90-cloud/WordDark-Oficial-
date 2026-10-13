@@ -15,17 +15,19 @@ assert.ok(html.includes('#screen.clean-launcher{display:grid!important;grid-temp
 assert.ok(html.includes('flex-direction:column!important') && html.includes('text-align:center!important'), 'App buttons must stack icon above its label, not look like a horizontal list');
 assert.ok(html.includes('left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important'), 'WordDark logo must remain centered at the top');
 assert.ok(source.includes("data-save-review"), "Review controls must be present");
+assert.ok(!source.includes("function createLaunchMission()"), "The launch mission generator must be removed from the factory");
+assert.ok(!source.includes("data-create-launch-mission") && !html.includes("MISSÃO DE ESTREIA · WORDDARK OFICIAL"), "The launch mission card must be absent from the factory");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
 assert.ok(source.includes("function dispatchRequest(id)"), "Content requests must dispatch into the Dark Factory");
-assert.ok(source.includes("function createLaunchMission()"), "The official launch content mission must be available");
-assert.ok(source.includes("data-create-launch-mission"), "The content workbench must expose the launch mission");
-assert.ok(source.includes("missionKey:'worddark-intro-v1'"), "The launch mission must have a stable key to avoid duplicates");
-assert.ok(source.includes("rightsChecked:false,policyChecked:false"), "Launch content must remain unapproved until manual review");
-assert.ok(source.includes("FORMATO PRINCIPAL · VÍDEO DE APRESENTAÇÃO"), "The launch package must include a main presentation script");
-assert.ok(source.includes("VERSÃO CURTA · SHORT"), "The launch package must include a short-form variant");
-assert.ok(source.includes("DESCRIÇÃO PARA YOUTUBE"), "The launch package must include a YouTube description");
-assert.ok(source.includes("].join('\\n');const job={id:'CT-'"), "Launch content must be joined with valid escaped newlines");
-assert.ok(source.includes("Não sugerir que a publicação automática, OAuth ou integrações externas já estejam ativas."), "Launch instructions must not overstate external integrations");
+
+
+
+
+
+
+
+
+
 assert.ok(source.includes("data-dispatch-request"), "Eligible requests must expose the dispatch action");
 assert.ok(source.includes("requestId:r.id"), "Dispatched jobs must retain the source request ID");
 assert.ok(source.includes("Solicitação de origem: '+(j.requestId||'Trabalho criado diretamente')"), "Delivery packages must preserve request provenance");
