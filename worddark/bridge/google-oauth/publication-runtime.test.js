@@ -15,7 +15,7 @@ function setup({authorized=true,persisted=true,publisherResult={success:true,sta
     async audit(event){events.push(event);return{recorded:true};}
   };
   const connectionStore={
-    async load(){return persisted?{status:"PERSISTED"}:null;},
+    async load(){return persisted?{status:"PERSISTED",providerId:"YOUTUBE",accountId:"channel-1",capabilities:["CONTENT_PUBLISH"],scope:"https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload"}:null;},
     async loadTokens(){return{refresh_token:"server-only"};}
   };
   let calls=0;
@@ -51,6 +51,16 @@ const noMedia=setup();
 const noMediaResult=await noMedia.runtime.publishYouTube({request,idempotencyKey:"runtime-key-3"});
 assert.equal(noMediaResult.status,"TRUSTED_MEDIA_REQUIRED");
 assert.equal(noMedia.calls,0);
+
+const wrongProvider=setup();
+const wrongProviderResult=await wrongProvider.runtime.publishYouTube({request:{...request,providerId:"INSTAGRAM"},idempotencyKey:"runtime-key-wrong-provider",media});
+assert.equal(wrongProviderResult.status,"PUBLICATION_PROVIDER_UNSUPPORTED");
+assert.equal(wrongProvider.calls,0);
+
+const wrongAction=setup();
+const wrongActionResult=await wrongAction.runtime.publishYouTube({request:{...request,action:"CONTENT_SCHEDULE",capability:"CONTENT_SCHEDULE"},idempotencyKey:"runtime-key-wrong-action",media});
+assert.equal(wrongActionResult.status,"PUBLICATION_ACTION_UNSUPPORTED");
+assert.equal(wrongAction.calls,0);
 
 const noConnection=setup({persisted:false});
 const noConnectionResult=await noConnection.runtime.publishYouTube({request,idempotencyKey:"runtime-key-4",media});
