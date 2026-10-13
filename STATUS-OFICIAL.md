@@ -1,107 +1,74 @@
-# WordDark Oficial — LINHA ATIVA
+# WordDark Oficial — linha ativa
 
-Este é o repositório oficial do mundo **WordDark**.
+**Repositório:** `ruanvictor90-cloud/WordDark-Oficial-`
 
-- Repositório oficial: `ruanvictor90-cloud/WordDark-Oficial-`
-- `main`: produção/online
-- `develop`: criação
-- `staging`: integração/testes
-- Arquitetura oficial: `worddark/runtime/world`
-- Financeiro: infraestrutura compartilhada do mundo.
+- `main`: produção/publicação.
+- `develop`: criação.
+- `staging`: integração e testes.
+- **Core canônico:** `worddark/runtime/world/core/`.
+- **Interface do mundo:** `worddark/app/`.
+- **Ruan:** aplicativo privado independente.
+- **Hub:** entrada separada com Central, Teste e acesso ao WordDark.
 
-## Regra estrutural
-
-O WordDark não cria estruturas históricas ou clientes artificiais apenas porque uma interface existe.
-
-Nenhum cliente, canal, grupo ou país pré-configurado é necessário para o mundo funcionar. Essas estruturas nascem quando uma necessidade ou conexão real exigir.
-
-## Mapa oficial
+## Mapa atual da interface
 
 ```
+RUAN (privado e independente)
+├── Pessoal
+│   ├── Financeiro
+│   └── Tarefas
+├── Shadow
+│   └── DarkEye (protótipo)
+└── WordDark Hub
+    ├── Central
+    │   ├── Pedidos
+    │   └── Em execução
+    ├── Teste
+    └── WordDark
+
 WORDDARK
-├── Infraestrutura central
-│   ├── Registro
-│   ├── Segurança
-│   ├── Memória
-│   ├── Central de Operações
-│   └── Biblioteca
-├── Terra
-│   ├── Gestão de Negócios
-│   └── Gestão de Conteúdos e Canais
+├── Central
+├── Darkbank
+│   ├── Financeiro
+│   ├── Cofre
+│   └── Investimentos
+├── Central de conexão
+├── Automação
+├── Biblioteca
+├── Escola do Mundo
+├── Governança
+├── Segurança
+├── Teste
 ├── Céu
-│   ├── Marketing
-│   └── Dark Factory
-└── Conexões Externas
+│   ├── Dark Factory
+│   │   ├── Em criação
+│   │   └── Biblioteca
+│   └── Central Social
+│       ├── Gestor de redes sociais
+│       ├── Gestor de marketing digital
+│       └── Gestor de projetos
+└── Terra
+    ├── Empresa social
+    └── Empresa comercial
 ```
 
-### Terra
+## Regras de consolidação
 
-Quando necessário, a organização territorial pode crescer por:
+1. O aplicativo expõe apenas as áreas definidas para esta versão.
+2. Ruan não é um setor nem um aplicativo interno do WordDark.
+3. Darkbank não mantém reserva, página ou transferência direcionada ao Ruan.
+4. Central Social é o nome atual da área; a antiga tela de Marketing não permanece como aplicativo separado.
+5. O Core ativo é único: `worddark/runtime/world/core/`.
+6. `worddark/core-central/` é legado arquivado e não entra na suíte padrão.
+7. Módulos detalhados ainda não conectados ficam fora do fluxo ativo; não devem ser integrados automaticamente.
+8. TEST não aciona conectores reais. PROD exige autorização e controles de servidor.
+9. Nenhum segredo deve ser armazenado no frontend público.
+10. Estado local não equivale a sincronização, autenticação ou auditoria inviolável.
 
-`País → Estado → Cidade → Bairro`
+## Estado técnico
 
-Esses níveis não são obrigatórios. O sistema cria somente o menor nível necessário.
+A versão atual reúne interfaces, navegação, armazenamento local e motores especializados. A integração de ponta a ponta entre todas as telas e todos os motores ainda é uma etapa futura. Recursos visuais ou registros locais não devem ser apresentados como execução externa real.
 
-### Céu
+## Verificação
 
-O Céu usa uma organização própria e flexível:
-
-`Domínio → Região → Unidade → Distrito`
-
-A nomenclatura é estrutural; não representa empresas adicionais. Marketing e Dark Factory são empresas registradas diretamente no mundo.
-
-## Operação
-
-```
-Intenção
-↓
-Necessidade
-↓
-Língua Universal
-↓
-Capacidade
-↓
-Empresa
-↓
-Portão
-↓
-Rodovia
-↓
-Operação
-↓
-Setor/Módulo
-↓
-Resultado
-↓
-Memória
-```
-
-A Central de Operações é a fachada operacional única. A infraestrutura interna permanece invisível para interfaces comuns.
-
-## Modularidade
-
-Falhas não obrigam repetição integral.
-
-Um módulo pode falhar, registrar sua evidência e receber reentrada específica. A operação continua somente depois da correção e validação daquele módulo.
-
-## Conexões
-
-A Central de Conexões Externas é infraestrutura compartilhada.
-
-- conectores ficam registrados em um hub interno;
-- TEST usa somente execução simulada;
-- PROD exige autorização e aprovação;
-- tokens de runtime não são persistidos como segredo público;
-- a interface mostra somente o estado necessário para o usuário.
-
-## Regra oficial
-
-Não existem SucoCast, Suco País ou derivados pré-instanciados na arquitetura atual.
-
-Novas empresas e capacidades entram por registro. O mundo não precisa ser redesenhado para receber uma nova empresa.
-
-## Validação
-
-`npm test` é a suíte automatizada.
-
-A Central de Testes é a validação funcional do runtime no navegador. Nenhum resultado de teste de produção é considerado válido sem evidência real de execução.
+`npm test` é a suíte automatizada principal. Depois dela, verificar manualmente a navegação, a persistência e a publicação no navegador.
