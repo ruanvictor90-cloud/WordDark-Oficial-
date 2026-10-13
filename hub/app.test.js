@@ -19,11 +19,12 @@ assert.ok(!hub.includes("info-widget") && !hub.includes("info-grid") && !hub.inc
 assert.ok(hub.includes('class="topbar"') && hub.includes('class="launch-dock"'), "Hub must keep its header and official app launch dock");
 assert.ok(css.includes("--bg:#09070f") && css.includes("--accent:#c49aff"), "Hub must preserve its original dark-purple identity");
 assert.ok(css.includes(".brand-mark") && css.includes(".launch-dock") && !css.includes("#54c8ff"), "Header and bottom app launch must use the original purple identity, not blue");
-assert.ok(sw.includes("worddark-hub-v8"), "Hub cache must refresh for the quick request bar and Teste app");
-assert.ok(hub.includes("app.css?v=20261013-4") && hub.includes("app.js?v=20261013-4"), "Hub must request fresh versioned assets");
+assert.ok(sw.includes("worddark-hub-v9"), "Hub cache must refresh for the quick request bar, Central and Teste apps");
+assert.ok(hub.includes("app.css?v=20261013-5") && hub.includes("app.js?v=20261013-5"), "Hub must request fresh versioned assets");
 assert.ok(hub.includes("id=\"quick-request-form\"") && hub.includes("id=\"quick-request-input\""), "Hub must expose a quick request bar below the header");
-assert.ok(hub.includes("class=\"test-app-tile\"") && hub.includes(">Teste</span>"), "Hub must expose the logo-and-name Teste app tile");
-assert.ok(css.includes(".quick-request-bar") && css.includes(".test-app-tile"), "Hub quick request and Teste app must have dedicated styling");
+assert.ok(hub.includes('class="central-app-tile"') && hub.includes('href="../worddark/app/index.html?area=central"'), "Hub must expose the Central app above Teste");
+assert.ok(hub.includes('class="test-app-tile"') && hub.includes(">Teste</span>"), "Hub must expose the logo-and-name Teste app tile");
+assert.ok(css.includes(".quick-request-bar") && css.includes(".central-app-tile") && css.includes(".test-app-tile"), "Hub quick request, Central and Teste apps must have dedicated styling");
 assert.ok(script.includes("worddark.hub.quick-request.v1") && script.includes("area=management&fromHub=1"), "Quick requests must enter WordDark Central Operations");
 assert.ok(sw.includes("event.request.mode===\"navigate\""), "Hub navigation should prefer the latest published HTML");
 assert.ok(script.includes('worddark.hub.notices.v1') && script.includes('createdAt'), 'Hub must receive and order world notifications');
