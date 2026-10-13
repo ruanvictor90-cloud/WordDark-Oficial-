@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { searchCatalog, createEnvelope, createLocalStore, getSystemStatus, CONNECTORS, DARKNET_VERSION } from "./darknet-core.js";
 assert.ok(DARKNET_VERSION.startsWith("0.1.0"));
 assert.ok(searchCatalog("Shadow","ruan").some(x=>x.id==="shadow"));
-assert.ok(searchCatalog("execução","both").some(x=>x.id==="sky"));
+assert.ok(searchCatalog("execução","both").some(x=>x.id==="execution-area"));
 assert.equal(searchCatalog("termo inexistente","ruan").length,0);
 const envelope=createEnvelope({from:"Ruan",to:"WordDark",subject:"Teste",body:"Mensagem preparada"});
 assert.equal(envelope.status,"draft");assert.equal(envelope.transport,"local-only");assert.equal(envelope.dispatchedAt,null);
