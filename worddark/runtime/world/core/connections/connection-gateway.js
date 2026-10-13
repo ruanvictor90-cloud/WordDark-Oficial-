@@ -44,6 +44,12 @@ class ExternalConnectionGateway {
     const request=built.request;
     const requestData=request.toJSON();
 
+    // Publicação e agendamento permanecem manuais, mesmo com conta e adapter conectados.
+    const manualOnlyActions=new Set(["CONTENT_PUBLISH","CONTENT_UNPUBLISH","CONTENT_SCHEDULE"]);
+    if(manualOnlyActions.has(String(request.action||"").toUpperCase())||manualOnlyActions.has(String(request.capability||"").toUpperCase())){
+      return{success:false,status:"MANUAL_ACTION_REQUIRED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,reason:"Esta versão prepara e acompanha conteúdo, mas não publica, despublica nem agenda publicação automaticamente."};
+    }
+
     // Falha fechada: ambiente desconhecido nunca alcança adapter externo.
     if(request.environment==="PROD") {
       if(typeof this.productionApproval!=="function")return{success:false,status:"PROD_APPROVAL_REQUIRED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId};
