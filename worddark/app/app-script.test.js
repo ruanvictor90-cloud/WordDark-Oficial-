@@ -8,7 +8,7 @@ const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
 assert.ok(scripts.length, "WordDark must include its client script");
 const source = scripts.at(-1)[1];
 assert.doesNotThrow(() => new vm.Script(source), "Inline WordDark script must parse");
-assert.ok(sw.includes("worddark-app-v1-24"), "World cache must refresh for the new navigation and commerce work");
+assert.ok(sw.includes("worddark-app-v1-25"), "World cache must refresh for the new navigation and commerce work");
 assert.ok(source.includes("central:{groups:[{items:[['ordersHub','Pedidos'],['executions','Em execução']]}]}"), "Central must contain only Pedidos and Em execução");
 assert.ok(source.includes("overview:{groups:[{items:[['central','Central'],['darkbank','Darkbank'],['connections','Central de conexão'],['automation','Automação'],['library','Biblioteca'],['school','Escola do Mundo'],['governance','Governança'],['security','Segurança'],['test','Teste']]}]}"), "WordDark home must keep its apps outside Central");
 assert.ok(source.includes("['coffer','Cofre'") && source.includes("['investments','Investimentos'") && !source.includes("['ruanReserve','Ruan'"), "Darkbank must keep its finance apps without a separate Ruan app");
