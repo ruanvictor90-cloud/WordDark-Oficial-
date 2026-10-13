@@ -18,7 +18,7 @@ assert.ok(source.includes("data-save-review"), "Review controls must be present"
 assert.ok(!html.includes('id="hubQuickRequestForm"') && !html.includes('id="hubQuickRequest"'), "Quick request bar must exist only in the Hub, not on WordDark world pages");
 assert.ok(!html.includes('class="hub-test-app"') && !html.includes('id="hubTestApp"'), "Hub Teste shortcut must not be pinned on every world page");
 assert.ok(!source.includes("quickRequestForm") && source.includes("worddark.hub.quick-request.v1"), "WordDark must receive Hub requests through the existing handoff key without embedding the quick request bar");
-assert.ok(source.includes("['test','Teste','','']"), "Test must be available from the WordDark home launcher");
+assert.ok(source.includes("['test','Teste']") && source.includes("['central','Central']"), "Central and Teste must be available as compact WordDark home apps");
 assert.ok(!source.includes("function createLaunchMission()"), "The launch mission generator must be removed from the factory");
 assert.ok(!source.includes("data-create-launch-mission") && !html.includes("MISSÃO DE ESTREIA · WORDDARK OFICIAL"), "The launch mission card must be absent from the factory");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
@@ -92,7 +92,7 @@ const cleanLauncherEnd=source.indexOf("function render()",cleanLauncherStart);
 const cleanLauncherSource=source.slice(cleanLauncherStart,cleanLauncherEnd);
 assert.ok(!cleanLauncherSource.includes("operation-primary") && !cleanLauncherSource.includes("view.description") && !cleanLauncherSource.includes("view.cta"), "Sector launchers must omit redundant descriptions and shortcut CTA buttons");
 assert.ok(source.includes("worddark.hub.quick-request.v1") && source.includes("Pedido encaminhado pelo WordDark Hub."), "Quick Hub requests must prefill the central request form");
-assert.ok(source.includes("page=['overview','management','sky','earth','test','finance','library','security','channels','social','workbench','marketing','darkbank','investments','myinvestments','opportunities'].includes(requestedPage)"), "Direct routes must include existing areas and the Darkbank hierarchy without a duplicate Financeiro page");
+assert.ok(source.includes("requestedPage).get('area'),page=['overview','management','sky','earth','test','finance','library','security','channels','social','workbench','marketing','darkbank','investments','myinvestments','opportunities','central','ordersHub'") && source.includes("'connections','automation'") && source.includes("'capture','store','commerceOrders'"), "Direct routes must include the new central and commercial apps");
 assert.ok(source.includes("overview:{") && source.includes("items:[['test','Teste','','']]") && source.includes("clean-app-name"), "WordDark launcher must include the logo-and-name Teste app");
 const launcherStart=source.indexOf("function cleanLauncher(area)");
 const launcherEnd=source.indexOf("function render()",launcherStart);
@@ -102,11 +102,11 @@ const earthConfig=launcher.slice(launcher.indexOf("earth:{"),launcher.indexOf("}
 const overviewConfig=launcher.slice(launcher.indexOf("overview:{"),launcher.indexOf("sky:{"));
 assert.ok(!overviewConfig.includes("channels"), "Commercial company must belong to Terra, not WordDark");
 assert.ok(earthConfig.includes("['channels','Empresa comercial'") && earthConfig.includes("['social','Empresa social'"), "Terra must show both Empresa social and Empresa comercial");
-assert.ok(overviewConfig.includes("['test','Teste','','']"), "Teste app must be available on the WordDark home only");
+assert.ok(overviewConfig.includes("['test','Teste']") && overviewConfig.includes("['central','Central']"), "Central and Teste must be available on the WordDark home only");
 assert.ok(!skyConfig.includes("['test','Teste") && !earthConfig.includes("['test','Teste"), "Teste app must not duplicate on each sector page");
 assert.ok(!skyConfig.includes("management") && !skyConfig.includes("library"), "Sky must not expose WordDark apps as shortcuts");
 assert.ok(!earthConfig.includes("management") && !earthConfig.includes("library"), "Terra must not expose WordDark apps as shortcuts");
-assert.ok(source.includes("const pageParents={") && source.includes("workbench:'sky'") && source.includes("marketing:'sky'") && source.includes("darkbank:'sky'") && source.includes("finance:'darkbank'") && source.includes("investments:'darkbank'") && source.includes("myinvestments:'investments'") && source.includes("opportunities:'investments'") && source.includes("channels:'earth'") && source.includes("social:'earth'"), "Each app must have a correct parent-sector fallback");
+assert.ok(source.includes("const pageParents={") && source.includes("workbench:'sky'") && source.includes("finance:'darkbank'") && source.includes("central:'overview'") && source.includes("ordersHub:'central'") && source.includes("connections:'central'") && source.includes("capture:'channels'") && source.includes("store:'channels'") && source.includes("receivedOrders:'commerceOrders'"), "Each app must have a correct parent-sector fallback");
 assert.ok(source.includes("function appLauncher(kind)") && source.includes("function darkbank()") && source.includes("function investments()") && source.includes("function myinvestments()") && source.includes("function opportunities()"), "Darkbank must contain Financeiro and Investimentos, with both investment sectors nested under Investimentos");
 assert.ok(source.includes("['darkbank','Darkbank'") && source.includes("<span class=\"clean-app-name\">'+label+'</span>"), "Darkbank must appear in Céu and use the compact icon-and-name launcher");
 assert.ok(source.includes("window.addEventListener('popstate',event=>"), "Browser back gestures must follow the in-app navigation history");
@@ -115,4 +115,11 @@ assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired wit
 assert.ok(html.includes("Navegação corrigida: sem barra lateral e com retorno sempre visível"), "The global sidebar must stay hidden and the return control must remain visible");
 assert.ok(html.includes(".app-topbar .back-top{display:grid!important;visibility:visible!important"), "The back button must override older rules that hid it");
 assert.ok(html.includes("#screen.clean-launcher{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))"), "Area launchers must remain three columns");
+
+assert.ok(source.includes("function connections()") && source.includes("data-provider") && source.includes("connection-panel"), "Central de conexão must list providers and jump directly to its connection area");
+assert.ok(source.includes("function requestSourceView(source)") && source.includes("requestSocial") && source.includes("requestCommercial") && source.includes("requestWorld"), "Pedidos must be separated by demand source");
+assert.ok(source.includes("function executionView(source)") && source.includes("executionSocial") && source.includes("executionCommercial"), "Execution must be separated by area");
+assert.ok(source.includes("function capture()") && source.includes("data-view-demand") && source.includes("function store()") && source.includes("data-add-cart") && source.includes("checkoutForm"), "Commercial company must include capture cards, storefront, cart and checkout flow");
+assert.ok(source.includes("function orderManagement()") && source.includes("function receivedOrders()") && source.includes("function awaitingOrders()") && source.includes("function supplierPage()"), "Commercial orders and suppliers must have distinct app screens");
+assert.ok(source.includes("function automated()") && source.includes("function automate()") && source.includes("function school()") && source.includes("function governancePlaceholder"), "Automation, School and Governance scaffolds must be present");
 console.log("worddark app script test: OK");
