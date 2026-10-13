@@ -15,8 +15,8 @@ assert.ok(html.includes('#screen.clean-launcher{display:grid!important;grid-temp
 assert.ok(html.includes('flex-direction:column!important') && html.includes('text-align:center!important'), 'App buttons must stack icon above its label, not look like a horizontal list');
 assert.ok(html.includes('left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important'), 'WordDark logo must remain centered at the top');
 assert.ok(source.includes("data-save-review"), "Review controls must be present");
-assert.ok(html.includes('id="hubQuickRequestForm"') && html.includes('id="hubQuickRequest"'), "WordDark Hub must provide a quick request bar below the header");
-assert.ok(html.includes('class="hub-test-app"') && html.includes('>Teste</span>'), "Test must appear as a compact logo-and-name app below the quick bar");
+assert.ok(!html.includes('id="hubQuickRequestForm"') && !html.includes('id="hubQuickRequest"'), "Quick request bar must exist only in the Hub, not on WordDark world pages");
+assert.ok(!html.includes('class="hub-test-app"') && !html.includes('id="hubTestApp"'), "Hub Teste shortcut must not be pinned on every world page");
 assert.ok(source.includes("Pedido registrado para triagem"), "Quick requests must be stored for triage without external execution");
 assert.ok(!source.includes("['test','Teste','','']"), "Test must not be duplicated in the area launcher");
 assert.ok(!source.includes("function createLaunchMission()"), "The launch mission generator must be removed from the factory");
@@ -93,10 +93,13 @@ const skyConfig=launcher.slice(launcher.indexOf("sky:{"),launcher.indexOf("earth
 const earthConfig=launcher.slice(launcher.indexOf("earth:{"),launcher.indexOf("};",launcher.indexOf("earth:{")));
 const overviewConfig=launcher.slice(launcher.indexOf("overview:{"),launcher.indexOf("sky:{"));
 assert.ok(!overviewConfig.includes("channels"), "Commercial company must belong to Terra, not WordDark");
+assert.ok(earthConfig.includes("['channels','Empresa comercial'"), "Terra must show the Empresa comercial app");
+assert.ok(overviewConfig.includes("['test','Teste','','']"), "Teste app must be available on the WordDark home only");
+assert.ok(!skyConfig.includes("['test','Teste") && !earthConfig.includes("['test','Teste"), "Teste app must not duplicate on each sector page");
 assert.ok(!skyConfig.includes("management") && !skyConfig.includes("library"), "Sky must not expose WordDark apps as shortcuts");
 assert.ok(!earthConfig.includes("management") && !earthConfig.includes("library"), "Terra must not expose WordDark apps as shortcuts");
-assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("showPage(pageHistory.pop())"), "Back must pop the most recent in-app page rather than jump to a fixed page");
-assert.ok(source.includes("window.addEventListener('popstate'"), "Browser back gestures must follow the in-app navigation stack");
+assert.ok(source.includes("const pageParents={") && source.includes("workbench:'sky'") && source.includes("channels:'earth'") && source.includes("function goBack(){const parent=pageParents[page]"), "Back must return to the parent sector, not a previously visited unrelated page");
+assert.ok(source.includes("window.addEventListener('popstate',()=>goBack())"), "Browser back gestures must follow the parent-sector navigation");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
 
 assert.ok(html.includes("Navegação corrigida: sem barra lateral e com retorno sempre visível"), "The global sidebar must stay hidden and the return control must remain visible");
