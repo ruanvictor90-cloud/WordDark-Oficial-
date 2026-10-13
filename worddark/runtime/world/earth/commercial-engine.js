@@ -1,7 +1,7 @@
 const clean=(v,f)=>{if(typeof v!=="string"||!v.trim())throw new TypeError(f+" é obrigatório.");return v.trim()};
 const clone=v=>JSON.parse(JSON.stringify(v??{}));
 const orderFlow={ORDER_OPEN:["PLANNED","CANCELLED"],PLANNED:["IN_PROGRESS","CANCELLED"],IN_PROGRESS:["REVIEW","CANCELLED"],REVIEW:["IN_PROGRESS","COMPLETED","CANCELLED"],COMPLETED:[],CANCELLED:[]};
-export function createCommercialEngine({companyId="commercial",companyName="Empresa comercial",sectorId="earth",now=()=>new Date().toISOString(),idFactory=()=>"x"+Math.random().toString(36).slice(2,9)}={}){
+function createCommercialEngine({companyId="commercial",companyName="Empresa comercial",sectorId="earth",now=()=>new Date().toISOString(),idFactory=()=>"x"+Math.random().toString(36).slice(2,9)}={}){
  const catalog=new Map(),leads=new Map(),proposals=new Map(),orders=new Map(),audit=[];
  const id=p=>p+"-"+idFactory(),record=(event,data)=>audit.push({event,at:now(),data:clone(data)}),list=m=>[...m.values()].map(clone),get=(m,k)=>m.has(k)?clone(m.get(k)):null;
  function addCatalogItem(x={}){const itemId=x.itemId||id("offer"),price=x.price==null?null:Number(x.price);if(catalog.has(itemId))throw Error("Oferta duplicada.");if(price!==null&&(!Number.isFinite(price)||price<0))throw TypeError("Preço inválido.");if(!["ONE_TIME","WEEKLY","MONTHLY","QUARTERLY","YEARLY","CUSTOM"].includes(x.recurrence||"ONE_TIME"))throw TypeError("Recorrência inválida.");const o={itemId,name:clean(x.name,"Nome da oferta"),category:clean(x.category,"Categoria"),description:x.description||"",price,currency:x.currency||"BRL",recurrence:x.recurrence||"ONE_TIME",active:x.active!==false,createdAt:now()};catalog.set(itemId,o);record("OFFER_CREATED",o);return clone(o)}
@@ -13,4 +13,4 @@ export function createCommercialEngine({companyId="commercial",companyName="Empr
  function transitionOrder(orderId,status,actorId){const o=orders.get(orderId);if(!o)throw Error("Pedido não encontrado.");if(!orderFlow[o.status]?.includes(status))throw Error("Transição de pedido não permitida.");o.status=status;o.lastActorId=clean(actorId,"Responsável");o.updatedAt=now();record("ORDER_STATUS_CHANGED",o);return clone(o)}
  return Object.freeze({addCatalogItem,createLead,qualifyLead,createProposal,decideProposal,openOrder,transitionOrder,getOffer:id=>get(catalog,id),listCatalog:()=>list(catalog),getLead:id=>get(leads,id),listLeads:()=>list(leads),getProposal:id=>get(proposals,id),listProposals:()=>list(proposals),getOrder:id=>get(orders,id),listOrders:()=>list(orders),auditTrail:()=>audit.map(clone),status:()=>({engine:"TERRA_COMMERCIAL_COMPANY",companyId,companyName,sectorId,catalogItems:catalog.size,leads:leads.size,proposals:proposals.size,orders:orders.size,paymentEnabled:false,externalExecutionEnabled:false})});
 }
-export default {createCommercialEngine};
+module.exports={createCommercialEngine};
