@@ -10,7 +10,7 @@ assert.ok(!html.includes('carousel-phrase'));
 assert.ok(!html.includes('finance-widget-value'));
 assert.ok(!html.includes('tasks-widget-value'));
 assert.ok(!html.includes('bills-widget-value'));
-assert.ok(html.includes('class="ruan-home-grid"'));
+assert.ok(html.includes('class="ruan-home-grid"'));\nassert.ok(read('app.css').includes('min-height:96px;max-height:118px'), 'Ruan apps must be compact and near the top');
 assert.ok(!html.includes('apps-drawer'));
 assert.ok(!html.includes('apps-toggle'));
 assert.ok(html.includes('class="home-app-name">Pessoal</span>'));
@@ -25,7 +25,7 @@ assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'
 assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
 assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(read('app.css').includes('body.ruan-launcher .top-actions{display:flex!important'), 'Ruan home must keep its notification bell visible');
-assert.ok(html.includes('app.css?v=20261012-8') && html.includes('app.js?v=20261012-8'), 'Ruan home must request refreshed assets');
+assert.ok(html.includes('app.css?v=20261013-1') && html.includes('app.js?v=20261013-1'), 'Ruan home must request refreshed assets');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
@@ -35,7 +35,7 @@ const pessoal = read('apps/pessoal/index.html');
 assert.ok(!pessoal.includes('apps-drawer'));
 assert.ok(!pessoal.includes('apps-toggle'));
 assert.ok(!pessoal.includes('apps/shadow'));
-assert.ok(pessoal.includes('class="pessoal-app-grid"'));
+assert.ok(pessoal.includes('class="pessoal-app-grid"'));\nassert.ok(read('apps/pessoal/pessoal.css').includes('min-height:94px;max-height:112px'), 'Pessoal apps must follow the same compact launcher architecture');
 assert.ok(pessoal.includes('class="pessoal-app-name">Financeiro</span>'));
 assert.ok(pessoal.includes('class="pessoal-app-name">Tarefas</span>'));
 assert.ok(pessoal.includes('circle cx="41" cy="37" r="7"'), 'Financeiro must use its dedicated money icon');
@@ -65,5 +65,5 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v14'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v15'"));
 console.log('Ruan app structure tests passed.');
