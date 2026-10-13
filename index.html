@@ -12,7 +12,7 @@
 .brand{position:relative;height:66px;width:min(100%,520px);display:flex;align-items:center;justify-content:center;border-bottom:1px solid #382647aa}.world-return{position:absolute;left:0;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:38px;height:38px;border:1px solid #49315d;border-radius:12px;background:#17101f;color:#d8c2f5;font-size:23px}.world-return:focus-visible{outline:2px solid #b58aff;outline-offset:2px}
 .brand-mark{width:43px;height:43px;display:grid;place-items:center;border:1px solid #9861e866;border-radius:14px;background:linear-gradient(145deg,#21152f,#100c18);box-shadow:0 0 26px #9d5cff20}
 .brand-mark svg{width:31px;height:31px;fill:none;stroke:#d9baff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.world-entry{width:min(100%,520px);margin:auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:30px 0}
+.world-entry{width:min(100%,420px);margin:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:26px 0}.world-option{aspect-ratio:auto;min-height:116px;flex-direction:row;justify-content:flex-start;gap:22px;padding:20px 25px;border-radius:23px}.world-option svg{width:clamp(48px,13vw,68px);height:clamp(48px,13vw,68px)}.world-option-name{font-size:clamp(16px,4vw,19px);text-align:left;letter-spacing:.01em}
 .world-option{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:10px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#1c1527,#120e19);color:var(--accent);transition:border-color .2s,transform .2s,box-shadow .2s}
 .world-option-name{font-size:clamp(11px,2.8vw,13px);font-weight:750;line-height:1.2;text-align:center;color:#f4efff}
 .world-option svg{flex:0 0 auto}
@@ -21,7 +21,7 @@
 .world-option:nth-child(2){color:#b9caff;border-color:#39465f;background:linear-gradient(145deg,#171d2a,#10131c)}
 .world-option:nth-child(3){color:#d5c1f5;border-color:#59416e;background:linear-gradient(145deg,#1b1425,#100c17)}
 .world-option:hover,.world-option:focus-visible{border-color:#c49aff;transform:translateY(-2px);box-shadow:0 8px 28px #0005,0 0 22px #9d5cff18;outline:none}
-@media(max-width:360px){body{padding-left:13px;padding-right:13px}.world-entry{gap:8px}.world-option{border-radius:16px}}
+@media(max-width:360px){body{padding-left:13px;padding-right:13px}.world-entry{gap:10px}.world-option{min-height:100px;padding:16px;border-radius:18px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 </style>
 </head>
