@@ -10,8 +10,8 @@ const store={loadTokens:async({providerId,accountId})=>{
 const fetchImpl=async(url,options={})=>{
   calls.push({url,options});
   if(url==="https://oauth2.googleapis.com/token")return{ok:true,json:async()=>({access_token:"SHORT_LIVED_ACCESS_TOKEN"})};
-  if(String(url).startsWith("https://www.googleapis.com/upload/youtube/v3/videos?"))return{ok:true,headers:{get:name=>name.toLowerCase()==="location"?"https://upload.youtube.test/session/opaque":null},json:async()=>({})};
-  if(url==="https://upload.youtube.test/session/opaque")return{ok:true,json:async()=>({id:"VIDEO-123",status:{privacyStatus:"private"}})};
+  if(String(url).startsWith("https://www.googleapis.com/upload/youtube/v3/videos?"))return{ok:true,headers:{get:name=>name.toLowerCase()==="location"?"https://upload.youtube.googleapis.com/session/opaque":null},json:async()=>({})};
+  if(url==="https://upload.youtube.googleapis.com/session/opaque")return{ok:true,json:async()=>({id:"VIDEO-123",status:{privacyStatus:"private"}})};
   throw new Error("Unexpected external URL in test: "+url);
 };
 
@@ -60,5 +60,20 @@ assert.equal(missing.status,"YOUTUBE_ACCOUNT_NOT_AUTHORIZED");
 
 const invalid=await publisher.publishVideo({accountId:"CHANNEL-001",videoBuffer:Buffer.alloc(0),title:"Empty"});
 assert.equal(invalid.status,"VIDEO_EMPTY");
+
+let bytesSentToUntrustedHost=0;
+const hostileLocationPublisher=createYouTubePublisher({
+  connectionStore:{loadTokens:async()=>({refresh_token:"SERVER_ONLY_REFRESH_TOKEN",scope:"https://www.googleapis.com/auth/youtube.upload"})},
+  clientId:"TEST_CLIENT_ID",clientSecret:"TEST_CLIENT_SECRET",
+  fetchImpl:async(url,options={})=>{
+    if(url==="https://oauth2.googleapis.com/token")return{ok:true,json:async()=>({access_token:"SHORT_LIVED_ACCESS_TOKEN"})};
+    if(String(url).startsWith("https://www.googleapis.com/upload/youtube/v3/videos?"))return{ok:true,headers:{get:()=> "https://attacker.example/upload"},json:async()=>({})};
+    bytesSentToUntrustedHost++;
+    throw new Error("Untrusted upload host must never receive media");
+  }
+});
+const hostile=await hostileLocationPublisher.publishVideo({accountId:"CHANNEL-001",videoBuffer:Buffer.from("private-video"),title:"Host check"});
+assert.equal(hostile.status,"YOUTUBE_UPLOAD_LOCATION_REJECTED");
+assert.equal(bytesSentToUntrustedHost,0,"Video bytes must not be sent to a non-Google host");
 
 console.log("youtube-publisher.test: OK");
