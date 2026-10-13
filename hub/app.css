@@ -17,3 +17,9 @@
 .test-app-logo svg{width:30px;height:30px;fill:none;stroke:#d9baff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:430px){.quick-request-bar{gap:6px;padding:6px}.quick-request-bar input{padding:0 9px;font-size:10px}.quick-request-bar button{padding:0 9px;font-size:9px}.test-app-tile{margin-bottom:14px}}
+
+/* App Central do WordDark: atalho principal acima do app Teste. */
+.central-app-tile{width:84px;display:flex;flex-direction:column;align-items:center;gap:7px;margin:4px 0 2px;padding:10px 6px;border:1px solid transparent;border-radius:16px;color:#e5d3ff;font-size:10px;font-weight:800;text-align:center;transition:background .18s,border-color .18s}
+.central-app-tile:hover,.central-app-tile:focus-visible{outline:none;border-color:#9a6bd0;background:#21152e}
+.central-app-logo{width:47px;height:47px;display:grid;place-items:center;border:1px solid #8759b2;border-radius:15px;background:linear-gradient(145deg,#38214e,#160e22);box-shadow:0 0 22px #9d5cff20}
+.central-app-logo svg{width:30px;height:30px;fill:none;stroke:#e0c8ff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
