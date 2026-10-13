@@ -5,7 +5,7 @@ const calls=[];
 const store={loadTokens:async({providerId,accountId})=>{
   assert.equal(providerId,"YOUTUBE");
   assert.equal(accountId,"CHANNEL-001");
-  return {refresh_token:"SERVER_ONLY_REFRESH_TOKEN",scope:"https://www.googleapis.com/auth/youtube.upload"};
+  return {refresh_token:"SERVER_ONLY_REFRESH_TOKEN",scope:"https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload"};
 }};
 const fetchImpl=async(url,options={})=>{
   calls.push({url,options});
