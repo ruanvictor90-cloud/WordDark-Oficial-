@@ -41,7 +41,7 @@ function createYouTubePublisher({
     if(!["private","unlisted","public"].includes(privacyStatus))return fail("INVALID_PRIVACY_STATUS","A visibilidade deve ser private, unlisted ou public.");
     if(!Buffer.isBuffer(videoBuffer)&&!(videoBuffer instanceof Uint8Array))return fail("VIDEO_BYTES_REQUIRED","O vídeo precisa ser entregue ao adaptador como bytes no backend.");
     if(videoBuffer.byteLength===0)return fail("VIDEO_EMPTY","O arquivo de vídeo está vazio.");
-    if(!/^video\\/[a-zA-Z0-9.+-]+$/.test(mimeType))return fail("INVALID_VIDEO_MIME_TYPE","O MIME type deve identificar um vídeo.");
+    if(!/^video\/[a-zA-Z0-9.+-]+$/.test(mimeType))return fail("INVALID_VIDEO_MIME_TYPE","O MIME type deve identificar um vídeo.");
 
     let tokens;
     try{tokens=await connectionStore.loadTokens({providerId:"YOUTUBE",accountId:String(accountId)});}
