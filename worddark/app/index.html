@@ -616,7 +616,7 @@ return '<section class="test-screen"><h1>Teste</h1><button class="btn gold test-
 function runSectorCheck(area){
 try{
 const html=cleanLauncher(area);
-const ok=area==='overview'?html.includes('Central de Operações')&&html.includes('Financeira')&&!html.includes('Empresa comercial'):area==='sky'?html.includes('Dark Factory')&&html.includes('Marketing')&&!html.includes('Central de Operações')&&!html.includes('Apoio operacional'):area==='earth'?html.includes('Empresa comercial')&&!html.includes('Central de Operações')&&!html.includes('Dark Factory'):false;
+const ok=area==='overview'?html.includes('Central de Operações')&&html.includes('Financeira')&&!html.includes('Empresa comercial'):area==='sky'?html.includes('Dark Factory')&&html.includes('Marketing')&&!html.includes('Central de Operações')&&!html.includes('Apoio operacional'):area==='earth'?html.includes('Empresa social')&&html.includes('Empresa comercial')&&!html.includes('Central de Operações')&&!html.includes('Dark Factory'):false;
 return {ok,message:ok?'Tudo OK':'Falha'};
 }catch{return {ok:false,message:'Falha'}}
 }
