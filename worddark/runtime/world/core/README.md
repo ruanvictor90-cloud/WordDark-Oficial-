@@ -33,6 +33,7 @@ Este é o único Core ativo do mundo WordDark. A consolidação deve reforçar e
 - `permissions.js` é o conjunto de permissões exportado pela entrada principal atual.
 - `permission-set.js` tem um contrato diferente e não deve ser usado como autoridade paralela sem adaptação e testes explícitos.
 - O gateway de conexões valida `TEST/PROD`; TEST usa somente `testExecute`, enquanto PROD bloqueia sem `productionApproval` configurado e aprovado.
+- Aprovação configurada apenas no navegador não é uma fronteira de segurança confiável; produção real precisa de validação no backend e segredos fora do Pages.
 - Capacidade de publicação não pode ser rebaixada para uma capacidade de roteamento. Os nomes devem corresponder à permissão efetivamente concedida.
 - O contrato externo clona o payload e os logs do gateway não registram o payload completo.
 
