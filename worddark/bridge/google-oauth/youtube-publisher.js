@@ -78,7 +78,7 @@ function createYouTubePublisher({
     try{
       uploaded=await fetchImpl(uploadUrl,{
         method:"PUT",
-        headers:{"Content-Type":mimeType,"Content-Length":String(bytes.length)},
+        headers:{"Content-Type":mimeType},
         body:bytes
       });
     }catch{return fail("YOUTUBE_UPLOAD_FAILED","O envio do vídeo foi interrompido; verifique o estado antes de tentar novamente.");}
