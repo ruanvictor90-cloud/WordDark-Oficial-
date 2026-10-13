@@ -12,6 +12,7 @@ assert.ok(hub.includes('href="./creationdark.html"') && hub.includes('>CreationD
 const creation=read('creationdark.html');
 assert.ok(creation.includes('Inventário operacional') && creation.includes('worddark.hub.creationdark.inventory.v1'), 'CreationDark must provide a local operational inventory');
 assert.ok(creation.includes('Sem destino') && creation.includes('Em análise') && creation.includes('Destino definido'), 'CreationDark must classify items by consolidation status');
+assert.ok(creation.includes('CD-LEGACY-OPERATION-LIFECYCLE') && creation.includes('CD-LEGACY-CONNECTION-STACK') && creation.includes('CD-LEGACY-GOVERNANCE'), 'CreationDark must inventory legacy operational candidates without activating them');
 assert.ok(creation.includes('não move nem executa código') && creation.includes('não representa sincronização entre dispositivos'), 'CreationDark must clearly remain a local preparation area');
 assert.ok(hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'), 'Hub must keep the bottom WordDark entry');
 assert.ok(!hub.includes('class="hub-apps"'), 'Pedidos and Em execução must live inside Hub Central');
