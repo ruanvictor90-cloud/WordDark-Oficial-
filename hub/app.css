@@ -53,3 +53,6 @@
 .dock-arrow{font-size:16px;margin-left:2px}
 .central-page{padding-top:0}
 @media(max-width:430px){.hub-return-under-header{margin:8px 0 4px}.test-app-tile{min-height:0;margin:5px auto 7px;padding:5px 8px}.test-app-logo{width:27px;height:27px;flex-basis:27px}.launch-dock{min-height:40px;padding:5px 10px}}
+
+/* Darknet launcher tile, separate from world runtime. */
+.darknet-app-tile{width:auto;min-height:0;max-width:max-content;align-self:center;display:inline-flex;align-items:center;gap:8px;margin:7px auto 9px;padding:6px 10px;border:1px solid #49315d;border-radius:12px;background:linear-gradient(145deg,#1c1730,#100c18);color:#e5d3ff;font-size:10px;font-weight:750}.darknet-app-tile:hover,.darknet-app-tile:focus-visible{outline:none;border-color:#bda5ff;background:#21152e}.darknet-app-logo{width:29px;height:29px;flex:0 0 29px;display:grid;place-items:center;border:1px solid #7059a5;border-radius:9px;background:#151020;color:#bda5ff}.darknet-app-logo svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
