@@ -20,6 +20,7 @@ assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes
 assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
 assert.ok(css.includes('.quick-request-bar') && css.includes('.test-app-tile') && css.includes('.launch-dock'));
 assert.ok(sw.includes('worddark-hub-v13') && sw.includes('central.html') && sw.includes('creationdark.html') && sw.includes('20261013-9'));
+assert.ok(sw.includes('requestUrl.pathname.endsWith("/creationdark.html")'), 'CreationDark must have its own offline navigation fallback');
 
 assert.ok(hub.indexOf('</header>')<hub.indexOf('class="ruan-return hub-return-under-header"'), 'Hub return must sit below the header');
 assert.ok(central.indexOf('</header>')<central.indexOf('class="ruan-return hub-return-under-header"') && !central.includes('<a class="central-back"'), 'Hub Central must have only one return link below the header');
