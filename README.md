@@ -1,151 +1,73 @@
-# WordDark Oficial
+# WordDark Oficial — versão consolidada em construção
 
-Este é o desenvolvimento oficial do mundo **WordDark**.
+Este repositório contém a versão atual dos aplicativos **Ruan**, **WordDark Hub** e **WordDark**, além dos motores e setores que serão conectados progressivamente.
 
-## Princípio central
+## Regra principal desta versão
 
-> **O WordDark coordena. As empresas operam. Os setores executam.**
+**Manter o aplicativo simples e os setores brutos; não integrar módulos antigos só porque eles já existem no repositório.**
 
-O mundo é a infraestrutura que interliga empresas, capacidades, operações, memória, segurança, permissões, finanças e conexões externas. Empresas não substituem o WordDark; elas usam o mundo para operar.
+A interface atual é a fonte do que está exposto nesta versão. Os motores e módulos detalhados são reutilizáveis, mas só entram no fluxo ativo quando forem conectados e testados explicitamente.
 
-## Mapa atual
+## Aplicativos atuais
 
-```
-WORDDARK
-├── Língua Universal
-│   ├── Produção
-│   └── Operação
-├── Infraestrutura
-│   ├── Registro
-│   ├── Segurança
-│   ├── Memória
-│   └── Central de Operações
-├── Rodovia
-├── Empresas
-│   ├── Terra
-│   │   ├── Gestão de Negócios
-│   │   └── Gestão de Conteúdos e Canais
-│   └── Céu
-│       ├── Marketing
-│       └── Dark Factory
-└── Conexões Externas
-```
+### Ruan — privado e independente
+- Central pessoal com gaveta global de aplicativos.
+- Pessoal: Financeiro e Tarefas.
+- Shadow: área separada, com protótipo DarkEye.
+- WordDark Hub: entrada para o ambiente WordDark.
+- Ruan não faz parte do mundo interno do WordDark. Não há compartilhamento automático de dados nem autoridade do WordDark sobre Ruan.
 
-Terra e Céu são áreas do mundo, não empresas.
+### WordDark Hub
+- Central do Hub: Pedidos e Em execução.
+- Teste: entrada compacta para testar o mundo ou setores.
+- WordDark: entrada para o aplicativo principal do mundo.
 
-## Fluxo oficial
+### WordDark — mundo operacional
+- **WordDark:** coordenação, gerenciamento e infraestrutura.
+- **Céu:** Dark Factory e Central Social.
+- **Terra:** Empresa social e Empresa comercial.
+- Aplicativos centrais visíveis nesta versão: Central, Darkbank, Central de conexão, Automação, Biblioteca, Escola do Mundo, Governança, Segurança e Teste.
+- Dark Factory mantém as entradas Em criação e Biblioteca, com categorias de mídia.
+- Central Social mantém Gestor de redes sociais, Gestor de marketing digital e Gestor de projetos.
+- Darkbank mantém Financeiro, Cofre e Investimentos. Os fundos do Cofre pertencem ao WordDark; não existe uma área financeira do Ruan dentro dele.
 
-```
-INTENÇÃO
-↓
-NECESSIDADE
-↓
-LÍNGUA UNIVERSAL
-↓
-CAPACIDADE
-↓
-EMPRESA
-↓
-PORTÃO
-↓
-RODOVIA
-↓
-OPERAÇÃO
-↓
-MÓDULOS
-↓
-RESULTADO
-↓
-MEMÓRIA
-↓
-RETORNO
-```
+SucoCast, SucoGeek, SucoComed e SucoFactor são perfis externos de canais de teste/operação, não setores internos nem a raiz da arquitetura.
 
-A **Central de Operações** é a entrada operacional única. Registries, planner, roteador e adapters permanecem por baixo do tapete; interfaces comuns mostram apenas o que é necessário para operar.
+## Fonte canônica do runtime
 
-## Operação modular
+- Core: `worddark/runtime/world/core/`
+- Céu: `worddark/runtime/world/sky/`
+- Terra: `worddark/runtime/world/earth/`
+- Interface WordDark: `worddark/app/`
+- Hub: `hub/`
+- Ruan: `ruan/`
 
-Uma produção pode possuir várias operações e módulos independentes. Se um módulo falhar, a operação pode reentrar somente naquele módulo.
+O Core coordena contratos e operações; Céu e Terra mantêm responsabilidades próprias. A interface e os motores ainda não devem ser considerados totalmente integrados apenas porque coexistem no repositório.
 
-Exemplo:
+## Código legado e módulos futuros
 
-`imagem ✅ → áudio ❌ → vídeo não executado`
+- `worddark/core-central/` é uma implementação anterior e está fora do caminho ativo e da suíte padrão de testes.
+- Outras implementações detalhadas podem permanecer no repositório para reaproveitamento, mas não devem ser conectadas automaticamente à versão atual.
+- Nenhum código legado deve criar um segundo Core, adicionar telas não definidas ou ligar integrações reais por conta própria.
 
-Depois:
+## Limites atuais
 
-`reentrada no áudio → áudio ✅ → vídeo → conclusão`
-
-Não é necessário repetir o que já foi concluído.
-
-## Área pessoal do proprietário
-
-**Ruan** é uma área pessoal privada, não uma empresa. Tarefas, lembretes, ideias e projetos pessoais ficam isolados do conhecimento operacional do mundo. A comunicação é iniciada por Ruan: o WordDark não entra nessa área nem compartilha seus dados automaticamente.
-
-Fluxo autorizado:
-
-`Ruan → solicitação explícita → WordDark → resposta → Ruan`
-
-## Empresas
-
-### Terra
-- **Empresa de Gestão de Negócios:** negócios, produtos, fornecedores, clientes, pedidos, recursos, vendas e automações.
-- **Empresa de Gestão de Conteúdos e Canais:** contas, canais, conteúdo, audiência, planejamento operacional e publicação.
-
-### Céu
-- **Empresa de Marketing:** mercado, tendências, oportunidades, naming, identidade, posicionamento, audiência, campanhas e crescimento.
-- **Dark Factory — Empresa de Produção de Conteúdo:** criação, edição, montagem, transformação, renderização, validação e preparação de conteúdo.
-
-## Conexões externas
-
-A **Central de Conexões Externas** é infraestrutura compartilhada, não empresa.
-
-Ela centraliza:
-- autorização;
-- contas externas;
-- adapters/connectors;
-- estado das conexões;
-- publicação e outras capacidades externas.
-
-A interface não precisa conhecer registries ou tokens. TEST usa somente simuladores; PROD exige autorização/aprovação e conexão adequada. Secrets não ficam no GitHub Pages.
-
-## TEST e PROD
-
-`TEST` é ambiente de laboratório e nunca deve executar connector real.
-
-`PROD` exige barreira explícita de aprovação e autorização. A separação existe para impedir que testes atinjam contas externas acidentalmente.
-
-## Central de Testes
-
-A Central de Testes é um laboratório funcional do runtime. Ela deve validar:
-- contratos;
-- empresas e capacidades;
-- roteamento;
-- operações;
-- produções;
-- execução por setores;
-- falhas;
-- reentrada;
-- resultados;
-- memória;
-- isolamento TEST/PROD;
-- conectores simulados.
-
-## Estrutura dinâmica
-
-Nenhum cliente, canal ou grupo histórico é criado automaticamente.
-
-A Terra cresce conforme necessidades reais. O Céu cresce conforme capacidades reais. Não existem SucoCast, Suco País ou derivados pré-instanciados na arquitetura oficial.
+- As interfaces usam armazenamento local do navegador em várias áreas.
+- Não há sincronização central garantida entre dispositivos.
+- Conectores, publicação automática, pagamentos e movimentações bancárias reais não são considerados ativos sem integração de backend e evidência de execução.
+- TEST deve usar simulação. PROD exige autorização explícita, credenciais seguras, auditoria e possibilidade de interrupção.
+- Os impostos no Darkbank são estimativas configuráveis, não apuração tributária.
 
 ## Desenvolvimento
 
-- `main` = 🌍 produção/online
-- `develop` = 🛠️ criação
-- `staging` = 🧪 integração/testes
+- `main`: produção publicada.
+- `develop`: criação.
+- `staging`: integração e testes.
 
-Todo desenvolvimento estrutural deve ser integrado e testado no repositório oficial antes de ser considerado parte do mundo.
+Antes de considerar uma mudança concluída, executar `npm test` e revisar o comportamento no navegador. A publicação do GitHub Pages deve ser verificada separadamente.
 
-### Testes
+## Testes
 
-`npm test`
-
-A suíte Node valida o runtime central e os contratos. A Central de Testes valida também o comportamento no navegador/GitHub Pages.
+```bash
+npm test
+```

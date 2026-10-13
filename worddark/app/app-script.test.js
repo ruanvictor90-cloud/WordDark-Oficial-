@@ -8,12 +8,12 @@ const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
 assert.ok(scripts.length, "WordDark must include its client script");
 const source = scripts.at(-1)[1];
 assert.doesNotThrow(() => new vm.Script(source), "Inline WordDark script must parse");
-assert.ok(sw.includes("worddark-app-v1-23"), "World cache must refresh for the new navigation and commerce work");
+assert.ok(sw.includes("worddark-app-v1-24"), "World cache must refresh for the new navigation and commerce work");
 assert.ok(source.includes("central:{groups:[{items:[['ordersHub','Pedidos'],['executions','Em execução']]}]}"), "Central must contain only Pedidos and Em execução");
 assert.ok(source.includes("overview:{groups:[{items:[['central','Central'],['darkbank','Darkbank'],['connections','Central de conexão'],['automation','Automação'],['library','Biblioteca'],['school','Escola do Mundo'],['governance','Governança'],['security','Segurança'],['test','Teste']]}]}"), "WordDark home must keep its apps outside Central");
 assert.ok(source.includes("['coffer','Cofre'") && source.includes("['investments','Investimentos'") && !source.includes("['ruanReserve','Ruan'"), "Darkbank must keep its finance apps without a separate Ruan app");
-assert.ok(source.includes("function cofferView()") && source.includes("cofferConfig.operations") && source.includes("cofferConfig.investments") && source.includes("cofferConfig.ruan"), "Cofre must keep three allocation buckets");
-assert.ok(source.includes("operations:70,investments:30,ruan:0"), "Initial allocation should keep Ruan salary at zero");
+assert.ok(source.includes("function cofferView()") && source.includes("cofferConfig.operations") && source.includes("cofferConfig.investments") && !source.includes("cofferConfig.ruan") && !source.includes("cofferRuan"), "Cofre must contain only WordDark operating and investment allocations");
+assert.ok(source.includes("operations:70,investments:30") && !source.includes("ruan:0"), "Initial allocation should keep only WorldDark operating and investment funds");
 assert.ok(source.includes("function markOrderPaid(orderId)") && source.includes("financeEvents.push(event)") && source.includes("order.financialPosted=true"), "Verified payment must post a financial event only once");
 assert.ok(source.includes("gross,expenses,taxRate,taxEstimate,profit,allocation"), "Financial events must distinguish gross movement, costs, estimated taxes, profit and coffer allocation");
 assert.ok(source.includes("stat('Movimento'") && source.includes("stat('Gastos'") && source.includes("stat('Impostos estimados'") && source.includes("stat('Lucro do mundo'") && source.includes("stat('Cofre'") && source.includes("taxConfigForm"), "Finance screen must show movement, costs, estimated taxes, profit and coffer");
@@ -31,4 +31,8 @@ assert.ok(source.includes("function creationQueue()") && source.includes("factor
 assert.ok(html.includes(".content{min-height:calc(100svh - 72px);padding:18px 10px 28px;display:block}") && html.includes("display:inline-flex!important;grid-column:1"), "Detail pages must use normal layout and show the back button");
 assert.ok(source.includes("KEYS.dispatches") && source.includes("KEYS.financeEvents") && source.includes("coffer:KEYS.coffer") && source.includes("taxConfig:KEYS.taxConfig"), "Order and finance data, including tax configuration, must be included in backups");
 assert.ok(source.includes("function connections()") && source.includes("data-provider") && source.includes("connection-panel"), "Central connections must jump directly to each provider area");
+assert.ok(!source.includes("function ruanReserve()") && !source.includes("Ruan · reserva") && !source.includes("KEYS.transfers"), "WordDark must not contain a private Ruan reserve or transfer path");
+assert.ok(!source.includes("function marketing()") && !source.includes("marketing:'Marketing'") && source.includes("requestedPage==='marketing'?'centralSocial'"), "The old Marketing screen must resolve to Central Social");
+assert.ok(!source.includes("'workbench','marketing','centralSocial'") && !source.includes("marketing:'sky'"), "The old Marketing route must not remain in the active app registry");
+assert.ok(!source.includes("ADM Dono") && !source.includes("Ruan permanece externo") && !source.includes("function overview()") && !source.includes("function sky()"), "The active WordDark app must not expose old authority labels or duplicate launcher screens");
 console.log("WordDark app script test: OK");

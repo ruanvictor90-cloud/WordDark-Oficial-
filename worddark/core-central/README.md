@@ -1,45 +1,15 @@
-# Core legado — desativado
+# Core legado — arquivado
 
-O antigo `worddark/core-central/` foi retirado da execução do WordDark.
+O antigo `worddark/core-central/` não é a fonte de execução do WordDark atual e está fora da suíte padrão de testes.
 
 ## Fonte única do Core
 
-A fonte canônica agora é:
-
 `worddark/runtime/world/core/`
 
-Ela concentra apenas a infraestrutura central do mundo:
-- identidade e autorização;
-- contratos;
-- Portão;
-- Rodovia;
-- comunicação;
-- catálogo de capacidades;
-- registro de empresas;
-- motor e coordenador de operações;
-- memória, recuperação e segurança.
+Ela concentra a infraestrutura central ativa do mundo. O Céu continua em `worddark/runtime/world/sky/` e a Terra em `worddark/runtime/world/earth/`.
 
-## Limites de arquitetura
+## Uso deste diretório
 
-**Céu não foi movido nem externalizado.**
+O conteúdo permanece temporariamente no repositório como referência para reaproveitamento seletivo. Não importar esses módulos para a interface atual, não criar um segundo coordenador e não adicionar seus testes à suíte principal sem uma decisão explícita de reativação e consolidação.
 
-`worddark/runtime/world/sky/` continua sendo a camada de operações e soluções do mundo.
-
-Dentro do Céu permanecem, em seus próprios módulos:
-- Marketing;
-- Dark Factory;
-- Conexões Externas;
-- futuras operações especializadas.
-
-A Dark Factory continua em:
-
-`worddark/runtime/world/sky/darkfactory/`
-
-O Core coordena e encaminha. O Céu executa operações. A fábrica produz.
-
-Nenhum cliente externo, grupo ou canal específico faz parte do Core.
-
-## Regra de migração
-
-Novos módulos devem ser adicionados no domínio responsável, nunca recriados em um segundo Core.
-
+A preservação do código legado não significa que ele esteja ativo.
