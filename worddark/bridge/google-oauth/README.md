@@ -45,6 +45,14 @@ O módulo `youtube-publisher.js` prepara o envio server-side de vídeo pelo flux
 
 **Portão de autorização preparado:** `publication-authorization.js` exige identidade de operador autenticada, autorização específica da operação, aprovação identificável, quota, chave de idempotência e auditoria. Falhas de autenticação, aprovação, quota, auditoria ou registro bloqueiam a operação. O contrato de idempotência depende de um armazenamento durável fornecido pelo backend; nenhum armazenamento em memória é tratado como proteção de produção. O módulo ainda não está ligado ao servidor HTTP.
 
+
+### Armazenamento de operações de publicação (preparado, ainda não ligado ao servidor)
+
+- `publication-store.js` fornece contratos Firestore para reivindicar chaves de idempotência com transações, finalizar recibos, reservar quota por operador/provedor/conta e gravar eventos de auditoria sem payload ou credenciais.
+- A fábrica cloud usa o projeto de serviço e coleções configuráveis por variáveis de ambiente; as permissões IAM do serviço precisam limitar quem pode ler/escrever essas coleções.
+- O teste local usa um Firestore falso para verificar o contrato; ele não substitui teste de integração no projeto Google Cloud nem comprova configuração IAM, transações concorrentes reais ou retenção/imutabilidade da auditoria.
+- Ainda não existe rota HTTP que conecte este armazenamento, o portão de autorização, o registro de conexões e o adaptador de upload. A publicação permanece indisponível por endpoint e manual por padrão.
+
 **Permanece deliberadamente inativo:** o servidor HTTP ainda não expõe rota de publicação e o módulo não é importado por `server.js`. Antes de ligá-lo, o backend precisa autenticar o operador, conferir autorização/aprovação por operação, validar a capacidade da conta, impor limites e idempotência, registrar auditoria e proteger contra repetição de pedidos. Os bytes do vídeo devem chegar por um caminho confiável do backend; não aceitar URL arbitrária fornecida pelo cliente para evitar SSRF.
 
 ## Ainda pendente antes de produção
