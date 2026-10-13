@@ -111,3 +111,13 @@ body.ruan-launcher .notification-wrap{display:block}
 body.ruan-launcher .bell{display:grid!important;width:36px;height:36px;border:1px solid #5b3b73;border-radius:12px;background:linear-gradient(145deg,#21172d,#15101e);color:#d8b5ff;opacity:1}
 body.ruan-launcher .notification-panel{right:0;top:42px}
 @media(max-width:360px){body.ruan-launcher .top-actions{gap:4px}body.ruan-launcher .bell{width:33px;height:33px}}
+
+/* Ruan home: smaller app cells near the top, matching the Hub's compact launcher. */
+body.ruan-launcher .shell{justify-content:flex-start;min-height:100svh}
+body.ruan-launcher .ruan-home-grid{width:min(100%,460px);margin:0 auto;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;padding:8px 0 14px}
+body.ruan-launcher .ruan-home-app{aspect-ratio:auto;min-height:96px;max-height:118px;gap:7px;padding:8px;border-radius:16px}
+body.ruan-launcher .ruan-home-app .brand-mark{width:44px;height:44px;flex:0 0 44px;border-radius:13px}
+body.ruan-launcher .ruan-home-app .brand-mark svg{width:29px;height:29px}
+body.ruan-launcher .home-app-name{font-size:11px;line-height:1.2;text-align:center}
+body.ruan-launcher footer{margin-top:auto;padding-top:12px}
+@media(max-width:360px){body.ruan-launcher .ruan-home-grid{gap:7px;padding-top:6px}body.ruan-launcher .ruan-home-app{min-height:86px;padding:6px}body.ruan-launcher .ruan-home-app .brand-mark{width:39px;height:39px;flex-basis:39px}}
