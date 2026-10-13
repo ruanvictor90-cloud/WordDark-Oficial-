@@ -37,10 +37,10 @@ assert.match(external.reason, /não está habilitado|reservado/);
 assert.equal(external.transportStarted, false);
 
 const audit = engine.getAuditLog();
-assert.equal(audit.length, 3);
-assert.deepEqual(audit.map(x => x.action), ["connection.requested", "connection.requested", "connection.requested"]);
+assert.equal(audit.length, 4);
+assert.deepEqual(audit.map(x => x.action), ["connector.registered", "connection.requested", "connection.requested", "connection.requested"]);
 assert.ok(audit.every(x => x.outcome === "blocked-no-transport" && x.allowed === false));
-assert.equal(engine.getStatus().auditCount, 3);
+assert.equal(engine.getStatus().auditCount, 4);
 assert.equal(engine.getStatus().connectorCount, 3);
 
 // Returned records are copies; callers cannot mutate the engine's internal audit log.
