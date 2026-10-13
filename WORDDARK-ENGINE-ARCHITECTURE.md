@@ -1,62 +1,46 @@
-# Arquitetura dos Motores — Ruan e WordDark
+# Arquitetura dos motores — versão consolidada
 
-## Fronteira soberana
+## Fronteira entre Ruan e WordDark
 
-- Ruan é o motor central pessoal e permanece soberano.
-- `ruan/engine/ruan-central.js` compõe o motor pessoal existente (`central-engine.js`) com a fronteira soberana, sem renomear nem substituir suas APIs.
-- WordDark, Céu, Terra e conectores externos não recebem acesso à raiz nem métodos de escrita de Ruan.
-- Sistemas conectados a Ruan recebem uma porta de solicitação: podem pedir uma capacidade e fornecer contexto, mas não aprovar pedidos, executar comandos pessoais ou alterar o estado pessoal.
-- Ruan pode iniciar mensagens para sistemas conectados. A resposta de um sistema é informação, não autoridade sobre Ruan.
-- A porta de solicitação em JavaScript estabelece separação de API; quando houver serviços remotos, a mesma regra precisa ser reforçada por autenticação, autorização no servidor, isolamento de credenciais e logs imutáveis.
+- Ruan é um aplicativo pessoal privado e independente.
+- WordDark não administra Ruan, não acessa seus dados e não recebe autoridade sobre sua raiz.
+- Nenhum módulo do WordDark deve criar uma página, reserva financeira ou transferência para Ruan.
+- Uma futura conexão, caso definida, terá de ser explícita, limitada e iniciada por Ruan; ela não faz parte da versão consolidada atual.
 
-## Motor central do WordDark
+## Fonte canônica do Core
 
-`worddark/core-central/world-engine.js` é o núcleo compartilhado do ecossistema. Ele recebe envelopes, valida tipo e origem, chama somente a responsabilidade de domínio correspondente, registra trilha de auditoria e cataloga modelos de receita. Não recria interfaces e não substitui os motores já existentes; é uma camada nova de coordenação sobre os contratos atuais.
+`worddark/runtime/world/core/` é o Core ativo e único. Ele reúne a infraestrutura operacional, incluindo identidade, permissões, portões, contratos, operações, comunicação, persistência, ambiente, recuperação e parada emergencial.
 
-## Motores de domínio
+`worddark/core-central/` é uma implementação anterior. Está fora do caminho ativo e da suíte padrão. Seus detalhes podem ser consultados para reaproveitamento, mas não devem ser importados nem usados como segundo coordenador.
 
-- **WordDark** — coordena, julga o encaminhamento e propõe rotas; não executa efeitos externos.
-- **Céu** — prepara soluções, planos, conteúdos e entregáveis para revisão; não publica por conta própria.
-- **Terra** — registra necessidades de clientes/negócios e recorrência; registrar demanda não significa aceitar orçamento nem prometer resultado.
+## Domínios
 
+- **WordDark:** coordena, registra e encaminha operações.
+- **Céu:** mantém capacidades especializadas, incluindo Dark Factory e Central Social.
+- **Terra:** mantém empresas e operações voltadas a necessidades externas, incluindo Empresa social e Empresa comercial.
+- **Darkbank:** acompanha registros financeiros do próprio mundo; não é uma integração bancária real.
+- **Central de conexão:** concentra o desenho dos conectores. Uma tela de conexão não significa que uma conta externa esteja conectada.
+- **Ruan:** fica fora desses domínios.
 
-## Motores de setores e empresas
+## Estado atual versus objetivo
 
-- `worddark/runtime/world/core/sector-engine.js` cria uma instância isolada por setor, registra as empresas vinculadas e mantém uma visão resumida das operações e uma trilha de auditoria.
-- `worddark/runtime/world/core/company-engine.js` cria uma instância isolada por empresa. Cada empresa mantém suas próprias ordens de trabalho, recorrência, orçamento/prazo, transições de estado e aprovações.
-- O núcleo `worddark/core-central/world-engine.js` inicia os três setores permanentes (WordDark, Céu e Terra) e a empresa prioritária de gestão de canais. Também permite registrar novos setores e empresas, encaminha operações para a instância da empresa e mantém o resumo do estado no setor. Uma empresa precisa pertencer a um setor registrado.
-- O fluxo de uma operação empresarial é `RECEIVED → TRIAGED → PREPARING → REVIEW → APPROVED → DELIVERED`; cancelamento e retorno de revisão são estados explícitos. A aprovação exige confirmação explícita e identidade do responsável.
-- Cada instância é isolada por identificador. Nenhum motor executa publicação, cobrança, compra ou chamada externa; o estado aprovado não liga execução real.
+O repositório possui motores de domínio e interfaces. A coexistência de arquivos não prova que todas as interfaces chamem os motores canônicos. A integração deve ocorrer por contratos explícitos e ser validada por testes.
 
-## Fluxo padrão
+Fluxo desejado:
 
-`DEMANDA → REGISTRO EM TERRA → COORDENAÇÃO WORDDARK → PREPARAÇÃO EM CÉU → REVISÃO/APROVAÇÃO → EXECUTOR AUTORIZADO`
+`SOLICITAÇÃO → CONTRATO → AUTORIZAÇÃO → ROTEAMENTO → OPERAÇÃO → RESULTADO → REGISTRO`
 
-O código desta etapa implementa intake, planejamento, roteamento e catálogo de modelos de receita. Publicação, cobrança, compras, alterações de contas e chamadas a conectores reais continuam desligadas.
+Cada operação deve ter identificador, estado, origem e evidências. Falhas devem permitir retomada controlada. Aprovação não significa execução externa automática.
 
-## Preparação para receitas
+## Regras de segurança
 
-O catálogo aceita modelos propostos, incluindo serviços avulsos, pacotes recorrentes, assinaturas, produtos digitais/físicos e operações comerciais. Cada modelo registra responsável, preço/modelo de cobrança e recorrência. O catálogo não cobra, não movimenta dinheiro e não afirma que um modelo está validado; todo registro nasce como `PROPOSED`.
-
-## Regras obrigatórias
-
-1. Nenhum domínio altera diretamente dados de outro domínio.
-2. Cada solicitação tem identificador, estado, origem e trilha de auditoria.
-3. A aprovação não executa automaticamente uma operação.
-4. Sem autorização explícita, não há publicação, cobrança, compra nem mudança de conta.
-5. O ambiente de testes usa motores simulados e não chama serviços reais.
-6. Falha em um módulo deve permitir corrigir e testar aquele módulo sem reconstruir os demais.
-7. Os nomes e caminhos existentes são preservados; estes arquivos acrescentam motores, sem substituir as interfaces antigas.
+1. Um domínio não escreve diretamente nos dados privados de outro.
+2. TEST usa simuladores e não chama conectores reais.
+3. PROD exige autorização explícita, credenciais protegidas no servidor e trilha de auditoria.
+4. Nenhuma publicação, cobrança, compra ou alteração de conta é considerada concluída sem confirmação do serviço responsável.
+5. Automação permanece desativada por padrão, com aprovação humana e parada emergencial.
+6. Novos setores reutilizam contratos existentes; não criam um segundo Core.
 
 ## Testes
 
-```bash
-node ruan/engine/sovereign-core.test.js
-node ruan/engine/ruan-central.test.js
-node worddark/core-central/world-engine.test.js
-node worddark/runtime/world/core/worddark-engine.test.js
-node worddark/runtime/world/core/sector-engine.test.js
-node worddark/runtime/world/core/company-engine.test.js
-node worddark/runtime/world/sky/sky-engine.test.js
-node worddark/runtime/world/earth/earth-engine.test.js
-```
+`npm test` valida a suíte ativa. Os testes do antigo `worddark/core-central/` ficam fora dessa suíte para não tratar a implementação anterior como fonte canônica.
