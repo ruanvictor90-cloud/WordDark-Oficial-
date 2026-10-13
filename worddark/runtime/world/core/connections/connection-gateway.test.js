@@ -12,14 +12,14 @@ function storage(){
   const store=storage();
   const registry=new Registry(store);
   store.setItem("wd.external.connections",JSON.stringify([{
-    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH"]
+    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH","ANALYTICS_READ"]
   }]));
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
 
   const gateway=new Gateway({registry});
   const waiting=await gateway.execute({
     requestId:"REQ-EXT-001",operationId:"OP-EXT-001",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-001"}
+    capability:"ANALYTICS_READ",action:"ANALYTICS_READ",payload:{contentId:"CONTENT-001"}
   });
   assert.strictEqual(waiting.status,"WAITING_EXTERNAL_CONNECTION");
 
@@ -37,7 +37,7 @@ function storage(){
 
   const done=await gateway.execute({
     requestId:"REQ-EXT-002",operationId:"OP-EXT-002",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-002"}
+    capability:"ANALYTICS_READ",action:"ANALYTICS_READ",payload:{contentId:"CONTENT-002"}
   });
   assert.strictEqual(done.success,true);
   assert.strictEqual(done.status,"TEST_SIMULATED");
@@ -45,7 +45,7 @@ function storage(){
 
   const blockedProd=await gateway.execute({
     requestId:"REQ-EXT-003",operationId:"OP-EXT-003",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-003"}
+    capability:"ANALYTICS_READ",action:"ANALYTICS_READ",environment:"PROD",payload:{contentId:"CONTENT-003"}
   });
   assert.strictEqual(blockedProd.status,"PROD_APPROVAL_REQUIRED");
   assert.strictEqual(realCalls,0,"PROD must be blocked without an explicit approval provider");
@@ -64,21 +64,28 @@ function storage(){
   });
   const deniedProd=await approvedGateway.execute({
     requestId:"REQ-EXT-005",operationId:"OP-EXT-005",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-005"}
+    capability:"ANALYTICS_READ",action:"ANALYTICS_READ",environment:"PROD",payload:{contentId:"CONTENT-005"}
   });
   assert.strictEqual(deniedProd.status,"PROD_NOT_AUTHORIZED");
   assert.strictEqual(realCalls,0);
 
   const allowedProd=await approvedGateway.execute({
     requestId:"REQ-EXT-004",operationId:"OP-EXT-004",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-004"}
+    capability:"ANALYTICS_READ",action:"ANALYTICS_READ",environment:"PROD",payload:{contentId:"CONTENT-004"}
   });
   assert.strictEqual(allowedProd.status,"PROD_STUB_EXECUTED");
   assert.strictEqual(realCalls,1);
 
+  const publishBlocked=await approvedGateway.execute({
+    requestId:"REQ-PUBLISH-MANUAL",operationId:"OP-PUBLISH-MANUAL",providerId:"YOUTUBE",accountId:"ACC-001",
+    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-MANUAL"}
+  });
+  assert.strictEqual(publishBlocked.status,"MANUAL_ACTION_REQUIRED","Publishing must stay manual even when PROD approval exists");
+  assert.strictEqual(realCalls,1,"manual publication must never reach an external adapter");
+
   const missingCapability=await gateway.execute({
     requestId:"REQ-EXT-006",operationId:"OP-EXT-006",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"ACCOUNT_MANAGE",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-006"}
+    capability:"ACCOUNT_MANAGE",action:"ANALYTICS_READ",payload:{contentId:"CONTENT-006"}
   });
   assert.strictEqual(missingCapability.status,"CAPABILITY_NOT_GRANTED","A weaker capability must not authorize a stronger action");
   assert.strictEqual(realCalls,1);
@@ -98,7 +105,7 @@ function storage(){
   registry.disconnect("YOUTUBE","ACC-001");
   const disconnected=await gateway.execute({
     requestId:"REQ-EXT-007",operationId:"OP-EXT-007",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-007"}
+    capability:"ANALYTICS_READ",action:"ANALYTICS_READ",payload:{contentId:"CONTENT-007"}
   });
   assert.strictEqual(disconnected.status,"ACCOUNT_NOT_CONNECTED");
   console.log("connection-gateway.test: OK");
