@@ -23,7 +23,7 @@ function setup({authorized=true,persisted=true,publisherResult={success:true,sta
   const runtime=createPublicationRuntime({
     connectionStore,publicationStore,publisher,
     authenticateOperator:async()=>({authenticated:true,operatorId:"operator-1"}),
-    authorizeOperation:async()=>({allowed}),
+    authorizeOperation:async()=>({allowed:authorized}),
     approveOperation:async()=>({allowed:true,approvalId:"approval-1"})
   });
   return{runtime,events,claims,get calls(){return calls;}};
