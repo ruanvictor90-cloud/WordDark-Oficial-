@@ -83,6 +83,22 @@ function storage(){
   assert.strictEqual(publishBlocked.status,"MANUAL_ACTION_REQUIRED","Publishing must stay manual even when PROD approval exists");
   assert.strictEqual(realCalls,1,"manual publication must never reach an external adapter");
 
+  const automaticGateway=new Gateway({
+    registry,
+    productionApproval:async request=>({allowed:request.operationId==="OP-PUBLISH-AUTO",reference:"APPROVAL-PUBLISH-AUTO"}),
+    publicationPolicy:async request=>({allowed:request.action==="CONTENT_PUBLISH",mode:"AUTOMATIC",serverAuthorized:true,reference:"SERVER-POLICY-001"})
+  });
+  automaticGateway.registerAdapter("YOUTUBE",{
+    execute:async(request,context)=>{realCalls++;assert.strictEqual(context.environment,"PROD");return{success:true,status:"PUBLISH_STUB_ACCEPTED",externalId:"STUB-001"};},
+    testExecute:async()=>({success:true,status:"TEST_SIMULATED"})
+  });
+  const automaticPublish=await automaticGateway.execute({
+    requestId:"REQ-PUBLISH-AUTO",operationId:"OP-PUBLISH-AUTO",providerId:"YOUTUBE",accountId:"ACC-001",
+    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-AUTO"}
+  });
+  assert.strictEqual(automaticPublish.status,"PUBLISH_STUB_ACCEPTED","explicit server authorization can enable the prepared publication path");
+  assert.strictEqual(realCalls,2,"only the explicit opt-in publication policy should reach the provider adapter");
+
   const missingCapability=await gateway.execute({
     requestId:"REQ-EXT-006",operationId:"OP-EXT-006",providerId:"YOUTUBE",accountId:"ACC-001",
     capability:"ACCOUNT_MANAGE",action:"ANALYTICS_READ",payload:{contentId:"CONTENT-006"}
