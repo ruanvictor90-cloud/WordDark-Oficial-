@@ -53,9 +53,7 @@ await assert.rejects(()=>store.complete("publish-1",{requestFingerprint:fingerpr
 
 const principal={operatorId:"operator-1"};
 const request={providerId:"YOUTUBE",accountId:"channel-1"};
-const reservations=await Promise.all(Array.from({length:3},()=>store.consumeQuota({principal,request,limit:2,windowMs:86400000})));
-assert.equal(reservations.filter(x=>x.allowed).length,3,"The simple fake transaction is not concurrency-atomic; production uses Firestore transactions");
-// Sequential checks exercise the cap deterministically.
+// Sequential checks exercise the cap deterministically; production uses Firestore transactions for atomic reservations.
 const quotaStore=createPublicationStore({firestore:fakeFirestore(),clock});
 assert.equal((await quotaStore.consumeQuota({principal,request,limit:2,windowMs:86400000})).allowed,true);
 assert.equal((await quotaStore.consumeQuota({principal,request,limit:2,windowMs:86400000})).allowed,true);
