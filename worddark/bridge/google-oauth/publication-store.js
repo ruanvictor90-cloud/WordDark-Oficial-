@@ -17,6 +17,7 @@ function requireId(value,name){
 
 export function createPublicationStore({
   firestore,
+  FieldValue,
   collectionName="worddarkPublicationOperations",
   quotaCollectionName="worddarkPublicationQuotas",
   auditCollectionName="worddarkPublicationAudit",
@@ -26,7 +27,7 @@ export function createPublicationStore({
   const operations=firestore.collection(collectionName);
   const quotas=firestore.collection(quotaCollectionName);
   const auditCollection=firestore.collection(auditCollectionName);
-  const serverTimestamp=()=>typeof firestore.FieldValue?.serverTimestamp==="function"?firestore.FieldValue.serverTimestamp():clock().toISOString();
+  const serverTimestamp=()=>typeof FieldValue?.serverTimestamp==="function"?FieldValue.serverTimestamp():clock().toISOString();
 
   async function claim(idempotencyKey,{requestFingerprint,operationId}={}){
     requireId(idempotencyKey,"IDEMPOTENCY_KEY");
@@ -117,6 +118,5 @@ export async function createCloudPublicationStore({
   if(!projectId)throw new Error("PUBLICATION_PROJECT_REQUIRED");
   const {Firestore,FieldValue}=await import("@google-cloud/firestore");
   const firestore=new Firestore({projectId});
-  firestore.FieldValue=FieldValue;
-  return createPublicationStore({firestore,collectionName,quotaCollectionName,auditCollectionName});
+  return createPublicationStore({firestore,FieldValue,collectionName,quotaCollectionName,auditCollectionName});
 }
