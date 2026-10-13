@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {createPublicationRuntime} from "./publication-runtime.js";
 
-function setup({authorized=true,persisted=true,capabilities=["CONTENT_PUBLISH"],scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload",publisherResult={success:true,status:"UPLOAD_COMPLETED",videoId:"video-1"}}={}){
+function setup({authorized=true,persisted=true,connectionAccountId="channel-1",capabilities=["CONTENT_PUBLISH"],scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload",publisherResult={success:true,status:"UPLOAD_COMPLETED",videoId:"video-1"}}={}){
   const events=[];
   const claims=new Map();
   const publicationStore={
@@ -15,7 +15,7 @@ function setup({authorized=true,persisted=true,capabilities=["CONTENT_PUBLISH"],
     async audit(event){events.push(event);return{recorded:true};}
   };
   const connectionStore={
-    async load(){return persisted?{status:"PERSISTED",providerId:"YOUTUBE",accountId:"channel-1",capabilities,scope}:null;},
+    async load(){return persisted?{status:"PERSISTED",providerId:"YOUTUBE",accountId:connectionAccountId,capabilities,scope}:null;},
     async loadTokens(){return{refresh_token:"server-only"};}
   };
   let calls=0;
@@ -61,6 +61,11 @@ const wrongAction=setup();
 const wrongActionResult=await wrongAction.runtime.publishYouTube({request:{...request,action:"CONTENT_SCHEDULE",capability:"CONTENT_SCHEDULE"},idempotencyKey:"runtime-key-wrong-action",media});
 assert.equal(wrongActionResult.status,"PUBLICATION_ACTION_UNSUPPORTED");
 assert.equal(wrongAction.calls,0);
+
+const wrongAccount=setup({connectionAccountId:"different-channel"});
+const wrongAccountResult=await wrongAccount.runtime.publishYouTube({request,idempotencyKey:"runtime-key-wrong-account",media});
+assert.equal(wrongAccountResult.status,"YOUTUBE_CONNECTION_NOT_PERSISTED");
+assert.equal(wrongAccount.calls,0);
 
 const noCapability=setup({capabilities:[]});
 const noCapabilityResult=await noCapability.runtime.publishYouTube({request,idempotencyKey:"runtime-key-no-capability",media});
