@@ -1,0 +1,13 @@
+import assert from "node:assert/strict";
+import { searchCatalog, createEnvelope, createLocalStore, getSystemStatus, CONNECTORS, DARKNET_VERSION } from "./darknet-core.js";
+assert.ok(DARKNET_VERSION.startsWith("0.1.0"));
+assert.ok(searchCatalog("Shadow","ruan").some(x=>x.id==="shadow"));
+assert.ok(searchCatalog("execução","both").some(x=>x.id==="sky"));
+assert.equal(searchCatalog("termo inexistente","ruan").length,0);
+const envelope=createEnvelope({from:"Ruan",to:"WordDark",subject:"Teste",body:"Mensagem preparada"});
+assert.equal(envelope.status,"draft");assert.equal(envelope.transport,"local-only");assert.equal(envelope.dispatchedAt,null);
+assert.throws(()=>createEnvelope({subject:"",body:"x"}));
+const data=new Map();const storage={getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value)};
+const store=createLocalStore(storage,"test");store.saveDraft(envelope);assert.equal(store.list().outbox.length,1);assert.equal(store.list().outbox[0].transport,"local-only");store.receiveLocal({...envelope,id:"LOCAL-1"});assert.equal(store.list().inbox.length,1);store.deleteDraft(envelope.id);assert.equal(store.list().outbox.length,0);store.clear();assert.equal(store.list().inbox.length,0);
+const status=getSystemStatus();assert.equal(status.mode,"isolated");assert.ok(CONNECTORS.every(c=>c.status==="disabled"));assert.equal(status.connectors.filter(c=>c.status==="disabled").length,CONNECTORS.length);
+console.log("Darknet foundation tests passed (isolated mode).");
