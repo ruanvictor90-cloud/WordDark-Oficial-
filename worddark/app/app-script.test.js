@@ -92,7 +92,7 @@ const cleanLauncherEnd=source.indexOf("function render()",cleanLauncherStart);
 const cleanLauncherSource=source.slice(cleanLauncherStart,cleanLauncherEnd);
 assert.ok(!cleanLauncherSource.includes("operation-primary") && !cleanLauncherSource.includes("view.description") && !cleanLauncherSource.includes("view.cta"), "Sector launchers must omit redundant descriptions and shortcut CTA buttons");
 assert.ok(source.includes("worddark.hub.quick-request.v1") && source.includes("Pedido encaminhado pelo WordDark Hub."), "Quick Hub requests must prefill the central request form");
-assert.ok(source.includes("'central','ordersHub','requestSocial'") && source.includes("'connections','automation'") && source.includes("'capture','store','commerceOrders'"), "Direct routes must include the new central and commercial apps");
+assert.ok(source.includes("'central','ordersHub','requestSocial'") && source.includes("'connections','automation'") && source.includes("'capture','store','catalog','commerceOrders'"), "Direct routes must include the new central and commercial apps");
 assert.ok(source.includes("overview:{") && source.includes("clean-app-name") && source.includes("['central','Central']") && source.includes("['test','Teste']"), "WordDark launcher must include the logo-and-name Central and Teste apps");
 const launcherStart=source.indexOf("function cleanLauncher(area)");
 const launcherEnd=source.indexOf("function render()",launcherStart);
@@ -120,6 +120,7 @@ assert.ok(source.includes("function connections()") && source.includes("data-pro
 assert.ok(source.includes("function requestSourceView(source)") && source.includes("requestSocial") && source.includes("requestCommercial") && source.includes("requestWorld"), "Pedidos must be separated by demand source");
 assert.ok(source.includes("function executionView(source)") && source.includes("executionSocial") && source.includes("executionCommercial"), "Execution must be separated by area");
 assert.ok(source.includes("function capture()") && source.includes("data-view-demand") && source.includes("function store()") && source.includes("data-add-cart") && source.includes("checkoutForm"), "Commercial company must include capture cards, storefront, cart and checkout flow");
+assert.ok(source.includes('data-go="catalog"') && source.includes("catalog:()=>businessStore('catalog')"), "The storefront must expose a route to manage products without adding a fifth commercial app tile");
 assert.ok(source.includes("function orderManagement()") && source.includes("function receivedOrders()") && source.includes("function awaitingOrders()") && source.includes("function supplierPage()"), "Commercial orders and suppliers must have distinct app screens");
 assert.ok(source.includes("function automated()") && source.includes("function automate()") && source.includes("function school()") && source.includes("function governancePlaceholder"), "Automation, School and Governance scaffolds must be present");
 console.log("worddark app script test: OK");
