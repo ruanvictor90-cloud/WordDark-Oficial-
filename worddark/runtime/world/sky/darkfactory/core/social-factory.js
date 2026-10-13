@@ -95,19 +95,25 @@ class SocialFactory {
   async execute(operationId){
     const operation=this.operations.get(operationId);
     if(!operation)return {success:false,status:"NOT_FOUND",reason:"Operação não encontrada."};
-    if(MANUAL_PUBLICATION_ACTIONS.has(operation.action)){
-      operation.status="WAITING_MANUAL_PUBLICATION";
-      const result={success:true,status:"WAITING_MANUAL_PUBLICATION",stage:"DARK_FACTORY_SOCIAL",operationId,requestId:operation.requestId,network:operation.network,action:operation.action,manualActionRequired:true,reason:"O conteúdo está preparado para decisão humana. Nenhuma publicação, despublicação ou agenda automática foi enviada."};
-      this.log("SOCIAL_OPERATION_WAITING_MANUAL_PUBLICATION",result);
-      return result;
+    const publicationAction=MANUAL_PUBLICATION_ACTIONS.has(operation.action);
+    if(!this.connectionBridge?.execute){
+      if(publicationAction){
+        operation.status="WAITING_MANUAL_PUBLICATION";
+        const result={success:true,status:"WAITING_MANUAL_PUBLICATION",stage:"DARK_FACTORY_SOCIAL",operationId,requestId:operation.requestId,network:operation.network,action:operation.action,manualActionRequired:true,reason:"O conteúdo está preparado para publicação manual. A publicação automática será possível quando a Central de Conexões tiver API, autorização e configuração válidas."};
+        this.log("SOCIAL_OPERATION_WAITING_MANUAL_PUBLICATION",result);
+        return result;
+      }
+      return {success:false,status:"WAITING_EXTERNAL_CONNECTION",stage:"CENTRAL_DE_CONEXOES",operationId,reason:"Nenhuma ponte de conexão externa disponível."};
     }
-    if(!this.connectionBridge?.execute)return {
-      success:false,status:"WAITING_EXTERNAL_CONNECTION",stage:"CENTRAL_DE_CONEXOES",
-      operationId,reason:"Nenhuma ponte de conexão externa disponível."
-    };
     operation.status="WAITING_EXTERNAL";
     try{
       const result=await this.connectionBridge.execute(operation.toJSON());
+      if(result?.status==="MANUAL_ACTION_REQUIRED"&&publicationAction){
+        operation.status="WAITING_MANUAL_PUBLICATION";
+        const manualResult={...result,success:true,status:"WAITING_MANUAL_PUBLICATION",operationId,requestId:operation.requestId,network:operation.network,action:operation.action,manualActionRequired:true};
+        this.log("SOCIAL_OPERATION_WAITING_MANUAL_PUBLICATION",manualResult);
+        return manualResult;
+      }
       operation.status=result?.success===false?"FAILED":"COMPLETED";
       return {...result,operationId,requestId:operation.requestId};
     }catch(error){
