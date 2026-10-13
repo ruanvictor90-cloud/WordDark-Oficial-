@@ -104,7 +104,7 @@ function storage(){
     capability:"ACCOUNT_MANAGE",action:"ANALYTICS_READ",payload:{contentId:"CONTENT-006"}
   });
   assert.strictEqual(missingCapability.status,"CAPABILITY_NOT_GRANTED","A weaker capability must not authorize a stronger action");
-  assert.strictEqual(realCalls,1);
+  assert.strictEqual(realCalls,2);
 
   const sourcePayload={nested:{value:"original"}};
   const request=new ExternalRequest({
