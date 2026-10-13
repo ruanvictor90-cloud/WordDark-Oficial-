@@ -74,6 +74,12 @@ function createYouTubePublisher({
     if(!session.ok)return fail("YOUTUBE_UPLOAD_SESSION_FAILED","O YouTube recusou iniciar a sessão de envio.");
     const uploadUrl=session.headers?.get?.("location");
     if(!uploadUrl)return fail("YOUTUBE_UPLOAD_LOCATION_MISSING","O YouTube não retornou o endereço da sessão de envio.");
+    // A sessão é devolvida pelo endpoint oficial. Não envie bytes de mídia a um host arbitrário.
+    let parsedUploadUrl;
+    try{parsedUploadUrl=new URL(uploadUrl);}catch{return fail("YOUTUBE_UPLOAD_LOCATION_INVALID","O endereço da sessão de envio é inválido.");}
+    if(parsedUploadUrl.protocol!=="https:"||!(parsedUploadUrl.hostname==="googleapis.com"||parsedUploadUrl.hostname.endsWith(".googleapis.com"))){
+      return fail("YOUTUBE_UPLOAD_LOCATION_REJECTED","O endereço da sessão não pertence ao domínio seguro da API Google.");
+    }
     let uploaded;
     try{
       uploaded=await fetchImpl(uploadUrl,{
