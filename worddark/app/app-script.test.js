@@ -65,7 +65,7 @@ assert.ok(source.includes("Entrada pelo Hub") && source.includes("Fila de trabal
 assert.ok(source.includes("librarySearch") && source.includes("data-export-backup"), "Library must be archive-first with search and backup tools");
 assert.ok(source.includes("['social','Empresa social'") && source.includes("['channels','Empresa comercial'"), "Terra must keep both social and commercial companies as separate apps");
 assert.ok(source.includes("function social()") && source.includes("social:'Empresa social'"), "Empresa social must have its own screen and route");
-assert.ok(source.includes(`operation-app-copy"><strong>'+label+'</strong></span>`) && !source.includes(`operation-app-copy"><strong>'+label+'</strong><small>`), "World app tiles must show only icon and name");
+assert.ok(source.includes("clean-app-name") && !source.includes("operation-app-copy"><strong>'+label+'</strong><small>"), "World app tiles must show only icon and name");
 assert.ok(!source.includes("navigationStack") && source.includes("worddarkPreviousPage:page") && source.includes("history.back()") && source.includes("window.addEventListener('popstate',event=>"), "Back must follow the browser's actual previous in-app page without a stale parallel stack");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
 assert.ok(source.includes("data-cancel-request"), "Queued operations must support cancellation");
