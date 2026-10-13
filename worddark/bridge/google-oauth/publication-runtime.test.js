@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {createPublicationRuntime} from "./publication-runtime.js";
 
-function setup({authorized=true,persisted=true,publisherResult={success:true,status:"UPLOAD_COMPLETED",videoId:"video-1"}}={}){
+function setup({authorized=true,persisted=true,capabilities=["CONTENT_PUBLISH"],scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload",publisherResult={success:true,status:"UPLOAD_COMPLETED",videoId:"video-1"}}={}){
   const events=[];
   const claims=new Map();
   const publicationStore={
@@ -15,7 +15,7 @@ function setup({authorized=true,persisted=true,publisherResult={success:true,sta
     async audit(event){events.push(event);return{recorded:true};}
   };
   const connectionStore={
-    async load(){return persisted?{status:"PERSISTED",providerId:"YOUTUBE",accountId:"channel-1",capabilities:["CONTENT_PUBLISH"],scope:"https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload"}:null;},
+    async load(){return persisted?{status:"PERSISTED",providerId:"YOUTUBE",accountId:"channel-1",capabilities,scope}:null;},
     async loadTokens(){return{refresh_token:"server-only"};}
   };
   let calls=0;
@@ -61,6 +61,16 @@ const wrongAction=setup();
 const wrongActionResult=await wrongAction.runtime.publishYouTube({request:{...request,action:"CONTENT_SCHEDULE",capability:"CONTENT_SCHEDULE"},idempotencyKey:"runtime-key-wrong-action",media});
 assert.equal(wrongActionResult.status,"PUBLICATION_ACTION_UNSUPPORTED");
 assert.equal(wrongAction.calls,0);
+
+const noCapability=setup({capabilities:[]});
+const noCapabilityResult=await noCapability.runtime.publishYouTube({request,idempotencyKey:"runtime-key-no-capability",media});
+assert.equal(noCapabilityResult.status,"YOUTUBE_PUBLICATION_CAPABILITY_NOT_GRANTED");
+assert.equal(noCapability.calls,0);
+
+const noUploadScope=setup({scope:"https://www.googleapis.com/auth/youtube.readonly"});
+const noUploadScopeResult=await noUploadScope.runtime.publishYouTube({request,idempotencyKey:"runtime-key-no-upload-scope",media});
+assert.equal(noUploadScopeResult.status,"YOUTUBE_UPLOAD_SCOPE_NOT_GRANTED");
+assert.equal(noUploadScope.calls,0);
 
 const noConnection=setup({persisted:false});
 const noConnectionResult=await noConnection.runtime.publishYouTube({request,idempotencyKey:"runtime-key-4",media});
