@@ -72,6 +72,11 @@ assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections 
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
 assert.ok(source.includes("function cleanLauncher(area)") && source.includes("operation-rail") && source.includes("operation-app-copy"), "World sections must use dynamic, named operational cards grouped by category");
+assert.ok(source.includes("function test()") && source.includes("function runWorldCheck()") && source.includes("data-run-test"), "Teste app must provide one-click world and individual sector checks");
+assert.ok(source.includes("Tudo OK") && source.includes("Falha"), "Teste app must return a clear pass/fail result");
+assert.ok(source.includes("operation-metrics top-metrics") && !source.includes("operation-primary"), "Sector launchers must keep metrics at the top without extra primary action buttons");
+assert.ok(source.includes("worddark.hub.quick-request.v1") && source.includes("Pedido encaminhado pelo WordDark Hub."), "Quick Hub requests must prefill the central request form");
+assert.ok(source.includes("test-only-app") && source.includes("<strong>Teste</strong>"), "WordDark launcher must include the logo-and-name Teste app");
 const launcherStart=source.indexOf("function cleanLauncher(area)");
 const launcherEnd=source.indexOf("function render()",launcherStart);
 const launcher=source.slice(launcherStart,launcherEnd);
