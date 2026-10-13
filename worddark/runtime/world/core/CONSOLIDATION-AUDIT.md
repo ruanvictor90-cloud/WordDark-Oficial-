@@ -30,7 +30,7 @@ O gateway ativo foi endurecido nesta revisão:
 - a capacidade pedida é conferida literalmente contra a conta conectada. Não se pode converter `CONTENT_PUBLISH` em `CONTENT_ROUTE`, pois isso poderia autorizar publicação com uma permissão mais fraca;
 - a camada de log não grava o payload completo, e os adapters recebem cópias do contrato.
 
-A aprovação configurada no gateway é uma barreira técnica, não substitui a futura integração com o motor de aprovações/governança. Nenhum adapter real foi ativado por esta alteração.
+A aprovação configurada no gateway é uma barreira técnica, não substitui a integração com o motor oficial de Aprovações/governança. Se executado no navegador, o callback é código do cliente e pode ser contornado por quem controla esse cliente; portanto, nenhuma credencial real ou ação de produção deve depender só dessa checagem client-side. A autorização final de produção precisa ser verificada no backend confiável. Nenhum adapter real foi ativado por esta alteração.
 
 ### Registro operacional
 
