@@ -33,4 +33,5 @@ assert.ok(source.includes("KEYS.dispatches") && source.includes("KEYS.financeEve
 assert.ok(source.includes("function connections()") && source.includes("data-provider") && source.includes("connection-panel"), "Central connections must jump directly to each provider area");
 assert.ok(!source.includes("function ruanReserve()") && !source.includes("Ruan · reserva") && !source.includes("KEYS.transfers"), "WordDark must not contain a private Ruan reserve or transfer path");
 assert.ok(!source.includes("function marketing()") && !source.includes("marketing:'Marketing'") && source.includes("requestedPage==='marketing'?'centralSocial'"), "The old Marketing screen must resolve to Central Social");
+assert.ok(!source.includes("'workbench','marketing','centralSocial'") && !source.includes("marketing:'sky'"), "The old Marketing route must not remain in the active app registry");
 console.log("WordDark app script test: OK");
