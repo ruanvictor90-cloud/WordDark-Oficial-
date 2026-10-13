@@ -1,18 +1,17 @@
 /* WordDark — Central External Connection Gateway
- * Todas as conexões externas passam por aqui.
- *
- * Céu executa a operação.
- * Central de Conexões executa apenas a fronteira externa.
- * OAuth, tokens, APIs e adapters de terceiros ficam atrás deste gateway.
+ * Toda chamada externa passa por este gateway.
+ * Céu executa; o gateway protege a fronteira externa.
+ * TEST usa exclusivamente testExecute; PROD exige aprovação explícita.
  */
-const ExternalRequest=typeof module==="object"&&module.exports?require("./connection-contract"):null;
-
-const CAPABILITY_ALIASES=Object.freeze({CONTENT_PUBLISH:"CONTENT_ROUTE",MEDIA_UPLOAD:"MEDIA_UPLOAD"});
+const ExternalRequest=typeof module==="object"&&module.exports
+  ?require("./connection-contract")
+  :(typeof window!=="undefined"?window.WordDarkExternalConnectionRequest:null);
 
 class ExternalConnectionGateway {
-  constructor({registry=null,logger=null}={}) {
+  constructor({registry=null,logger=null,productionApproval=null}={}) {
     this.registry=registry||null;
     this.logger=logger||null;
+    this.productionApproval=productionApproval;
     this.adapters=new Map();
     this.status="ONLINE";
   }
@@ -32,7 +31,8 @@ class ExternalConnectionGateway {
 
   createRequest(source={}) {
     if(!ExternalRequest)return{success:false,status:"CONTRACT_UNAVAILABLE"};
-    const request=new ExternalRequest(source);
+    let request;
+    try{request=new ExternalRequest(source)}catch(error){return{success:false,status:"INVALID_EXTERNAL_REQUEST",errors:[String(error?.message||error)]};}
     const validation=request.validate();
     if(!validation.valid)return{success:false,status:"INVALID_EXTERNAL_REQUEST",errors:validation.errors};
     return{success:true,request};
@@ -42,11 +42,21 @@ class ExternalConnectionGateway {
     const built=this.createRequest(source);
     if(!built.success)return built;
     const request=built.request;
-    if(!this.registry)return{success:false,status:"CONNECTION_REGISTRY_UNAVAILABLE",operationId:request.operationId};
+    const requestData=request.toJSON();
 
-    const registryCapability=CAPABILITY_ALIASES[request.capability]||request.capability;
-    const access=this.registry.authorizeContext(request.providerId,request.accountId,registryCapability);
-    if(!access.allowed)return{success:false,status:access.status,stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,capability:registryCapability};
+    // Falha fechada: ambiente desconhecido nunca alcança adapter externo.
+    if(request.environment==="PROD") {
+      if(typeof this.productionApproval!=="function")return{success:false,status:"PROD_APPROVAL_REQUIRED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId};
+      let approval;
+      try{approval=await this.productionApproval(structuredClone(requestData));}
+      catch(error){return{success:false,status:"PROD_APPROVAL_FAILED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,reason:String(error?.message||error)};}
+      if(!approval||approval.allowed!==true)return{success:false,status:approval?.status||"PROD_NOT_AUTHORIZED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,reason:approval?.reason||"A aprovação de produção não foi concedida."};
+    }
+
+    if(!this.registry)return{success:false,status:"CONNECTION_REGISTRY_UNAVAILABLE",operationId:request.operationId};
+    // Não reduzir uma capacidade de alto impacto a outra mais fraca.
+    const access=this.registry.authorizeContext(request.providerId,request.accountId,request.capability);
+    if(!access.allowed)return{success:false,status:access.status,stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,capability:request.capability};
 
     const adapter=this.adapters.get(request.providerId);
     if(!adapter)return{
@@ -55,18 +65,28 @@ class ExternalConnectionGateway {
       reason:"Adapter externo ainda não conectado. A ponta operacional está pronta."
     };
 
+    const simulated=request.environment==="TEST";
+    const execute=simulated?adapter.testExecute:adapter.execute;
+    if(typeof execute!=="function")return{
+      success:false,status:simulated?"TEST_ADAPTER_UNAVAILABLE":"PROD_ADAPTER_UNAVAILABLE",
+      stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,
+      reason:simulated?"O adapter não possui caminho de simulação; nenhuma chamada real foi feita.":"O adapter de produção não está disponível."
+    };
+
     try{
-      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_STARTED",request.toJSON());
-      const result=await adapter.execute(request.toJSON(),{account:access.account,credential:this.registry.getRuntimeCredential(request.providerId,request.accountId)});
-      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FINISHED",{request:request.toJSON(),result});
-      return{success:result?.success!==false,status:result?.status||"EXTERNAL_EXECUTED",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,result};
+      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_STARTED",{...requestData,payload:{redacted:true},environment:request.environment});
+      const credential=this.registry.getRuntimeCredential(request.providerId,request.accountId);
+      const context={account:structuredClone(access.account),credential,environment:request.environment,simulation:simulated};
+      const result=await execute.call(adapter,structuredClone(requestData),context);
+      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FINISHED",{request:{...requestData,payload:{redacted:true}},status:result?.status||null,success:result?.success!==false});
+      return{success:result?.success!==false,status:result?.status||(simulated?"TEST_EXECUTED":"EXTERNAL_EXECUTED"),operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,environment:request.environment,result};
     }catch(error){
-      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FAILED",{request:request.toJSON(),error:String(error?.message||error)});
+      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FAILED",{request:{...requestData,payload:{redacted:true}},environment:request.environment,error:String(error?.message||error)});
       return{success:false,status:"EXTERNAL_EXECUTION_FAILED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,reason:error?.message||"Falha na conexão externa."};
     }
   }
 
-  getStatus(){return{status:this.status,adapters:[...this.adapters.keys()],adapterCount:this.adapters.size};}
+  getStatus(){return{status:this.status,adapters:[...this.adapters.keys()],adapterCount:this.adapters.size,productionApprovalConfigured:typeof this.productionApproval==="function"};}
 }
 if(typeof window!=="undefined")window.ExternalConnectionGateway=ExternalConnectionGateway;
 if(typeof module!=="undefined"&&module.exports)module.exports=ExternalConnectionGateway;
