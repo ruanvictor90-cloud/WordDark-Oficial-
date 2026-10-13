@@ -23,6 +23,15 @@
 .world-option:hover,.world-option:focus-visible{border-color:#c49aff;transform:translateY(-2px);box-shadow:0 8px 28px #0005,0 0 22px #9d5cff18;outline:none}
 @media(max-width:360px){body{padding-left:13px;padding-right:13px}.world-entry{gap:10px}.world-option{min-height:100px;padding:16px;border-radius:18px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+
+/* Entrada compacta: as três áreas ficam centralizadas e visíveis sem rolagem. */
+body{justify-content:center;gap:0;padding-top:max(10px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom))}
+.brand{height:58px;flex:0 0 58px}
+.world-entry{width:min(100%,380px);margin:auto;grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(3,minmax(0,1fr));gap:10px;padding:12px 0;align-content:center}
+.world-option{aspect-ratio:auto;min-height:78px;max-height:110px;flex-direction:row;justify-content:flex-start;gap:18px;padding:12px 22px;border-radius:18px}
+.world-option svg{width:clamp(42px,11vw,50px);height:clamp(42px,11vw,50px)}
+.world-option-name{font-size:clamp(15px,4vw,18px);text-align:left;letter-spacing:.01em}
+@media(max-height:620px){.brand{height:50px;flex-basis:50px}.world-entry{gap:7px;padding:8px 0}.world-option{min-height:68px;padding:8px 18px}.world-option svg{width:40px;height:40px}}
 </style>
 </head>
 <body>

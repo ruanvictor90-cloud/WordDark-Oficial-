@@ -26,3 +26,18 @@
 
 /* Hub launcher: Central first, then the two operational destinations. */
 .hub-apps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:min(100%,520px);margin:0 auto}.hub-app-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-height:112px;padding:14px 8px;border:1px solid #342443;border-radius:17px;background:linear-gradient(145deg,#171020,#100c17);color:#e5d3ff;font-size:12px;font-weight:750;text-align:center}.hub-app-tile:hover,.hub-app-tile:focus-visible{outline:none;border-color:#9a6bd0;background:#21152e}.hub-app-logo{width:47px;height:47px;display:grid;place-items:center;border:1px solid #76549a;border-radius:14px;background:linear-gradient(145deg,#2a1c3b,#120d1b);color:#d9baff}.hub-app-logo svg{width:31px;height:31px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}@media(max-width:430px){.central-app-tile{min-height:145px;margin:17px auto 14px}.central-app-logo{width:72px;height:72px}.central-app-logo svg{width:46px;height:46px}.hub-apps{gap:9px}.hub-app-tile{min-height:100px}}
+
+/* Hub home: request bar, independent Central, Teste, and WordDark dock. */
+.quick-request-bar{display:flex;gap:8px;width:min(100%,520px);margin:12px auto 8px;padding:8px;border:1px solid #342443;border-radius:16px;background:#120d19}
+.quick-request-bar input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid #3c2b4e;border-radius:11px;background:#09070f;color:#f4efff;font:inherit;font-size:12px}
+.quick-request-bar button{border:1px solid #8059a4;border-radius:11px;padding:0 12px;background:#2b1c3c;color:#f4efff;font-size:11px;font-weight:800;white-space:nowrap}
+.central-app-tile{width:min(100%,360px);min-height:110px;flex-direction:row;gap:18px;justify-content:flex-start;margin:10px auto;padding:16px 22px;font-size:15px}
+.central-app-logo{width:54px;height:54px;flex:0 0 54px}.central-app-logo svg{width:36px;height:36px}
+.test-app-tile{width:min(100%,360px);min-height:72px;display:flex;align-items:center;justify-content:flex-start;gap:16px;margin:8px auto 12px;padding:12px 22px;border:1px solid #342443;border-radius:16px;background:linear-gradient(145deg,#171020,#100c17);color:#e5d3ff;font-size:12px;font-weight:750;text-align:center}
+.test-app-tile:hover,.test-app-tile:focus-visible{outline:none;border-color:#9a6bd0;background:#21152e}
+.test-app-logo{width:42px;height:42px;display:grid;place-items:center;border:1px solid #76549a;border-radius:13px;background:linear-gradient(145deg,#2a1c3b,#120d1b);color:#d9baff}
+.test-app-logo svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.launch-dock{display:flex;align-items:center;gap:11px;width:min(100%,520px);min-height:58px;margin:12px auto 0;padding:10px 14px;border:1px solid #49315d;border-radius:16px;background:linear-gradient(145deg,#21152f,#100c18);color:#e5d3ff;text-decoration:none;font-size:12px;font-weight:800}
+.launch-dock svg{width:35px;height:35px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.dock-arrow{margin-left:auto;font-size:20px}
+@media(max-width:430px){.quick-request-bar{gap:6px;padding:6px}.quick-request-bar input{padding:0 9px;font-size:10px}.quick-request-bar button{padding:0 9px;font-size:9px}.central-app-tile{min-height:88px;margin:8px auto}.central-app-logo{width:48px;height:48px;flex-basis:48px}.central-app-logo svg{width:32px;height:32px}.test-app-tile{min-height:62px;margin:6px auto 8px}.launch-dock{min-height:50px;margin-top:8px}}
