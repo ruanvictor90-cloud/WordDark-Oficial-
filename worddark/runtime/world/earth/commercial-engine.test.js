@@ -1,6 +1,5 @@
-import assert from "node:assert/strict";
-import commercialModule from "./commercial-engine.js";
-const {createCommercialEngine}=commercialModule;
+const assert=require("node:assert/strict");
+const {createCommercialEngine}=require("./commercial-engine.js");
 let n=0;
 const engine=createCommercialEngine({now:()=>"2026-10-13T00:00:00.000Z",idFactory:()=>String(++n)});
 assert.equal(engine.status().sectorId,"earth");
