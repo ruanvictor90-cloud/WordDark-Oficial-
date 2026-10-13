@@ -59,6 +59,10 @@ assert.ok(!source.includes("commerce:()=>businessStore"), "Retired commercial co
 assert.ok(!html.includes('data-page="commerce"'), "Retired commercial company must not appear in the active navigation");
 assert.ok(source.includes("function marketing()"), "Marketing must have a distinct screen");
 assert.ok(source.includes("['workbench','Dark Factory'"), "Sky must list its own production apps");
+assert.ok(source.includes("['social','Empresa social'") && source.includes("['channels','Empresa comercial'"), "Terra must keep both social and commercial companies as separate apps");
+assert.ok(source.includes("function social()") && source.includes("social:'Empresa social'"), "Empresa social must have its own screen and route");
+assert.ok(source.includes("operation-app-copy"><strong>'+label+'</strong></span>") && !source.includes("operation-app-copy"><strong>'+label+'</strong><small>"), "World app tiles must show only icon and name");
+assert.ok(source.includes("const navigationStack=[]") && source.includes("history.pushState({worddarkApp:'WordDark',worddarkPage:next}") && source.includes("window.addEventListener('popstate',event=>"), "Back must use synchronized in-app navigation history");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
 assert.ok(source.includes("data-cancel-request"), "Queued operations must support cancellation");
 assert.ok(source.includes("data-delete-request"), "Queued operations must support deletion");
@@ -84,7 +88,7 @@ const cleanLauncherEnd=source.indexOf("function render()",cleanLauncherStart);
 const cleanLauncherSource=source.slice(cleanLauncherStart,cleanLauncherEnd);
 assert.ok(!cleanLauncherSource.includes("operation-primary") && !cleanLauncherSource.includes("view.description") && !cleanLauncherSource.includes("view.cta"), "Sector launchers must omit redundant descriptions and shortcut CTA buttons");
 assert.ok(source.includes("worddark.hub.quick-request.v1") && source.includes("Pedido encaminhado pelo WordDark Hub."), "Quick Hub requests must prefill the central request form");
-assert.ok(source.includes("page=['overview','sky','earth','test','management'].includes(requestedPage)"), "Hub quick requests must be allowed to open Central Operations directly");
+assert.ok(source.includes("page=['overview','management','sky','earth','test','finance','library','security','channels','social','workbench','marketing'].includes(requestedPage)"), "Hub quick requests must be allowed to open Central Operations directly");
 assert.ok(source.includes("test-only-app") && source.includes("<strong>Teste</strong>"), "WordDark launcher must include the logo-and-name Teste app");
 const launcherStart=source.indexOf("function cleanLauncher(area)");
 const launcherEnd=source.indexOf("function render()",launcherStart);
@@ -93,13 +97,13 @@ const skyConfig=launcher.slice(launcher.indexOf("sky:{"),launcher.indexOf("earth
 const earthConfig=launcher.slice(launcher.indexOf("earth:{"),launcher.indexOf("};",launcher.indexOf("earth:{")));
 const overviewConfig=launcher.slice(launcher.indexOf("overview:{"),launcher.indexOf("sky:{"));
 assert.ok(!overviewConfig.includes("channels"), "Commercial company must belong to Terra, not WordDark");
-assert.ok(earthConfig.includes("['channels','Empresa comercial'"), "Terra must show the Empresa comercial app");
+assert.ok(earthConfig.includes("['channels','Empresa comercial'") && earthConfig.includes("['social','Empresa social'"), "Terra must show both Empresa social and Empresa comercial");
 assert.ok(overviewConfig.includes("['test','Teste','','']"), "Teste app must be available on the WordDark home only");
 assert.ok(!skyConfig.includes("['test','Teste") && !earthConfig.includes("['test','Teste"), "Teste app must not duplicate on each sector page");
 assert.ok(!skyConfig.includes("management") && !skyConfig.includes("library"), "Sky must not expose WordDark apps as shortcuts");
 assert.ok(!earthConfig.includes("management") && !earthConfig.includes("library"), "Terra must not expose WordDark apps as shortcuts");
-assert.ok(source.includes("const pageParents={") && source.includes("workbench:'sky'") && source.includes("channels:'earth'") && source.includes("function goBack(){const parent=pageParents[page]"), "Back must return to the parent sector, not a previously visited unrelated page");
-assert.ok(source.includes("window.addEventListener('popstate',()=>goBack())"), "Browser back gestures must follow the parent-sector navigation");
+assert.ok(source.includes("const pageParents={") && source.includes("workbench:'sky'") && source.includes("channels:'earth'") && source.includes("social:'earth'"), "Each app must have a correct parent-sector fallback");
+assert.ok(source.includes("window.addEventListener('popstate',event=>"), "Browser back gestures must follow the in-app navigation history");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
 
 assert.ok(html.includes("Navegação corrigida: sem barra lateral e com retorno sempre visível"), "The global sidebar must stay hidden and the return control must remain visible");
