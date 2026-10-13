@@ -7,7 +7,7 @@ self.addEventListener("fetch",event=>{
  const requestUrl=new URL(event.request.url);
  const isNavigation=event.request.mode==="navigate"||requestUrl.pathname.endsWith("/hub/")||requestUrl.pathname.endsWith("/hub/index.html");
  if(isNavigation){
-  const fallbackPath=requestUrl.pathname.endsWith("/central.html")?"./central.html":"./index.html";
+  const fallbackPath=requestUrl.pathname.endsWith("/central.html")?"./central.html":requestUrl.pathname.endsWith("/creationdark.html")?"./creationdark.html":"./index.html";
   event.respondWith(fetch(event.request).then(response=>{
    if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(fallbackPath,copy));}
    return response;
