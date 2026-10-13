@@ -11,6 +11,11 @@ Este documento define o que pode estar exposto no aplicativo atual. Não signifi
 - Teste.
 - Entrada para WordDark.
 
+## CreationDark (dentro do Hub)
+- Oficina para inventariar e preparar código operacional, regras, motores, conectores e telas antes da integração oficial.
+- Itens sem destino consolidado ficam catalogados aqui; itens com destino conhecido mantêm seu setor responsável.
+- Inventário local, sem execução/publicação automática e sem reaproveitar interfaces antigas.
+
 ## WordDark
 - Áreas: WordDark, Céu e Terra.
 - Aplicativos centrais: Central, Darkbank, Central de conexão, Automação, Biblioteca, Escola do Mundo, Governança, Segurança e Teste.
