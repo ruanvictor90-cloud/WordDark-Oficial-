@@ -5,3 +5,15 @@
 .ruan-return{grid-column:1;justify-self:start;z-index:1}
 .notice-toggle{grid-column:3;justify-self:end;z-index:1}
 @media(max-width:370px){.brand{gap:5px;max-width:calc(100% - 98px)}.brand-copy strong{font-size:8px}.brand-copy small{font-size:7px}.ruan-return{padding:0 6px}.notice-toggle{width:34px;height:34px}}
+
+/* Barra de pedido rápido e app Teste, com a mesma identidade discreta do Hub. */
+.quick-request-bar{display:flex;gap:8px;align-items:center;margin:18px 0 14px;padding:8px;border:1px solid #5b3d7466;border-radius:15px;background:#130e1bcc;box-shadow:0 10px 28px #0003}
+.quick-request-bar input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid #342443;border-radius:10px;background:#0d0913;color:var(--text);font:inherit;font-size:11px}
+.quick-request-bar input::placeholder{color:#8f829f}
+.quick-request-bar button{min-height:42px;padding:0 13px;border:1px solid #a77be0;border-radius:10px;background:linear-gradient(135deg,#d5b7ff,#9e70df);color:#1b1028;font-size:10px;font-weight:850;white-space:nowrap}
+.test-app-tile{width:84px;display:flex;flex-direction:column;align-items:center;gap:7px;margin:4px 0 22px;padding:10px 6px;border:1px solid transparent;border-radius:16px;color:#d9c4f6;font-size:10px;font-weight:750;text-align:center;transition:background .18s,border-color .18s}
+.test-app-tile:hover,.test-app-tile:focus-visible{outline:none;border-color:#76549a;background:#1d1428}
+.test-app-logo{width:47px;height:47px;display:grid;place-items:center;border:1px solid #76549a;border-radius:15px;background:linear-gradient(145deg,#2a1c3b,#120d1b);box-shadow:0 0 22px #9d5cff18}
+.test-app-logo svg{width:30px;height:30px;fill:none;stroke:#d9baff;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:430px){.quick-request-bar{gap:6px;padding:6px}.quick-request-bar input{padding:0 9px;font-size:10px}.quick-request-bar button{padding:0 9px;font-size:9px}.test-app-tile{margin-bottom:14px}}
