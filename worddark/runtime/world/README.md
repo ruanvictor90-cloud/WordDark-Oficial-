@@ -1,3 +1,5 @@
+> **Nota de consolidação (2026-10-13):** este documento preserva detalhes de arquitetura e serve como referência de implementação; não é a lista de telas da versão atual. O escopo de interface está em `CURRENT-VERSION-SCOPE.md`. A antiga área de Marketing é apresentada no aplicativo por meio da Central Social, e `worddark/runtime/world/core/` é o Core ativo. Não reintroduza automaticamente módulos antigos ou experimentais no aplicativo.
+
 # WordDark — Mundo Operacional
 
 ## Definição oficial
