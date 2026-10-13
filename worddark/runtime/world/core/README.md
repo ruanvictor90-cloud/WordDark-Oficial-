@@ -32,10 +32,10 @@ Este é o único Core ativo do mundo WordDark. A consolidação deve reforçar e
 
 - `permissions.js` é o conjunto de permissões exportado pela entrada principal atual.
 - `permission-set.js` tem um contrato diferente e não deve ser usado como autoridade paralela sem adaptação e testes explícitos.
-- O gateway de conexões valida `TEST/PROD`; TEST usa somente `testExecute`, enquanto PROD bloqueia sem `productionApproval` configurado e aprovado.
+- O gateway de conexões valida `TEST/PROD`; TEST usa somente `testExecute`, enquanto PROD bloqueia sem `productionApproval` configurado e aprovado. Publicação automática fica desabilitada por padrão e exige `publicationPolicy` explícita.
 - Aprovação configurada apenas no navegador não é uma fronteira de segurança confiável; produção real precisa de validação no backend e segredos fora do Pages.
 - Capacidade de publicação não pode ser rebaixada para uma capacidade de roteamento. Os nomes devem corresponder à permissão efetivamente concedida.
-- Dark Factory pode preparar e acompanhar conteúdo; `CONTENT_PUBLISH`, `CONTENT_UNPUBLISH` e `CONTENT_SCHEDULE` ficam em espera para ação humana, e o gateway central bloqueia a execução automática dessas ações.
+- Dark Factory pode preparar e acompanhar conteúdo. Publicação, despublicação e agendamento ficam manuais por padrão; a Central de Conexões aceita preparar o caminho automático via `publicationPolicy`, mas somente com autorização explícita de serviço confiável. Sem essa política, o fallback é `WAITING_MANUAL_PUBLICATION`.
 - O contrato externo clona o payload e os logs do gateway não registram o payload completo.
 
 ## Tratamento do legado
