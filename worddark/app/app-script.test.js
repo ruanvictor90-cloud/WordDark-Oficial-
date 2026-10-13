@@ -122,5 +122,6 @@ assert.ok(source.includes("function executionView(source)") && source.includes("
 assert.ok(source.includes("function capture()") && source.includes("data-view-demand") && source.includes("function store()") && source.includes("data-add-cart") && source.includes("checkoutForm"), "Commercial company must include capture cards, storefront, cart and checkout flow");
 assert.ok(source.includes('data-go="catalog"') && source.includes("catalog:()=>businessStore('catalog')"), "The storefront must expose a route to manage products without adding a fifth commercial app tile");
 assert.ok(source.includes("function orderManagement()") && source.includes("function receivedOrders()") && source.includes("function awaitingOrders()") && source.includes("function supplierPage()"), "Commercial orders and suppliers must have distinct app screens");
+assert.ok(source.includes("data-order-supplier") && source.includes("order.supplierName=supplier.name"), "Order management must select and record the target supplier before preparing a repass");
 assert.ok(source.includes("function automated()") && source.includes("function automate()") && source.includes("function school()") && source.includes("function governancePlaceholder"), "Automation, School and Governance scaffolds must be present");
 console.log("worddark app script test: OK");
