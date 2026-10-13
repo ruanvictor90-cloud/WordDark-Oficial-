@@ -15,6 +15,23 @@ Não criar segundo runtime, segundo orquestrador global, nova raiz de permissõe
 
 ## Consolidação aplicada nesta revisão
 
+### Permissões e contratos
+
+- `permissions.js` é a implementação canônica atualmente exportada pelo `index.js` e usada pelos testes do motor: regras contextuais com perfil, capacidade, ação, recurso, cliente e ambiente.
+- `permission-set.js` tem outro contrato (`add`, efeito ALLOW/DENY e `defaultEffect`) e não aparece como dependência do Core ativo na busca realizada. Mantê-lo no repositório por compatibilidade potencial, mas não tratá-lo como segunda autoridade ativa nem removê-lo sem decisão explícita.
+- A política de autonomia antiga contém requisitos úteis (ações permitidas, aprovação, parada e auditoria), mas não deve ser ligada diretamente ao motor até existir um contrato canônico que una autorização contextual, aprovação de PROD e parada de emergência sem caminhos alternativos.
+
+### Gateway de conexões
+
+O gateway ativo foi endurecido nesta revisão:
+- o contrato de conexão agora carrega `environment` (`TEST` por padrão; apenas `TEST/PROD` são válidos) e isola o payload por cópia;
+- `TEST` usa exclusivamente `adapter.testExecute`; se o adapter não tiver esse método, a operação falha fechada em vez de chamar a API real;
+- `PROD` exige uma função de aprovação explicitamente configurada e uma resposta `{allowed:true}` antes de chegar ao adapter real;
+- a capacidade pedida é conferida literalmente contra a conta conectada. Não se pode converter `CONTENT_PUBLISH` em `CONTENT_ROUTE`, pois isso poderia autorizar publicação com uma permissão mais fraca;
+- a camada de log não grava o payload completo, e os adapters recebem cópias do contrato.
+
+A aprovação configurada no gateway é uma barreira técnica, não substitui a futura integração com o motor de aprovações/governança. Nenhum adapter real foi ativado por esta alteração.
+
 ### Registro operacional
 
 O `operation-registry.js` ativo agora isola snapshots e eventos por cópia defensiva:
@@ -32,9 +49,9 @@ A suíte de teste cobre essa fronteira. Isso melhora a integridade do histórico
 | Criar/executar operações | `operation.js`, `operation-engine.js` | Um contrato e um motor ativo; sem orquestrador legado paralelo |
 | Coordenação/roteamento | `operation-coordinator.js`, `operation-center.js`, `road.js`, `communication.js` | Resolver destino e encaminhar pelo fluxo atual |
 | Histórico e auditoria | `operation-registry.js`, bibliotecas e memória operacional | Detalhes no setor; índice/resumo na camada central |
-| Permissões | `permissions.js`, `permission-set.js` conforme o contrato já usado | Não fundir interfaces diferentes sem mapear consumidores e testes |
+| Permissões | `permissions.js` é canônico e exportado; `permission-set.js` é compatibilidade não conectada | Não fundir interfaces diferentes; autorização contextual deve continuar fail-closed |
 | Segurança ambiental | `environment-guard.js`, `emergency-stop-manager.js`, módulos de segurança | TEST/PROD explícitos; produção exige aprovação configurada |
-| Conexões externas | `core/connections/connection-gateway.js` e contratos associados | Sem chamada real sem conta, capacidade, autorização e adapter registrado |
+| Conexões externas | `core/connections/connection-gateway.js` e contratos associados | TEST só simula; PROD exige aprovação explícita, conta conectada, capacidade exata e adapter registrado |
 | Recuperação/diagnóstico | `error-recovery.js`, `operation-diagnostics.js` e suíte atual | Reutilizar comportamento testado; snapshots/undo do legado não são rollback durável |
 | Produção de conteúdo | `sky/darkfactory/` e contratos de operação atuais | Céu executa; políticas por plataforma e revisão humana permanecem explícitas |
 | Operações comerciais | `earth/commercial-engine.js` e contratos atuais | Terra origina necessidades; não ativar pagamentos ou compromissos externos sem controles |
@@ -63,8 +80,9 @@ Um item sai do CreationDark somente quando:
 
 ## Pendências de validação
 
-- Executar `npm test` integral no ambiente de CI após esta revisão.
-- Confirmar que a nova cobertura de isolamento do registro passa.
+- Confirmar que `npm test` integral passa no commit final desta revisão.
+- Confirmar que os testes de isolamento do registro e os testes de bloqueio do gateway passam.
+- Ligar a aprovação PROD ao mecanismo oficial de Aprovações quando esse contrato estiver definido; até lá, nenhuma produção pode ser liberada sem um provedor explícito.
 - Continuar a comparação de permissões, conexões, canais e contas por comportamento, não por semelhança de nomes.
 - Fazer teste visual/manual do CreationDark e do Hub; inventário local não é sincronização entre dispositivos.
 
