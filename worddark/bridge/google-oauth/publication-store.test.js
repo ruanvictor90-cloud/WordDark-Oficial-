@@ -66,6 +66,6 @@ assert.equal(auditRecords.length,1);
 assert.equal(JSON.stringify(auditRecords).includes("DO_NOT_STORE"),false);
 assert.equal(JSON.stringify(auditRecords).includes("accessToken"),false);
 
-assert.throws(()=>store.claim("../unsafe",{requestFingerprint:fingerprint,operationId:"operation-1"}),/IDEMPOTENCY_KEY_INVALID/);
+await assert.rejects(()=>store.claim("../unsafe",{requestFingerprint:fingerprint,operationId:"operation-1"}),/IDEMPOTENCY_KEY_INVALID/);
 assert.throws(()=>createPublicationStore({}),/PUBLICATION_FIRESTORE_REQUIRED/);
 console.log("publication-store.test: OK");
