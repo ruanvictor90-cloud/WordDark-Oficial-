@@ -11,7 +11,7 @@ export const CONNECTORS = Object.freeze([
 ]);
 export const CATALOG = Object.freeze([
   { id: "ruan-home", title: "Ruan", kind: "Aplicativo", description: "Central privada de operação pessoal e desenvolvimento.", scope: "ruan", tags: ["central", "aplicativos", "pessoal"] },
-  { id: "hub", title: "WordDark Hub", kind: "Central", description: "Ponto de entrada e ferramentas operacionais do Hub.", scope: "hub", tags: ["central", "pedidos", "operações"] },
+  { id: "hub", title: "Hub", kind: "Central", description: "Ponto de entrada e ferramentas operacionais da central.", scope: "hub", tags: ["central", "pedidos", "operações"] },
   { id: "darknet", title: "Darknet", kind: "Sistema", description: "Busca, catálogo, diretório de serviços e preparação de mensagens.", scope: "both", tags: ["pesquisa", "busca", "rede", "diretório"] },
   { id: "shadow", title: "Shadow / darkEye", kind: "Aplicativo", description: "Área separada de pesquisa e navegação em desenvolvimento.", scope: "ruan", tags: ["navegador", "pesquisa", "shadow"] },
   { id: "world-runtime", title: "Mundo digital", kind: "Sistema futuro", description: "Destino futuro de conexão; permanece isolado nesta versão.", scope: "future", tags: ["mundo", "setores", "conexões"] },
