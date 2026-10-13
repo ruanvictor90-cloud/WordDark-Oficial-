@@ -8,10 +8,12 @@ const ExternalRequest=typeof module==="object"&&module.exports
   :(typeof window!=="undefined"?window.WordDarkExternalConnectionRequest:null);
 
 class ExternalConnectionGateway {
-  constructor({registry=null,logger=null,productionApproval=null}={}) {
+  constructor({registry=null,logger=null,productionApproval=null,publicationPolicy=null}={}) {
     this.registry=registry||null;
     this.logger=logger||null;
     this.productionApproval=productionApproval;
+    // Padrão seguro: publicação manual até existir autorização explícita do serviço confiável.
+    this.publicationPolicy=publicationPolicy;
     this.adapters=new Map();
     this.status="ONLINE";
   }
@@ -44,10 +46,19 @@ class ExternalConnectionGateway {
     const request=built.request;
     const requestData=request.toJSON();
 
-    // Publicação e agendamento permanecem manuais, mesmo com conta e adapter conectados.
-    const manualOnlyActions=new Set(["CONTENT_PUBLISH","CONTENT_UNPUBLISH","CONTENT_SCHEDULE"]);
-    if(manualOnlyActions.has(String(request.action||"").toUpperCase())||manualOnlyActions.has(String(request.capability||"").toUpperCase())){
-      return{success:false,status:"MANUAL_ACTION_REQUIRED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,reason:"Esta versão prepara e acompanha conteúdo, mas não publica, despublica nem agenda publicação automaticamente."};
+    // Publicação automática é opt-in. Sem política autorizadora, a saída é sempre manual.
+    const publicationActions=new Set(["CONTENT_PUBLISH","CONTENT_UNPUBLISH","CONTENT_SCHEDULE"]);
+    const isPublicationAction=publicationActions.has(String(request.action||"").toUpperCase())||publicationActions.has(String(request.capability||"").toUpperCase());
+    if(isPublicationAction){
+      if(typeof this.publicationPolicy!=="function"){
+        return{success:false,status:"MANUAL_ACTION_REQUIRED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,manualActionRequired:true,reason:"Publicação automática ainda não foi habilitada; o conteúdo pode ser publicado manualmente."};
+      }
+      let publicationAuthorization;
+      try{publicationAuthorization=await this.publicationPolicy(structuredClone(requestData));}
+      catch(error){return{success:false,status:"PUBLICATION_AUTHORIZATION_FAILED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,reason:String(error?.message||error)};}
+      if(!publicationAuthorization||publicationAuthorization.allowed!==true||publicationAuthorization.mode!=="AUTOMATIC"||publicationAuthorization.serverAuthorized!==true){
+        return{success:false,status:"MANUAL_ACTION_REQUIRED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,manualActionRequired:true,reason:publicationAuthorization?.reason||"O serviço confiável não autorizou a publicação automática; use o fluxo manual."};
+      }
     }
 
     // Falha fechada: ambiente desconhecido nunca alcança adapter externo.
@@ -92,7 +103,7 @@ class ExternalConnectionGateway {
     }
   }
 
-  getStatus(){return{status:this.status,adapters:[...this.adapters.keys()],adapterCount:this.adapters.size,productionApprovalConfigured:typeof this.productionApproval==="function"};}
+  getStatus(){return{status:this.status,adapters:[...this.adapters.keys()],adapterCount:this.adapters.size,productionApprovalConfigured:typeof this.productionApproval==="function",automaticPublicationConfigured:typeof this.publicationPolicy==="function"};}
 }
 if(typeof window!=="undefined")window.ExternalConnectionGateway=ExternalConnectionGateway;
 if(typeof module!=="undefined"&&module.exports)module.exports=ExternalConnectionGateway;
