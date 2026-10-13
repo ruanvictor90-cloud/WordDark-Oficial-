@@ -498,10 +498,6 @@ body[data-page="earth"]::before{
 </aside>
 <div class="main">
 <header class="topbar app-topbar"><button class="btn back-top" id="backRuan" type="button" aria-label="Voltar" title="Voltar">←</button><div class="world-brand-centered" id="worldBrandHome" role="button" tabindex="0" aria-label="Voltar ao lançador WordDark"><span class="world-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span><div class="world-brand-copy"><strong>WORDDARK</strong><small id="crumbName">Visão geral</small></div></div><div class="top-actions"><button class="btn" id="worldHomeBtn" aria-label="Áreas" title="Áreas">⌂</button><button class="btn optional" id="newRequestTop" aria-label="Nova solicitação" title="Nova solicitação">+</button></div></header>
-<section class="hub-command-zone" aria-label="Pedido rápido do WordDark">
-<form id="hubQuickRequestForm" class="hub-commandbar"><label class="sr-only" for="hubQuickRequest">Pedido</label><input id="hubQuickRequest" name="request" maxlength="500" required placeholder="O que você precisa que o mundo resolva?"><button class="btn gold" type="submit">Enviar pedido <span aria-hidden="true">↗</span></button></form>
-<button class="hub-test-app" id="hubTestApp" type="button" aria-label="Abrir app Teste"><span class="hub-test-logo" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="M17 3 29 8v9c0 7-5 11-12 14C10 28 5 24 5 17V8Z"/><path d="m11 17 4 4 8-9"/></svg></span><span>Teste</span></button>
-</section>
 <main class="content" id="screen"></main>
 </div>
 </div>
@@ -526,16 +522,14 @@ function persist(){write(KEYS.requests,requests);write(KEYS.ledger,ledger);write
 const BACKUP_COLLECTIONS={requests:KEYS.requests,ledger:KEYS.ledger,transfers:KEYS.transfers,notes:KEYS.notes,tasks:KEYS.tasks,contentJobs:KEYS.contentJobs,catalog:KEYS.catalog,suppliers:KEYS.suppliers,orders:KEYS.orders,customers:KEYS.customers};
 function exportWorldBackup(){const collections={};for(const [name,key] of Object.entries(BACKUP_COLLECTIONS)){try{const value=JSON.parse(localStorage.getItem(key)||'[]');collections[name]=Array.isArray(value)?value:[]}catch{toast('Não foi possível ler a coleção '+name+'. Backup cancelado.');return}}const payload={app:'WordDark',formatVersion:1,exportedAt:new Date().toISOString(),collections};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='worddark-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);toast('Backup local exportado. Guarde o arquivo em segurança.')}
 async function restoreWorldBackupFile(file){if(!file)return;if(file.size>5*1024*1024){toast('Arquivo acima de 5 MB. Restauração recusada.');return}let payload;try{payload=JSON.parse(await file.text())}catch{toast('Arquivo inválido: não é um JSON legível.');return}if(!payload||payload.app!=='WordDark'||payload.formatVersion!==1||!payload.collections||typeof payload.collections!=='object'){toast('Backup incompatível. Nenhum dado foi alterado.');return}for(const name of Object.keys(BACKUP_COLLECTIONS)){if(!Array.isArray(payload.collections[name])){toast('Backup incompleto ou inválido: '+name+'. Nenhum dado foi alterado.');return}}if(!confirm('Restaurar este backup WordDark? Isso substituirá as coleções locais atuais neste navegador. Exporte um backup atual antes se quiser preservá-lo.'))return;const previous={};try{for(const [name,key] of Object.entries(BACKUP_COLLECTIONS)){previous[key]=localStorage.getItem(key);localStorage.setItem(key,JSON.stringify(payload.collections[name]))}}catch{for(const [key,value] of Object.entries(previous)){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value)}catch{}}toast('Falha ao restaurar. Foi tentada a recuperação dos dados anteriores.');return}toast('Backup restaurado. Recarregando os dados locais.');location.reload()}
-const pageHistory=[];
 function showPage(p){page=p in names?p:'overview';document.body.dataset.page=page;$('crumbName').textContent=names[page];document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));render();window.scrollTo({top:0,behavior:'smooth'})}
-function navigate(p,options={}){const next=p in names?p:'overview';if(next===page)return;if(!options.back)pageHistory.push(page);showPage(next)}
-function goBack(){while(pageHistory.length&&pageHistory[pageHistory.length-1]===page)pageHistory.pop();if(pageHistory.length){showPage(pageHistory.pop());return}if(page!=='overview'){showPage('overview');return}location.href='../../index.html'}
+function navigate(p){const next=p in names?p:'overview';if(next===page)return;showPage(next)}
+const pageParents={management:'overview',finance:'overview',library:'overview',security:'overview',sky:'overview',earth:'overview',test:'overview',workbench:'sky',marketing:'sky',channels:'earth'};
+function goBack(){const parent=pageParents[page];if(parent){showPage(parent);return}location.href='../../index.html'}
 window.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();goBack()}});
-window.addEventListener('popstate',()=>{if(pageHistory.length){showPage(pageHistory.pop())}else if(page!=='overview'){showPage('overview')}});
+window.addEventListener('popstate',()=>goBack());
 
-const quickRequestForm=$('hubQuickRequestForm');if(quickRequestForm)quickRequestForm.addEventListener('submit',event=>{event.preventDefault();const field=$('hubQuickRequest'),title=field.value.trim();if(!title){field.focus();return}const lower=title.toLocaleLowerCase('pt-BR');let kind='Operação',area='WordDark / Triagem';if(/vídeo|video|short|reel|roteiro|legenda|dubl|imagem|conteúdo|conteudo/.test(lower)){kind='Produção';area='Céu / Dark Factory'}else if(/marketing|campanha|marca|público|publico|identidade/.test(lower)){kind='Pesquisa';area='Céu / Marketing'}else if(/cliente|venda|comercial|canal|pedido de cliente/.test(lower)){kind='Operação';area='Terra / Gestão de canais'}else if(/dinheiro|finance|pagamento|receita|despesa|orçamento/.test(lower)){kind='Financeira';area='WordDark / Financeira'}else if(/erro|falha|corrigir|bug/.test(lower)){kind='Correção';area='WordDark / Triagem'}const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),title,kind,area,date:new Date().toISOString().slice(0,10),detail:'Pedido enviado pela barra rápida do WordDark Hub.',status:'Aberta'};requests.push(item);if(!write(KEYS.requests,requests)){requests.pop();return}field.value='';publishHubNotice('Novo pedido recebido',title+' · '+area);render();toast('Pedido registrado para triagem. Nenhuma execução externa foi iniciada.')});
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
-$('hubTestApp')?.addEventListener('click',()=>navigate('test'));
 $('worldBrandHome')?.addEventListener('click',()=>navigate('overview'));
 $('worldBrandHome')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate('overview')}});
 $('backRuan').addEventListener('click',goBack);
@@ -585,7 +579,7 @@ const reviewJobs=contentJobs.filter(j=>j.status==='Em revisão').length;
 const config={
 overview:{kicker:'WORDDARK · CENTRAL DO MUNDO',title:'O que precisa avançar?',description:'Demandas, setores e operações em um só lugar. Entre direto no próximo passo.',cta:'Registrar uma demanda',groups:[
 {title:'Operação diária',note:pending+' solicitações em aberto',items:[['management','Central de Operações','Registrar e encaminhar demandas','Abrir operação'],['finance','Financeira','Acompanhar registros e movimentações locais','Ver financeiro']]},
-{title:'Controle do mundo',note:'Ferramentas de suporte',items:[['library','Biblioteca','Decisões, notas e arquivos','Consultar biblioteca'],['security','Segurança','Limites, permissões e estado técnico','Ver controles']]},
+{title:'Controle do mundo',note:'Ferramentas de suporte',items:[['library','Biblioteca','Decisões, notas e arquivos','Consultar biblioteca'],['security','Segurança','Limites, permissões e estado técnico','Ver controles']]},{title:'Ferramentas',note:'Testes do mundo',items:[['test','Teste','','']]} ,
 
 ]},
 sky:{kicker:'CÉU · PREPARAÇÃO E PRODUÇÃO',title:'Transformar pedidos em soluções',description:'Abra uma capacidade específica. Cada trabalho pode seguir seu próprio fluxo, sem exigir uma produção completa.',cta:'Abrir a fábrica',ctaTarget:'workbench',groups:[
@@ -593,7 +587,7 @@ sky:{kicker:'CÉU · PREPARAÇÃO E PRODUÇÃO',title:'Transformar pedidos em so
 
 ]},
 earth:{kicker:'TERRA · DEMANDA E EMPRESAS',title:'O que precisa ser atendido?',description:'A Terra reúne necessidades, clientes e empresas. Registre a demanda e acompanhe quem está responsável.',cta:'Abrir empresa',ctaTarget:'channels',groups:[
-{title:'Empresas e atendimento',note:'Operações pertencentes à Terra',items:[['channels','Gestão de canais','Pedidos, produção e entregas comerciais','Abrir empresa']]}
+{title:'Empresas e atendimento',note:'Operações pertencentes à Terra',items:[['channels','Empresa comercial','Clientes, catálogo, pedidos e canais','Abrir empresa']]}
 ]}
 };
 const view=config[area]||config.overview;
