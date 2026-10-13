@@ -15,6 +15,7 @@ assert.ok(creation.includes('Sem destino') && creation.includes('Em análise') &
 assert.ok(creation.includes('CD-LEGACY-OPERATION-LIFECYCLE') && creation.includes('CD-LEGACY-CONNECTION-STACK') && creation.includes('CD-LEGACY-GOVERNANCE'), 'CreationDark must inventory legacy operational candidates without activating them');
 assert.ok(creation.includes('CD-REGISTRY-INTEGRITY') && creation.includes('CD-PERMISSION-MODEL-OVERLAP'), 'CreationDark must track current-layer hardening and duplicate permission contracts');
 assert.ok(creation.includes('CD-LEGACY-ROLLBACK-LIMIT') && creation.includes('CD-LEGACY-PAYLOAD-BOUNDARY') && creation.includes('CD-LEGACY-ENVIRONMENT-NAMES'), 'CreationDark must document concrete legacy safety and compatibility findings');
+assert.ok(creation.includes('CD-GATEWAY-TEST-PROD') && creation.includes('CD-PERMISSION-CANONICAL'), 'CreationDark must track current gateway and canonical permission decisions');
 assert.ok(creation.includes('const additions=seed.filter(item=>!known.has(item.id))'), 'CreationDark must add new seed audit records without overwriting the local inventory');
 assert.ok(creation.includes('não move nem executa código') && creation.includes('não representa sincronização entre dispositivos'), 'CreationDark must clearly remain a local preparation area');
 assert.ok(hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'), 'Hub must keep the bottom WordDark entry');
