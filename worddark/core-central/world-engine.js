@@ -154,7 +154,7 @@ export function createWordDarkWorldEngine({
     return [...sectors.values()].map(({ engine, ...sector }) => ({ ...clone(sector), operations: engine.status().workOrders, companies: engine.status().companies }));
   }
   function listCompanies() {
-    return [...companies.values()].map(({ engine, ...company }) => ({ ...clone(company), operations: engine.status().workOrders }));
+    return [...companies.values()].map(({ engine, commercialEngine, ...company }) => ({ ...clone(company), operations: engine.status().workOrders, commercial: commercialEngine ? commercialEngine.status() : null }));
   }
   function getSector(sectorId) {
     const sector = sectors.get(sectorId);
@@ -162,7 +162,7 @@ export function createWordDarkWorldEngine({
   }
   function getCompany(companyId) {
     const company = companies.get(companyId);
-    return company ? { companyId: company.companyId, name: company.name, sectorId: company.sectorId, description: company.description, status: company.status, engine: company.engine.status(), workOrders: company.engine.listWorkOrders(), audit: company.engine.auditTrail() } : null;
+    return company ? { companyId: company.companyId, name: company.name, sectorId: company.sectorId, description: company.description, status: company.status, engine: company.engine.status(), commercial: company.commercialEngine ? company.commercialEngine.status() : null, workOrders: company.engine.listWorkOrders(), audit: company.engine.auditTrail() } : null;
   }
 
   function approveForExecution(requestId, approval) {
