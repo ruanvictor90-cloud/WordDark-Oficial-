@@ -12,8 +12,10 @@ const clean = (value, field) => {
 const clone = value => JSON.parse(JSON.stringify(value ?? {}));
 import sectorModule from "../runtime/world/core/sector-engine.js";
 import companyModule from "../runtime/world/core/company-engine.js";
+import commercialModule from "../runtime/world/earth/commercial-engine.js";
 const { createSectorEngine } = sectorModule;
 const { createCompanyEngine } = companyModule;
+const { createCommercialEngine } = commercialModule;
 const TYPES = Object.freeze({ DEMAND: "DEMAND", PREPARE: "PREPARE", COORDINATE: "COORDINATE", REVENUE_MODEL: "REVENUE_MODEL" });
 
 export function createWordDarkWorldEngine({
@@ -103,7 +105,8 @@ export function createWordDarkWorldEngine({
     const name = clean(input.name, "Nome da empresa");
     sector.engine.registerCompany({ companyId, name });
     const engine = createCompanyEngine({ companyId, name, sectorId, now, idFactory });
-    const company = { companyId, name, sectorId, description: typeof input.description === "string" ? input.description.trim() : "", status: "ACTIVE", createdAt: now(), engine };
+    const commercialEngine = sectorId === "earth" && companyId === "channels" ? createCommercialEngine({ companyId, companyName: name, sectorId, now, idFactory }) : null;
+    const company = { companyId, name, sectorId, description: typeof input.description === "string" ? input.description.trim() : "", status: "ACTIVE", createdAt: now(), engine, commercialEngine };
     companies.set(companyId, company);
     record("COMPANY_REGISTERED", { companyId, name, sectorId });
     return { companyId, name, sectorId, description: company.description, status: company.status, createdAt: company.createdAt };
@@ -130,11 +133,28 @@ export function createWordDarkWorldEngine({
     return clone(order);
   }
 
+  function getCommercialEngine(companyId = "channels") {
+    const company = companies.get(clean(companyId, "Identificador da empresa"));
+    if (!company || company.sectorId !== "earth" || !company.commercialEngine) throw new Error("Motor comercial não registrado nesta empresa da Terra.");
+    return company.commercialEngine;
+  }
+  function getCommercialCompany(companyId = "channels") {
+    const commercial = getCommercialEngine(companyId);
+    return { ...commercial.status(), catalog: commercial.listCatalog(), leads: commercial.listLeads(), proposals: commercial.listProposals(), orders: commercial.listOrders(), audit: commercial.auditTrail() };
+  }
+  function addCommercialCatalogItem(input = {}) { return getCommercialEngine(input.companyId || "channels").addCatalogItem(input); }
+  function createCommercialLead(input = {}) { return getCommercialEngine(input.companyId || "channels").createLead(input); }
+  function qualifyCommercialLead(input = {}) { return getCommercialEngine(input.companyId || "channels").qualifyLead(input.leadId, input.actorId); }
+  function createCommercialProposal(input = {}) { return getCommercialEngine(input.companyId || "channels").createProposal(input); }
+  function decideCommercialProposal(input = {}) { return getCommercialEngine(input.companyId || "channels").decideProposal(input.proposalId, input.decision, input.actorId); }
+  function openCommercialOrder(input = {}) { return getCommercialEngine(input.companyId || "channels").openOrder(input.proposalId); }
+  function transitionCommercialOrder(input = {}) { return getCommercialEngine(input.companyId || "channels").transitionOrder(input.orderId, input.status, input.actorId); }
+
   function listSectors() {
     return [...sectors.values()].map(({ engine, ...sector }) => ({ ...clone(sector), operations: engine.status().workOrders, companies: engine.status().companies }));
   }
   function listCompanies() {
-    return [...companies.values()].map(({ engine, ...company }) => ({ ...clone(company), operations: engine.status().workOrders }));
+    return [...companies.values()].map(({ engine, commercialEngine, ...company }) => ({ ...clone(company), operations: engine.status().workOrders, commercial: commercialEngine ? commercialEngine.status() : null }));
   }
   function getSector(sectorId) {
     const sector = sectors.get(sectorId);
@@ -142,7 +162,7 @@ export function createWordDarkWorldEngine({
   }
   function getCompany(companyId) {
     const company = companies.get(companyId);
-    return company ? { companyId: company.companyId, name: company.name, sectorId: company.sectorId, description: company.description, status: company.status, engine: company.engine.status(), workOrders: company.engine.listWorkOrders(), audit: company.engine.auditTrail() } : null;
+    return company ? { companyId: company.companyId, name: company.name, sectorId: company.sectorId, description: company.description, status: company.status, engine: company.engine.status(), commercial: company.commercialEngine ? company.commercialEngine.status() : null, workOrders: company.engine.listWorkOrders(), audit: company.engine.auditTrail() } : null;
   }
 
   function approveForExecution(requestId, approval) {
@@ -176,6 +196,14 @@ export function createWordDarkWorldEngine({
     registerCompany,
     createCompanyWorkOrder,
     transitionCompanyWorkOrder,
+    getCommercialCompany,
+    addCommercialCatalogItem,
+    createCommercialLead,
+    qualifyCommercialLead,
+    createCommercialProposal,
+    decideCommercialProposal,
+    openCommercialOrder,
+    transitionCommercialOrder,
     listSectors,
     listCompanies,
     getSector,
