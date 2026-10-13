@@ -41,5 +41,6 @@ const SocialFactory=require("./social-factory");
   const manualFallback=await manualFactory.execute(noBridge.operationId);
   assert.strictEqual(manualFallback.status,"WAITING_MANUAL_PUBLICATION");
   assert.strictEqual(manualFallback.manualActionRequired,true,"no API connection must preserve manual publication fallback");
-\n  console.log("social-factory.test: OK");
+
+  console.log("social-factory.test: OK");
 })().catch(error=>{console.error(error);process.exitCode=1;});
