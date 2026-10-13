@@ -10,7 +10,8 @@ class WordDarkExternalConnectionRequest {
     this.accountId=source.accountId||null;
     this.capability=source.capability||null;
     this.action=source.action||null;
-    this.payload=source.payload||{};
+    this.environment=source.environment||"TEST";
+    this.payload=structuredClone(source.payload||{});
     this.createdAt=source.createdAt||new Date().toISOString();
   }
   validate(){
@@ -23,7 +24,7 @@ class WordDarkExternalConnectionRequest {
     if(!this.action)errors.push("action é obrigatória.");
     return{valid:errors.length===0,errors};
   }
-  toJSON(){return{...this};}
+  toJSON(){return structuredClone({...this});}
 }
 if(typeof window!=="undefined")window.WordDarkExternalConnectionRequest=WordDarkExternalConnectionRequest;
 if(typeof module!=="undefined"&&module.exports)module.exports=WordDarkExternalConnectionRequest;
