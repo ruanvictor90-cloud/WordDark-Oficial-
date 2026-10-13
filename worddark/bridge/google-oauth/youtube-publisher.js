@@ -7,7 +7,7 @@ const TOKEN_URL="https://oauth2.googleapis.com/token";
 const UPLOAD_URL="https://www.googleapis.com/upload/youtube/v3/videos";
 
 function fail(status,reason){return{success:false,status,reason};}
-function parseScopes(scope){return String(scope||"").split(/\\s+/).filter(Boolean);}
+function parseScopes(scope){return String(scope||"").split(/\s+/).filter(Boolean);}
 
 function createYouTubePublisher({
   connectionStore,
