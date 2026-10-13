@@ -54,7 +54,7 @@ assert.ok(source.includes("function businessStore(kind)"), "Archived commercial 
 assert.ok(!source.includes("commerce:()=>businessStore"), "Retired commercial company must not be an active route");
 assert.ok(!html.includes('data-page="commerce"'), "Retired commercial company must not appear in the active navigation");
 assert.ok(source.includes("function marketing()"), "Marketing must have a distinct screen");
-assert.ok(source.includes("module('workbench','▧','Dark Factory'"), "Sky must link directly to the content workbench");
+assert.ok(source.includes("['workbench','Dark Factory'"), "Sky must list its own production apps");
 assert.ok(source.includes("KEYS.catalog") && source.includes("KEYS.suppliers") && source.includes("KEYS.orders") && source.includes("KEYS.customers"), "Commercial modules must persist separate record collections");
 assert.ok(source.includes("data-cancel-request"), "Queued operations must support cancellation");
 assert.ok(source.includes("data-delete-request"), "Queued operations must support deletion");
@@ -72,6 +72,15 @@ assert.ok(html.includes("radial-gradient(ellipse at 50% -20%"), "World sections 
 assert.ok(!html.includes('url("./assets/world-cosmos.svg")') && !html.includes('url("./assets/world-sky.svg")') && !html.includes('url("./assets/world-earth.svg")'), "Placeholder scene illustrations must not be presented as the user's original reference backgrounds");
 assert.ok(source.includes("document.body.dataset.page=page"), "Navigation must select the correct section background");
 assert.ok(source.includes("function cleanLauncher(area)") && source.includes("operation-rail") && source.includes("operation-app-copy"), "World sections must use dynamic, named operational cards grouped by category");
+const launcherStart=source.indexOf("function cleanLauncher(area)");
+const launcherEnd=source.indexOf("function render()",launcherStart);
+const launcher=source.slice(launcherStart,launcherEnd);
+const skyConfig=launcher.slice(launcher.indexOf("sky:{"),launcher.indexOf("earth:{"));
+const earthConfig=launcher.slice(launcher.indexOf("earth:{"),launcher.indexOf("};",launcher.indexOf("earth:{")));
+const overviewConfig=launcher.slice(launcher.indexOf("overview:{"),launcher.indexOf("sky:{"));
+assert.ok(!overviewConfig.includes("channels"), "Commercial company must belong to Terra, not WordDark");
+assert.ok(!skyConfig.includes("management") && !skyConfig.includes("library"), "Sky must not expose WordDark apps as shortcuts");
+assert.ok(!earthConfig.includes("management") && !earthConfig.includes("library"), "Terra must not expose WordDark apps as shortcuts");
 assert.ok(source.includes("const pageHistory=[]") && source.includes("function goBack()") && source.includes("showPage(pageHistory.pop())"), "Back must pop the most recent in-app page rather than jump to a fixed page");
 assert.ok(source.includes("window.addEventListener('popstate'"), "Browser back gestures must follow the in-app navigation stack");
 assert.ok(swCacheVersionForTest(sw) === true, "Visual changes must be paired with the service worker cache version update");
