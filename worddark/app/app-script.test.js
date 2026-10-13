@@ -18,7 +18,7 @@ assert.ok(source.includes("data-save-review"), "Review controls must be present"
 assert.ok(!html.includes('id="hubQuickRequestForm"') && !html.includes('id="hubQuickRequest"'), "Quick request bar must exist only in the Hub, not on WordDark world pages");
 assert.ok(!html.includes('class="hub-test-app"') && !html.includes('id="hubTestApp"'), "Hub Teste shortcut must not be pinned on every world page");
 assert.ok(!source.includes("quickRequestForm") && source.includes("worddark.hub.quick-request.v1"), "WordDark must receive Hub requests through the existing handoff key without embedding the quick request bar");
-assert.ok(!source.includes("['test','Teste','','']"), "Test must not be duplicated in the area launcher");
+assert.ok(source.includes("['test','Teste','','']"), "Test must be available from the WordDark home launcher");
 assert.ok(!source.includes("function createLaunchMission()"), "The launch mission generator must be removed from the factory");
 assert.ok(!source.includes("data-create-launch-mission") && !html.includes("MISSÃO DE ESTREIA · WORDDARK OFICIAL"), "The launch mission card must be absent from the factory");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
