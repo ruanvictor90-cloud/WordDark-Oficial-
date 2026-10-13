@@ -38,3 +38,11 @@ body.pessoal-launcher .pessoal-app-icon:first-child{background:radial-gradient(c
 body.pessoal-launcher .pessoal-app-icon:last-child{background:radial-gradient(circle at 50% 20%,#35204b 0,#1c1527 60%,#120e19 100%)}
 body.pessoal-launcher .pessoal-app-icon svg{filter:drop-shadow(0 0 5px currentColor)}
 body.pessoal-launcher .pessoal-app-name{letter-spacing:.01em;text-shadow:0 1px 8px #0008}
+
+/* Pessoal follows the same compact, top-aligned app launcher as Ruan and Hub. */
+body.pessoal-launcher .shell{justify-content:flex-start}
+body.pessoal-launcher .welcome{padding-top:16px;padding-bottom:8px}
+body.pessoal-launcher .pessoal-app-grid{width:min(100%,420px);margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:8px 0 14px}
+body.pessoal-launcher .pessoal-app-icon{aspect-ratio:auto;min-height:94px;max-height:112px;gap:8px;border-radius:16px;padding:9px}
+body.pessoal-launcher .pessoal-app-icon svg{width:clamp(36px,10vw,48px);height:clamp(36px,10vw,48px)}
+body.pessoal-launcher .pessoal-app-name{font-size:11px}
