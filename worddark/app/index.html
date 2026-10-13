@@ -462,6 +462,21 @@ body[data-page="earth"]::before{
 .test-pass{color:#9be3bf!important;border-color:#3a7456!important;background:#14291f!important}
 .test-fail{color:#f1a7ad!important;border-color:#82444b!important;background:#2a1519!important}
 @media(max-width:560px){.operation-metrics.top-metrics{gap:7px}.operation-metrics.top-metrics .operation-metric{padding:10px 9px;min-height:72px}.operation-metrics.top-metrics .operation-metric span{font-size:9px}.operation-metrics.top-metrics .operation-metric strong{font-size:21px}.test-sector-row{padding:10px}.test-sector-row .btn{min-width:84px}}
+
+/* WordDark Hub: quick request and compact Test app under the header */
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.hub-command-zone{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:11px clamp(14px,3vw,30px);border-bottom:1px solid rgba(185,203,244,.13);background:rgba(7,11,20,.46);backdrop-filter:blur(14px)}
+.hub-commandbar{display:flex;align-items:center;gap:8px;min-width:0;max-width:920px;width:100%;margin:0 auto}
+.hub-commandbar input{flex:1;min-width:0;height:40px;padding:0 13px;border:1px solid var(--line);border-radius:12px;background:rgba(18,23,35,.82);color:var(--text);font-size:12px}
+.hub-commandbar input::placeholder{color:#8995aa}
+.hub-commandbar .btn{height:40px;white-space:nowrap;padding:0 14px}
+.hub-test-app{display:flex;align-items:center;gap:8px;justify-content:center;min-width:84px;padding:4px 8px;border:1px solid transparent;border-radius:13px;background:transparent;color:var(--text);font-size:11px;font-weight:650}
+.hub-test-app:hover{background:rgba(190,207,255,.08);border-color:var(--line)}
+.hub-test-logo{width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(199,214,255,.28);border-radius:11px;background:linear-gradient(145deg,#202a43,#121824);color:#c7d6ff}
+.hub-test-logo svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.test-pass{border-color:#397b60!important;background:#123328!important;color:#a4edcb!important}
+.test-fail{border-color:#85434b!important;background:#37191f!important;color:#ffb6bf!important}
+@media(max-width:560px){.hub-command-zone{gap:5px;padding:8px 10px}.hub-commandbar{gap:6px}.hub-commandbar input{height:38px;font-size:11px;padding:0 10px}.hub-commandbar .btn{height:38px;padding:0 9px;font-size:10px}.hub-test-app{min-width:57px;flex-direction:column;gap:3px;padding:3px 4px;font-size:9px}.hub-test-logo{width:31px;height:31px}.hub-commandbar .btn span{display:none}}
 </style></head>
 <body>
 <div class="layout">
@@ -483,6 +498,10 @@ body[data-page="earth"]::before{
 </aside>
 <div class="main">
 <header class="topbar app-topbar"><button class="btn back-top" id="backRuan" type="button" aria-label="Voltar" title="Voltar">←</button><div class="world-brand-centered" id="worldBrandHome" role="button" tabindex="0" aria-label="Voltar ao lançador WordDark"><span class="world-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span><div class="world-brand-copy"><strong>WORDDARK</strong><small id="crumbName">Visão geral</small></div></div><div class="top-actions"><button class="btn" id="worldHomeBtn" aria-label="Áreas" title="Áreas">⌂</button><button class="btn optional" id="newRequestTop" aria-label="Nova solicitação" title="Nova solicitação">+</button></div></header>
+<section class="hub-command-zone" aria-label="Pedido rápido do WordDark">
+<form id="hubQuickRequestForm" class="hub-commandbar"><label class="sr-only" for="hubQuickRequest">Pedido</label><input id="hubQuickRequest" name="request" maxlength="500" required placeholder="O que você precisa que o mundo resolva?"><button class="btn gold" type="submit">Enviar pedido <span aria-hidden="true">↗</span></button></form>
+<button class="hub-test-app" id="hubTestApp" type="button" aria-label="Abrir app Teste"><span class="hub-test-logo" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="M17 3 29 8v9c0 7-5 11-12 14C10 28 5 24 5 17V8Z"/><path d="m11 17 4 4 8-9"/></svg></span><span>Teste</span></button>
+</section>
 <main class="content" id="screen"></main>
 </div>
 </div>
@@ -514,7 +533,9 @@ function goBack(){while(pageHistory.length&&pageHistory[pageHistory.length-1]===
 window.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();goBack()}});
 window.addEventListener('popstate',()=>{if(pageHistory.length){showPage(pageHistory.pop())}else if(page!=='overview'){showPage('overview')}});
 
+const quickRequestForm=$('hubQuickRequestForm');if(quickRequestForm)quickRequestForm.addEventListener('submit',event=>{event.preventDefault();const field=$('hubQuickRequest'),title=field.value.trim();if(!title){field.focus();return}const lower=title.toLocaleLowerCase('pt-BR');let kind='Operação',area='WordDark / Triagem';if(/vídeo|video|short|reel|roteiro|legenda|dubl|imagem|conteúdo|conteudo/.test(lower)){kind='Produção';area='Céu / Dark Factory'}else if(/marketing|campanha|marca|público|publico|identidade/.test(lower)){kind='Pesquisa';area='Céu / Marketing'}else if(/cliente|venda|comercial|canal|pedido de cliente/.test(lower)){kind='Operação';area='Terra / Gestão de canais'}else if(/dinheiro|finance|pagamento|receita|despesa|orçamento/.test(lower)){kind='Financeira';area='WordDark / Financeira'}else if(/erro|falha|corrigir|bug/.test(lower)){kind='Correção';area='WordDark / Triagem'}const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),title,kind,area,date:new Date().toISOString().slice(0,10),detail:'Pedido enviado pela barra rápida do WordDark Hub.',status:'Aberta'};requests.push(item);if(!write(KEYS.requests,requests)){requests.pop();return}field.value='';publishHubNotice('Novo pedido recebido',title+' · '+area);render();toast('Pedido registrado para triagem. Nenhuma execução externa foi iniciada.')});
 document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+$('hubTestApp')?.addEventListener('click',()=>navigate('test'));
 $('worldBrandHome')?.addEventListener('click',()=>navigate('overview'));
 $('worldBrandHome')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate('overview')}});
 $('backRuan').addEventListener('click',goBack);
@@ -564,7 +585,7 @@ const reviewJobs=contentJobs.filter(j=>j.status==='Em revisão').length;
 const config={
 overview:{kicker:'WORDDARK · CENTRAL DO MUNDO',title:'O que precisa avançar?',description:'Demandas, setores e operações em um só lugar. Entre direto no próximo passo.',cta:'Registrar uma demanda',groups:[
 {title:'Operação diária',note:pending+' solicitações em aberto',items:[['management','Central de Operações','Registrar e encaminhar demandas','Abrir operação'],['finance','Financeira','Acompanhar registros e movimentações locais','Ver financeiro']]},
-{title:'Controle do mundo',note:'Ferramentas de suporte',items:[['library','Biblioteca','Decisões, notas e arquivos','Consultar biblioteca'],['security','Segurança','Limites, permissões e estado técnico','Ver controles'],['test','Teste','','']]},
+{title:'Controle do mundo',note:'Ferramentas de suporte',items:[['library','Biblioteca','Decisões, notas e arquivos','Consultar biblioteca'],['security','Segurança','Limites, permissões e estado técnico','Ver controles']]},
 
 ]},
 sky:{kicker:'CÉU · PREPARAÇÃO E PRODUÇÃO',title:'Transformar pedidos em soluções',description:'Abra uma capacidade específica. Cada trabalho pode seguir seu próprio fluxo, sem exigir uma produção completa.',cta:'Abrir a fábrica',ctaTarget:'workbench',groups:[
