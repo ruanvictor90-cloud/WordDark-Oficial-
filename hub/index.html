@@ -7,7 +7,7 @@
 <meta name="description" content="WordDark Hub — acesso e avisos do mundo.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./app-icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="./app.css?v=20261013-4">
+<link rel="stylesheet" href="./app.css?v=20261013-5">
 <title>WordDark Hub</title>
 </head>
 <body>
@@ -22,6 +22,10 @@
 <input id="quick-request-input" maxlength="500" required placeholder="O que precisa ser feito no mundo?">
 <button type="submit">Preparar pedido ↗</button>
 </form>
+<a class="central-app-tile" href="../worddark/app/index.html?area=central" aria-label="Abrir Central do WordDark">
+<span class="central-app-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
+<span>Central</span>
+</a>
 <a class="test-app-tile" href="../worddark/app/index.html?area=test" aria-label="Abrir app Teste">
 <span class="test-app-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 6 56 18v28L32 58 8 46V18Z"/><path d="M20 32h24M32 20v24"/><circle cx="32" cy="32" r="13"/></svg></span>
 <span>Teste</span>
@@ -29,6 +33,6 @@
 <section id="notice-panel" class="notice-panel" hidden aria-live="polite"><div class="notification-head"><strong>Avisos</strong><button id="notice-close" class="close-button" aria-label="Fechar avisos">×</button></div><div id="notice-list"></div></section>
 <a class="launch-dock" href="../index.html" aria-label="Abrir o aplicativo oficial WordDark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg><span>Abrir WordDark</span><span class="dock-arrow">↗</span></a>
 </main>
-<script src="./app.js?v=20261013-4" defer></script>
+<script src="./app.js?v=20261013-5" defer></script>
 </body>
 </html>
