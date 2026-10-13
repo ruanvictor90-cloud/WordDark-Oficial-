@@ -485,6 +485,34 @@ body[data-page="earth"]::before{
 .operation-app-copy strong{font-size:11px;line-height:1.25;overflow-wrap:anywhere}
 .operation-app-copy small,.operation-app-copy em{display:none!important}
 @media(max-width:600px){.operation-rail{grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:8px}.operation-app{min-height:80px;padding:9px 5px}.operation-app-icon{width:29px;height:29px;min-width:29px;flex-basis:29px}.operation-app-icon svg{width:17px;height:17px}.operation-app-copy strong{font-size:10px}}
+
+/* Novos módulos WordDark: cartões compactos e telas comerciais móveis. */
+.connection-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(220px,.8fr);gap:14px;align-items:start}
+.provider-grid{display:grid;gap:8px}
+.provider-tile{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:10px;width:100%;padding:10px;border:1px solid #382947;border-radius:15px;background:linear-gradient(145deg,#171020,#100c17);color:#f1e9fb;text-align:left}
+.provider-tile:hover,.provider-tile:focus-visible{border-color:#8058a6;outline:none}
+.provider-logo{display:grid;place-items:center;width:38px;height:38px;border:1px solid #4a375d;border-radius:12px;background:#20162d;color:#d8b7ff;font-size:18px;font-weight:850}
+.provider-youtube{color:#ff7d8b}.provider-instagram{color:#e4a2ff}.provider-github{color:#e5dafa}.provider-drive{color:#9dd7a8}.provider-openai{color:#b4c9ff}.provider-tiktok{color:#a4f0ee}
+.provider-copy{display:grid;gap:3px;min-width:0}.provider-copy strong{font-size:12px}.provider-copy small{font-size:10px;line-height:1.35;color:#a99bb8}
+.provider-state{font-size:9px;color:#d7b3ff;white-space:nowrap}
+.connection-panel{position:sticky;top:85px}.connection-panel h2{font-size:18px;margin:9px 0}.connection-panel .btn{width:100%;margin:12px 0}
+.capture-categories{display:flex;gap:7px;overflow-x:auto;padding:3px 0 12px;margin:0 0 10px}
+.capture-category{flex:0 0 auto;padding:8px 12px;border:1px solid #3b2a4b;border-radius:999px;background:#140e1d;color:#d7c6e8;font-size:10px}
+.capture-category.active{border-color:#9b6bd0;background:#2b1a3b;color:#fff}
+.capture-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.capture-card{min-width:0;padding:0;overflow:hidden;border:1px solid #392848;border-radius:16px;background:#130e1b;color:#f2eafa;text-align:left}
+.capture-card[hidden]{display:none}.capture-cover{position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;min-height:130px;padding:13px;background:radial-gradient(circle at 80% 20%,#64428c 0,transparent 42%),linear-gradient(145deg,#251932,#10101a)}
+.capture-tone-1{background:radial-gradient(circle at 80% 20%,#356e75 0,transparent 45%),linear-gradient(145deg,#1c3034,#11121c)}
+.capture-tone-2{background:radial-gradient(circle at 80% 20%,#8c6139 0,transparent 45%),linear-gradient(145deg,#382619,#15101a)}
+.capture-tone-3{background:radial-gradient(circle at 80% 20%,#49588b 0,transparent 45%),linear-gradient(145deg,#20283f,#10101a)}
+.capture-cover small{font-size:9px;color:#d9c0ff}.capture-cover strong{font-size:13px;line-height:1.3;overflow-wrap:anywhere}.capture-play{position:absolute;right:10px;top:10px;display:grid;place-items:center;width:28px;height:28px;border:1px solid #ffffff45;border-radius:50%;background:#09070f70}
+.capture-card-title{display:block;padding:9px 10px 2px;font-size:11px;font-weight:750}.capture-card>small{display:block;padding:0 10px 11px;color:#a99bb8;font-size:9px}.capture-detail-cover{min-height:180px;border-radius:12px;margin-bottom:14px}
+.store-list{display:grid;gap:10px}.store-card{display:flex;align-items:center;gap:12px;width:100%;padding:13px;border:1px solid #443051;border-radius:16px;background:linear-gradient(145deg,#21172e,#110d18);color:#f2eafa;text-align:left}
+.store-logo{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#38234b;color:#e0c8ff;font-size:24px}.store-card>span:nth-child(2){display:grid;gap:4px;flex:1}.store-card strong{font-size:13px}.store-card small{font-size:10px;color:#ac9dbb}.store-open{font-size:10px;color:#d8b5ff}
+.store-product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.store-product{overflow:hidden;border:1px solid #3b2a4b;border-radius:15px;background:#130e1b}.product-art{display:grid;place-items:center;min-height:105px;background:radial-gradient(circle at 50% 35%,#66468a,#261832 55%,#110d18);color:#e1c7ff;font-size:38px}.store-product:nth-child(even) .product-art{background:radial-gradient(circle at 50% 35%,#3c7376,#1a3034 55%,#100f18)}
+.store-product-body{padding:10px}.store-product-body>strong,.store-product-body>small{display:block}.store-product-body>strong{font-size:11px;line-height:1.35}.store-product-body>small{margin-top:4px;color:#a99bb8;font-size:9px}.product-buy{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-top:10px}.product-buy b{font-size:11px}.product-buy .btn{padding:7px 9px;font-size:9px}
+@media(max-width:650px){.connection-layout{grid-template-columns:1fr}.connection-panel{position:static}.provider-tile{grid-template-columns:38px minmax(0,1fr) auto;gap:8px;padding:9px}.provider-state{font-size:8px}.capture-grid,.store-product-grid{gap:8px}.capture-cover{min-height:118px;padding:10px}.capture-cover strong{font-size:11px}.store-product-body{padding:8px}}
 </style></head>
 <body>
 <div class="layout">
@@ -611,7 +639,7 @@ management:'<rect x="8" y="8" width="18" height="18" rx="3"/><path d="M13 14h8M1
 finance:'<rect x="5" y="8" width="24" height="17" rx="3"/><path d="M5 14h24M10 20h5"/>',
 library:'<path d="M8 6h17v22H8z"/><path d="M12 11h9M12 16h9M12 21h6"/>',
 security:'<path d="M17 4 28 8v8c0 7-5 11-11 14C11 27 6 23 6 16V8Z"/><path d="m12 17 4 4 7-9"/>',
-channels:'<rect x="5" y="7" width="24" height="18" rx="4"/><path d="m14 12 8 4-8 4Z"/>',
+channels:'<path d="M3 7h4l3 15h16l4-11H9"/><circle cx="13" cy="27" r="1.8"/><circle cx="24" cy="27" r="1.8"/>',
 social:'<rect x="5" y="5" width="24" height="24" rx="7"/><circle cx="17" cy="17" r="5"/><circle cx="24" cy="10" r="1"/>',
 workbench:'<path d="M4 10h26v18H4z"/><path d="M10 10V6h14v4M12 18h10"/>',
 marketing:'<path d="m5 17 23-9v18L5 17Z"/><path d="M10 20l3 8h5"/>',
