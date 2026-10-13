@@ -42,7 +42,6 @@ function createYouTubePublisher({
     if(!Buffer.isBuffer(videoBuffer)&&!(videoBuffer instanceof Uint8Array))return fail("VIDEO_BYTES_REQUIRED","O vídeo precisa ser entregue ao adaptador como bytes no backend.");
     if(videoBuffer.byteLength===0)return fail("VIDEO_EMPTY","O arquivo de vídeo está vazio.");
     if(!/^video\\/[a-zA-Z0-9.+-]+$/.test(mimeType))return fail("INVALID_VIDEO_MIME_TYPE","O MIME type deve identificar um vídeo.");
-    if(!Array.isArray(tags))return fail("INVALID_TAGS","As tags devem ser uma lista.");
 
     let tokens;
     try{tokens=await connectionStore.loadTokens({providerId:"YOUTUBE",accountId:String(accountId)});}
@@ -96,4 +95,4 @@ function createYouTubePublisher({
   return Object.freeze({publishVideo});
 }
 
-module.exports={createYouTubePublisher};
+export {createYouTubePublisher};
