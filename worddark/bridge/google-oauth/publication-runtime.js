@@ -68,7 +68,7 @@ export function createPublicationRuntime({
     try{
       const connection=await connectionStore.load({providerId:"YOUTUBE",accountId:authorization.accountId});
       const grantedCapabilities=Array.isArray(connection?.capabilities)?connection.capabilities:[];
-      const grantedScopes=String(connection?.scope||"").split(/\\s+/).filter(Boolean);
+      const grantedScopes=String(connection?.scope||"").split(/\s+/).filter(Boolean);
       const uploadScope="https://www.googleapis.com/auth/youtube.upload";
       if(!connection||connection.status!=="PERSISTED"||String(connection.providerId||"").toUpperCase()!=="YOUTUBE"||String(connection.accountId||"")!==String(authorization.accountId||"")){
         result={success:false,status:"YOUTUBE_CONNECTION_NOT_PERSISTED",reason:"A conta YouTube não possui autorização persistida utilizável."};
