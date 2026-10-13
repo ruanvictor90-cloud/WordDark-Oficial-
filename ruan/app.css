@@ -121,3 +121,6 @@ body.ruan-launcher .ruan-home-app .brand-mark svg{width:29px;height:29px}
 body.ruan-launcher .home-app-name{font-size:11px;line-height:1.2;text-align:center}
 body.ruan-launcher footer{margin-top:auto;padding-top:12px}
 @media(max-width:360px){body.ruan-launcher .ruan-home-grid{gap:7px;padding-top:6px}body.ruan-launcher .ruan-home-app{min-height:86px;padding:6px}body.ruan-launcher .ruan-home-app .brand-mark{width:39px;height:39px;flex-basis:39px}}
+
+/* Darknet shortcut: independent local search system. */
+body.ruan-launcher .ruan-home-app.darknet-launch{background:linear-gradient(145deg,#1c1730,#100c18);border-color:#5e4a88}body.ruan-launcher .ruan-home-app .darknet-logo{color:#bda5ff;border-color:#7059a5;background:radial-gradient(circle at 30% 18%,#30254a,#151020 70%)}
