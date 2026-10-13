@@ -25,7 +25,7 @@ assert.ok(source.includes("data-send-dispatch") && source.includes("https://wa.m
 assert.ok(source.includes("if(!packet||!order||!['Pago','Recebido'].includes(order.status))"), "Supplier messages must not open before payment is confirmed");
 assert.ok(source.includes("function socialChannels()") && source.includes("SucoCast") && source.includes("SucoGeek") && source.includes("SucoComed") && source.includes("SucoFactor"), "Empresa social must provide channel profile entry points");
 assert.ok(source.includes("launchedFromHub") && source.includes("'../../hub/index.html'") && source.includes("window.addEventListener('popstate',event=>"), "Back navigation must return to Hub when Hub was the entry point");
-assert.ok(source.includes("iconMap={ordersHub:") && source.includes("world-brand-copy"), "Pedidos must use its notebook icon rather than the WordDark logo");
+assert.ok(source.includes("iconMap={ordersHub:") && html.includes("world-brand-copy") && html.includes("body[data-page=\"ordersHub\"] .world-brand-copy"), "Pedidos must use its notebook icon and show its name under the logo");
 assert.ok(source.includes("KEYS.dispatches") && source.includes("KEYS.financeEvents") && source.includes("coffer:KEYS.coffer"), "Order and finance data must be included in local storage and backups");
 assert.ok(source.includes("function connections()") && source.includes("data-provider") && source.includes("connection-panel"), "Central connections must jump directly to each provider area");
 console.log("WordDark app script test: OK");
