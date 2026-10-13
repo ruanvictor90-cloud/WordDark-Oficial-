@@ -15,6 +15,10 @@ assert.ok(html.includes('#screen.clean-launcher{display:grid!important;grid-temp
 assert.ok(html.includes('flex-direction:column!important') && html.includes('text-align:center!important'), 'App buttons must stack icon above its label, not look like a horizontal list');
 assert.ok(html.includes('left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important'), 'WordDark logo must remain centered at the top');
 assert.ok(source.includes("data-save-review"), "Review controls must be present");
+assert.ok(html.includes('id="hubQuickRequestForm"') && html.includes('id="hubQuickRequest"'), "WordDark Hub must provide a quick request bar below the header");
+assert.ok(html.includes('class="hub-test-app"') && html.includes('>Teste</span>'), "Test must appear as a compact logo-and-name app below the quick bar");
+assert.ok(source.includes("Pedido registrado para triagem"), "Quick requests must be stored for triage without external execution");
+assert.ok(!source.includes("['test','Teste','','']"), "Test must not be duplicated in the area launcher");
 assert.ok(!source.includes("function createLaunchMission()"), "The launch mission generator must be removed from the factory");
 assert.ok(!source.includes("data-create-launch-mission") && !html.includes("MISSÃO DE ESTREIA · WORDDARK OFICIAL"), "The launch mission card must be absent from the factory");
 assert.ok(source.includes("function exportJobPackage(id)"), "Work packages must be exportable for manual handoff");
