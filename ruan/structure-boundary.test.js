@@ -56,7 +56,10 @@ for (const file of files.filter(file => /\.(?:html|js|css|webmanifest)$/.test(fi
     : source;
   assert.ok(!/worddark/i.test(permittedHubShortcut), `Ruan runtime must not depend on another project's naming except the explicit Hub launcher shortcut: ${path.relative(root, file)}`);
   if (file.endsWith('.js')) {
-    for (const match of source.matchAll(/\b(?:from\s*|import\s*\()\s*["']([^"']+)["']/g)) {
+    for (const match of source.matchAll(/\\bimport\\s+(?:[^'";]*?\\sfrom\\s+)?["']([^"']+)["']/g)) {
+      resolveLocalReference(file, match[1]);
+    }
+    for (const match of source.matchAll(/\\bimport\\s*\\(\\s*["']([^"']+)["']/g)) {
       resolveLocalReference(file, match[1]);
     }
   }
