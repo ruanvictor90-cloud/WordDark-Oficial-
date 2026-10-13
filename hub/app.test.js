@@ -14,5 +14,9 @@ assert.ok(central.includes('Pedidos') && central.includes('Em execução') && ce
 assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
 assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
 assert.ok(css.includes('.quick-request-bar') && css.includes('.test-app-tile') && css.includes('.launch-dock'));
-assert.ok(sw.includes('worddark-hub-v11') && sw.includes('central.html') && sw.includes('20261013-7'));
+assert.ok(sw.includes('worddark-hub-v12') && sw.includes('central.html') && sw.includes('20261013-8'));
+
+assert.ok(hub.indexOf('</header>')<hub.indexOf('class="ruan-return hub-return-under-header"'), 'Hub return must sit below the header');
+assert.ok(central.indexOf('</header>')<central.indexOf('class="ruan-return hub-return-under-header"') && !central.includes('<a class="central-back"'), 'Hub Central must have only one return link below the header');
+assert.ok(css.includes('.test-app-tile{width:auto;min-height:0;max-width:max-content') && css.includes('width:auto;min-height:42px'), 'Teste and WordDark entry must stay compact');
 console.log('WordDark Hub tests passed.');
