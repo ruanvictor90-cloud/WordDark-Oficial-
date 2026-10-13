@@ -80,6 +80,7 @@ const cleanLauncherEnd=source.indexOf("function render()",cleanLauncherStart);
 const cleanLauncherSource=source.slice(cleanLauncherStart,cleanLauncherEnd);
 assert.ok(!cleanLauncherSource.includes("operation-primary") && !cleanLauncherSource.includes("view.description") && !cleanLauncherSource.includes("view.cta"), "Sector launchers must omit redundant descriptions and shortcut CTA buttons");
 assert.ok(source.includes("worddark.hub.quick-request.v1") && source.includes("Pedido encaminhado pelo WordDark Hub."), "Quick Hub requests must prefill the central request form");
+assert.ok(source.includes("page=['overview','sky','earth','test','management'].includes(requestedPage)"), "Hub quick requests must be allowed to open Central Operations directly");
 assert.ok(source.includes("test-only-app") && source.includes("<strong>Teste</strong>"), "WordDark launcher must include the logo-and-name Teste app");
 const launcherStart=source.indexOf("function cleanLauncher(area)");
 const launcherEnd=source.indexOf("function render()",launcherStart);
