@@ -30,7 +30,7 @@ O gateway ativo foi endurecido nesta revisão:
 - a capacidade pedida é conferida literalmente contra a conta conectada. Não se pode converter `CONTENT_PUBLISH` em `CONTENT_ROUTE`, pois isso poderia autorizar publicação com uma permissão mais fraca;
 - a camada de log não grava o payload completo, e os adapters recebem cópias do contrato.
 
-A aprovação configurada no gateway é uma barreira técnica, não substitui a integração com o motor oficial de Aprovações/governança. Se executado no navegador, o callback é código do cliente e pode ser contornado por quem controla esse cliente; portanto, nenhuma credencial real ou ação de produção deve depender só dessa checagem client-side. A autorização final de produção precisa ser verificada no backend confiável. Nenhum adapter real foi ativado por esta alteração.
+A publicação manual foi reforçada em duas camadas: `sky/darkfactory/core/social-factory.js` mantém `CONTENT_PUBLISH`, `CONTENT_UNPUBLISH` e `CONTENT_SCHEDULE` em `WAITING_MANUAL_PUBLICATION`; `core/connections/connection-gateway.js` rejeita essas ações como `MANUAL_ACTION_REQUIRED`, mesmo com adapter e aprovação configurados. Assim, o mundo pode preparar e acompanhar operações, mas esta linha não envia conteúdo para publicação. A suíte inclui testes para garantir que esses caminhos não chamem o adapter externo.\n\nA aprovação configurada no gateway é uma barreira técnica, não substitui a integração com o motor oficial de Aprovações/governança. Se executado no navegador, o callback é código do cliente e pode ser contornado por quem controla esse cliente; portanto, nenhuma credencial real ou ação de produção deve depender só dessa checagem client-side. A autorização final de produção precisa ser verificada no backend confiável. Nenhum adapter real foi ativado por esta alteração.
 
 ### Registro operacional
 
@@ -51,7 +51,7 @@ A suíte de teste cobre essa fronteira. Isso melhora a integridade do histórico
 | Histórico e auditoria | `operation-registry.js`, bibliotecas e memória operacional | Detalhes no setor; índice/resumo na camada central |
 | Permissões | `permissions.js` é canônico e exportado; `permission-set.js` é compatibilidade não conectada | Não fundir interfaces diferentes; autorização contextual deve continuar fail-closed |
 | Segurança ambiental | `environment-guard.js`, `emergency-stop-manager.js`, módulos de segurança | TEST/PROD explícitos; produção exige aprovação configurada |
-| Conexões externas | `core/connections/connection-gateway.js` e contratos associados | TEST só simula; PROD exige aprovação explícita, conta conectada, capacidade exata e adapter registrado |
+| Conexões externas | `core/connections/connection-gateway.js` e contratos associados | TEST só simula; PROD exige aprovação explícita, conta conectada, capacidade exata e adapter registrado; publicação/agendamento/despublicação ficam manuais |
 | Recuperação/diagnóstico | `error-recovery.js`, `operation-diagnostics.js` e suíte atual | Reutilizar comportamento testado; snapshots/undo do legado não são rollback durável |
 | Produção de conteúdo | `sky/darkfactory/` e contratos de operação atuais | Céu executa; políticas por plataforma e revisão humana permanecem explícitas |
 | Operações comerciais | `earth/commercial-engine.js` e contratos atuais | Terra origina necessidades; não ativar pagamentos ou compromissos externos sem controles |
@@ -81,7 +81,7 @@ Um item sai do CreationDark somente quando:
 ## Pendências de validação
 
 - Confirmar que `npm test` integral passa no commit final desta revisão.
-- Confirmar que os testes de isolamento do registro e os testes de bloqueio do gateway passam.
+- Confirmar que os testes de isolamento do registro, bloqueio do gateway e publicação manual passam.
 - Ligar a aprovação PROD ao mecanismo oficial de Aprovações quando esse contrato estiver definido; até lá, nenhuma produção pode ser liberada sem um provedor explícito.
 - Continuar a comparação de permissões, conexões, canais e contas por comportamento, não por semelhança de nomes.
 - Fazer teste visual/manual do CreationDark e do Hub; inventário local não é sincronização entre dispositivos.
