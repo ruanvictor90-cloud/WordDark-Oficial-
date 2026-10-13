@@ -20,6 +20,7 @@ A interface atual é a fonte do que está exposto nesta versão. Os motores e m�
 ### WordDark Hub
 - Central do Hub: Pedidos e Em execução.
 - Teste: entrada compacta para testar o mundo ou setores.
+- CreationDark: oficina de preparação, inventário operacional e triagem de itens ainda sem destino consolidado; não publica nem ativa código automaticamente.
 - WordDark: entrada para o aplicativo principal do mundo.
 
 ### WordDark — mundo operacional
@@ -43,6 +44,13 @@ SucoCast, SucoGeek, SucoComed e SucoFactor são perfis externos de canais de tes
 - Ruan: `ruan/`
 
 O Core coordena contratos e operações; Céu e Terra mantêm responsabilidades próprias. A interface e os motores ainda não devem ser considerados totalmente integrados apenas porque coexistem no repositório.
+
+## CreationDark — preparação antes da integração
+
+- A tela fica em `hub/creationdark.html` e segue a identidade visual atual do Hub.
+- O inventário inicial organiza módulos, regras, motores, conectores e testes; os registros do navegador são locais e não sincronizam entre dispositivos.
+- Itens sem destino consolidado ficam na triagem do CreationDark. Itens com destino conhecido continuam associados ao setor/app indicado, sem reintroduzir interfaces antigas.
+- A catalogação não equivale à integração: nenhuma entrada executa, publica, move ou ativa código. A promoção exige auditoria, testes, revisão e autorização.
 
 ## Código legado e módulos futuros
 
