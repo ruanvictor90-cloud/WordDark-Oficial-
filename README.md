@@ -55,6 +55,9 @@ O Core coordena contratos e operações; Céu e Terra mantêm responsabilidades 
 ## Código legado e módulos futuros
 
 - `worddark/core-central/` é uma implementação anterior e está fora do caminho ativo e da suíte padrão de testes.
+- A auditoria operacional e o mapa de responsabilidades estão em `worddark/runtime/world/core/CONSOLIDATION-AUDIT.md`.
+- A camada ativa do registro isola snapshots/eventos retornados por cópias defensivas; isso protege o estado em memória, mas não substitui persistência durável.
+- Duplicações entre modelos de permissão, diferenças de ambiente e limites dos módulos antigos permanecem em auditoria; não fundir contratos só porque têm nomes parecidos.
 - Outras implementações detalhadas podem permanecer no repositório para reaproveitamento, mas não devem ser conectadas automaticamente à versão atual.
 - Nenhum código legado deve criar um segundo Core, adicionar telas não definidas ou ligar integrações reais por conta própria.
 
