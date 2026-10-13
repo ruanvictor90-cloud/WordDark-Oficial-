@@ -16,7 +16,7 @@ assert.ok(hub.includes('id="notice-toggle"') && hub.includes('id="notice-panel"'
 assert.ok(!hub.includes("Informações") && !hub.includes("VISÃO GERAL"), "Hub must not reintroduce a dense information dashboard");
 assert.ok(!hub.includes("PORTÃO DE ENTRADA") && !hub.includes("O mundo começa"), "Hub must not show a welcome hero");
 assert.ok(!hub.includes("info-widget") && !hub.includes("info-grid") && !hub.includes("<footer"), "Hub must not show information widgets or a footer");
-assert.ok(hub.includes('class="topbar"') && hub.includes('class="launch-dock"'), "Hub must keep only the header and bottom app launch on its home");
+assert.ok(hub.includes('class="topbar"') && hub.includes('class="launch-dock"'), "Hub must keep its header and official app launch dock");
 assert.ok(css.includes("--bg:#09070f") && css.includes("--accent:#c49aff"), "Hub must preserve its original dark-purple identity");
 assert.ok(css.includes(".brand-mark") && css.includes(".launch-dock") && !css.includes("#54c8ff"), "Header and bottom app launch must use the original purple identity, not blue");
 assert.ok(sw.includes("worddark-hub-v8"), "Hub cache must refresh for the quick request bar and Teste app");
