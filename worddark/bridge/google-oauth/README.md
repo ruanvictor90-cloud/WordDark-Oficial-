@@ -43,6 +43,8 @@ O módulo `youtube-publisher.js` prepara o envio server-side de vídeo pelo flux
 - não devolve access token nem refresh token;
 - tem teste automatizado com respostas simuladas; nenhum vídeo real é enviado pela suíte.
 
+**Portão de autorização preparado:** `publication-authorization.js` exige identidade de operador autenticada, autorização específica da operação, aprovação identificável, quota, chave de idempotência e auditoria. Falhas de autenticação, aprovação, quota, auditoria ou registro bloqueiam a operação. O contrato de idempotência depende de um armazenamento durável fornecido pelo backend; nenhum armazenamento em memória é tratado como proteção de produção. O módulo ainda não está ligado ao servidor HTTP.
+
 **Permanece deliberadamente inativo:** o servidor HTTP ainda não expõe rota de publicação e o módulo não é importado por `server.js`. Antes de ligá-lo, o backend precisa autenticar o operador, conferir autorização/aprovação por operação, validar a capacidade da conta, impor limites e idempotência, registrar auditoria e proteger contra repetição de pedidos. Os bytes do vídeo devem chegar por um caminho confiável do backend; não aceitar URL arbitrária fornecida pelo cliente para evitar SSRF.
 
 ## Ainda pendente antes de produção
