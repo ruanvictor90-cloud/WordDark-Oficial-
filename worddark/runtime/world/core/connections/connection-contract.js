@@ -22,6 +22,7 @@ class WordDarkExternalConnectionRequest {
     if(!this.accountId)errors.push("accountId é obrigatório.");
     if(!this.capability)errors.push("capability é obrigatória.");
     if(!this.action)errors.push("action é obrigatória.");
+    if(!["TEST","PROD"].includes(this.environment))errors.push("environment deve ser TEST ou PROD.");
     return{valid:errors.length===0,errors};
   }
   toJSON(){return structuredClone({...this});}
