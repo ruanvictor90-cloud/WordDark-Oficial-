@@ -15,10 +15,12 @@
  * - external network communication
  */
 const SOCIAL_ACTIONS=Object.freeze({ACCOUNT_READ:"ACCOUNT_READ",ACCOUNT_UPDATE:"ACCOUNT_UPDATE",CONTENT_CREATE:"CONTENT_CREATE",CONTENT_UPDATE:"CONTENT_UPDATE",CONTENT_DELETE:"CONTENT_DELETE",CONTENT_PUBLISH:"CONTENT_PUBLISH",CONTENT_UNPUBLISH:"CONTENT_UNPUBLISH",CONTENT_SCHEDULE:"CONTENT_SCHEDULE",COMMENT_READ:"COMMENT_READ",COMMENT_CREATE:"COMMENT_CREATE",COMMENT_DELETE:"COMMENT_DELETE",MESSAGE_READ:"MESSAGE_READ",MESSAGE_SEND:"MESSAGE_SEND",ANALYTICS_READ:"ANALYTICS_READ",MEDIA_UPLOAD:"MEDIA_UPLOAD",MEDIA_DELETE:"MEDIA_DELETE"});
+// Publicar, despublicar ou agendar publicação exige ação manual fora do fluxo automático.
+const MANUAL_PUBLICATION_ACTIONS=new Set(["CONTENT_PUBLISH","CONTENT_UNPUBLISH","CONTENT_SCHEDULE"]);
 class SocialOperation{
- constructor({requestId,network,action,accountId=null,payload={},options={}}={}){this.operationId="SOP-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,7).toUpperCase();this.requestId=requestId||null;this.network=String(network||"").toUpperCase();this.action=String(action||"").toUpperCase();this.accountId=accountId;this.payload=payload||{};this.options=options||{};this.status="PENDING";this.createdAt=new Date().toISOString();}
+ constructor({requestId,network,action,accountId=null,payload={},options={}}={}){this.operationId="SOP-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,7).toUpperCase();this.requestId=requestId||null;this.network=String(network||"").toUpperCase();this.action=String(action||"").toUpperCase();this.accountId=accountId;this.payload=structuredClone(payload||{});this.options=structuredClone(options||{});this.status="PENDING";this.createdAt=new Date().toISOString();}
  validate(){const errors=[];if(!this.requestId)errors.push("requestId obrigatório.");if(!this.network)errors.push("network obrigatório.");if(!this.action)errors.push("action obrigatório.");if(!Object.values(SOCIAL_ACTIONS).includes(this.action))errors.push("Ação social não suportada pelo contrato.");if(!this.accountId)errors.push("accountId obrigatório.");return{valid:errors.length===0,errors};}
- toJSON(){return{...this};}
+ toJSON(){return structuredClone({...this});}
 }
 
 class SocialFactory {
@@ -93,6 +95,12 @@ class SocialFactory {
   async execute(operationId){
     const operation=this.operations.get(operationId);
     if(!operation)return {success:false,status:"NOT_FOUND",reason:"Operação não encontrada."};
+    if(MANUAL_PUBLICATION_ACTIONS.has(operation.action)){
+      operation.status="WAITING_MANUAL_PUBLICATION";
+      const result={success:true,status:"WAITING_MANUAL_PUBLICATION",stage:"DARK_FACTORY_SOCIAL",operationId,requestId:operation.requestId,network:operation.network,action:operation.action,manualActionRequired:true,reason:"O conteúdo está preparado para decisão humana. Nenhuma publicação, despublicação ou agenda automática foi enviada."};
+      this.log("SOCIAL_OPERATION_WAITING_MANUAL_PUBLICATION",result);
+      return result;
+    }
     if(!this.connectionBridge?.execute)return {
       success:false,status:"WAITING_EXTERNAL_CONNECTION",stage:"CENTRAL_DE_CONEXOES",
       operationId,reason:"Nenhuma ponte de conexão externa disponível."
