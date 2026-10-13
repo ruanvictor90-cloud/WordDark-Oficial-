@@ -93,7 +93,7 @@ const cleanLauncherSource=source.slice(cleanLauncherStart,cleanLauncherEnd);
 assert.ok(!cleanLauncherSource.includes("operation-primary") && !cleanLauncherSource.includes("view.description") && !cleanLauncherSource.includes("view.cta"), "Sector launchers must omit redundant descriptions and shortcut CTA buttons");
 assert.ok(source.includes("worddark.hub.quick-request.v1") && source.includes("Pedido encaminhado pelo WordDark Hub."), "Quick Hub requests must prefill the central request form");
 assert.ok(source.includes("page=['overview','management','sky','earth','test','finance','library','security','channels','social','workbench','marketing','darkbank','investments','myinvestments','opportunities'].includes(requestedPage)"), "Direct routes must include existing areas and the Darkbank hierarchy without a duplicate Financeiro page");
-assert.ok(source.includes("test-only-app") && source.includes("<strong>Teste</strong>"), "WordDark launcher must include the logo-and-name Teste app");
+assert.ok(source.includes("overview:{") && source.includes("items:[['test','Teste','','']]") && source.includes("clean-app-name"), "WordDark launcher must include the logo-and-name Teste app");
 const launcherStart=source.indexOf("function cleanLauncher(area)");
 const launcherEnd=source.indexOf("function render()",launcherStart);
 const launcher=source.slice(launcherStart,launcherEnd);
