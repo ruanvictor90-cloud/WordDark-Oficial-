@@ -1,5 +1,5 @@
-import assert from "node:assert/strict";
-import {createDarknetWorldAdapter} from "./darknet-world-adapter.js";
+const assert=require("node:assert/strict");
+const createDarknetWorldAdapter=require("./darknet-world-adapter.js");
 let submissions=0,audits=0;
 const operationCenter={submit:input=>{submissions++;assert.equal(input.requesterId,"DARKNET");assert.equal(input.originId,"darknet");assert.equal(input.environment,"TEST");return{success:true,status:"QUEUED"};},getStatus:()=>({status:"HEALTHY"})};
 const request={requestId:"DNET-REQ-1",source:"DARKNET",destination:"WORDDARK",sector:"ceu",action:"REQUEST_OPERATION",payload:{need:"Preparar conteúdo"}};
