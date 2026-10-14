@@ -37,7 +37,7 @@ assert.ok(hubManifest.includes('"name": "Ruan Hub"'));
 assert.ok(hubWorker.includes('ruan-hub-v14') && !hubWorker.includes('../ruan/apps/darknet/'));
 assert.ok(hubTests.includes('Ruan Hub') && hubTests.includes('migrateHubStorage'));
 assert.ok(world.includes('ARCHITECTURE-CONSOLIDATION.md') && world.includes('CURRENT-VERSION-SCOPE.md'));
-assert.ok(sectors.includes('Ruan permanece separado') && sectors.includes('Core operacional ativo'));
+assert.ok(sectors.includes('Sistema privado separado') && sectors.includes('Core operacional ativo'));
 assert.ok(interfaceBriefs.includes('Ruan Hub') && interfaceBriefs.includes('Banco/Darkbank') && interfaceBriefs.includes('Apps privados Ruan'));
 assert.ok(worldApp.includes('Darkbank'), 'WordDark interface must retain the current Banco/Darkbank app entry');
 assert.ok(darknet.includes('sistema independente') && darknet.includes('Ruan'), 'Darknet documentation must preserve the independent Ruan boundary');
