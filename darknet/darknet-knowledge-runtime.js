@@ -43,13 +43,17 @@ export function createDarknetKnowledgeRuntime(options = {}) {
   if (options.enabled === true && !readiness.ready) {
     throw new Error("DARKNET_KNOWLEDGE_RUNTIME_NOT_READY:" + readiness.missing.join(","));
   }
-  const repository = createDurableKnowledgeRepository({ backend: options.repository });
-  const archiver = createCentralKnowledgeArchiver({ createKnowledgeRecord: options.createKnowledgeRecord, centralKnowledgeStore: options.centralKnowledgeStore });
+  const repository = options.repository?.durable === true && options.repository?.atomic === true
+    ? createDurableKnowledgeRepository({ backend: options.repository })
+    : null;
+  const archiver = fn(options.createKnowledgeRecord) && options.centralKnowledgeStore && typeof options.centralKnowledgeStore.archive === "function"
+    ? createCentralKnowledgeArchiver({ createKnowledgeRecord: options.createKnowledgeRecord, centralKnowledgeStore: options.centralKnowledgeStore })
+    : null;
   const registry = createDurableKnowledgeIntakeRegistry({
     repository,
     authorizeReview: options.authorizeReview,
     audit: options.auditReview,
-    archiveValidated: archiver.archiveValidated,
+    archiveValidated: archiver?.archiveValidated,
     enabled: options.enabled === true,
     now: options.now
   });
