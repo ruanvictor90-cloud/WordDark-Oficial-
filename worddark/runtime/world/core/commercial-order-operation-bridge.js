@@ -198,7 +198,7 @@ export function createCommercialOrderOperationBridge({
           status: orderStatus === "REVIEW" ? "COMMERCIAL_ORDER_REVIEW_REQUIRED" : "COMMERCIAL_ORDER_DISPATCHED",
           dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus
         };
-      }, { fingerprint: JSON.stringify({ orderId, requestId, approvalId, order }) });
+      }, { fingerprint: JSON.stringify({ orderId, requestId, approvalId, proposalId: order.proposalId || null, title: order.title || "", scope: order.scope || "", amount: order.amount ?? null, currency: order.currency || "BRL", contentType: order.contentType || order.deliverableType || "TEXT", requesterId: order.requesterId || null, deadline: order.deadline || null, recurrence: order.recurrence || "ONE_TIME" }) });
     } catch (error) {
       return deny(error?.code === "IDEMPOTENCY_CONFLICT"
         ? "COMMERCIAL_DISPATCH_IDEMPOTENCY_CONFLICT"
