@@ -13,7 +13,14 @@ export function normalizePreferences(input = {}) {
   const profile = PROFILE_IDS.has(input.profile) ? input.profile : DEFAULT_PREFS.profile;
   const engine = ["duckduckgo", "google", "bing"].includes(input.engine) ? input.engine : DEFAULT_PREFS.engine;
   const favorites = Array.isArray(input.favorites)
-    ? [...new Set(input.favorites.filter(item => typeof item === "string" && /^https:\/\/[a-z0-9.-]+(?:\/[^\s]*)?$/i.test(item)).map(item => item.slice(0, 300)))].slice(0, 12)
+    ? [...new Set(input.favorites.flatMap(item => {
+        if (typeof item !== "string" || item.length > 300) return [];
+        try {
+          const url = new URL(item);
+          if (url.protocol !== "https:" || !url.hostname || url.username || url.password) return [];
+          return [url.href];
+        } catch { return []; }
+      }))].slice(0, 12)
     : [];
   return { profile, engine, favorites };
 }
@@ -33,9 +40,9 @@ export function savePreferences(storage, input) {
 export function buildSearchUrl(query, engine = "duckduckgo") {
   const q = String(query ?? "").trim();
   if (!q) throw new TypeError("Digite uma pesquisa ou endereço.");
-  if (/^https:\/\//i.test(q)) {
+  if (/^https?:\/\//i.test(q)) {
     const url = new URL(q);
-    if (url.protocol !== "https:") throw new TypeError("Por segurança, use endereços HTTPS.");
+    if (url.protocol !== "https:" || url.username || url.password) throw new TypeError("Por segurança, use um endereço HTTPS válido sem credenciais.");
     return url.href;
   }
   const engines = {
