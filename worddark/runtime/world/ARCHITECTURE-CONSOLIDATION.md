@@ -101,7 +101,11 @@ Antes de considerar qualquer módulo integrado:
 - diferenciar testes simulados de evidência em serviços reais;
 - preservar a interface existente salvo pedido explícito de alteração.
 
-## 9. Estado real conhecido nesta fase
+## 9. Ruan Hub ↔ WordDark Core
+
+O contrato de controle do Hub fica em `core/connections/ruan-hub-control-adapter.js`. Ele exige contexto de identidade confiável separado do payload, autorização por ação, aprovação identificável para submissão, auditoria e idempotência fornecidas por dependências de backend. Permanece desligado por padrão e não registra rota HTTP. O ambiente está fixado em `TEST`. O Hub ainda guarda rascunhos locais; não está ligado a uma sessão de operador real nem a um serviço remoto autenticado. Consulte [Mapa da arquitetura e pendências](./ARCHITECTURE-MAP.md).
+
+## 10. Estado real conhecido nesta fase
 
 - Ruan e Hub são aplicações estáticas; várias funções guardam dados no armazenamento local do navegador.
 - Os pedidos atuais do Hub são locais e não demonstram execução remota.
