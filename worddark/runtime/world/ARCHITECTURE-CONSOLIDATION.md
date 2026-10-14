@@ -103,7 +103,7 @@ Antes de considerar qualquer módulo integrado:
 
 ## 9. Ruan Hub ↔ WordDark Core
 
-O contrato de controle do Hub fica em `core/connections/ruan-hub-control-adapter.js`. Ele exige contexto de identidade confiável separado do payload, autorização por ação, aprovação identificável para submissão, auditoria e idempotência fornecidas por dependências de backend. Permanece desligado por padrão e não registra rota HTTP. O ambiente está fixado em `TEST`. O Hub ainda guarda rascunhos locais; não está ligado a uma sessão de operador real nem a um serviço remoto autenticado. Consulte [Mapa da arquitetura e pendências](./ARCHITECTURE-MAP.md).
+O contrato de controle do Hub fica em `core/connections/ruan-hub-control-adapter.js`. Ele exige contexto de identidade confiável separado do payload, autorização por ação, aprovação identificável para submissão, auditoria e idempotência fornecidas por dependências de backend. `core/connections/firestore-operation-control-store.js` implementa essas duas últimas dependências sobre Firestore transacional injetado; a integração foi testada com o runtime do Hub e a ponte comercial. O runtime permanece desligado por padrão, não registra rota HTTP e está fixado em `TEST`. O Hub ainda guarda rascunhos locais; não está ligado a uma sessão de operador real nem a um serviço remoto autenticado. A instância Firestore, identidade, autorização e aprovação reais continuam pendentes. Consulte [Mapa da arquitetura e pendências](./ARCHITECTURE-MAP.md).
 
 ## 10. Estado real conhecido nesta fase
 
