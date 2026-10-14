@@ -31,7 +31,6 @@ async function main() {
   const ContentExecutor = require("../sky/darkfactory/core/content-publication-executor.js");
   const ContentModules = require("../sky/darkfactory/core/content-module-registry.js");
   const ContentFactory = require("../sky/darkfactory/core/content-factory.js");
-  const { createRuanHubControlAdapter } = await import("../core/connections/ruan-hub-control-adapter.js").catch(() => ({ createRuanHubControlAdapter: null }));
 
   global.WordDarkCapabilityCatalog = require("../core/capability-catalog.js");
   global.WordDarkRoute = Route;
