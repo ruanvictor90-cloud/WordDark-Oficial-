@@ -5,7 +5,7 @@ let n = 0;
 const manager = createPluginManager({ now: () => "2026-10-13T20:30:0" + n++ + "Z" });
 const registered = manager.register({
   id: "catalog-helper", name: "Catalog Helper", version: "1.0.0",
-  capabilities: ["catalog.read", "metadata.read"]
+  capabilities: ["catalog.read", "metadata.read", "network"]
 });
 assert.equal(registered.status, "disabled");
 assert.equal(registered.execution, "not-loaded");
