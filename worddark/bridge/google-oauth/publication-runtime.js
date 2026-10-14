@@ -45,7 +45,7 @@ export function createPublicationRuntime({
     if(!request||String(request.providerId||"").toUpperCase()!=="YOUTUBE"){
       return{success:false,status:"PUBLICATION_PROVIDER_UNSUPPORTED",reason:"Este runtime aceita somente o provedor YOUTUBE."};
     }
-    if(String(request.action||"").toUpperCase()!=="CONTENT_PUBLISH"||String(request.capability||"").toUpperCase()!=="CONTENT_PUBLISH"){
+    if(String(request.action||"").toUpperCase()!=="CONTENT_PUBLISH"||String(request.capability||"").toUpperCase()!=="CONTENT_PUBLICATION"){
       return{success:false,status:"PUBLICATION_ACTION_UNSUPPORTED",reason:"Este runtime aceita somente a ação CONTENT_PUBLISH."};
     }
     if(!media||!Buffer.isBuffer(media.videoBuffer)){
@@ -72,8 +72,8 @@ export function createPublicationRuntime({
       const uploadScope="https://www.googleapis.com/auth/youtube.upload";
       if(!connection||connection.status!=="PERSISTED"||String(connection.providerId||"").toUpperCase()!=="YOUTUBE"||String(connection.accountId||"")!==String(authorization.accountId||"")){
         result={success:false,status:"YOUTUBE_CONNECTION_NOT_PERSISTED",reason:"A conta YouTube não possui autorização persistida utilizável."};
-      }else if(!grantedCapabilities.includes("CONTENT_PUBLISH")){
-        result={success:false,status:"YOUTUBE_PUBLICATION_CAPABILITY_NOT_GRANTED",reason:"A conta persistida ainda não recebeu a capacidade operacional CONTENT_PUBLISH."};
+      }else if(!grantedCapabilities.includes("CONTENT_PUBLICATION")){
+        result={success:false,status:"YOUTUBE_PUBLICATION_CAPABILITY_NOT_GRANTED",reason:"A conta persistida ainda não recebeu a capacidade canônica CONTENT_PUBLICATION."};
       }else if(!grantedScopes.includes(uploadScope)&&!grantedScopes.includes("youtube.upload")){
         result={success:false,status:"YOUTUBE_UPLOAD_SCOPE_NOT_GRANTED",reason:"A autorização OAuth persistida não contém o escopo youtube.upload."};
       }else{
