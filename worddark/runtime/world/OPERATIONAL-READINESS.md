@@ -170,3 +170,7 @@ O gateway carregado pela interface da Dark Factory (connection-gateway.js) agora
 O teste registra um adapter deliberadamente e confirma que ele não é chamado enquanto o gateway está desligado. Os testes funcionais que exercitam o gateway habilitam-no explicitamente com dependências de teste.
 
 Esta alteração evita que a instância client-side/local seja confundida com o limite de segurança de produção. Ela não desliga nem substitui os runtimes server-side próprios de publicação e pesquisa; esses continuam dependendo de autenticação, autorização, auditoria, segredos e persistência reais.
+
+## Validação pendente da última alteração
+
+A estrutura do `package.json`, o registro do loader ESM e as referências entre os novos testes foram conferidos no repositório. Porém, o GitHub não retornou workflow runs nem status checks para o head desta última alteração; por isso, **não declaro que os novos testes executaram ou passaram**. Antes de merge ou ativação, executar `npm run operation-control:test` e a suíte completa `npm test` em um checkout de trabalho/CI e revisar eventuais falhas.
