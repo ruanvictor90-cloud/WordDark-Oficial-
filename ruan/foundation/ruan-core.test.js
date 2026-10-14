@@ -22,6 +22,8 @@ assert.deepEqual(migrated.projects, []);
 assert.equal(validateState(migrated).valid, true);
 assert.equal(validateState({ transactions: [{ type: "expense", amount: -5, title: "x" }] }).valid, false);
 assert.equal(validateState({ bills: [{ title: "Conta", amount: -1, dueDate: "2026-10-01" }] }).valid, false);
+assert.equal(validateState({ bills: [{ title: "Conta", amount: 10, dueDate: "2026-02-30" }] }).valid, false);
+assert.equal(validateState({ schemaVersion: SCHEMA_VERSION + 1 }).valid, false);
 
 const logged = createEvent(initial, "created", "task", "t1", { title: "Arrumar cama" }, "2026-10-14T12:00:00.000Z");
 assert.equal(logged.events[0].entityId, "t1");
@@ -87,5 +89,6 @@ const parsed = parseImportPayload(payload);
 assert.equal(parsed.valid, true);
 assert.equal(parsed.data.tasks.length, 1);
 assert.equal(parseImportPayload({ app: "Other" }).valid, false);
+assert.equal(parseImportPayload({ app: "Ruan", kind: "personal-data-export", schemaVersion: SCHEMA_VERSION + 1, data: { schemaVersion: SCHEMA_VERSION + 1 } }).valid, false);
 
 console.log("Ruan personal core tests passed.");
