@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f">
+<meta name="description" content="Protótipo isolado da estrutura pessoal do Ruan.">
+<title>Ruan — Fundação Pessoal</title>
+<link rel="stylesheet" href="./foundation.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <button class="icon-button back" id="backHome" aria-label="Voltar para visão geral" title="Visão geral">←</button>
+    <a class="brand" href="#overview" aria-label="Ruan visão geral">
+      <span class="logo" aria-hidden="true">R</span>
+      <span><strong>RUAN</strong><small>Central pessoal</small></span>
+    </a>
+    <div class="top-actions"><span class="online-dot" title="Protótipo local"></span><button class="icon-button" id="notificationButton" aria-label="Ver lembretes">♧<span class="notification-count" id="notificationCount">0</span></button></div>
+  </header>
+  <main>
+    <section class="welcome">
+      <div><p class="eyebrow" id="greeting">SEU ESPAÇO PESSOAL</p><h1 id="welcomeTitle">Vamos organizar o seu dia.</h1><p class="muted" id="todayLabel"></p></div>
+      <button class="primary-button" data-action="quick-add">＋ Adicionar</button>
+    </section>
+    <nav class="app-nav" aria-label="Áreas pessoais">
+      <button class="nav-item active" data-view="overview"><span>⌂</span>Visão geral</button>
+      <button class="nav-item" data-view="tasks"><span>✓</span>Tarefas</button>
+      <button class="nav-item" data-view="shopping"><span>▤</span>Compras</button>
+      <button class="nav-item" data-view="reminders"><span>◷</span>Lembretes</button>
+      <button class="nav-item" data-view="finance"><span>◈</span>Financeiro</button>
+    </nav>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <section class="view active" id="view-overview">
+      <div class="section-heading"><div><p class="eyebrow">RESUMO</p><h2>Seu momento</h2></div><span class="quiet-pill">Atualizado neste aparelho</span></div>
+      <div class="stat-grid">
+        <article class="stat-card"><span class="stat-icon">✓</span><span class="stat-label">Tarefas de hoje</span><strong id="overviewTasks">0/0</strong><small id="overviewTasksHint">Vamos começar pelo simples</small></article>
+        <article class="stat-card"><span class="stat-icon">◷</span><span class="stat-label">Lembretes ativos</span><strong id="overviewReminders">0</strong><small>Itens que pedem atenção</small></article>
+        <article class="stat-card"><span class="stat-icon">▤</span><span class="stat-label">Lista de compras</span><strong id="overviewShopping">0</strong><small>Itens ainda não marcados</small></article>
+        <article class="stat-card"><span class="stat-icon">◈</span><span class="stat-label">Saldo registrado</span><strong id="overviewBalance">R$ 0,00</strong><small>Baseado nos lançamentos salvos</small></article>
+      </div>
+      <div class="content-grid">
+        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">PRÓXIMAS AÇÕES</p><h2>O que fazer agora</h2></div><button class="text-button" data-view="tasks">Ver tarefas →</button></div><div id="overviewTaskList" class="simple-list"></div></article>
+        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">LEMBRETES</p><h2>Não esquecer</h2></div><button class="text-button" data-view="reminders">Ver todos →</button></div><div id="overviewReminderList" class="simple-list"></div></article>
+      </div>
+      <article class="panel finance-peek"><div class="panel-heading"><div><p class="eyebrow">CONTROLE FINANCEIRO</p><h2>Dinheiro com clareza</h2><p class="muted">Entradas, gastos, reservas e investimentos registrados por você.</p></div><button class="secondary-button" data-view="finance">Abrir financeiro</button></div><div class="money-strip"><div><span>Entradas no mês</span><strong id="overviewIncome">R$ 0,00</strong></div><div><span>Saídas no mês</span><strong id="overviewExpenses">R$ 0,00</strong></div><div><span>Investimentos registrados</span><strong id="overviewInvestments">R$ 0,00</strong></div></div></article>
+    </section>
+    <section class="view" id="view-tasks">
+      <div class="section-heading"><div><p class="eyebrow">ROTINA REALISTA</p><h2>Tarefas do dia</h2><p class="muted">Pequenas ações contam. Você pode adaptar a lista quando quiser.</p></div><button class="primary-button" data-action="add-task">＋ Nova tarefa</button></div>
+      <form class="inline-form" id="taskForm"><input id="taskTitle" maxlength="120" placeholder="Ex.: arrumar a cama, lavar a louça..." required><select id="taskCategory" aria-label="Categoria"><option>Casa</option><option>Pessoal</option><option>Trabalho</option><option>Saúde</option><option>Outro</option></select><select id="taskPriority" aria-label="Prioridade"><option value="normal">Normal</option><option value="high">Importante</option><option value="low">Se der tempo</option></select><button class="primary-button" type="submit">Adicionar</button></form>
+      <div class="filter-row"><span id="taskProgress" class="quiet-pill">0 concluídas</span><button class="text-button" id="seedRoutine">＋ Sugerir rotina básica</button></div>
+      <div id="taskList" class="task-list"></div>
+    </section>
+    <section class="view" id="view-shopping">
+      <div class="section-heading"><div><p class="eyebrow">LISTAS PRÁTICAS</p><h2>Lista de compras</h2><p class="muted">Monte listas por mercado, casa ou qualquer ocasião.</p></div><button class="primary-button" data-action="add-shopping-list">＋ Nova lista</button></div>
+      <form class="inline-form" id="shoppingForm"><input id="shoppingTitle" maxlength="100" placeholder="Nome da lista (ex.: Mercado da semana)" required><button class="primary-button" type="submit">Criar lista</button></form>
+      <div id="shoppingLists" class="shopping-grid"></div>
+    </section>
+    <section class="view" id="view-reminders">
+      <div class="section-heading"><div><p class="eyebrow">NO MOMENTO CERTO</p><h2>Lembretes</h2><p class="muted">Registre o que precisa lembrar. Este protótipo ainda não envia notificações do sistema.</p></div><button class="primary-button" data-action="add-reminder">＋ Novo lembrete</button></div>
+      <form class="inline-form reminder-form" id="reminderForm"><input id="reminderTitle" maxlength="120" placeholder="O que você precisa lembrar?" required><input id="reminderDate" type="datetime-local" aria-label="Data e hora"><button class="primary-button" type="submit">Salvar</button></form>
+      <div id="reminderList" class="task-list"></div>
+    </section>
+    <section class="view" id="view-finance">
+      <div class="section-heading"><div><p class="eyebrow">GESTÃO FINANCEIRA PESSOAL</p><h2>Seu dinheiro</h2><p class="muted">Controle manual com separação entre saldo, reservas e investimentos.</p></div><button class="primary-button" data-action="add-transaction">＋ Lançamento</button></div>
+      <div class="finance-stats">
+        <article class="stat-card"><span class="stat-label">Saldo calculado</span><strong id="financeBalance">R$ 0,00</strong><small>Entradas menos saídas registradas</small></article>
+        <article class="stat-card"><span class="stat-label">Reservas</span><strong id="financeReserve">R$ 0,00</strong><small>Dinheiro separado por objetivo</small></article>
+        <article class="stat-card"><span class="stat-label">Investimentos</span><strong id="financeInvestment">R$ 0,00</strong><small>Valor informado manualmente</small></article>
+      </div>
+      <div class="content-grid finance-grid">
+        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">MOVIMENTAÇÕES</p><h2>Entradas e saídas</h2></div></div><form id="transactionForm" class="stack-form"><input id="transactionTitle" placeholder="Descrição (ex.: salário, mercado)" maxlength="120" required><div class="form-row"><select id="transactionType" aria-label="Tipo"><option value="income">Entrada</option><option value="expense">Saída</option></select><input id="transactionAmount" type="number" min="0.01" step="0.01" placeholder="Valor em R$" required></div><button class="primary-button" type="submit">Registrar movimentação</button></form><div id="transactionList" class="simple-list"></div></article>
+        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">OBJETIVOS</p><h2>Reservas e investimentos</h2></div></div><form id="assetForm" class="stack-form"><input id="assetTitle" maxlength="100" placeholder="Nome (ex.: reserva de emergência)" required><div class="form-row"><select id="assetType" aria-label="Tipo de reserva"><option value="reserve">Reserva</option><option value="investment">Investimento</option></select><input id="assetAmount" type="number" min="0" step="0.01" placeholder="Valor atual em R$" required></div><button class="secondary-button" type="submit">Salvar objetivo</button></form><div id="assetList" class="simple-list"></div></article>
+      </div>
+      <p class="security-note"><strong>Importante:</strong> esta é uma base de organização pessoal, não um banco conectado. Não movimenta dinheiro real, não acessa contas e não calcula rentabilidade automaticamente. Valores e investimentos são registros manuais; futuras integrações precisarão de segurança e autorização próprias.</p>
+    </section>
+  </main>
+  <footer>RUAN · Fundação pessoal isolada <span>Seus registros ficam neste navegador neste protótipo.</span></footer>
+</div>
+<dialog id="quickDialog"><form method="dialog" class="dialog-card"><div class="panel-heading"><div><p class="eyebrow">AÇÃO RÁPIDA</p><h2>O que vamos organizar?</h2></div><button class="icon-button" aria-label="Fechar">×</button></div><button class="quick-option" value="task" data-dialog-action="task">✓ <span><strong>Adicionar tarefa</strong><small>Uma ação para concluir</small></span></button><button class="quick-option" value="shopping" data-dialog-action="shopping">▤ <span><strong>Lista de compras</strong><small>Itens para lembrar de comprar</small></span></button><button class="quick-option" value="reminder" data-dialog-action="reminder">◷ <span><strong>Criar lembrete</strong><small>Algo para não esquecer</small></span></button><button class="quick-option" value="transaction" data-dialog-action="transaction">◈ <span><strong>Lançamento financeiro</strong><small>Registrar entrada ou saída</small></span></button></form></dialog>
+<script src="./foundation.js"></script>
+</body>
+</html>
