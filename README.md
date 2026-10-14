@@ -61,3 +61,8 @@ A pasta `hub/` continua separada por conveniência de implementação/publicaç�
 - `staging`: integração e testes.
 
 Executar `npm test` antes de concluir mudanças. Validar a publicação do GitHub Pages separadamente.
+
+
+## Operação comercial inicial
+
+Antes de ampliar os setores, siga o [plano de operação comercial sem investimento inicial](COMMERCIAL-BOOTSTRAP.md): oferta pequena, entrega manual revisada, autorização humana, medição de custos e reinvestimento apenas do saldo disponível.
