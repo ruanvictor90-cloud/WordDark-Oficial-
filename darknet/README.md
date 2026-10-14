@@ -40,7 +40,7 @@ A porta usa comunicação in-process injetada, não HTTP nem rede. Os dois lados
 
 ## Recepção e aprendizagem de conteúdo
 
-O pipeline `darknet-knowledge-pipeline.js` é a porta de aquisição: usa adaptadores de provedores injetados, valida origem HTTPS, declaração de direitos, tamanho e proveniência, e encaminha os registros ao WordDark. A Darknet não guarda tokens de provedores e não abre conexões de rede por conta própria.
+O pipeline `darknet-knowledge-pipeline.js` é a porta de aquisição e `darknet-knowledge-integration.js` compõe a entrada da Darknet com o adaptador do WordDark em memória: usa adaptadores de provedores injetados, valida origem HTTPS, declaração de direitos, tamanho e proveniência, e encaminha os registros ao WordDark. A Darknet não guarda tokens de provedores e não abre conexões de rede por conta própria.
 
 - O provedor externo é fornecido pela Central de Conexões por meio de um adaptador `search({ query, limit })`.
 - A transferência exige identidade autenticada confiável, autorização e auditoria.
