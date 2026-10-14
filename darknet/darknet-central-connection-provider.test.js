@@ -3,7 +3,8 @@ import { createCentralConnectionKnowledgeProvider } from "./darknet-central-conn
 
 let calls = 0;
 const provider = createCentralConnectionKnowledgeProvider({
-  gateway: { execute: async request => {
+  gateway: { execute: async (request, context) => {
+    assert.deepEqual(context.requestContext, { authenticated: true, actorId: "darknet-service", sessionId: "session-1" });
     calls++;
     assert.equal(request.providerId, "RESEARCH_API");
     assert.equal(request.accountId, "acct-1");
@@ -16,7 +17,8 @@ const provider = createCentralConnectionKnowledgeProvider({
   operationIdFactory: () => "REQ-1"
 });
 assert.equal(provider.id, "research_api");
-assert.deepEqual(await provider.search({ query: "safe research", limit: 5 }), [{ id: "s1", title: "Guide" }]);
+const trustedContext = { authenticated: true, actorId: "darknet-service", sessionId: "session-1" };
+assert.deepEqual(await provider.search({ query: "safe research", limit: 5, trustedContext }), [{ id: "s1", title: "Guide" }]);
 assert.equal(calls, 1);
 assert.equal(provider.getStatus().credentialsExposed, false);
 const nested = createCentralConnectionKnowledgeProvider({
