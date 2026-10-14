@@ -46,13 +46,13 @@
   function parse(input={}){
     const raw=typeof input==="string"?input:(input.text||input.request||input.goal||"");
     const t=text(raw),type=classify(input),human=resolveHuman(input);
-    const base={resourceId:input.resourceId||input.resource||null,destinationId:input.destinationId||input.destination||null,clientId:input.clientId||input.accountId||null,deadline:input.deadline||null,format:input.format||null};
+    const base={resourceId:input.resourceId||input.resource||null,destinationId:input.destinationId||input.destination||null,clientId:input.clientId||input.accountId||null,deadline:input.deadline||null,format:input.format||null};const context={...base,...(input.context&&typeof input.context==="object"&&!Array.isArray(input.context)?input.context:{})};
     if(type==="OPERATION"){
-      return{type:"OPERATION",action:input.action||findAction(raw),intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,deadline:base.deadline,format:base.format,parameters:input.parameters||input.options||{},context:base,raw};
+      return{type:"OPERATION",action:input.action||findAction(raw),intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,deadline:base.deadline,format:base.format,parameters:input.parameters||input.options||{},context,raw};
     }
     const compoundGoal=/(?:criar|produzir|gerar).*(?:\be\b|\bdepois\b|\bpara\b).*(?:publicar|postar)/.test(t);
     const inferredOperations=input.requirements?.operations||(compoundGoal?null:human?.operations||null);
-    return{type:"PRODUCTION",intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,goal:input.goal||raw,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,quantity:extractQuantity(input,t),requirements:{...(input.requirements||{}),capability:human?.capability||null,service:human?.service||null,action:input.requirements?.action||(!compoundGoal?human?.operations?.[0]:null)||null,operations:inferredOperations},options:{...(input.options||{}),environment:input.environment||input.options?.environment||"TEST"},context:base,raw};
+    return{type:"PRODUCTION",intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,goal:input.goal||raw,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,quantity:extractQuantity(input,t),requirements:{...(input.requirements||{}),capability:human?.capability||null,service:human?.service||null,action:input.requirements?.action||(!compoundGoal?human?.operations?.[0]:null)||null,operations:inferredOperations},options:{...(input.options||{}),environment:input.environment||input.options?.environment||"TEST"},context,raw};
   }
   const api={ACTIONS,classify,parse,findAction,resolveHuman};
   if(typeof global!=="undefined")global.WordDarkUniversalLanguage=api;
