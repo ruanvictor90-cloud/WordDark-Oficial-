@@ -21,7 +21,7 @@
 | **Terra / comercial** | Motor de demandas, leads, ofertas, propostas e pedidos, com bridges para o Core | CI passou na cadeia demanda → lead → proposta aceita → pedido → Core → Dark Factory em TEST | Persistência multiusuário, confirmação real do cliente, cobrança, confirmação de entrega e registro financeiro ainda exigem backend e procedimento operacional validados |
 | **Marketing e canais sociais** | Responsabilidades e capacidades documentadas | Podem alimentar a esteira de preparação | Contas, métricas e publicação reais não devem ser inferidas da presença de módulos; manter revisão e envio manuais |
 | **Cidade de Compras** | Estrutura separada, indicada como desenvolvimento em `develop` | Não é fonte do Core ativo | Não misturar nem promover para o Core sem revisão, migração explícita e testes |
-| **Central de Conexões** | Gateway, contratos, armazenamento OAuth criptografado e controles de capacidade existem | Testes exercitam registro, autorização e adapters simulados | Conectar os handlers reais já configurados; validar Firestore/KMS/IAM, identidade, rotação de credenciais, auditoria e comportamento no ambiente implantado. Registro de conta não concede capacidade por si só |
+| **Central de Conexões** | Gateway cliente, contratos, armazenamento OAuth criptografado e controles de capacidade existem | Gateway do navegador agora fica desligado por padrão; gateways server-side têm contratos próprios e testes simulados | Conectar os handlers reais já configurados; validar Firestore/KMS/IAM, identidade, rotação de credenciais, auditoria e comportamento no ambiente implantado. O registro local do navegador não é uma fronteira de confiança; conta persistida não concede capacidade por si só |
 | **Publicação YouTube** | Publisher e runtime backend com gate, quota, idempotência e auditoria | O fluxo é testável com dependências simuladas; a publicação permanece manual por padrão | Fonte real de identidade/aprovação, conexão persistida, escopo e capacidade concedida, armazenamento transacional e teste em staging; sem ativação automática |
 | **Darknet** | Sistema independente, pipeline de conhecimento e composição server-side | Há testes de integração da pesquisa ao intake e arquivo usando mocks | Conectar os providers reais da Central de Conexões, autenticação/autorização/auditoria duráveis e Firestore/IAM; sem rota HTTP ativa e desligada por padrão |
 | **Biblioteca central** | Contratos de intake durável e adapters Firestore | Validação, revisão, idempotência e arquivo têm cobertura de contrato | Instância real de Firestore, índices/permissões/retention, monitoramento e teste concorrente no projeto de nuvem |
@@ -150,3 +150,11 @@ A tela financeira continua sendo um registro local de apoio operacional, não um
 - Mesmo quando os custos estão informados, o resultado continua estimado porque a alíquota tributária é uma estimativa e podem existir custos/obrigações não registrados.
 
 Testes de script e alinhamento arquitetural protegem essas regras. Isso reduz a chance de tratar faturamento ou margem incompleta como dinheiro disponível para reinvestimento, mas não substitui conciliação bancária, contabilidade, persistência de servidor nem apuração fiscal.
+
+## Endurecimento da Central de Conexões — 14/10/2026
+
+O gateway carregado pela interface da Dark Factory (connection-gateway.js) agora usa enabled=false por padrão e devolve EXTERNAL_CONNECTION_GATEWAY_DISABLED antes de consultar credenciais ou executar adapters. Seu estado declara explicitamente productionSafe=false e serverGatewayRequiredForProduction=true.
+
+O teste registra um adapter deliberadamente e confirma que ele não é chamado enquanto o gateway está desligado. Os testes funcionais que exercitam o gateway habilitam-no explicitamente com dependências de teste.
+
+Esta alteração evita que a instância client-side/local seja confundida com o limite de segurança de produção. Ela não desliga nem substitui os runtimes server-side próprios de publicação e pesquisa; esses continuam dependendo de autenticação, autorização, auditoria, segredos e persistência reais.
