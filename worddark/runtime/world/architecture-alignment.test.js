@@ -19,6 +19,9 @@ const hubWorker = read('hub/sw.js');
 const hubTests = read('hub/app.test.js');
 const world = read('worddark/runtime/world/README.md');
 const sectors = read('worddark/runtime/world/SECTOR-ALIGNMENT.md');
+const readinessAudit = read('worddark/runtime/world/OPERATIONAL-READINESS.md');
+const connectionGateway = read('worddark/runtime/world/core/connections/connection-gateway.js');
+const connectionGatewayTest = read('worddark/runtime/world/core/connections/connection-gateway.test.js');
 const interfaceBriefs = read('worddark/runtime/world/APP-INTERFACE-BRIEFS.md');
 const worldApp = read('worddark/app/index.html');
 const darknet = read('darknet/README.md');
@@ -100,4 +103,7 @@ assert.ok(knowledgeRuntimeIntegrationTest.includes('runtime.learn') && knowledge
 assert.ok(packageScripts.includes('darknet/darknet-knowledge-runtime.integration.test.js'), 'End-to-end knowledge integration test must be included in the standard test suites');
 assert.ok(sectors.includes('Verificação ponta a ponta da cadeia de conhecimento'), 'Sector alignment must record end-to-end evidence and production limitations');
 assert.ok(sectors.includes('Matriz geral de integração') && sectors.includes('Validar a composição server-side da Central de Conexões persistida'), 'Sector alignment must record block-level readiness and the next integration dependency');
+assert.ok(readinessAudit.includes('Matriz bloco por bloco') && readinessAudit.includes('Receita recebida não é lucro'), 'Operational readiness audit must cover sector boundaries and financial truth');
+assert.ok(connectionGateway.includes('sanitizeExternalValue') && connectionGateway.includes('EXTERNAL_CONNECTION_EXECUTION_FINISHED'), 'External gateway must sanitize provider results and keep logs metadata-only');
+assert.ok(connectionGatewayTest.includes('MUST_NOT_ESCAPE') && connectionGatewayTest.includes('NEVER_LOG'), 'Gateway tests must prove secret redaction from responses and logs');
 console.log('Architecture alignment tests passed.');
