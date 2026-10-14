@@ -6,14 +6,12 @@ export const DARKNET_VERSION = "0.1.0-foundation";
 export const CONNECTION_MODE = "isolated";
 export const CONNECTORS = Object.freeze([
   { id: "world-runtime", label: "World runtime", status: "disabled", reason: "Aguardando alinhamento geral e autorização explícita." },
-  { id: "private-bridge", label: "Ruan ↔ Hub", status: "disabled", reason: "Ponte reservada para etapa posterior." },
+  { id: "world-bridge", label: "Darknet ↔ WordDark", status: "disabled", reason: "Contrato integrado; autorização backend e ativação continuam pendentes." },
   { id: "external-web", label: "Web externa", status: "disabled", reason: "Pesquisa externa não habilitada nesta versão." }
 ]);
 export const CATALOG = Object.freeze([
-  { id: "ruan-home", title: "Ruan", kind: "Aplicativo", description: "Central privada de operação pessoal e desenvolvimento.", scope: "private", tags: ["central", "aplicativos", "pessoal"] },
   { id: "hub", title: "Hub", kind: "Central", description: "Ponto de entrada e ferramentas operacionais da central.", scope: "hub", tags: ["central", "pedidos", "operações"] },
   { id: "darknet", title: "Darknet", kind: "Sistema", description: "Busca, catálogo, diretório de serviços e preparação de mensagens.", scope: "both", tags: ["pesquisa", "busca", "rede", "diretório"] },
-  { id: "shadow", title: "Shadow / darkEye", kind: "Aplicativo", description: "Área separada de pesquisa e navegação em desenvolvimento.", scope: "ruan", tags: ["navegador", "pesquisa", "shadow"] },
   { id: "world-runtime", title: "Mundo digital", kind: "Sistema futuro", description: "Destino futuro de conexão; permanece isolado nesta versão.", scope: "future", tags: ["mundo", "setores", "conexões"] },
   { id: "execution-area", title: "Área de execução", kind: "Área futura", description: "Área de execução prevista para conexão futura.", scope: "future", tags: ["execução", "produção"] },
   { id: "request-area", title: "Área de demandas", kind: "Área futura", description: "Área de demandas e entidades prevista para conexão futura.", scope: "future", tags: ["demandas", "entidades"] }
@@ -37,8 +35,8 @@ export function createEnvelope({ from, to = "unassigned", subject, body, type = 
     body: message, status: "draft", transport: "local-only", dispatchedAt: null
   });
 }
-export function createLocalStore(storage = globalThis.localStorage, namespace = "ruan") {
-  const key = "darknet." + safe(namespace || "ruan") + ".v1";
+export function createLocalStore(storage = globalThis.localStorage, namespace = "darknet") {
+  const key = "darknet." + safe(namespace || "darknet") + ".v1";
   const read = () => {
     if (!storage) return { inbox: [], outbox: [] };
     const value = parse(storage.getItem(key), {});
