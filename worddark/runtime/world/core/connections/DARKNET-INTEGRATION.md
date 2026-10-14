@@ -24,4 +24,4 @@ A ponte é desativada por padrão em ambos os lados. A habilitação exige uma i
 
 ## Testes
 
-`darknet/darknet-world-bridge.test.js` cobre modo desligado, encaminhamento autorizado, setor inválido, negação e falha de auditoria. `darknet-world-adapter.test.js` cobre modo desligado, submissão em TEST, origem inválida, pedido incompleto, negação e descoberta de capacidades.
+`darknet/darknet-world-bridge.test.js` cobre modo desligado, encaminhamento autorizado, setor inválido, negação e falha de auditoria. `worddark/runtime/world/core/connections/darknet-world-adapter.test.js` cobre modo desligado, submissão em TEST, origem inválida, pedido incompleto, negação e descoberta de capacidades.
