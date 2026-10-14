@@ -27,5 +27,8 @@ jobs:
           node --check ruan/foundation/foundation.js
           node --check ruan/foundation/ruan-core.js
           node --check ruan/foundation/ruan-core.test.js
+          node --check ruan/foundation/ruan-app-registry.js
+          node --check ruan/foundation/ruan-app-registry.test.js
       - name: Run domain core tests
         run: node ruan/foundation/ruan-core.test.js
+          node ruan/foundation/ruan-app-registry.test.js
