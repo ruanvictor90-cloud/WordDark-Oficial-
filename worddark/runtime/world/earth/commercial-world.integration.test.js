@@ -154,7 +154,7 @@ async function main() {
     proposalId: "proposal-commercial-integration",
     leadId: lead.leadId,
     title: "Pacote de conteúdo básico",
-    scope: "3 textos e 1 roteiro curto",
+    scope: "3 textos de publicação, 1 roteiro curto, 1 bio/descrição de perfil e 1 rodada de ajustes",
     amount: 75
   });
   commercial.decideProposal(proposal.proposalId, "ACCEPTED", "client-demo");
