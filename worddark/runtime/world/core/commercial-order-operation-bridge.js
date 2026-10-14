@@ -198,7 +198,7 @@ export function createCommercialOrderOperationBridge({
           status: orderStatus === "REVIEW" ? "COMMERCIAL_ORDER_REVIEW_REQUIRED" : "COMMERCIAL_ORDER_DISPATCHED",
           dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus
         };
-      });
+      }, { fingerprint: JSON.stringify({ orderId, requestId, approvalId, order }) });
     } catch (error) {
       return deny(error?.code === "IDEMPOTENCY_CONFLICT"
         ? "COMMERCIAL_DISPATCH_IDEMPOTENCY_CONFLICT"
