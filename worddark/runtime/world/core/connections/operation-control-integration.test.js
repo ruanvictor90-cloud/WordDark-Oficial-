@@ -72,7 +72,7 @@ const hub = createRuanHubControlRuntime({
     getStatus() { return { status: "READY", environment: "TEST", activeOperations: 1 }; }
   }
 });
-assert.equal(hub.getStatus().readiness.ready, true);
+assert.equal(hub.getStatus().ready, true);
 const hubRequest = {
   requestId: "hub-request-1", source: "RUAN_HUB", destination: "WORDDARK",
   action: "SUBMIT_NEED", need: "Prepare a sample deliverable"
@@ -111,7 +111,7 @@ const bridge = createCommercialOrderOperationBridge({
     : null,
   authorizeDispatch: async () => ({ allowed: true, approved: true, approvalId: "COMM-APPROVAL-1" }),
   resolveAction: async () => "CONTENT_CREATE",
-  audit: controls.audit,
+  audit,
   idempotencyStore: controls.idempotencyStore,
   enabled: true
 });
