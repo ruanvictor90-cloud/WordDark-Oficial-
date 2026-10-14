@@ -1,0 +1,31 @@
+name: Ruan Personal Foundation
+on:
+  push:
+    branches:
+      - feature/ruan-personal-foundation
+    paths:
+      - "ruan/foundation/**"
+      - ".github/workflows/ruan-foundation.yml"
+  pull_request:
+    paths:
+      - "ruan/foundation/**"
+      - ".github/workflows/ruan-foundation.yml"
+permissions:
+  contents: read
+jobs:
+  validate-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check ruan/foundation/foundation.js
+          node --check ruan/foundation/ruan-core.js
+          node --check ruan/foundation/ruan-core.test.js
+      - name: Run domain core tests
+        run: node ruan/foundation/ruan-core.test.js
