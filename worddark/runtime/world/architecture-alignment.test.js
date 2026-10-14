@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const read = file => readFileSync(path.join(root, file), 'utf8');
 const repository = read('README.md');
+const commercialPlan = read('COMMERCIAL-BOOTSTRAP.md');
 const architecture = read('worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md');
 const scope = read('worddark/runtime/world/CURRENT-VERSION-SCOPE.md');
 const ruan = read('ruan/README.md');
@@ -48,6 +49,7 @@ const knowledgePersistedGatewayIntegrationTest = read('darknet/darknet-knowledge
 const packageScripts = read('package.json');
 const capabilityCatalog = read('worddark/runtime/world/core/capability-catalog.js');
 
+assert.ok(repository.includes('COMMERCIAL-BOOTSTRAP.md') && commercialPlan.includes('Sem APIs premium antes de provar retorno') && commercialPlan.includes('Faturamento não é lucro') && commercialPlan.includes('Nenhuma proposta ou execução externa automática sem autorização'));
 assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('ARCHITECTURE-MAP.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
 assert.ok(architecture.includes('Ruan — aplicativo pessoal') && architecture.includes('Hub — painel superior pertencente ao Ruan'));
 assert.ok(architecture.includes('Banco — instituição financeira do WordDark') && architecture.includes('implementação/app atualmente identificada como Darkbank'));
