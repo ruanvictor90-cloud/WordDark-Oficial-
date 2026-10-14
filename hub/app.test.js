@@ -14,8 +14,10 @@ assert.ok(hub.includes('class="test-app-tile"') && hub.includes('>Teste</span>')
 assert.ok(hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'), 'Hub must keep the bottom WordDark entry');
 assert.ok(!hub.includes('class="hub-apps"'), 'Pedidos and Em execução must live inside Hub Central');
 assert.ok(central.includes('Pedidos') && central.includes('Em execução') && central.includes('independente da Central do WordDark'));
-assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
-assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
+assert.ok(central.includes('ruan.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
+assert.ok(script.includes('ruan.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
+assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('migrateHubStorage'), 'Hub must preserve existing local requests while migrating to its Ruan-owned namespace');
+assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('migrateHubStorage'), 'Hub Central must migrate previously saved requests');
 assert.ok(css.includes('.quick-request-bar') && css.includes('.test-app-tile') && css.includes('.launch-dock'));
 assert.ok(sw.includes('ruan-hub-v14') && sw.includes('central.html') && sw.includes('darknet.html'));
 assert.ok(!sw.includes('../ruan/apps/darknet/'), 'Hub cache must not reference the removed Ruan-owned Darknet copy');
