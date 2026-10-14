@@ -76,3 +76,16 @@ Um bloco passa para o próximo estágio somente quando:
 - Preparar conteúdo não é o mesmo que publicar.
 - Receita recebida não é lucro.
 - Nenhuma alteração neste plano autoriza merge, deploy, publicação, gasto com APIs ou movimentação de dinheiro.
+
+
+## Integração comercial Terra → WordDark Core (nova verificação)
+
+Foi adicionado `core/commercial-order-operation-bridge.js` para encaminhar um pedido comercial aceito da Terra ao Centro de Operações canônico. O adaptador não cria um motor paralelo: resolve explicitamente a ação, encaminha a operação ao Core, exige operador autenticado, aprovação correspondente, autorização, auditoria e idempotência injetadas.
+
+- Estado inicial: desligado por padrão; o contrato mantém o ambiente em `TEST`.
+- A proposta precisa estar aceita e o pedido precisa estar em `ORDER_OPEN`.
+- O pedido só avança para `PLANNED` depois que o Core devolve uma operação rastreável com `operationId`.
+- Repetições do mesmo pedido usam uma chave de idempotência baseada no pedido, evitando um segundo despacho quando o armazenamento idempotente honra o contrato.
+- O teste cobre modo desligado, autorização negada, aprovação ausente, rejeição do Core, despacho aceito, sincronização do pedido, ausência de ID de operação e repetição.
+
+**Limite importante:** o teste usa Core, autorização, auditoria e idempotência simulados. Esta é a integração de contrato entre Terra comercial e Core, não a ativação do backend real. Antes de habilitar, é necessário injetar autenticação/aprovação/auditoria persistentes e armazenamento idempotente atômico reais, validar o resultado no ambiente de staging e decidir explicitamente a ativação. Não existe endpoint HTTP novo nem efeito externo ativado por este adaptador.
