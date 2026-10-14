@@ -29,11 +29,12 @@ function sanitizeExternalValue(value,depth=0){
 }
 
 class ExternalConnectionGateway {
-  constructor({registry=null,logger=null}={}) {
+  constructor({registry=null,logger=null,enabled=false}={}) {
     this.registry=registry||null;
     this.logger=logger||null;
     this.adapters=new Map();
-    this.status="ONLINE";
+    this.enabled=enabled===true;
+    this.status=this.enabled?"ONLINE":"DISABLED";
   }
 
   registerAdapter(providerId,adapter) {
@@ -61,6 +62,7 @@ class ExternalConnectionGateway {
     const built=this.createRequest(source);
     if(!built.success)return built;
     const request=built.request;
+    if(!this.enabled)return{success:false,status:"EXTERNAL_CONNECTION_GATEWAY_DISABLED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId};
     if(!this.registry)return{success:false,status:"CONNECTION_REGISTRY_UNAVAILABLE",operationId:request.operationId};
 
     const requiredCapability=ACTION_CAPABILITIES[request.action];
@@ -91,7 +93,7 @@ class ExternalConnectionGateway {
     }
   }
 
-  getStatus(){return{status:this.status,adapters:[...this.adapters.keys()],adapterCount:this.adapters.size};}
+  getStatus(){return{status:this.status,enabled:this.enabled,adapters:[...this.adapters.keys()],adapterCount:this.adapters.size,trustBoundary:"CLIENT_LOCAL_ONLY",productionSafe:false,serverGatewayRequiredForProduction:true};}
 }
 if(typeof window!=="undefined")window.ExternalConnectionGateway=ExternalConnectionGateway;
 if(typeof module!=="undefined"&&module.exports)module.exports=ExternalConnectionGateway;
