@@ -115,3 +115,8 @@ O contrato de controle do Hub fica em `core/connections/ruan-hub-control-adapter
 - O código do Banco/Darkbank deve ser tratado como gestão financeira do mundo, não como instituição bancária regulada já operacional.
 
 Este documento define o alinhamento alvo; ele não declara que integrações ainda pendentes já estejam implementadas.
+
+
+## 11. Operação comercial inicial
+
+O desenvolvimento passa a seguir também o [Plano de operação comercial sem investimento inicial](../../../COMMERCIAL-BOOTSTRAP.md). A primeira receita deve vir de uma entrega pequena e revisada manualmente, não da conclusão de todos os setores. APIs pagas, assinaturas, propostas automáticas e ações financeiras externas exigem evidência de retorno e autorização explícita. Faturamento, custos, horas e saldo disponível devem ser registrados separadamente.
