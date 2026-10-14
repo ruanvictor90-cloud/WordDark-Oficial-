@@ -57,9 +57,9 @@ const commercialBridgeTest = read('worddark/runtime/world/core/commercial-order-
 assert.ok(repository.includes('COMMERCIAL-BOOTSTRAP.md') && commercialPlan.includes('Sem APIs premium antes de provar retorno') && commercialPlan.includes('Faturamento não é lucro') && commercialPlan.includes('Nenhuma proposta ou execução externa automática sem autorização'));
 assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('ARCHITECTURE-MAP.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
 assert.ok(architecture.includes('Ruan — aplicativo pessoal') && architecture.includes('Hub — painel superior pertencente ao Ruan'));
-assert.ok(architecture.includes('Darkbank — gestão financeira interna do WordDark') && architecture.includes('não é uma instituição financeira autorizada'));
+assert.ok(architecture.includes('Darkbank — gestão financeira interna do WordDark') && architecture.includes('não uma instituição financeira autorizada'));
 assert.ok(architecture.includes('não é administrado pelo WordDark') && architecture.includes('o Hub não cria um segundo Core'));
-assert.ok(scope.includes('Banco (interface atual Darkbank)') && scope.includes('ponte com o Core permanece desativada'));
+assert.ok(scope.includes('Darkbank é o setor de gestão financeira interna do mundo') && scope.includes('ponte com o Core permanece desativada'));
 assert.ok(ruan.includes('aplicativo pessoal') && ruan.includes('pertencente ao Ruan'));
 assert.ok(ruanHome.includes('../hub/index.html'), 'Ruan must retain the explicit Hub launcher');
 assert.ok(!ruanHome.includes('apps/darknet'), 'Ruan must not own the legacy Darknet app');
