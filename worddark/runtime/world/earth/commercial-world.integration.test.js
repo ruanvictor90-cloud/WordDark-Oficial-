@@ -163,6 +163,11 @@ async function main() {
   assert.ok(road.listDeliveries().length >= 2, "A Rodovia deve transportar a solicitação e o retorno.");
   assert.equal(communication.getStatus().pending, 0, "Não pode restar solicitação pendente.");
   assert.ok(operationRegistry.list().length > 0, "A operação deve ser registrada.");
+  const coreOperation = operationRegistry.list().find(item => item.resourceId === order.orderId);
+  assert.ok(coreOperation, "A operação central deve manter o vínculo com o pedido comercial.");
+  assert.equal(coreOperation.clientId, "client-demo", "A identidade do cliente não pode ser perdida na tradução da linguagem universal.");
+  assert.equal(coreOperation.context.source, "TERRA_COMMERCIAL_ORDER", "A origem comercial e a aprovação precisam acompanhar a operação.");
+  assert.equal(coreOperation.context.approvalId, "commercial-integration-approval-1");
   assert.ok(centralLibrary.count() > 0, "A operação deve deixar registro na Biblioteca Central.");
   assert.ok(auditEvents.some(event => event.event === "COMMERCIAL_ORDER_DISPATCH_AUTHORIZED"));
   assert.ok(auditEvents.some(event => event.event === "COMMERCIAL_ORDER_CORE_ACCEPTED"));
