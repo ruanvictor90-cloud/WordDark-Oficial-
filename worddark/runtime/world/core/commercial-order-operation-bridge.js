@@ -16,7 +16,9 @@ export function createCommercialOrderOperationBridge({
   resolveAction,
   audit,
   idempotencyStore,
-  enabled = false
+  enabled = false,
+  executionQueue = null,
+  resolveExecutionService = async order => clean(order.serviceType) || "content.digital-package"
 } = {}) {
   if (!commercialEngine || typeof commercialEngine.getOrder !== "function" ||
       typeof commercialEngine.transitionOrder !== "function") {
@@ -32,6 +34,10 @@ export function createCommercialOrderOperationBridge({
   }
   if (!idempotencyStore || typeof idempotencyStore.executeOnce !== "function") {
     throw new Error("COMMERCIAL_BRIDGE_IDEMPOTENCY_REQUIRED");
+  }
+  if (executionQueue && (typeof executionQueue.enqueue !== "function" ||
+      typeof executionQueue.getStatus !== "function" || typeof resolveExecutionService !== "function")) {
+    throw new Error("COMMERCIAL_EXECUTION_QUEUE_DEPENDENCY_REQUIRED");
   }
 
   async function dispatch(input = {}, requestContext = null) {
@@ -98,6 +104,16 @@ export function createCommercialOrderOperationBridge({
           return deny("COMMERCIAL_OPERATION_ACTION_INVALID");
         }
 
+        let executionServiceType = null;
+        if (executionQueue) {
+          try { executionServiceType = clean(await resolveExecutionService(structuredClone(current))); }
+          catch { return deny("COMMERCIAL_EXECUTION_SERVICE_RESOLUTION_FAILED"); }
+          const supported = executionQueue.getStatus()?.supportedServices;
+          if (!executionServiceType || !Array.isArray(supported) || !supported.includes(executionServiceType)) {
+            return deny("COMMERCIAL_EXECUTION_SERVICE_UNSUPPORTED");
+          }
+        }
+
         let coreResult;
         try {
           coreResult = await operationCenter.submit({
@@ -159,18 +175,13 @@ export function createCommercialOrderOperationBridge({
           return deny("COMMERCIAL_CORE_OPERATION_ID_REQUIRED");
         }
 
+        let auditWarning = false;
         try {
           await audit({
             event: "COMMERCIAL_ORDER_CORE_ACCEPTED",
             actorId: principal.actorId, requestId, orderId, approvalId, operationId
           });
-        } catch {
-          return {
-            success: true, status: "DISPATCHED_AUDIT_WARNING",
-            dispatched: true, environment: "TEST", orderId, operationId,
-            warning: "A operação foi aceita pelo Core, mas a auditoria final falhou; revisar antes de novo despacho."
-          };
-        }
+        } catch { auditWarning = true; }
 
         let orderStatus = "PLANNED";
         const coreStatus = clean(coreResult.status).toUpperCase() || "ACCEPTED";
@@ -193,10 +204,52 @@ export function createCommercialOrderOperationBridge({
           };
         }
 
+        let executionTaskId = null;
+        let executionQueueWarning = null;
+        if (executionQueue) {
+          const queued = executionQueue.enqueue({
+            orderId,
+            proposalId: clean(current.proposalId),
+            title: clean(current.title),
+            scope: clean(current.scope),
+            serviceType: executionServiceType,
+            assignedTo: principal.actorId,
+            approved: true,
+            approvedBy: principal.actorId,
+            approvalId,
+            clientId: clean(current.requesterId),
+            deadline: current.deadline || null
+          });
+          if (queued?.success === true) {
+            executionTaskId = clean(queued.task?.taskId) || null;
+            try { await audit({ event: "COMMERCIAL_ORDER_ASSIGNED_TO_DARK_FACTORY", actorId: principal.actorId, requestId, orderId, approvalId, operationId, taskId: executionTaskId, serviceType: executionServiceType }); }
+            catch { auditWarning = true; }
+          } else {
+            executionQueueWarning = clean(queued?.code) || "EXECUTION_QUEUE_REJECTED";
+            try { await audit({ event: "COMMERCIAL_ORDER_EXECUTION_QUEUE_FAILED", actorId: principal.actorId, requestId, orderId, approvalId, operationId, queueStatus: executionQueueWarning }); }
+            catch { auditWarning = true; }
+          }
+        }
+
+        if (executionQueueWarning) {
+          return {
+            success: true, status: "COMMERCIAL_CORE_ACCEPTED_QUEUE_WARNING",
+            dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus,
+            queueStatus: executionQueueWarning,
+            warning: "O Core aceitou a operação, mas a fila da Dark Factory não confirmou a atribuição. Reconciliação manual obrigatória."
+          };
+        }
+        if (auditWarning) {
+          return {
+            success: true, status: "DISPATCHED_AUDIT_WARNING",
+            dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus, executionTaskId,
+            warning: "O Core aceitou a operação, mas uma gravação de auditoria falhou; revisar antes de novo despacho."
+          };
+        }
         return {
           success: true,
           status: orderStatus === "REVIEW" ? "COMMERCIAL_ORDER_REVIEW_REQUIRED" : "COMMERCIAL_ORDER_DISPATCHED",
-          dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus
+          dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus, executionTaskId
         };
       }, { fingerprint: JSON.stringify({ orderId, requestId, approvalId, proposalId: order.proposalId || null, title: order.title || "", scope: order.scope || "", amount: order.amount ?? null, currency: order.currency || "BRL", contentType: order.contentType || order.deliverableType || "TEXT", requesterId: order.requesterId || null, deadline: order.deadline || null, recurrence: order.recurrence || "ONE_TIME" }) });
     } catch (error) {
@@ -216,7 +269,9 @@ export function createCommercialOrderOperationBridge({
       requiresTrustedOperator: true,
       requiresExplicitApproval: true,
       requiresAudit: true,
-      requiresAtomicIdempotency: true
+      requiresAtomicIdempotency: true,
+      manualExecutionQueueEnabled: !!executionQueue,
+      executionMode: executionQueue ? "OPERATOR_ASSISTED" : "CORE_ONLY"
     })
   });
 }
