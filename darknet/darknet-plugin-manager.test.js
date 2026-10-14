@@ -28,5 +28,5 @@ assert.throws(() => manager.enable("catalog-helper"), /indisponível/);
 assert.throws(() => manager.execute("catalog-helper"), /indisponível/);
 assert.equal(manager.getStatus().enabledPlugins, 0);
 assert.equal(manager.getStatus().executionEnabled, false);
-assert.equal(manager.getAuditLog().length, 3);
+assert.equal(manager.getAuditLog().length, 4);
 console.log("Darknet plugin manager tests passed.");
