@@ -99,5 +99,5 @@ assert.ok(knowledgePersistedGatewayIntegrationTest.includes('createPersistedKnow
 assert.ok(knowledgeRuntimeIntegrationTest.includes('runtime.learn') && knowledgeRuntimeIntegrationTest.includes('runtime.review') && knowledgeRuntimeIntegrationTest.includes('runtime.searchValidated'), 'Knowledge integration test must cover acquisition, review, archive and validated retrieval end to end');
 assert.ok(packageScripts.includes('darknet/darknet-knowledge-runtime.integration.test.js'), 'End-to-end knowledge integration test must be included in the standard test suites');
 assert.ok(sectors.includes('Verificação ponta a ponta da cadeia de conhecimento'), 'Sector alignment must record end-to-end evidence and production limitations');
-assert.ok(sectors.includes('Matriz geral de integração') && sectors.includes('Unificar a conexão persistida do Google'), 'Sector alignment must record block-level readiness and the next integration dependency');
+assert.ok(sectors.includes('Matriz geral de integração') && sectors.includes('Validar a composição server-side da Central de Conexões persistida'), 'Sector alignment must record block-level readiness and the next integration dependency');
 console.log('Architecture alignment tests passed.');
