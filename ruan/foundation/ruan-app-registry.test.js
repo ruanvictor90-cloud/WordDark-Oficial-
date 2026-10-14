@@ -6,6 +6,9 @@ assert.equal(getApp("finance").owns.includes("transactions"), true);
 assert.equal(getApp("finance").owns.includes("tasks"), false);
 assert.equal(listApps({ status: "active" }).some(app => app.id === "shopping"), true);
 assert.equal(listApps({ status: "planned" }).some(app => app.id === "documents"), true);
+assert.equal(getApp("capture").owns.includes("quickCaptures"), true);
+assert.equal(getApp("bills").owns.includes("bills"), true);
+assert.equal(getApp("search").actions.includes("search"), true);
 
 assert.deepEqual(authorize({ actor: "owner", appId: "tasks", action: "create", dataScope: "tasks" }), {
   allowed: true, reason: "module_owns_scope"
