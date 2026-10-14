@@ -20,7 +20,8 @@ const pipeline = createDarknetKnowledgePipeline({
   audit: async () => { audits++; }
 });
 assert.deepEqual(pipeline.listProviders(), ["public-search"]);
-assert.equal((await pipeline.learn({ providerId: "public-search", query: "workflow automation", principal: "operator", limit: 2 })).received, 1);
+const trustedContext = { authenticated: true, actorId: "darknet-service", sessionId: "session-1" };
+assert.equal((await pipeline.learn({ providerId: "public-search", query: "workflow automation", principal: "operator", trustedContext, limit: 2 })).received, 1);
 assert.equal(calls, 1);
 assert.equal(received[0].status, "RECEIVED_PENDING_REVIEW");
 assert.equal(received[0].promotedToKnowledge, false);
@@ -28,9 +29,10 @@ assert.equal(received[0].rights, "PUBLIC");
 assert.equal(received[0].content, "A useful guide.");
 assert.equal(received[0].provenance.providerId, "public-search");
 assert.equal(audits, 2);
-assert.equal((await pipeline.learn({ providerId: "missing", query: "x" })).status, "KNOWLEDGE_PROVIDER_UNAVAILABLE");
+assert.equal((await pipeline.learn({ providerId: "missing", query: "x", trustedContext })).status, "KNOWLEDGE_PROVIDER_UNAVAILABLE");
+assert.equal((await pipeline.learn({ providerId: "public-search", query: "x" })).status, "KNOWLEDGE_TRUSTED_IDENTITY_REQUIRED");
 const disabled = createDarknetKnowledgePipeline();
 assert.equal((await disabled.learn({ providerId: "public-search", query: "x" })).status, "DARKNET_KNOWLEDGE_PIPELINE_DISABLED");
 const denied = createDarknetKnowledgePipeline({ enabled: true, providers: [{ id: "public-search", search: async () => [] }], knowledgePort: { receive: async () => ({ success: true }) } });
-assert.equal((await denied.learn({ providerId: "public-search", query: "x" })).status, "KNOWLEDGE_REQUEST_DENIED");
+assert.equal((await denied.learn({ providerId: "public-search", query: "x", trustedContext })).status, "KNOWLEDGE_REQUEST_DENIED");
 console.log("darknet-knowledge-pipeline.test: OK");
