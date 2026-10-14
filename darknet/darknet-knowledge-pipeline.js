@@ -15,9 +15,11 @@ function normalizeRecord(raw, providerId, now) {
   const title = clean(raw.title).slice(0, 300);
   const content = clean(raw.content || raw.text || raw.snippet);
   const rights = clean(raw.rights).toUpperCase();
+  const license = clean(raw.license).slice(0, 300);
   if (!sourceId || !title || !content) return { error: "SOURCE_FIELDS_REQUIRED" };
   if (!/^https:\/\//i.test(url)) return { error: "HTTPS_SOURCE_REQUIRED" };
   if (!RIGHTS.has(rights)) return { error: "RIGHTS_DECLARATION_REQUIRED" };
+  if (rights === "LICENSED" && !license) return { error: "LICENSE_DETAILS_REQUIRED" };
   if (content.length > MAX_CONTENT_CHARS) return { error: "CONTENT_TOO_LARGE" };
   return {
     record: {
@@ -29,7 +31,7 @@ function normalizeRecord(raw, providerId, now) {
       content,
       contentType: clean(raw.contentType || "text/plain").slice(0, 80),
       rights,
-      license: clean(raw.license).slice(0, 300) || null,
+      license: license || null,
       language: clean(raw.language || "und").slice(0, 20),
       tags: Array.isArray(raw.tags) ? [...new Set(raw.tags.map(clean).filter(Boolean))].slice(0, 20) : [],
       provenance: { acquisition: "DARKNET_PROVIDER_ADAPTER", providerId },
