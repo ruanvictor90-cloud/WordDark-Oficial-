@@ -48,7 +48,7 @@
     const t=text(raw),type=classify(input),human=resolveHuman(input);
     const base={resourceId:input.resourceId||input.resource||null,destinationId:input.destinationId||input.destination||null,clientId:input.clientId||input.accountId||null,deadline:input.deadline||null,format:input.format||null};
     if(type==="OPERATION"){
-      return{type:"OPERATION",action:input.action||findAction(raw),intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,resourceId:base.resourceId,destinationId:base.destinationId,parameters:input.parameters||input.options||{},context:base,raw};
+      return{type:"OPERATION",action:input.action||findAction(raw),intent:human?.id||null,capability:human?.capability||null,service:human?.service||null,resourceId:base.resourceId,destinationId:base.destinationId,clientId:base.clientId,deadline:base.deadline,format:base.format,parameters:input.parameters||input.options||{},context:base,raw};
     }
     const compoundGoal=/(?:criar|produzir|gerar).*(?:\be\b|\bdepois\b|\bpara\b).*(?:publicar|postar)/.test(t);
     const inferredOperations=input.requirements?.operations||(compoundGoal?null:human?.operations||null);
