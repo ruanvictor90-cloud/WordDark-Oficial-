@@ -26,7 +26,13 @@ function makeCommercialEngine() {
     getOrder(id) { const item = orders.get(id); return item ? structuredClone(item) : null; },
     transitionOrder(id, status, actorId) {
       const item = orders.get(id);
-      if (!item || item.status !== "ORDER_OPEN" || status !== "PLANNED") throw new Error("TRANSITION_NOT_ALLOWED");
+      const allowed = {
+        ORDER_OPEN: ["PLANNED", "CANCELLED"],
+        PLANNED: ["IN_PROGRESS", "CANCELLED"],
+        IN_PROGRESS: ["REVIEW", "CANCELLED"],
+        REVIEW: ["IN_PROGRESS", "COMPLETED", "CANCELLED"]
+      };
+      if (!item || !allowed[item.status]?.includes(status)) throw new Error("TRANSITION_NOT_ALLOWED");
       const next = { ...item, status, lastActorId: actorId };
       orders.set(id, next);
       return structuredClone(next);
