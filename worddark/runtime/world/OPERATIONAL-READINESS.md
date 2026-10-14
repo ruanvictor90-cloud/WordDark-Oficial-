@@ -65,7 +65,7 @@ Um bloco passa para o próximo estágio somente quando:
 6. Fechar o ciclo de Hub com autenticação, aprovação, consulta e auditoria duráveis.
 7. Validar o caminho Darknet → conhecimento pendente → revisão → Biblioteca Central.
 8. Consolidar o livro-caixa interno do Darkbank e o relatório de margem por trabalho.
-9. Iniciar a oferta piloto manual conforme [COMMERCIAL-BOOTSTRAP.md](../COMMERCIAL-BOOTSTRAP.md).
+9. Iniciar a oferta piloto manual conforme [COMMERCIAL-BOOTSTRAP.md](../../../COMMERCIAL-BOOTSTRAP.md).
 
 ## Limites da auditoria
 
