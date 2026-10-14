@@ -245,3 +245,8 @@ O adaptador fica desligado por padrão e usa ambiente `TEST`. A cobertura automa
 ## Integração Terra: demanda → lead comercial
 
 O motor de demandas da Terra agora pode vincular uma demanda `CAPTURED` a um lead comercial por `core/earth-commercial-intake-adapter.js`. O vínculo preserva `sourceDemandId` e o contexto original; o estado da demanda passa a `LEAD_CREATED` para impedir reprocessamento acidental. O fluxo exige operador autenticado, autorização, auditoria e idempotência, fica desligado por padrão e não envia proposta nem inicia execução.
+
+
+## Verificação de cadeia comercial até o Core
+
+O teste core/terra-commercial-core.integration.test.js cobre a sequência Terra demanda → lead → proposta aceita → pedido → autorização interna → Centro de Operações, incluindo rastreabilidade, repetição e parada em revisão. O Core usado neste teste é simulado; a execução Core → Dark Factory possui uma prova de integração separada em core/operation-001.integration.test.js. As duas evidências não devem ser confundidas com um único runtime de produção ativado.
