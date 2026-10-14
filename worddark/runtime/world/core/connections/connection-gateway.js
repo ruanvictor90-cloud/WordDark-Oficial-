@@ -8,6 +8,25 @@
 const ExternalRequest=typeof module==="object"&&module.exports?require("./connection-contract"):null;
 
 const ACTION_CAPABILITIES=Object.freeze({CONTENT_PUBLISH:"CONTENT_PUBLICATION",CONTENT_UNPUBLISH:"CONTENT_PUBLICATION",CONTENT_SCHEDULE:"CONTENT_PUBLICATION",SEARCH_KNOWLEDGE:"KNOWLEDGE_RESEARCH",FETCH_KNOWLEDGE:"KNOWLEDGE_RESEARCH"});
+const SECRET_KEYS=/(?:token|secret|credential|authorization|ciphertext|password|api[-_]?key|client[-_]?secret)/i;
+
+/** Restrict provider data before it leaves the trusted adapter boundary. */
+function sanitizeExternalValue(value,depth=0){
+  if(depth>8)return null;
+  if(Array.isArray(value))return value.slice(0,100).map(item=>sanitizeExternalValue(item,depth+1));
+  if(!value||typeof value!=="object"){
+    if(typeof value==="string")return value.slice(0,20000);
+    if(typeof value==="number"&&!Number.isFinite(value))return null;
+    if(typeof value==="function"||typeof value==="symbol"||typeof value==="bigint")return null;
+    return value;
+  }
+  const output={};
+  for(const [key,item] of Object.entries(value)){
+    if(SECRET_KEYS.test(key))continue;
+    output[key]=sanitizeExternalValue(item,depth+1);
+  }
+  return output;
+}
 
 class ExternalConnectionGateway {
   constructor({registry=null,logger=null}={}) {
@@ -57,14 +76,18 @@ class ExternalConnectionGateway {
       reason:"Adapter externo ainda não conectado. A ponta operacional está pronta."
     };
 
+    const auditContext={operationId:request.operationId,providerId:request.providerId,action:request.action,capability:registryCapability};
     try{
-      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_STARTED",request.toJSON());
-      const result=await adapter.execute(request.toJSON(),{account:access.account,credential:this.registry.getRuntimeCredential(request.providerId,request.accountId)});
-      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FINISHED",{request:request.toJSON(),result});
+      // Logs contain only routing metadata, never request payloads, credentials, or provider responses.
+      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_STARTED",auditContext);
+      const rawResult=await adapter.execute(request.toJSON(),{account:access.account,credential:this.registry.getRuntimeCredential(request.providerId,request.accountId)});
+      const result=sanitizeExternalValue(rawResult);
+      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FINISHED",{...auditContext,status:String(result?.status||"EXTERNAL_EXECUTED"),success:result?.success!==false});
       return{success:result?.success!==false,status:result?.status||"EXTERNAL_EXECUTED",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,result};
-    }catch(error){
-      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FAILED",{request:request.toJSON(),error:String(error?.message||error)});
-      return{success:false,status:"EXTERNAL_EXECUTION_FAILED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,reason:error?.message||"Falha na conexão externa."};
+    }catch{
+      // Do not echo exception text: SDK errors can contain headers, URLs, or credential fragments.
+      this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FAILED",{...auditContext,status:"EXTERNAL_EXECUTION_FAILED"});
+      return{success:false,status:"EXTERNAL_EXECUTION_FAILED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,reason:"Falha na conexão externa. Consulte a auditoria segura para detalhes."};
     }
   }
 
