@@ -8,13 +8,25 @@ assert.ok(hub.includes('id="quick-request-form"') && hub.includes('id="quick-req
 assert.ok(hub.includes('href="./central.html"'), 'Hub Central must open its own independent screen');
 assert.ok(!hub.includes('area=central&fromHub=1'), 'Hub Central must not route into WordDark Central');
 assert.ok(hub.includes('class="test-app-tile"') && hub.includes('>Teste</span>'), 'Hub must keep the Teste app');
+assert.ok(hub.includes('href="./creationdark.html"') && hub.includes('>CreationDark</span>'), 'Hub must expose CreationDark as an app tile');
+const creation=read('creationdark.html');
+assert.ok(creation.includes('Inventário operacional') && creation.includes('worddark.hub.creationdark.inventory.v1'), 'CreationDark must provide a local operational inventory');
+assert.ok(creation.includes('Sem destino') && creation.includes('Em análise') && creation.includes('Destino definido'), 'CreationDark must classify items by consolidation status');
+assert.ok(creation.includes('CD-LEGACY-OPERATION-LIFECYCLE') && creation.includes('CD-LEGACY-CONNECTION-STACK') && creation.includes('CD-LEGACY-GOVERNANCE'), 'CreationDark must inventory legacy operational candidates without activating them');
+assert.ok(creation.includes('CD-REGISTRY-INTEGRITY') && creation.includes('CD-PERMISSION-MODEL-OVERLAP'), 'CreationDark must track current-layer hardening and duplicate permission contracts');
+assert.ok(creation.includes('CD-LEGACY-ROLLBACK-LIMIT') && creation.includes('CD-LEGACY-PAYLOAD-BOUNDARY') && creation.includes('CD-LEGACY-ENVIRONMENT-NAMES'), 'CreationDark must document concrete legacy safety and compatibility findings');
+assert.ok(creation.includes('CD-GATEWAY-TEST-PROD') && creation.includes('CD-PERMISSION-CANONICAL'), 'CreationDark must track current gateway and canonical permission decisions');
+assert.ok(creation.includes('CD-DF-CREATE-MONITOR') && creation.includes('CD-YOUTUBE-PUBLISHER') && creation.includes('youtube-publisher.js'), 'CreationDark must track opt-in publishing and the dormant YouTube adapter');
+assert.ok(creation.includes('const additions=seed.filter(item=>!known.has(item.id))'), 'CreationDark must add new seed audit records without overwriting the local inventory');
+assert.ok(creation.includes('não move nem executa código') && creation.includes('não representa sincronização entre dispositivos'), 'CreationDark must clearly remain a local preparation area');
 assert.ok(hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'), 'Hub must keep the bottom WordDark entry');
 assert.ok(!hub.includes('class="hub-apps"'), 'Pedidos and Em execução must live inside Hub Central');
 assert.ok(central.includes('Pedidos') && central.includes('Em execução') && central.includes('independente da Central do WordDark'));
 assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
 assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
 assert.ok(css.includes('.quick-request-bar') && css.includes('.test-app-tile') && css.includes('.launch-dock'));
-assert.ok(sw.includes('worddark-hub-v12') && sw.includes('central.html') && sw.includes('20261013-8'));
+assert.ok(sw.includes('worddark-hub-v13') && sw.includes('central.html') && sw.includes('creationdark.html') && sw.includes('20261013-9'));
+assert.ok(sw.includes('requestUrl.pathname.endsWith("/creationdark.html")'), 'CreationDark must have its own offline navigation fallback');
 
 assert.ok(hub.indexOf('</header>')<hub.indexOf('class="ruan-return hub-return-under-header"'), 'Hub return must sit below the header');
 assert.ok(central.indexOf('</header>')<central.indexOf('class="ruan-return hub-return-under-header"') && !central.includes('<a class="central-back"'), 'Hub Central must have only one return link below the header');

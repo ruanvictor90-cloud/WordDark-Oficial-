@@ -20,6 +20,7 @@ A interface atual é a fonte do que está exposto nesta versão. Os motores e m�
 ### WordDark Hub
 - Central do Hub: Pedidos e Em execução.
 - Teste: entrada compacta para testar o mundo ou setores.
+- CreationDark: oficina de preparação, inventário operacional e triagem de itens ainda sem destino consolidado; não publica nem ativa código automaticamente.
 - WordDark: entrada para o aplicativo principal do mundo.
 
 ### WordDark — mundo operacional
@@ -44,9 +45,19 @@ SucoCast, SucoGeek, SucoComed e SucoFactor são perfis externos de canais de tes
 
 O Core coordena contratos e operações; Céu e Terra mantêm responsabilidades próprias. A interface e os motores ainda não devem ser considerados totalmente integrados apenas porque coexistem no repositório.
 
+## CreationDark — preparação antes da integração
+
+- A tela fica em `hub/creationdark.html` e segue a identidade visual atual do Hub.
+- O inventário inicial organiza módulos, regras, motores, conectores e testes; os registros do navegador são locais e não sincronizam entre dispositivos.
+- Itens sem destino consolidado ficam na triagem do CreationDark. Itens com destino conhecido continuam associados ao setor/app indicado, sem reintroduzir interfaces antigas.
+- A catalogação não equivale à integração: nenhuma entrada executa, publica, move ou ativa código. A promoção exige auditoria, testes, revisão e autorização.
+
 ## Código legado e módulos futuros
 
 - `worddark/core-central/` é uma implementação anterior e está fora do caminho ativo e da suíte padrão de testes.
+- A auditoria operacional e o mapa de responsabilidades estão em `worddark/runtime/world/core/CONSOLIDATION-AUDIT.md`.
+- A camada ativa do registro isola snapshots/eventos retornados por cópias defensivas; isso protege o estado em memória, mas não substitui persistência durável.
+- Duplicações entre modelos de permissão, diferenças de ambiente e limites dos módulos antigos permanecem em auditoria; não fundir contratos só porque têm nomes parecidos.
 - Outras implementações detalhadas podem permanecer no repositório para reaproveitamento, mas não devem ser conectadas automaticamente à versão atual.
 - Nenhum código legado deve criar um segundo Core, adicionar telas não definidas ou ligar integrações reais por conta própria.
 

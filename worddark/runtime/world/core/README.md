@@ -1,37 +1,51 @@
-# WordDark Core — Unified Central Copy
+# WordDark Core — camada operacional atual
 
-This branch is the isolated experimental copy of the central WordDark Core.
+Este é o único Core ativo do mundo WordDark. A consolidação deve reforçar esta camada, sem criar um segundo runtime e sem recuperar a arquitetura visual antiga.
 
-## Architecture
-The consolidated runtime remains responsible for operational execution:
-- operation engine
-- security
-- environment guard
-- road / communication
-- registry / persistence
-- emergency stop
+## Responsabilidades
 
-The integrated Core V1 foundation adds the structural layer:
-- identity IDs
-- entities and registry
-- context
-- contextual permissions
-- gates
-- operation package
-- results
-- services
-- external connectors
-- error recovery
-- inbox
-- version history
+- **Operações:** contratos, motor, coordenação, central de operações, roteamento e comunicação.
+- **Segurança:** identidade, permissões contextuais, gates, guardas de ambiente e parada de emergência.
+- **Estado e evidência:** registro de operações/eventos, persistência, memória operacional, biblioteca hierárquica e versionamento.
+- **Resiliência:** diagnóstico, recuperação e tratamento de reentrada.
+- **Conexões externas:** gateway único; TEST executa somente simulação, PROD exige aprovação explícita, capacidade exata e conta conectada.
+- **Composição do mundo:** empresas, setores, capacidades e runtime único.
 
-There is one active Core architecture. The old laboratory naming is not used by the integrated modules.
+## Estrutura vigente
 
-## Runtime
-Use `WordDarkCoreRuntime` as the unified composition layer. It extends the existing operational runtime instead of creating a second world/runtime.
+- Entrada pública dos módulos: `index.js`.
+- Runtime único: `world-runtime.js`.
+- Motor de execução: `operation-engine.js`.
+- Coordenação: `operation-coordinator.js` e `operation-center.js`.
+- Registro operacional: `operation-registry.js`.
+- Conexões externas: `connections/connection-gateway.js`.
+- Guardas: `environment-guard.js` e `emergency-stop-manager.js`.
 
-## Safety
-This branch is `staging-core-v1-integration`. It is isolated from `main`. No code here is promoted automatically.
+## Fronteiras
 
-Pipeline:
-SETOR → TESTES → VALIDAÇÃO → REVISÃO → AUTORIZAÇÃO → TRANSPLANTE → MAIN
+- **WordDark** coordena a infraestrutura e a operação do mundo.
+- **Céu** executa capacidades, incluindo a Dark Factory.
+- **Terra** origina necessidades, pedidos e operações comerciais.
+- **Ruan** é privado e permanece fora do mundo WordDark.
+
+## Contratos canônicos de segurança
+
+- `permissions.js` é o conjunto de permissões exportado pela entrada principal atual.
+- `permission-set.js` tem um contrato diferente e não deve ser usado como autoridade paralela sem adaptação e testes explícitos.
+- O gateway de conexões valida `TEST/PROD`; TEST usa somente `testExecute`, enquanto PROD bloqueia sem `productionApproval` configurado e aprovado. Publicação automática fica desabilitada por padrão e exige `publicationPolicy` explícita.
+- Aprovação configurada apenas no navegador não é uma fronteira de segurança confiável; produção real precisa de validação no backend e segredos fora do Pages.
+- Capacidade de publicação não pode ser rebaixada para uma capacidade de roteamento. Os nomes devem corresponder à permissão efetivamente concedida.
+- Dark Factory pode preparar e acompanhar conteúdo. Publicação, despublicação e agendamento ficam manuais por padrão; a Central de Conexões aceita preparar o caminho automático via `publicationPolicy`, mas somente com autorização explícita de serviço confiável. Sem essa política, o fallback é `WAITING_MANUAL_PUBLICATION`.
+- O contrato externo clona o payload e os logs do gateway não registram o payload completo.
+
+## Tratamento do legado
+
+`worddark/core-central/` é somente fonte para auditoria comportamental. Não importar seus orquestradores, contratos de conta, políticas ou interfaces diretamente. Extrair apenas regras comprovadamente úteis, adaptando-as aos contratos ativos e acrescentando testes. Consulte `CONSOLIDATION-AUDIT.md` para decisões e pendências.
+
+## Validação e promoção
+
+Pipeline: **AUDITORIA → CONTRATO → TESTES → REVISÃO → AUTORIZAÇÃO → INTEGRAÇÃO**.
+
+Testes não devem acionar serviços reais. `PROD` precisa de aprovação explícita configurada; segredos não ficam no GitHub Pages. A existência de um arquivo ou de uma tela não comprova que a capacidade operacional está pronta.
+
+A revisão atual fortalece o isolamento de snapshots/eventos no registro operacional e impõe uma fronteira explícita TEST/PROD no gateway externo. Isso protege referências em memória, mas não equivale a persistência durável nem à integração completa com o serviço oficial de Aprovações. Não declarar a consolidação completa até a suíte integral e a revisão final passarem.

@@ -1,5 +1,5 @@
-const CACHE="worddark-hub-v12";
-const CORE=["./","./index.html","./central.html","./app.css?v=20261013-8","./app.js?v=20261013-8","./manifest.webmanifest","./app-icon.svg"];
+const CACHE="worddark-hub-v13";
+const CORE=["./","./index.html","./central.html","./creationdark.html","./app.css?v=20261013-9","./app.js?v=20261013-9","./manifest.webmanifest","./app-icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("worddark-hub-")&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{
@@ -7,7 +7,7 @@ self.addEventListener("fetch",event=>{
  const requestUrl=new URL(event.request.url);
  const isNavigation=event.request.mode==="navigate"||requestUrl.pathname.endsWith("/hub/")||requestUrl.pathname.endsWith("/hub/index.html");
  if(isNavigation){
-  const fallbackPath=requestUrl.pathname.endsWith("/central.html")?"./central.html":"./index.html";
+  const fallbackPath=requestUrl.pathname.endsWith("/central.html")?"./central.html":requestUrl.pathname.endsWith("/creationdark.html")?"./creationdark.html":"./index.html";
   event.respondWith(fetch(event.request).then(response=>{
    if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(fallbackPath,copy));}
    return response;

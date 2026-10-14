@@ -17,7 +17,15 @@ const operation = new WordDarkOperation({
   operationType: "content.produce"
 });
 
-registry.recordEvent(operation, "CREATED", { test: true });
+const returnedEvent = registry.recordEvent(operation, "CREATED", { test: true });
+returnedEvent.data.test = false;
+assert.strictEqual(registry.getEvents("OP-TEST-001")[0].data.test, true, "Returned events must not mutate the audit log");
+const returnedSnapshot = registry.get("OP-TEST-001");
+returnedSnapshot.status = "CORRUPTED";
+assert.notStrictEqual(registry.get("OP-TEST-001").status, "CORRUPTED", "Returned snapshots must be isolated");
+const returnedList = registry.list();
+returnedList[0].payload = { injected: true };
+assert.notDeepStrictEqual(registry.get("OP-TEST-001").payload, { injected: true }, "List results must not expose internal snapshots");
 
 assert.ok(registry.get("OP-TEST-001"));
 assert.strictEqual(registry.getEvents("OP-TEST-001").length, 1);

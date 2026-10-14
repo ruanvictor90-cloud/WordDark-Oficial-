@@ -1,0 +1,89 @@
+# Auditoria de consolidação do Core atual
+
+**Escopo:** reforçar a camada operacional existente sem importar a arquitetura visual antiga. Este documento registra decisões de consolidação; não ativa integrações externas.
+
+## Fonte única de execução
+
+- **Core ativo:** `worddark/runtime/world/core/`.
+- **Legado de referência:** `worddark/core-central/`. Permanece fora da execução e da suíte padrão.
+- **Ruan:** privado e soberano, fora do mundo WordDark.
+- **WordDark:** coordenação, contratos, roteamento, segurança, auditoria e conexões.
+- **Céu:** execução de capacidades, incluindo Dark Factory.
+- **Terra:** origem das necessidades, pedidos e operações comerciais.
+
+Não criar segundo runtime, segundo orquestrador global, nova raiz de permissões ou uma interface herdada para acomodar código legado.
+
+## Consolidação aplicada nesta revisão
+
+### Permissões e contratos
+
+- `permissions.js` é a implementação canônica atualmente exportada pelo `index.js` e usada pelos testes do motor: regras contextuais com perfil, capacidade, ação, recurso, cliente e ambiente.
+- `permission-set.js` tem outro contrato (`add`, efeito ALLOW/DENY e `defaultEffect`) e não aparece como dependência do Core ativo na busca realizada. Mantê-lo no repositório por compatibilidade potencial, mas não tratá-lo como segunda autoridade ativa nem removê-lo sem decisão explícita.
+- A política de autonomia antiga contém requisitos úteis (ações permitidas, aprovação, parada e auditoria), mas não deve ser ligada diretamente ao motor até existir um contrato canônico que una autorização contextual, aprovação de PROD e parada de emergência sem caminhos alternativos.
+
+### Gateway de conexões
+
+O gateway ativo foi endurecido nesta revisão:
+- o contrato de conexão agora carrega `environment` (`TEST` por padrão; apenas `TEST/PROD` são válidos) e isola o payload por cópia;
+- `TEST` usa exclusivamente `adapter.testExecute`; se o adapter não tiver esse método, a operação falha fechada em vez de chamar a API real;
+- `PROD` exige uma função de aprovação explicitamente configurada e uma resposta `{allowed:true}` antes de chegar ao adapter real;
+- a capacidade pedida é conferida literalmente contra a conta conectada. Não se pode converter `CONTENT_PUBLISH` em `CONTENT_ROUTE`, pois isso poderia autorizar publicação com uma permissão mais fraca;
+- a camada de log não grava o payload completo, e os adapters recebem cópias do contrato.
+
+A publicação agora tem um caminho preparado com opt-in e fallback manual. `sky/darkfactory/core/social-factory.js` encaminha as ações de publicação à Central de Conexões quando a ponte existe; sem ponte, mantém `WAITING_MANUAL_PUBLICATION`. `core/connections/connection-gateway.js` usa `publicationPolicy` como opt-in: sem provedor que retorne explicitamente `{allowed:true, mode:"AUTOMATIC", serverAuthorized:true}`, a ação continua manual. O gateway exige ainda autorização PROD quando o ambiente é `PROD`, conta conectada, capacidade exata e adapter. Os testes cobrem tanto o padrão manual como o caminho opt-in com adapter de teste. Esse contrato prepara a integração futura, mas a aprovação client-side não é uma fronteira confiável: a política e os segredos devem residir num backend confiável que revalide cada ação. Nenhuma API paga ou publicação real foi ativada.\n\nA aprovação configurada no gateway é uma barreira técnica, não substitui a integração com o motor oficial de Aprovações/governança. Se executado no navegador, o callback é código do cliente e pode ser contornado por quem controla esse cliente; portanto, nenhuma credencial real ou ação de produção deve depender só dessa checagem client-side. A autorização final de produção precisa ser verificada no backend confiável. Nenhum adapter real foi ativado por esta alteração.
+
+### Registro operacional
+
+O `operation-registry.js` ativo agora isola snapshots e eventos por cópia defensiva:
+- dados recebidos são copiados antes de serem guardados;
+- `get`, `getEvents` e `list` devolvem cópias;
+- mutações em objetos devolvidos não devem alterar o histórico interno;
+- os registros enviados às bibliotecas recebem cópias, evitando compartilhar referências mutáveis.
+
+A suíte de teste cobre essa fronteira. Isso melhora a integridade do histórico em memória, mas **não transforma o registro em armazenamento durável** nem substitui testes de integração com bibliotecas.
+
+## Mapa de responsabilidades ativo
+
+| Capacidade | Camada canônica | Regra de integração |
+| --- | --- | --- |
+| Criar/executar operações | `operation.js`, `operation-engine.js` | Um contrato e um motor ativo; sem orquestrador legado paralelo |
+| Coordenação/roteamento | `operation-coordinator.js`, `operation-center.js`, `road.js`, `communication.js` | Resolver destino e encaminhar pelo fluxo atual |
+| Histórico e auditoria | `operation-registry.js`, bibliotecas e memória operacional | Detalhes no setor; índice/resumo na camada central |
+| Permissões | `permissions.js` é canônico e exportado; `permission-set.js` é compatibilidade não conectada | Não fundir interfaces diferentes; autorização contextual deve continuar fail-closed |
+| Segurança ambiental | `environment-guard.js`, `emergency-stop-manager.js`, módulos de segurança | TEST/PROD explícitos; produção exige aprovação configurada |
+| Conexões externas | `core/connections/connection-gateway.js` e contratos associados | TEST só simula; PROD exige aprovação explícita, conta conectada, capacidade exata e adapter registrado; publicação automática é opt-in via política autorizadora confiável, com fallback manual |
+| Recuperação/diagnóstico | `error-recovery.js`, `operation-diagnostics.js` e suíte atual | Reutilizar comportamento testado; snapshots/undo do legado não são rollback durável |
+| Produção de conteúdo | `sky/darkfactory/` e contratos de operação atuais | Céu executa; políticas por plataforma e revisão humana permanecem explícitas |
+| Operações comerciais | `earth/commercial-engine.js` e contratos atuais | Terra origina necessidades; não ativar pagamentos ou compromissos externos sem controles |
+
+## Achados do legado — não transplantar diretamente
+
+1. **Orquestração, registro e rollback:** sobrepõem capacidades atuais. O rollback legado guarda callbacks e snapshots em memória; não é um mecanismo persistente de reversão. Extrair requisitos/testes, não copiar o orquestrador inteiro.
+2. **Política de autonomia:** contém conceitos úteis de ações permitidas, aprovação e parada de emergência, mas deve ser traduzida para permissões, guardas e parada já ativos, sem uma segunda política global.
+3. **Fronteira de informação:** o código antigo normaliza metadados e clona o payload, mas não faz redação de campos sensíveis dentro do payload. Não tratar essa cópia como sanitização de segredos.
+4. **Pilha de conexões:** há um gateway ativo e contratos atuais. A camada antiga usa valores de ambiente diferentes (`PRODUCTION` em alguns pontos contra `TEST/PROD` no Core atual) e modelos próprios; exige adaptação e testes antes de reutilização.
+5. **Canais/conteúdo:** comparar os estados antigos com o ciclo atual de operação, decisão de conteúdo, Dark Factory e Central Social. Manter autorização humana e não habilitar publicação externa por herança; publicação automática só após opt-in, política confiável e integração de plataforma autorizada.
+6. **Contas e login:** não conectar gerenciadores antigos à identidade/autorização atuais sem revisão de fronteiras, credenciais e responsabilidades.
+7. **Governança, escola e mapas:** extrair regras e conhecimento validados para os setores/bibliotecas atuais; não restaurar páginas nem navegação antiga.
+8. **Modelos de permissão:** existe mais de uma implementação com nome/contratos parecidos. O ponto de entrada ativo exporta `permissions.js`; verificar consumidores de `permission-set.js` antes de remover, adaptar ou declarar uma implementação obsoleta.
+
+## Critérios de promoção
+
+Um item sai do CreationDark somente quando:
+1. tem destino e responsável claros;
+2. tem contrato de entrada/saída e dependências mapeados;
+3. não cria um segundo Core nem duplica autoridade;
+4. tem testes cobrindo sucesso, bloqueio, erro e fronteiras de dados relevantes;
+5. mantém a interface atual ou não altera interface alguma;
+6. passa a suíte de testes e revisão do diff;
+7. só ativa produção/conexões externas após autorização explícita e configuração segura.
+
+## Pendências de validação
+
+- Confirmar que `npm test` integral passa no commit final desta revisão.
+- Confirmar que os testes de isolamento do registro, bloqueio do gateway e publicação manual passam.
+- Ligar a aprovação PROD ao mecanismo oficial de Aprovações quando esse contrato estiver definido; até lá, nenhuma produção pode ser liberada sem um provedor explícito.
+- Continuar a comparação de permissões, conexões, canais e contas por comportamento, não por semelhança de nomes.
+- Fazer teste visual/manual do CreationDark e do Hub; inventário local não é sincronização entre dispositivos.
+
+**Estado:** revisão operacional parcial aplicada; não declarar consolidação completa nem publicação oficial até os testes e a revisão final.
