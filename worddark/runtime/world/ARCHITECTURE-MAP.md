@@ -83,3 +83,20 @@ flowchart TB
 - Nenhuma publicação externa, movimentação financeira, pagamento ou investimento real foi ativado.
 - Não compartilhar dados ou fundos pessoais do Ruan com o WordDark.
 - Não tratar mocks, testes locais, telas ou registros locais como evidência de operação em produção.
+
+
+## Camada de conhecimento recebido pela Darknet
+
+```mermaid
+flowchart LR
+    API["APIs externas / fontes"] --> CC["Central de Conexões<br/>adapter + credenciais"]
+    CC --> DN["Darknet<br/>pipeline de aquisição"]
+    DN --> AUTH["Identidade + autorização<br/>auditoria"]
+    AUTH --> INTAKE["WordDark Knowledge Adapter"]
+    INTAKE --> PENDING["Registro pendente<br/>RECEIVED_PENDING_REVIEW"]
+    PENDING --> REVIEW["Validação / revisão"]
+    REVIEW --> LIB["Biblioteca local ou central<br/>conforme política"]
+    LIB --> SKY["Céu / capacidades"]
+```
+
+O pipeline está implementado como contrato de integração e usa adaptadores de provedores injetados. Ele não ativa por si só uma API externa. A entrada WordDark também permanece desligada por padrão, exige identidade confiável e recebe conteúdo como pendente de revisão. Antes da operação oficial faltam conectar os adapters reais já disponíveis, injetar uma sessão de serviço autenticada, ligar armazenamento durável e idempotência, e testar a cadeia completa em staging.
