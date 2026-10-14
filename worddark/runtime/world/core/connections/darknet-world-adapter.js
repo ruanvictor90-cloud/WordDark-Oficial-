@@ -4,7 +4,7 @@
 const ALLOWED_SECTORS=new Set(["worddark","ceu","terra"]);
 const ALLOWED_ACTIONS=new Set(["CAPABILITY_DISCOVERY","REQUEST_OPERATION","REQUEST_STATUS","SUBMIT_NEED"]);
 function deny(status){return{success:false,status,transportStarted:false};}
-export function createDarknetWorldAdapter({operationCenter=null,capabilityCatalog=null,authorizeRequest=async()=>({allowed:false}),audit=async()=>{},enabled=false}={}){
+function createDarknetWorldAdapter({operationCenter=null,capabilityCatalog=null,authorizeRequest=async()=>({allowed:false}),audit=async()=>{},enabled=false}={}){
   async function handle(request={}){
     const requestId=String(request.requestId||"").trim();
     const sector=String(request.sector||"").trim().toLowerCase();
