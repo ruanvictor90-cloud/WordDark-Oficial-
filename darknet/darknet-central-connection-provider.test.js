@@ -8,7 +8,7 @@ const provider = createCentralConnectionKnowledgeProvider({
     assert.equal(request.providerId, "RESEARCH_API");
     assert.equal(request.accountId, "acct-1");
     assert.equal(request.capability, "KNOWLEDGE_RESEARCH");
-    assert.equal(request.action, "KNOWLEDGE_SEARCH");
+    assert.equal(request.action, "SEARCH_KNOWLEDGE");
     assert.deepEqual(request.payload, { query: "safe research", limit: 5 });
     return { success: true, result: { results: [{ id: "s1", title: "Guide" }] } };
   }},
