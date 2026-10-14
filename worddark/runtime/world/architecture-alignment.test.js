@@ -32,6 +32,8 @@ const knowledgeRegistry = read('worddark/runtime/world/library/knowledge-intake-
 const knowledgeArchiver = read('worddark/runtime/world/library/central-knowledge-archiver.js');
 const durableKnowledgeRepository = read('worddark/runtime/world/library/durable-knowledge-repository.js');
 const durableKnowledgeRegistry = read('worddark/runtime/world/library/durable-knowledge-intake-registry.js');
+const firestoreKnowledgeAdapters = read('worddark/runtime/world/library/firestore-knowledge-adapters.js');
+const firestoreKnowledgeTests = read('worddark/runtime/world/library/firestore-knowledge-adapters.test.js');
 const knowledgeRuntime = read('darknet/darknet-knowledge-runtime.js');
 const capabilityCatalog = read('worddark/runtime/world/core/capability-catalog.js');
 
@@ -68,5 +70,8 @@ assert.ok(knowledgeArchiver.includes('DARKNET_KNOWLEDGE_VALIDATED') && knowledge
 assert.ok(durableKnowledgeRepository.includes('DURABLE_ATOMIC_KNOWLEDGE_BACKEND_REQUIRED') && durableKnowledgeRepository.includes('compareAndSet'));
 assert.ok(durableKnowledgeRegistry.includes('KNOWLEDGE_REVIEW_CONFLICT') && durableKnowledgeRegistry.includes('DUPLICATE_SKIPPED'));
 assert.ok(knowledgeRuntime.includes('DARKNET_KNOWLEDGE_RUNTIME_NOT_READY') && knowledgeRuntime.includes('DURABLE_CANONICAL_KNOWLEDGE_ARCHIVE'));
+assert.ok(firestoreKnowledgeAdapters.includes('runTransaction') && firestoreKnowledgeAdapters.includes('idempotent: true'));
+assert.ok(firestoreKnowledgeTests.includes('insertIfAbsent') && firestoreKnowledgeTests.includes('DUPLICATE') === false, 'Firestore adapter tests must cover durable insert and archive idempotency');
+assert.ok(knowledgeRuntime.includes('KNOWLEDGE_READ_AUTHORIZATION') && knowledgeRuntime.includes('authenticateRequest'), 'Knowledge review and retrieval must be gated by trusted backend identity');
 assert.ok(capabilityCatalog.includes('KNOWLEDGE_RESEARCH') && capabilityCatalog.includes('SEARCH_KNOWLEDGE'));
 console.log('Architecture alignment tests passed.');
