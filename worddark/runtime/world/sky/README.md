@@ -1,82 +1,26 @@
 # Céu
 
-O **Céu é a área do WordDark que concentra empresas especializadas, fábricas e infraestrutura compartilhada**.
+O **Céu** é a área do WordDark que reúne capacidades especializadas para resolver necessidades encaminhadas pelo mundo. Não é uma empresa única.
 
-Ele não é uma empresa.
+## Aplicativos definidos nesta versão
 
-É uma área do mundo que fornece capacidades para as empresas da Terra e para outras unidades do próprio WordDark.
+### Dark Factory
 
-## Empresas e serviços
+Estrutura inicial de produção de conteúdo. A interface expõe Em criação e Biblioteca; a Biblioteca separa Áudio, Vídeos, Voz, Imagens e Outros arquivos. Os interiores serão detalhados por etapas.
 
-### Dark Factory — Empresa de Produção de Conteúdo
+### Central Social
 
-A Dark Factory é uma empresa especializada em:
+Agrupa três aplicativos independentes:
+- **Gestor de redes sociais:** perfis, calendário, publicações e resultados.
+- **Gestor de marketing digital:** aquisição, campanhas, anúncios, posicionamento e resultados comerciais.
+- **Gestor de projetos:** demandas, prazos, responsáveis, custos e entregas.
 
-- criação de conteúdo;
-- edição;
-- montagem;
-- transformação;
-- renderização;
-- validação;
-- preparação de ativos;
-- operações modulares de produção.
+Esses aplicativos estão na fase de estrutura inicial; não se deve presumir que calendários, métricas, campanhas ou publicação estejam conectados a serviços externos.
 
-Ela recebe operações através das interfaces do WordDark.
+## Infraestrutura de conexão
 
-### Central de Conexões Externas
-
-É uma infraestrutura centralizada para comunicação com plataformas e serviços externos.
-
-Responsável por:
-
-- OAuth;
-- credenciais;
-- tokens;
-- adapters;
-- providers;
-- estado das conexões;
-- capacidades;
-- auditoria;
-- comunicação externa.
-
-Ela não deve ser incorporada à lógica de negócio das empresas.
-
-## Relação entre empresas
-
-```
-EMPRESA DE GESTÃO DE NEGÓCIOS
-            ↕
-EMPRESA DE OPERAÇÃO DIGITAL
-            ↕
-        WORDDARK
-            ↕
-     DARK FACTORY
-            ↕
-CENTRAL DE CONEXÕES EXTERNAS
-            ↕
-      MUNDO EXTERNO
-```
-
-As conexões entre essas unidades passam por contratos, permissões e Rodovias.
+A Central de Conexões Externas é infraestrutura compartilhada, não um quarto aplicativo de marketing. Credenciais e tokens não ficam no frontend público. TEST usa simuladores; PROD exige autorização e controles de servidor.
 
 ## Princípio
 
-O Céu fornece capacidades especializadas.
-
-A empresa que precisa de uma capacidade não precisa conhecer sua implementação interna. Ela solicita o serviço ao WordDark, que encaminha a operação para a unidade capaz.
-
-## Estrutura-base
-
-```
-CÉU
-├── Empresas especializadas
-│   └── Dark Factory
-├── Conexões externas
-├── Routing / Rodovia
-├── Registry
-├── Security
-├── Library
-└── Contracts
-```
-
-Novas empresas especializadas podem ser adicionadas ao Céu sem alterar a estrutura das empresas já existentes.
+O Céu executa capacidades que o WordDark encaminha. Novos detalhes devem ser adicionados dentro do aplicativo responsável, sem duplicar a infraestrutura central.

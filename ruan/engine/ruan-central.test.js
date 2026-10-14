@@ -1,0 +1,16 @@
+import assert from "node:assert/strict";
+import { createRuanCentral } from "./ruan-central.js";
+let n = 0;
+const storage = { data: new Map(), getItem(k) { return this.data.get(k) ?? null; }, setItem(k, v) { this.data.set(k, String(v)); } };
+const ruan = createRuanCentral({ personal: { storage, eventTarget: null, now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "personal-" + (++n) }, now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "request-" + (++n) });
+const task = ruan.personal.addTask({ title: "Personal task" });
+assert.equal(ruan.personal.getSnapshot().openTasks.length, 1);
+const world = ruan.connectPeer("worddark");
+const request = world.submitRequest({ capability: "tasks.read-summary", purpose: "Prepare a task summary" });
+assert.equal(request.status, "PENDING_OWNER_DECISION");
+assert.equal(typeof world.updateTask, "undefined");
+assert.equal(typeof world.decideRequest, "undefined");
+assert.equal(ruan.status().authority, "SOVEREIGN");
+assert.equal(ruan.status().externalPersonalWrites, false);
+assert.equal(ruan.personal.getSnapshot().openTasks[0].id, task.id);
+console.log("Ruan Central composition tests passed.");

@@ -1,0 +1,29 @@
+.shadow-logo{color:#b7a2ff;border-color:#634a9c;background:linear-gradient(145deg,#261942,#120d20);box-shadow:0 0 22px #956bff20,inset 0 0 14px #b7a2ff0c}.shadow-logo svg{fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}.eye-core{fill:#f4eaff;stroke:none}.shadow-card{display:flex;align-items:center;gap:14px;padding:17px;border:1px solid #49315d;border-radius:19px;background:linear-gradient(125deg,#241836,#120e1b);color:inherit;text-decoration:none;transition:border-color .18s,transform .18s}.shadow-card:hover{border-color:#b58aff;transform:translateY(-1px)}.darkeye-mark{width:52px;height:52px;flex:0 0 52px;display:grid;place-items:center;border:1px solid #684b9a;border-radius:16px;background:#211532;color:#c4a0ff}.darkeye-mark svg{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}.shadow-copy{display:grid;gap:4px;flex:1;min-width:0}.shadow-copy strong{font-size:14px}.shadow-copy small{font-size:10px;color:#c6a9ff}.shadow-copy span{font-size:11px;color:var(--muted);line-height:1.4}.shadow-note{padding:15px;border:1px solid #382647;border-radius:16px;background:#15101e}.shadow-note strong{font-size:12px}.shadow-note p{font-size:11px;line-height:1.6;color:var(--muted);margin:7px 0 0}
+
+/* Visual area shortcuts, styled like DarkEye quick access. */
+.area-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin:8px 0 20px;padding:0;border:0;overflow:visible}
+.area-nav a{display:flex;align-items:center;gap:9px;min-width:0;padding:10px;border:1px solid #382647;border-radius:14px;background:linear-gradient(145deg,#1c1527,#120e19);color:#a99ab9;text-decoration:none;text-align:left;transition:border-color .18s,transform .18s}
+.area-nav a:hover{border-color:#72558f;transform:translateY(-1px)}
+.area-nav a[aria-current="page"]{color:#eadcff;border-color:#b58aff;background:linear-gradient(145deg,#30203f,#17101f);box-shadow:inset 0 0 0 1px #b58aff20}
+.area-icon{display:grid;place-items:center;width:36px;height:36px;flex:0 0 36px;border:1px solid #49315d;border-radius:11px;background:#2b1b3d;color:#c6a3ff}
+.area-icon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.area-icon-overview{color:#b7a2ff}.area-icon-finance{color:#8fe6c4;background:#153329;border-color:#3b7965}.area-icon-tasks{color:#e4c4ff}.area-icon-shadow{color:#b7a2ff}.area-icon-darkeye{color:#c4a0ff}
+.area-copy{display:grid;gap:3px;min-width:0}.area-copy strong{font-size:11px;line-height:1.2}.area-copy small{font-size:9px;color:var(--muted);line-height:1.3;white-space:normal}
+.area-nav a:focus-visible{outline:2px solid #b58aff;outline-offset:2px}
+@media(max-width:360px){.area-nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.area-nav a{display:grid;justify-items:start;align-content:start;padding:8px;gap:7px}.area-icon{width:32px;height:32px;flex-basis:32px}.area-icon svg{width:19px;height:19px}.area-copy strong{font-size:10px}.area-copy small{font-size:8px}}
+
+/* Shadow launcher: one DarkEye logo and name, with return navigation. */
+body.shadow-launcher .topbar{display:grid;grid-template-columns:42px minmax(0,1fr) 42px;justify-content:stretch}
+body.shadow-launcher .back-button{display:grid!important;grid-column:1;grid-row:1;z-index:2}
+body.shadow-launcher .brand-centered{grid-column:2;grid-row:1;justify-self:center}
+body.shadow-launcher .shadow-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;aspect-ratio:1;width:min(100%,190px);margin:auto;padding:14px}
+body.shadow-launcher .shadow-copy{display:block!important;flex:0 0 auto;text-align:center}
+body.shadow-launcher .shadow-copy strong{display:block;font-size:12px;color:#f4efff}
+body.shadow-launcher .shadow-copy small,body.shadow-launcher .shadow-copy span{display:none!important}
+body.shadow-launcher .darkeye-mark{width:clamp(48px,14vw,64px);height:clamp(48px,14vw,64px);flex:0 0 auto}
+
+
+/* Shadow e DarkEye: ícones próprios, com contraste e profundidade discretos. */
+body.shadow-launcher .darkeye-mark{background:radial-gradient(circle at 35% 20%,#3c285a,#211532 66%,#120d20);box-shadow:inset 0 1px #ffffff10,0 8px 24px #0005,0 0 24px #956bff18}
+body.shadow-launcher .darkeye-mark svg{filter:drop-shadow(0 0 4px #b7a2ff55)}
+.shadow-logo svg,.darkeye-logo svg{filter:drop-shadow(0 0 3px currentColor)}

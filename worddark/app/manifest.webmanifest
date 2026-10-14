@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "WordDark — Mundo Operacional",
+  "short_name": "WordDark",
+  "description": "Coordenação modular do mundo WordDark.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#090a0d",
+  "theme_color": "#090a0d",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

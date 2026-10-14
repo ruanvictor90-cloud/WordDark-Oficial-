@@ -3,6 +3,7 @@
  * PRODUÇÃO = objetivo composto.
  * OPERAÇÃO = função única.
  * CAPACIDADE = o que uma empresa/setor sabe executar.
+ * A tradução entre ação operacional e serviço de transporte é centralizada aqui.
  */
 (function(global){
   "use strict";
@@ -12,7 +13,8 @@
     "content.validate":"CONTENT_VALIDATE","content.package":"CONTENT_PACKAGE","content.publish":"CONTENT_PUBLICATION",
     "content.publication":"CONTENT_PUBLICATION","channel.manage":"CHANNEL_MANAGEMENT","business.operate":"BUSINESS_OPERATIONS",
     "business.manage":"BUSINESS_MANAGEMENT","marketing.manage":"MARKETING_MANAGEMENT","marketing.analyze":"MARKET_ANALYSIS",
-    "marketing.trends":"TREND_ANALYSIS","marketing.brand":"BRAND_IDENTITY","marketing.campaign":"CAMPAIGN_STRATEGY"
+    "marketing.trends":"TREND_ANALYSIS","marketing.brand":"BRAND_IDENTITY","marketing.campaign":"CAMPAIGN_STRATEGY",
+    "knowledge.search":"KNOWLEDGE_RESEARCH","knowledge.fetch":"KNOWLEDGE_RESEARCH"
   });
   const ACTION_CAPABILITIES=Object.freeze({
     CREATE_CONTENT:"CONTENT_CREATE", EDIT_CONTENT:"CONTENT_EDIT", EDIT_PHOTO:"CONTENT_EDIT",
@@ -21,7 +23,15 @@
     PACKAGE_CONTENT:"CONTENT_PACKAGE", PUBLISH_CONTENT:"CONTENT_PUBLICATION", MANAGE_CHANNEL:"CHANNEL_MANAGEMENT",
     OPERATE_BUSINESS:"BUSINESS_OPERATIONS", MANAGE_BUSINESS:"BUSINESS_MANAGEMENT", MANAGE_MARKETING:"MARKETING_MANAGEMENT",
     ANALYZE_MARKET:"MARKET_ANALYSIS", ANALYZE_TRENDS:"TREND_ANALYSIS", CREATE_BRAND:"BRAND_IDENTITY",
-    PLAN_CAMPAIGN:"CAMPAIGN_STRATEGY", CONNECT_EXTERNAL:"EXTERNAL_CONNECTION"
+    PLAN_CAMPAIGN:"CAMPAIGN_STRATEGY", SEARCH_KNOWLEDGE:"KNOWLEDGE_RESEARCH", FETCH_KNOWLEDGE:"KNOWLEDGE_RESEARCH", CONNECT_EXTERNAL:"EXTERNAL_CONNECTION"
+  });
+  const CAPABILITY_SERVICES=Object.freeze({
+    CONTENT_CREATE:"content.produce", CONTENT_EDIT:"content.edit", CONTENT_ASSEMBLE:"content.assemble",
+    CONTENT_RENDER:"content.render", CONTENT_TRANSFORM:"content.transform", CONTENT_VALIDATE:"content.validate",
+    CONTENT_PACKAGE:"content.package", CONTENT_PUBLICATION:"content.publish", CHANNEL_MANAGEMENT:"channel.manage",
+    BUSINESS_OPERATIONS:"business.operate", BUSINESS_MANAGEMENT:"business.manage", MARKETING_MANAGEMENT:"marketing.manage",
+    MARKET_ANALYSIS:"marketing.analyze", TREND_ANALYSIS:"marketing.trends", BRAND_IDENTITY:"marketing.brand",
+    CAMPAIGN_STRATEGY:"marketing.campaign", KNOWLEDGE_RESEARCH:"knowledge.search"
   });
   function normalize(value){
     const raw=String(value||"").trim(); if(!raw)return null;
@@ -29,6 +39,8 @@
   }
   function normalizeAction(value){const raw=String(value||"").trim();return ACTION_CAPABILITIES[raw.toUpperCase()]?raw.toUpperCase():raw||null;}
   function capabilityForAction(action){return ACTION_CAPABILITIES[String(action||"").toUpperCase()]||null;}
+  function serviceForCapability(capability){return CAPABILITY_SERVICES[normalize(capability)]||null;}
+  function serviceForAction(action){return serviceForCapability(capabilityForAction(action)||normalize(action));}
   function resolve({intent=null,need=null,capability=null,service=null,action=null}={}){
     if(action)return capabilityForAction(action)||normalize(action);
     if(capability)return normalize(capability); if(service)return normalize(service);
@@ -44,7 +56,7 @@
     if(/criar|produzir|editar|vídeo|video|imagem|áudio|audio/.test(text))return"CONTENT_CREATE";
     return null;
   }
-  const api={SERVICE_CAPABILITIES,ACTION_CAPABILITIES,normalize,normalizeAction,capabilityForAction,resolve};
+  const api={SERVICE_CAPABILITIES,ACTION_CAPABILITIES,CAPABILITY_SERVICES,normalize,normalizeAction,capabilityForAction,serviceForCapability,serviceForAction,resolve};
   if(typeof global!=="undefined")global.WordDarkCapabilityCatalog=api;
   if(typeof module!=="undefined"&&module.exports)module.exports=api;
 })(typeof globalThis!=="undefined"?globalThis:window);

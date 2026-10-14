@@ -6,11 +6,12 @@
   "use strict";
 
   class WordDarkOperationalMemory{
-    constructor({library=null,storage=null,maxRecords=5000}={}){
+    constructor({library=null,storage=null,maxRecords=5000,centralPromoter=null}={}){
       this.library=library||null;
       this.storage=storage||((typeof localStorage!=="undefined")?localStorage:null);
       this.maxRecords=maxRecords;
       this.records=[];
+      this.centralPromoter=centralPromoter||null;
       this._load();
     }
 
@@ -35,7 +36,9 @@
       this.records.push(record);
       this.records=this.records.slice(-this.maxRecords);
       this._save();
-      if(this.library?.append)try{this.library.append({...record,type:"OPERATION_MEMORY"});}catch(_){}
+      if(this.library?.save)try{this.library.save(record);}catch(_){}
+      else if(this.library?.append)try{this.library.append({...record,type:"OPERATION_MEMORY"});}catch(_){}
+      if(this.centralPromoter)try{this.centralPromoter(record);}catch(_){}
       return record;
     }
 

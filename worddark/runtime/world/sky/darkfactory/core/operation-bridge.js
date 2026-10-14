@@ -3,12 +3,13 @@
  * A Dark Factory executa apenas depois que a operação chega ao Céu.
  */
 class DarkFactoryOperationBridge {
-  constructor({factory,communication,serviceMap={}}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;}
+  constructor({factory,communication,serviceMap={},requestClass=null}={}){this.factory=factory||null;this.communication=communication||null;this.serviceMap=serviceMap;this.requestClass=requestClass||this.resolveRequestClass();}
+  resolveRequestClass(){if(typeof module==="object"&&module.exports){const R=require("./request");return typeof R==="function"?R:(R&&typeof R.DarkFactoryRequest==="function"?R.DarkFactoryRequest:null);}const R=typeof globalThis!=="undefined"?globalThis.DarkFactoryRequest:null;return typeof R==="function"?R:null;}
 
   getService(operation){return this.serviceMap[operation.operationType]||operation.operationType;}
 
   createRequest(operation){
-    return new DarkFactoryRequest({
+    return new this.requestClass({
       requester:operation.requesterId,
       origin:operation.originId,
       destination:operation.destinationId,
@@ -46,15 +47,30 @@ class DarkFactoryOperationBridge {
 
   createRequestFromGlobal(request){
     const p=request.payload||{};
-    return new DarkFactoryRequest({
+    return {
+      id:request.requestId||request.operationId,
+      operationId:request.operationId||p.operationId||request.requestId,
+      parentOperationId:request.operationId||p.parentOperationId||null,
       requester:request.requesterId,
       origin:request.originId,
       destination:request.destinationId,
       task:request.task,
       taskType:request.service,
       permission:"approved",
-      payload:p
-    });
+      payload:p,
+      content:p.content||p.parameters?.content||false,
+      contentId:p.contentId||p.parameters?.contentId||null,
+      action:(()=>{
+        const action=String(p.action||p.parameters?.action||"").toUpperCase();
+        const map={CREATE_CONTENT:"CONTENT_CREATE",EDIT_CONTENT:"CONTENT_EDIT",EDIT_PHOTO:"CONTENT_EDIT",CUT_VIDEO:"CONTENT_EDIT",REPLACE_AUDIO:"CONTENT_EDIT",ADD_SUBTITLE:"CONTENT_EDIT",RENDER_CONTENT:"CONTENT_RENDER",TRANSFORM_CONTENT:"CONTENT_TRANSFORM",VALIDATE_CONTENT:"CONTENT_VALIDATE",PACKAGE_CONTENT:"CONTENT_PACKAGE"};
+        return map[action]||action||null;
+      })(),
+      network:p.network||p.parameters?.network||null,
+      accountId:p.accountId||p.parameters?.accountId||null,
+      createdAt:request.createdAt||new Date().toISOString(),
+      validate(){return {valid:!!(this.requester&&this.origin&&this.destination&&this.task&&this.taskType),errors:[]};},
+      toJSON(){return {...this};}
+    };
   }
 }
 if(typeof module!=="undefined")module.exports=DarkFactoryOperationBridge;

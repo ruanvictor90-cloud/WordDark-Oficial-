@@ -1,3 +1,5 @@
+> **Fonte canônica:** leia primeiro [Consolidação arquitetural](./ARCHITECTURE-CONSOLIDATION.md), [Mapa da arquitetura e pendências](./ARCHITECTURE-MAP.md), [Escopo da versão atual](./CURRENT-VERSION-SCOPE.md) e [Contrato de controle do Ruan Hub](./core/connections/RUAN-HUB-CONTROL.md). Para o detalhamento, consulte [Alinhamento dos setores](./SECTOR-ALIGNMENT.md) e [Requisitos de interfaces futuras](./APP-INTERFACE-BRIEFS.md). Este documento preserva detalhes de arquitetura e serve como referência de implementação; não é a lista de telas da versão atual. A antiga área de Marketing é apresentada no aplicativo por meio da Central Social, e `worddark/runtime/world/core/` é o Core ativo. Não reintroduza automaticamente módulos antigos ou experimentais no aplicativo.
+
 # WordDark — Mundo Operacional
 
 ## Definição oficial
@@ -503,3 +505,12 @@ O núcleo já possui:
 - comunicação e recibos.
 
 O próximo nível é transformar cada empresa em uma participante ativa desse circuito, conectando suas operações internas ao mesmo contrato central.
+
+
+## Darknet — central independente
+
+Darknet é um sistema independente fora da área privada Ruan. Seu contrato com o mundo está documentado em `core/connections/DARKNET-INTEGRATION.md`; a porta de saída fica em `darknet/darknet-world-bridge.js`, a entrada governada em `core/connections/darknet-world-adapter.js` e a composição de teste em `darknet/darknet-world-integration.js`. A ponte permanece desligada por padrão, sem endpoint HTTP ou rede externa. A Central de Conexões continua controlando os provedores externos e o Core conserva a autoridade sobre autorização, capacidades e roteamento.
+
+## Auditoria operacional por bloco
+
+Consulte [OPERATIONAL-READINESS.md](./OPERATIONAL-READINESS.md) para a matriz de integração, bloqueios de cada setor, critérios de liberação e ordem de trabalho até a primeira operação comercial.

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f"><meta name="description" content="Pessoal — financeiro e tarefas no ambiente Ruan.">
+<link rel="stylesheet" href="../../app.css?v=20261013-1"><link rel="stylesheet" href="./pessoal.css?v=20261013-1">
+<title>Pessoal · Ruan</title>
+</head>
+<body class="pessoal-launcher">
+<main class="shell">
+<header class="topbar">
+<a class="back-button" href="../../index.html" aria-label="Voltar para Ruan" title="Voltar para Ruan"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+<a class="brand brand-centered" href="./index.html" aria-label="Pessoal — início"><span class="brand-mark pessoal-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="27" cy="22" r="9"/><path d="M10 53c2-10 8-15 17-15s15 5 17 15"/><path d="m40 43 5 5 10-12"/></svg></span><span class="brand-copy"><strong>PESSOAL</strong><small>Rotina e organização</small></span></a>
+<div class="top-actions"><span class="online-dot" aria-label="Aplicativo pronto"></span><a class="bell" href="../../index.html" aria-label="Voltar à central Ruan">⌂</a></div>
+</header>
+<section class="welcome"><p class="eyebrow">APLICATIVO PESSOAL</p><h1 id="greeting">Seu espaço.</h1><p class="muted phrase">Organize o que entra, o que precisa ser feito e o próximo passo.</p></section>
+
+<section class="section"><div class="section-title"><h2>Informações</h2><span class="section-caption">VISÃO GERAL</span></div>
+<div class="info-grid personal-widgets">
+<a class="info-widget data-widget finance-widget" href="./financeiro.html"><span class="info-symbol green">R$</span><div class="widget-copy"><strong>Saldo registrado</strong><small id="balance-detail">Registre entradas e saídas</small></div><p id="balance-value">R$ 0,00</p></a>
+<a class="info-widget data-widget tasks-widget" href="./tarefas.html"><span class="info-symbol">✓</span><div class="widget-copy"><strong>Tarefas em aberto</strong><small id="task-detail">Tudo sob controle</small></div><p id="task-value">0</p></a>
+<a class="info-widget data-widget bills-widget" href="./financeiro.html"><span class="info-symbol">!</span><div class="widget-copy"><strong>Contas pendentes</strong><small id="bill-detail">Pagamentos a acompanhar</small></div><p id="bill-value">0</p></a>
+<a class="info-widget data-widget" href="./tarefas.html"><span class="info-symbol">◷</span><div class="widget-copy"><strong>Prazos próximos</strong><small id="deadline-detail">Tarefas com vencimento</small></div><p id="deadline-value">0</p></a>
+</div></section>
+<section class="pessoal-app-grid" aria-label="Aplicativos do Pessoal">
+<a class="pessoal-app-icon" href="./financeiro.html" aria-label="Abrir Financeiro" title="Financeiro"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="7" y="13" width="50" height="38" rx="7"/><path d="M8 24h48"/><circle cx="41" cy="37" r="7"/><path d="M41 33v8m-3-6h4a2 2 0 0 1 0 4h-4"/></svg><span class="pessoal-app-name">Financeiro</span></a>
+<a class="pessoal-app-icon" href="./tarefas.html" aria-label="Abrir Tarefas" title="Tarefas"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="13" y="7" width="38" height="50" rx="8"/><path d="m21 22 3 3 5-6M34 23h9M21 36l3 3 5-6M34 37h9M21 49h22"/></svg><span class="pessoal-app-name">Tarefas</span></a>
+</section>
+<footer><span>PESSOAL · RUAN</span><span>Seus dados permanecem neste dispositivo.</span></footer>
+</main><script type="module" src="./app.js"></script></body></html>

@@ -1,0 +1,80 @@
+{
+  "brandId": "WORDDARK",
+  "profileId": "WORDDARK-OFFICIAL",
+  "name": "WordDark",
+  "entityType": "WORLD_PRIMARY_ACCOUNT",
+  "version": "1.0.0",
+  "status": "VALIDATION_BASE",
+  "positioning": "Um mundo digital que coordena empresas, operações e produção por meio de uma infraestrutura comum.",
+  "promise": "Mostrar como um mundo pode organizar ideias, empresas e operações para transformar necessidade em resultado.",
+  "mission": "Construir e operar um mundo digital modular, verificável e capaz de crescer sem perder sua organização.",
+  "signature": "O mundo coordena. As empresas operam. Os setores executam.",
+  "personality": ["tecnológica","inteligente","misteriosa","organizada","direta","ambiciosa","transparente"],
+  "voice": {
+    "tone": ["confiante","curto","claro","estratégico"],
+    "avoid": ["promessas vazias","linguagem infantil","excesso de jargão","fingir que algo já está pronto"],
+    "rule": "Mostrar o que existe, o que está em teste e o que ainda será construído."
+  },
+  "audience": ["tecnologia","IA","automação","empreendedorismo","negócios digitais","criadores","curiosos por sistemas"],
+  "visual": {
+    "base": "dark",
+    "direction": "mundo digital + infraestrutura + operação",
+    "logoRule": "símbolo reconhecível em tamanho pequeno; texto somente quando houver espaço",
+    "imageRule": "alto contraste, composição limpa, foco único e sensação de sistema vivo",
+    "thumbnailRule": "2 a 4 palavras principais, elemento focal forte e marca WordDark discreta",
+    "profileAsset": "assets/worddark-avatar.svg",
+    "bannerAsset": "assets/worddark-banner.svg",
+    "thumbnailTemplate": "assets/worddark-thumbnail-template.svg"
+  },
+  "contentPillars": [
+    {"id":"WORLD","name":"O Mundo","description":"Apresentação da estrutura e da visão do WordDark."},
+    {"id":"BUILD","name":"Construção Real","description":"Evolução, testes, erros, correções e decisões reais."},
+    {"id":"SYSTEM","name":"Operação","description":"Como empresas, setores, módulos e automações trabalham juntos."},
+    {"id":"AI","name":"Inteligência","description":"IA, automação e tomada de decisão aplicada ao mundo."},
+    {"id":"RESULT","name":"Resultados","description":"Produções, experimentos, publicações e aprendizados."}
+  ],
+  "platforms": {
+    "youtube": {
+      "role":"canal principal de profundidade",
+      "format":["vídeos","shorts","séries"],
+      "banner":"assets/worddark-banner.svg",
+      "avatar":"assets/worddark-avatar.svg",
+      "thumbnail":"assets/worddark-thumbnail-template.svg",
+      "bio":"WordDark — um mundo digital onde o mundo coordena, as empresas operam e os setores executam."
+    },
+    "instagram": {
+      "role":"presença visual e bastidores",
+      "format":["reels","carrosséis","stories"],
+      "avatar":"assets/worddark-avatar.svg",
+      "visualRule":"priorizar impacto visual e textos curtos",
+      "bio":"Um mundo digital em construção. IA, negócios, automação e operações reais."
+    },
+    "tiktok": {
+      "role":"descoberta e alcance",
+      "format":["vídeos verticais","séries curtas","bastidores"],
+      "avatar":"assets/worddark-avatar.svg",
+      "visualRule":"gancho imediato, demonstração e conclusão curta",
+      "bio":"O mundo por trás das operações. Construção real, IA e automação."
+    },
+    "facebook": {
+      "role":"distribuição e comunidade",
+      "format":["vídeos","posts","atualizações"],
+      "avatar":"assets/worddark-avatar.svg",
+      "cover":"assets/worddark-banner.svg",
+      "bio":"WordDark é um mundo digital que coordena empresas, operações e produção."
+    },
+    "universal": {
+      "role":"identidade-mãe",
+      "avatar":"assets/worddark-avatar.svg",
+      "banner":"assets/worddark-banner.svg"
+    }
+  },
+  "rules": [
+    "Uma identidade central, adaptações por plataforma.",
+    "Nunca criar uma marca visual diferente para cada rede.",
+    "Conteúdo pode mudar de formato, mas não de posicionamento.",
+    "A marca deve continuar reconhecível mesmo sem o nome WordDark.",
+    "Produções reais devem ser separadas de testes e simulações.",
+    "A identidade pertence ao WordDark e pode ser consumida pela Empresa de Marketing."
+  ]
+}

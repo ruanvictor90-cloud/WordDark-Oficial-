@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f">
+<meta name="description" content="Ruan Hub — acesso e avisos do mundo.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./app-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./app.css?v=20261014-1">
+<title>Ruan Hub</title>
+</head>
+<body>
+<main class="shell">
+<header class="topbar">
+<span class="topbar-spacer" aria-hidden="true"></span>
+<a class="brand" href="./index.html" aria-label="Ruan Hub — início"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path class="mark-frame" d="M32 5 55 18v28L32 59 9 46V18Z"/><path class="mark-path" d="M20 21v22l12-12 12 12V21"/><circle class="mark-core" cx="32" cy="31" r="4"/></svg></span><span class="brand-copy"><strong>RUAN <i>HUB</i></strong><small>Painel superior de gestão do mundo</small></span></a>
+<button id="notice-toggle" class="notice-toggle" aria-label="Abrir avisos" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span id="notice-count" hidden>0</span></button>
+</header>
+<a class="ruan-return hub-return-under-header" href="../ruan/index.html" aria-label="Voltar para Ruan Central"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>Ruan</span></a>
+<form id="quick-request-form" class="quick-request-bar" autocomplete="off"><label class="sr-only" for="quick-request-input">Pesquisar ou preparar um pedido</label><input id="quick-request-input" maxlength="500" required placeholder="Pesquisar ou descrever um pedido..."><button type="submit">Preparar pedido ↗</button></form>
+<a class="central-app-tile" href="./central.html" aria-label="Abrir Central do Hub">
+<span class="central-app-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
+<span>Central</span>
+</a>
+<a class="darknet-app-tile" href="./darknet.html" aria-label="Abrir Darknet"><span class="darknet-app-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><circle cx="32" cy="32" r="12"/><path d="M32 6v12M32 46v12M6 32h12M46 32h12"/></svg></span><span>Darknet</span></a>
+<a class="test-app-tile" href="../worddark/app/index.html?area=test&fromHub=1" aria-label="Abrir app Teste"><span class="test-app-logo" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 6 56 18v28L32 58 8 46V18Z"/><path d="M20 32h24M32 20v24"/><circle cx="32" cy="32" r="13"/></svg></span><span>Teste</span></a>
+<section id="notice-panel" class="notice-panel" hidden aria-live="polite"><div class="notification-head"><strong>Avisos</strong><button id="notice-close" class="close-button" aria-label="Fechar avisos">×</button></div><div id="notice-list"></div></section>
+<a class="launch-dock" href="../index.html" aria-label="Abrir o aplicativo oficial WordDark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg><span>Abrir WordDark</span><span class="dock-arrow">↗</span></a>
+</main>
+<script src="./app.js?v=20261014-1" defer></script>
+</body>
+</html>

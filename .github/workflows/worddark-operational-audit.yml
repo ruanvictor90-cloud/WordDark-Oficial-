@@ -1,0 +1,28 @@
+name: WordDark Operational Audit
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Structural sector audit
+        run: node worddark/runtime/world/operational-structure.test.js
+      - name: Contract and communication audit
+        run: node worddark/runtime/world/core/operational-audit.test.js
+      - name: Central connections audit
+        run: node worddark/runtime/world/core/connections/connection-gateway.test.js
+      - name: End-to-end generic client
+        run: node worddark/runtime/world/core/operation-001.integration.test.js
+      - name: Hierarchical library audit
+        run: node worddark/runtime/world/library/hierarchical-library.test.js
+      - name: Full npm suite
+        run: npm test

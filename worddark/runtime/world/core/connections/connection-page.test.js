@@ -1,0 +1,38 @@
+const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
+
+const page = readFileSync(path.join(__dirname, "index.html"), "utf8");
+const scripts = [...page.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
+assert.ok(scripts.length, "Connection page must contain its OAuth controller");
+assert.doesNotThrow(() => new vm.Script(scripts.at(-1)[1]), "Connection page controller must be valid JavaScript");
+const controller = scripts.at(-1)[1];
+assert.ok(controller.includes("async function exchangeCode(code,clientId)"), "OAuth authorization code must be exchanged through the backend");
+assert.ok(controller.includes("fetch(cfg.codeEndpoint"), "OAuth controller must use the configured backend endpoint");
+assert.ok(controller.includes('"X-Requested-With":"XmlHttpRequest"'), "OAuth request must include the CSRF defense header");
+assert.ok(controller.includes("new URLSearchParams({code,client_id:clientId})"), "OAuth request must send the code and public client ID");
+assert.ok(controller.includes('result.persistence==="PERSISTED"'), "The UI must distinguish durable storage from operational activation");
+assert.ok(controller.includes("CONEXÃO SALVA · OPERAÇÃO PENDENTE"), "The UI must not claim operational activation merely because tokens were stored");
+assert.ok(controller.includes("BACKEND NÃO CONFIGURADO"), "The UI must explain when the backend endpoint is missing");
+assert.ok(!controller.includes("localStorage.setItem(\"wd.google.accessToken\""), "OAuth tokens must not be persisted in browser storage");
+
+const bridge = readFileSync(path.resolve(__dirname, "../../../../bridge/google-oauth/server.js"), "utf8");
+assert.ok(bridge.includes('req.headers["x-requested-with"]!=="XmlHttpRequest"'), "Bridge must validate the custom request header");
+assert.ok(bridge.includes('clientId!==CLIENT_ID'), "Bridge must reject authorization codes for a different client ID");
+assert.ok(bridge.includes("raw.length>8192"), "Bridge must bound the request body size");
+assert.ok(bridge.includes("Google authorization could not be completed."), "Bridge must return a generic authorization failure message");
+const store = readFileSync(path.resolve(__dirname, "../../../../bridge/google-oauth/connection-store.js"), "utf8");
+assert.ok(bridge.includes("persistence:\"PERSISTED\""), "Bridge must confirm storage only after persistence completes");
+assert.ok(bridge.includes("REFRESH_TOKEN_REQUIRED"), "Bridge must not activate a connection without offline refresh access");
+assert.ok(store.includes("kms.encrypt"), "Token bundles must be encrypted with Cloud KMS");
+assert.ok(store.includes("collection.doc(documentId).set(record,{merge:true})"), "Connection metadata and encrypted token bundle must be stored durably");
+assert.ok(store.includes("encryptedTokenBundle"), "Only encrypted token material may be stored in Firestore");
+const socialNetworks = readFileSync(path.join(__dirname, "social-networks.js"), "utf8");
+const legacyController = readFileSync(path.join(__dirname, "app.js"), "utf8");
+const gateway = readFileSync(path.join(__dirname, "connection-gateway.js"), "utf8");
+assert.ok(socialNetworks.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]'), "Social connector metadata must use the canonical publication capability");
+assert.ok(legacyController.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]'), "Connection metadata must use the canonical publication capability");
+assert.ok(!socialNetworks.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]') && !legacyController.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]'), "Transport action names must not be stored as capability grants");
+assert.ok(gateway.includes('CONTENT_PUBLISH:"CONTENT_PUBLICATION"'), "The gateway must map the publish transport action to the canonical capability");
+console.log("YouTube OAuth connection page and bridge contract tests: OK");

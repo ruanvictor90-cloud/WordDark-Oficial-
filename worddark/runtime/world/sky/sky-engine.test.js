@@ -1,0 +1,12 @@
+const assert = require("node:assert/strict");
+const { createSkyEngine } = require("./sky-engine.js");
+const sky = createSkyEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "plan-1" });
+const plan = sky.prepare({ requestId: "req-1", objective: "Promote a product", deliverables: ["script", "short video"], proposedSteps: [{ action: "draft" }] });
+assert.equal(plan.status, "PREPARED_FOR_REVIEW");
+assert.equal(plan.approvalRequired, true);
+assert.equal(plan.publishingEnabled, false);
+assert.equal(plan.externalConnectorsInvoked, false);
+assert.deepEqual(sky.getPlan("plan-1").deliverables, ["script", "short video"]);
+assert.equal(sky.status().plans, 1);
+assert.throws(() => sky.prepare({ requestId: "req-2" }), /Objetivo é obrigatório/);
+console.log("Sky preparation engine tests passed.");

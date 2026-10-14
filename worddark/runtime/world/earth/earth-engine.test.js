@@ -1,0 +1,17 @@
+const assert = require("node:assert/strict");
+const { createEarthEngine } = require("./earth-engine.js");
+const earth = createEarthEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "demand-1" });
+const demand = earth.captureDemand({ requester: "client-1", need: "Promote a product", category: "content", budget: 500, recurrence: "MONTHLY", businessContext: { product: "example" } });
+assert.equal(demand.status, "CAPTURED");
+assert.equal(demand.quoteApproved, false);
+assert.equal(demand.executionAuthorized, false);
+assert.equal(earth.getDemand("demand-1").recurrence, "MONTHLY");
+const linked = earth.linkCommercialLead("demand-1", "lead-demand-1", "operator-1");
+assert.equal(linked.status, "LEAD_CREATED");
+assert.equal(linked.commercialLeadId, "lead-demand-1");
+assert.equal(earth.status().linkedLeads, 1);
+assert.throws(() => earth.linkCommercialLead("demand-1", "lead-other", "operator-1"), /Somente demanda capturada/);
+assert.ok(earth.auditTrail().some(event => event.event === "DEMAND_LINKED_TO_COMMERCIAL_LEAD"));
+assert.equal(earth.status().salesEnabled, false);
+assert.throws(() => earth.captureDemand({ requester: "client-2", category: "content" }), /Necessidade é obrigatório/);
+console.log("Earth demand engine tests passed.");

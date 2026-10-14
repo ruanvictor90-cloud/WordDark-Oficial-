@@ -1,0 +1,12 @@
+const assert = require("node:assert/strict");
+const { createWordDarkEngine } = require("./worddark-engine.js");
+let n = 0;
+const engine = createWordDarkEngine({ now: () => "2026-10-12T00:00:00.000Z", idFactory: () => "route-" + (++n) });
+const route = engine.coordinate({ requestId: "req-1", demandId: "demand-1", intent: "Prepare promotion content", destination: "sky", context: { clientType: "external" } });
+assert.equal(route.status, "ROUTE_PROPOSED");
+assert.equal(route.requiredApproval, true);
+assert.equal(route.executionEnabled, false);
+assert.equal(engine.listDecisions().length, 1);
+assert.equal(engine.status().sideEffectsEnabled, false);
+assert.throws(() => engine.coordinate({ requestId: "req-2", intent: "x", destination: "billing" }), /Destino operacional inválido/);
+console.log("WordDark coordination engine tests passed.");

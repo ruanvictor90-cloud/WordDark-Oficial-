@@ -1,143 +1,74 @@
-# WordDark Oficial
+# WordDark Oficial — arquitetura consolidada em construção
 
-Este é o desenvolvimento oficial do mundo **WordDark**.
+Este repositório reúne o aplicativo pessoal Ruan, seu painel Hub, o mundo operacional WordDark e os motores que serão conectados progressivamente.
 
-## Princípio central
+## Fonte canônica de alinhamento
 
-> **O WordDark coordena. As empresas operam. Os setores executam.**
+Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md) e [Escopo funcional atual](worddark/runtime/world/CURRENT-VERSION-SCOPE.md), além do [Mapa da arquitetura e pendências](worddark/runtime/world/ARCHITECTURE-MAP.md). Para o inventário técnico, consulte [Alinhamento dos setores](worddark/runtime/world/SECTOR-ALIGNMENT.md) e [Requisitos de interfaces futuras](worddark/runtime/world/APP-INTERFACE-BRIEFS.md).
 
-O mundo é a infraestrutura que interliga empresas, capacidades, operações, memória, segurança, permissões, finanças e conexões externas. Empresas não substituem o WordDark; elas usam o mundo para operar.
+**Regra principal:** manter os sistemas separados por responsabilidade. A presença de código legado ou de um motor no repositório não significa que ele esteja conectado ao fluxo ativo.
 
-## Mapa atual
+## Sistemas e responsabilidades
 
-```
-WORDDARK
-├── Língua Universal
-│   ├── Produção
-│   └── Operação
-├── Infraestrutura
-│   ├── Registro
-│   ├── Segurança
-│   ├── Memória
-│   └── Central de Operações
-├── Rodovia
-├── Empresas
-│   ├── Terra
-│   │   ├── Gestão de Negócios
-│   │   └── Gestão de Conteúdos e Canais
-│   └── Céu
-│       ├── Marketing
-│       └── Dark Factory
-└── Conexões Externas
-```
+### Ruan — aplicativo pessoal
+- Aplicativo privado e independente, com seus próprios dados.
+- Inclui Entretenimento (player incorporado a fontes autorizadas), Pessoal (Financeiro e Tarefas) e Shadow.
+- O financeiro pessoal organiza registros locais; não é um banco e não movimenta dinheiro real.
+- Não é parte do mundo WordDark e não compartilha dados automaticamente com ele.
 
-Terra e Céu são áreas do mundo, não empresas.
+### Hub — painel superior do Ruan
+- Pertence logicamente ao Ruan e é acessado por ele.
+- Centraliza pedidos, execução, avisos e verificações do mundo.
+- Deve permitir gerir o WordDark sem abrir cada setor, usando contratos autorizados.
+- Não é um segundo Core e não executa operações por conta própria.
+- Pedidos salvos localmente ainda não comprovam recebimento ou execução no mundo.
 
-## Fluxo oficial
+### WordDark — mundo operacional
+- Coordena necessidades, operações, capacidades, empresas e resultados.
+- **WordDark/Core** coordena; **Céu** executa capacidades especializadas; **Terra** organiza empresas e necessidades externas.
+- A Central de Conexões controla a fronteira com provedores externos.
+- Darknet é independente do Ruan e solicita operações ao mundo por contrato governado.
 
-```
-INTENÇÃO
-↓
-NECESSIDADE
-↓
-LÍNGUA UNIVERSAL
-↓
-CAPACIDADE
-↓
-EMPRESA
-↓
-PORTÃO
-↓
-RODOVIA
-↓
-OPERAÇÃO
-↓
-MÓDULOS
-↓
-RESULTADO
-↓
-MEMÓRIA
-↓
-RETORNO
-```
+### Darkbank — gestão financeira interna do mundo
+- Darkbank começa como gestão financeira interna do WordDark: livro-caixa, receitas, custos, tesouraria, Cofre e controles. Uma instituição financeira real é uma possibilidade futura, não o estado atual.
+- Recursos internos do WordDark não são fundos pessoais do Ruan.
+- A interface e os registros atuais não constituem serviço bancário real nem comprovam transações ou investimentos executados.
 
-A **Central de Operações** é a entrada operacional única. Registries, planner, roteador e adapters permanecem por baixo do tapete; interfaces comuns mostram apenas o que é necessário para operar.
+## Próxima fase comercial
 
-## Operação modular
+- [Alinhamento integral do mundo e limites da integração](worddark/runtime/world/WORLD-ALIGNMENT-NEXT-PHASE.md).
+- [Roteiro prático da primeira venda](COMMERCIAL-FIRST-SALE.md).
+- Livro-caixa manual de teste: `worddark/runtime/world/earth/commercial-ledger.js` (não verifica bancos nem substitui persistência durável).
 
-Uma produção pode possuir várias operações e módulos independentes. Se um módulo falhar, a operação pode reentrar somente naquele módulo.
+## Fontes canônicas do runtime
 
-Exemplo:
+- Ruan: `ruan/`
+- Hub: `hub/`
+- Interface WordDark: `worddark/app/`
+- Core: `worddark/runtime/world/core/`
+- Céu: `worddark/runtime/world/sky/`
+- Terra: `worddark/runtime/world/earth/`
+- Darknet independente: `darknet/`
 
-`imagem ✅ → áudio ❌ → vídeo não executado`
+A pasta `hub/` continua separada por conveniência de implementação/publicação, sem alterar sua propriedade lógica pelo Ruan. `worddark/core-central/` é legado e não deve virar um segundo Core ativo.
 
-Depois:
+## Estado real e limites
 
-`reentrada no áudio → áudio ✅ → vídeo → conclusão`
+- Várias funções de Ruan e Hub usam armazenamento local; não há sincronização central garantida entre dispositivos.
+- A ponte Darknet–WordDark está desativada por padrão, sem rota HTTP ou transporte externo ativo.
+- Publicação de conteúdo permanece manual por padrão; testes simulados não são publicação real.
+- Credenciais, aprovações, permissões e auditoria reais precisam ser validadas no backend antes de produção.
+- Banco/Darkbank não deve ser descrito como banco regulado operacional sem integração real e validação específica.
 
-Não é necessário repetir o que já foi concluído.
+## Desenvolvimento e testes
 
-## Empresas
+- `main`: produção publicada.
+- `develop`: criação.
+- `staging`: integração e testes.
 
-### Terra
-- **Empresa de Gestão de Negócios:** negócios, produtos, fornecedores, clientes, pedidos, recursos, vendas e automações.
-- **Empresa de Gestão de Conteúdos e Canais:** contas, canais, conteúdo, audiência, planejamento operacional e publicação.
+Executar `npm test` antes de concluir mudanças. Validar a publicação do GitHub Pages separadamente.
 
-### Céu
-- **Empresa de Marketing:** mercado, tendências, oportunidades, naming, identidade, posicionamento, audiência, campanhas e crescimento.
-- **Dark Factory — Empresa de Produção de Conteúdo:** criação, edição, montagem, transformação, renderização, validação e preparação de conteúdo.
 
-## Conexões externas
+## Operação comercial inicial
 
-A **Central de Conexões Externas** é infraestrutura compartilhada, não empresa.
-
-Ela centraliza:
-- autorização;
-- contas externas;
-- adapters/connectors;
-- estado das conexões;
-- publicação e outras capacidades externas.
-
-A interface não precisa conhecer registries ou tokens. TEST usa somente simuladores; PROD exige autorização/aprovação e conexão adequada. Secrets não ficam no GitHub Pages.
-
-## TEST e PROD
-
-`TEST` é ambiente de laboratório e nunca deve executar connector real.
-
-`PROD` exige barreira explícita de aprovação e autorização. A separação existe para impedir que testes atinjam contas externas acidentalmente.
-
-## Central de Testes
-
-A Central de Testes é um laboratório funcional do runtime. Ela deve validar:
-- contratos;
-- empresas e capacidades;
-- roteamento;
-- operações;
-- produções;
-- execução por setores;
-- falhas;
-- reentrada;
-- resultados;
-- memória;
-- isolamento TEST/PROD;
-- conectores simulados.
-
-## Estrutura dinâmica
-
-Nenhum cliente, canal ou grupo histórico é criado automaticamente.
-
-A Terra cresce conforme necessidades reais. O Céu cresce conforme capacidades reais. Não existem SucoCast, Suco País ou derivados pré-instanciados na arquitetura oficial.
-
-## Desenvolvimento
-
-- `main` = 🌍 produção/online
-- `develop` = 🛠️ criação
-- `staging` = 🧪 integração/testes
-
-Todo desenvolvimento estrutural deve ser integrado e testado no repositório oficial antes de ser considerado parte do mundo.
-
-### Testes
-
-`npm test`
-
-A suíte Node valida o runtime central e os contratos. A Central de Testes valida também o comportamento no navegador/GitHub Pages.
+Antes de ampliar os setores, siga o [plano de operação comercial sem investimento inicial](COMMERCIAL-BOOTSTRAP.md): oferta pequena, entrega manual revisada, autorização humana, medição de custos e reinvestimento apenas do saldo disponível.

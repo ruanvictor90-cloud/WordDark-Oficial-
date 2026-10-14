@@ -1,3 +1,5 @@
+> **Nota de consolidação (2026-10-13):** esta árvore preserva a arquitetura detalhada e materiais históricos; ela não deve ser interpretada como a lista de aplicativos da interface atual. Consulte `CURRENT-VERSION-SCOPE.md` antes de expor ou conectar qualquer módulo. Juice Country e os canais derivados são exemplos externos/de teste, não a estrutura interna obrigatória do mundo.
+
 # WordDark
 mundo das sombras
 

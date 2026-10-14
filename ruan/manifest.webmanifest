@@ -1,0 +1,20 @@
+{
+  "name": "Ruan — Central de Operação",
+  "short_name": "Ruan",
+  "description": "Central privada de operação com widgets informativos e gaveta de aplicativos.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#09070f",
+  "theme_color": "#09070f",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

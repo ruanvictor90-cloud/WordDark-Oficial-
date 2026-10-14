@@ -1,11 +1,15 @@
-# Core Central — Nova Estrutura
+# Core legado — arquivado
 
-Núcleo único do WordDark. O Core não é um setor de execução: ele identifica, controla contexto, autoriza, registra, consulta capacidades e encaminha pedidos pela infraestrutura do mundo.
+O antigo `worddark/core-central/` não é a fonte de execução do WordDark atual e está fora da suíte padrão de testes.
 
-Regras:
-- TERRA produz necessidades.
-- CÉU oferece capacidades/soluções.
-- WORDDARK governa, registra e encaminha.
-- PORTÃO é a entrada/saída formal.
-- RODOVIA transporta; não executa.
-- Cada módulo é independente e pode receber uma reentrada específica.
+## Fonte única do Core
+
+`worddark/runtime/world/core/`
+
+Ela concentra a infraestrutura central ativa do mundo. O Céu continua em `worddark/runtime/world/sky/` e a Terra em `worddark/runtime/world/earth/`.
+
+## Uso deste diretório
+
+O conteúdo permanece temporariamente no repositório como referência para reaproveitamento seletivo. Não importar esses módulos para a interface atual, não criar um segundo coordenador e não adicionar seus testes à suíte principal sem uma decisão explícita de reativação e consolidação.
+
+A preservação do código legado não significa que ele esteja ativo.

@@ -42,3 +42,26 @@ Se não existir capacidade compatível, a solicitação é encaminhada ao Setor 
 A Central conhece o que cada setor sabe fazer, não precisa conhecer toda a implementação interna de cada setor.
 
 Isso mantém o mundo modular.
+## Fronteira de informações
+
+A Central do Mundo agora recebe informações externas somente pela **Fronteira de Informações** da Central de Conexões.
+
+O fluxo é:
+
+```
+PROVEDOR EXTERNO
+      ↓
+GATEWAY SEGURO
+      ↓
+FRONTEIRA / SANITIZAÇÃO
+      ↓
+MUNDO WORDDARK
+      ↓
+CENTRAL / RODOVIA / SETOR
+```
+
+O Mundo pode consultar o estado das conexões, capacidades e informações operacionais necessárias, mas não possui acesso à porta de entrada, credenciais, client secrets, refresh tokens ou códigos de autorização.
+
+Isso preserva a separação entre **entrada**, **conhecimento** e **execução**.
+
+A conexão também é tratada como capacidade modular: um setor pode pedir apenas a função necessária sem obrigar o conteúdo a atravessar novamente setores que não precisam participar.
