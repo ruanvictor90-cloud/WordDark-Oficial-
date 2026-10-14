@@ -12,7 +12,7 @@ function storage(){
   const store=storage();
   const registry=new Registry(store);
   store.setItem("wd.external.connections",JSON.stringify([{
-    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH","ANALYTICS_READ"]
+    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLICATION","ANALYTICS_READ"]
   }]));
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
 
@@ -78,7 +78,7 @@ function storage(){
 
   const publishBlocked=await approvedGateway.execute({
     requestId:"REQ-PUBLISH-MANUAL",operationId:"OP-PUBLISH-MANUAL",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-MANUAL"}
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-MANUAL"}
   });
   assert.strictEqual(publishBlocked.status,"MANUAL_ACTION_REQUIRED","Publishing must stay manual even when PROD approval exists");
   assert.strictEqual(realCalls,1,"manual publication must never reach an external adapter");
