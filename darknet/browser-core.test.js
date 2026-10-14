@@ -5,7 +5,7 @@ const storage = { getItem: key => saved.get(key) ?? null, setItem: (key, value) 
 assert.equal(loadPreferences(storage).profile, "personal");
 const prefs = savePreferences(storage, { profile: "creator", engine: "bing", favorites: ["https://example.com", "javascript:alert(1)", "https://example.com"] });
 assert.equal(prefs.profile, "creator");
-assert.deepEqual(prefs.favorites, ["https://example.com"]);
+assert.deepEqual(prefs.favorites, ["https://example.com/"]);
 assert.equal(loadPreferences(storage).engine, "bing");
 assert.equal(new URL(buildSearchUrl("anime clássico", "duckduckgo")).hostname, "duckduckgo.com");
 assert.equal(buildSearchUrl("https://example.com/path"), "https://example.com/path");
