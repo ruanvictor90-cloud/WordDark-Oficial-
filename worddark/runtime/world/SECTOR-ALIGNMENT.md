@@ -250,3 +250,10 @@ O motor de demandas da Terra agora pode vincular uma demanda `CAPTURED` a um lea
 ## Verificação de cadeia comercial até o Core
 
 O teste core/terra-commercial-core.integration.test.js cobre a sequência Terra demanda → lead → proposta aceita → pedido → autorização interna → Centro de Operações, incluindo rastreabilidade, repetição e parada em revisão. O Core usado neste teste é simulado; a execução Core → Dark Factory possui uma prova de integração separada em core/operation-001.integration.test.js. As duas evidências não devem ser confundidas com um único runtime de produção ativado.
+
+
+## Prova integrada Terra → Comercial → Core → Dark Factory
+
+O teste worddark/runtime/world/earth/commercial-world.integration.test.js combina os dois adapters e exercita a cadeia inteira no ambiente de teste: demanda capturada → lead comercial → proposta aceita → pedido → aprovação interna → Core/Rodovia → Dark Factory → retorno rastreável. O teste verifica a preservação de sourceDemandId, a prevenção de lead duplicado, o ID da operação, os registros centrais e a parada em REVIEW.
+
+O cenário usa identidade, autorização, auditoria e idempotência simuladas; portanto, comprova a integração de código entre os setores, mas não substitui validação em staging nem autoriza execução em produção.
