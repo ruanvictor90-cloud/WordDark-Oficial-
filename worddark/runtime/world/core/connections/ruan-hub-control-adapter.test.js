@@ -1,6 +1,6 @@
-const assert=require("node:assert/strict");
-const createAdapter=require("./ruan-hub-control-adapter.js");
-(async()=>{
+import assert from "node:assert/strict";
+import createAdapter from "./ruan-hub-control-adapter.js";
+async function run(){
  const request={requestId:"HUB-REQ-1",source:"RUAN_HUB",destination:"WORDDARK",action:"SUBMIT_NEED",need:"Organizar produção de conteúdo"};
  const trusted={authenticated:true,actorId:"operator-1",sessionId:"session-1"};
  let submissions=0,audits=[],authorizationCalls=0;
@@ -31,4 +31,5 @@ const createAdapter=require("./ruan-hub-control-adapter.js");
  assert.equal((await adapter.handle({...request,requestId:"HUB-CAPS",action:"CAPABILITY_DISCOVERY",need:""},trusted)).status,"CAPABILITIES_AVAILABLE");
  const status=adapter.getStatus();assert.equal(status.httpRoute,false);assert.equal(status.externalNetwork,false);assert.equal(status.environment,"TEST");
  console.log("ruan-hub-control-adapter.test: OK");
-})().catch(error=>{console.error(error);process.exitCode=1;});
+}
+run().catch(error=>{console.error(error);process.exitCode=1;});
