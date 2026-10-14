@@ -59,10 +59,13 @@ export function createDarknetKnowledgePipeline({
     registry.set(id, Object.freeze({ id, search: provider.search }));
   }
 
-  async function learn({ providerId, query, principal, limit = 10 } = {}) {
+  async function learn({ providerId, query, principal, trustedContext = null, limit = 10 } = {}) {
     const providerKey = clean(providerId).toLowerCase();
     const searchQuery = clean(query);
-    const caller = clean(principal);
+    const caller = clean(trustedContext?.actorId || principal);
+    if (trustedContext?.authenticated !== true || !clean(trustedContext?.actorId) || !clean(trustedContext?.sessionId)) {
+      return { success: false, status: "KNOWLEDGE_TRUSTED_IDENTITY_REQUIRED", received: 0, rejected: 0 };
+    }
     if (!providerKey || !searchQuery || searchQuery.length > 1000) {
       return { success: false, status: "KNOWLEDGE_REQUEST_INVALID", received: 0, rejected: 0 };
     }
@@ -97,7 +100,7 @@ export function createDarknetKnowledgePipeline({
       const item = normalized.record;
       if (seen.has(item.recordId)) { duplicates++; outcomes.push({ recordId: item.recordId, status: "DUPLICATE_SKIPPED" }); continue; }
       try {
-        const result = await knowledgePort.receive(item, { principal: caller, approvalId: decision.approvalId || null });
+        const result = await knowledgePort.receive(item, trustedContext);
         if (result?.success !== true) { rejected++; outcomes.push({ recordId: item.recordId, status: result?.status || "WORLD_REJECTED" }); continue; }
         seen.add(item.recordId);
         received++;
