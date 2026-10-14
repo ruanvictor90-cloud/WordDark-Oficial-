@@ -101,3 +101,19 @@ npm test
 ```
 
 Os testes usam um Firestore falso para validar o contrato transacional; eles não comprovam que o projeto Cloud real, IAM, regras de coleção ou credenciais estejam configurados. A operação só está pronta para ativação quando o readiness report não apresentar pendências e uma execução real, controlada, passar em staging.
+
+
+## Composição server-side de pesquisa para o WordDark
+
+`darknet-knowledge-server-composition.js` conecta handlers de pesquisa já configurados à Central de Conexões persistida e ao runtime durável de conhecimento. O módulo não cria rotas HTTP e permanece desligado por padrão.
+
+O backend precisa injetar:
+- o `connectionStore` persistido e criptografado;
+- `providerHandlers` com handlers server-side por `providerId`;
+- `knowledgeConnections` com conta e capacidade `KNOWLEDGE_RESEARCH` concedida;
+- autenticação confiável de serviço, autorização e auditoria;
+- repositório atômico durável, arquivo canônico e políticas de revisão/leitura.
+
+A composição mantém a identidade confiável em um contexto interno não forjável pelo payload do cliente. O token de acesso é entregue apenas ao handler server-side e não é retornado à Darknet. `enabled: true` só é aceito quando a prontidão do runtime está completa; isso não substitui validar IAM, Firestore/KMS, identidade e handlers reais em staging.
+
+Teste de composição: `node --experimental-loader=./worddark/runtime/esm-test-loader.mjs darknet/darknet-knowledge-server-composition.test.js`. A suíte padrão inclui esse teste.
