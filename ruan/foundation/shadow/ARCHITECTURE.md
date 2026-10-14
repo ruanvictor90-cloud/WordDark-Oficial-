@@ -1,51 +1,54 @@
-# Shadow — estrutura do aplicativo
+# Shadow, Darknet e DarkEye — arquitetura
 
-**Estado:** estrutura documental inicial; ainda não é um navegador funcional.
-**Localização:** app independente sob a plataforma Ruan.
-**Limite atual:** não implementar lógica de IA/Shadow nesta etapa.
+**Estado:** estrutura e contratos documentados; navegador, overlay e IA ainda não implementados.
+**Regra:** Darknet é a base do navegador. DarkEye é uma camada contextual visual, não o navegador.
 
-## Missão
+## Papéis sem ambiguidade
 
-Shadow será um aplicativo próprio de navegação e ferramentas. A ideia DarkEye começa como uma camada de navegador/visualização com permissões explícitas, podendo evoluir depois para integrações por APIs e plugins. Shadow não é uma cópia da central Ruan e não deve aparecer duplicado dentro de Pessoal.
+- **Shadow:** aplicativo que reúne as ferramentas de navegação assistida e futuras integrações.
+- **Darknet:** núcleo/base do navegador. Futuramente cuida da navegação, abas, endereço, histórico, favoritos, perfis e integração com APIs/plugins autorizados.
+- **DarkEye:** camada visual contextual sobre a experiência de navegação, inspirada em um HUD de capacete. Poderá mostrar traduções, explicações, alertas, estado de projetos e pedidos de confirmação, sempre de forma legível e dispensável.
+- **Conectores:** contratos para serviços externos, independentes do motor de navegação.
+- **Plugins:** extensões declaradas e limitadas por permissões.
 
-## Camadas propostas
+## Exemplo de fluxo futuro
 
-1. **Shell Shadow:** configurações e navegação interna do próprio Shadow. Não possui a gaveta global de aplicativos do Ruan.
-2. **DarkEye (planejado):** espaço de navegação; no futuro poderá ter barra de endereço/pesquisa, abas, histórico local, favoritos, perfis e permissões por site. Nenhuma navegação real está implementada por este documento.
-3. **Gateway de integrações:** catálogo de APIs/conectores, credenciais protegidas fora de arquivos estáticos e permissões por integração. Não executar chamadas externas até existir um conector real, autorizado e testado.
-4. **Registro de plugins:** nome, versão, origem, permissões declaradas, compatibilidade, estado e ação de revogação. Plugins não recebem acesso irrestrito por padrão.
-5. **Dados locais:** preferências, favoritos e metadados de navegação quando implementados. Não guardar senhas, tokens, cookies de sessão ou dados sensíveis em armazenamento local simples.
-6. **Segurança e privacidade:** permissões explícitas, isolamento por origem quando tecnicamente disponível, indicação de conexões externas e revogação de acesso.
+1. Darknet abre uma página ou recurso permitido.
+2. DarkEye recebe somente o contexto autorizado e necessário.
+3. DarkEye pode preparar uma tradução, destacar informação ou apresentar um cartão de confirmação de projeto.
+4. Ações que alterem dados ou aprovem projetos exigem confirmação explícita do usuário ou uma regra previamente autorizada.
+5. O evento é registrado no histórico visível; o usuário pode desativar a sobreposição e revogar permissões.
 
 ## Módulos
 
 | ID | Responsabilidade | Estado |
 |---|---|---|
-| shadow-shell | Configuração e navegação interna do app | Estrutura |
-| darkeye | Conceito de navegador/overlay e navegação | Planejado |
-| connectors | Contratos de APIs e integrações externas | Planejado |
-| plugins | Registro e ciclo de vida de plugins | Planejado |
-| permissions | Declaração e concessão de escopos | Estrutura declarativa |
-| activity | Eventos locais legíveis pelo usuário | Planejado |
+| shadow-shell | Preferências e navegação do aplicativo Shadow | Estrutura |
+| darknet-browser-core | Base do navegador e perfis | Planejado |
+| darkeye-overlay | HUD contextual: tradução, alertas e confirmações | Planejado |
+| connectors | Contratos para APIs externas | Planejado |
+| plugins | Catálogo, compatibilidade e revogação | Planejado |
+| permissions | Escopos e concessões | Declarativo |
+| activity | Histórico local de ações | Planejado |
 
-## Contrato de plugin/conector
+## Contrato de segurança
 
-Cada extensão futura deverá declarar id, name, version, kind, requestedScopes, entrypoint, status e publisher. Permissões precisam ser mínimas e revogáveis. Uma declaração de permissões não é, por si só, isolamento técnico: a execução deve ocorrer em ambiente apropriado e ser validada antes de habilitar plugins.
+- DarkEye não pode aprovar ou executar uma ação importante apenas porque uma página a sugere.
+- Conteúdo externo é dado não confiável, nunca instrução privilegiada.
+- Tradução e análise contextual devem indicar quando dependem de serviço externo.
+- Senhas, cookies, tokens e credenciais não ficam em localStorage nem em arquivos estáticos.
+- Plugins e conectores não recebem acesso geral por padrão.
+- Permissões declarativas são apenas um contrato de projeto; não substituem sandbox, autenticação ou validação técnica.
 
-## Não fazer nesta fase
+## Fora do escopo atual
 
-- Não implementar IA, agente autônomo ou raciocínio do Shadow.
-- Não tratar DarkEye como navegador pronto nem afirmar suporte a sites reais.
-- Não criar funções de invasão, ocultação de atividade ou contorno de permissões.
-- Não compartilhar automaticamente dados do Pessoal com Shadow.
-- Não armazenar segredos em arquivos do repositório ou em armazenamento local simples.
-- Não conectar APIs externas sem autorização, contrato, tratamento de erros e testes.
+Não existe ainda motor de navegador real, leitura automática de páginas, tradução ao vivo, HUD flutuante, execução de plugins ou IA do Shadow. Esta estrutura não faz chamadas de rede nem contorna controles de acesso.
 
-## Critérios para a próxima fase
+## Critérios para implementação
 
-- App Shadow abre separadamente do Pessoal.
-- Não existe gaveta global duplicada dentro do Shadow.
-- DarkEye tem interface e comportamento claramente identificados como protótipo até existir navegação real.
-- Toda integração declara escopos e pode ser desativada.
-- Falhas de conexão não apagam dados locais.
-- Testes verificam limites de acesso entre Shadow e Pessoal.
+1. Provar que Darknet funciona como módulo de navegador independente.
+2. Definir quais fontes de contexto DarkEye pode ler e com quais permissões.
+3. Criar interface overlay acessível, móvel e fácil de desligar.
+4. Separar sugestão, preparação e execução de ações.
+5. Exigir confirmação para aprovações, alterações externas e ações irreversíveis.
+6. Testar isolamento entre sites, dados pessoais e conectores.
