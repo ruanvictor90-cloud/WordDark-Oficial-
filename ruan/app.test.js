@@ -18,6 +18,8 @@ assert.ok(html.includes('class="home-app-name">Pessoal</span>'));
 assert.ok(html.includes('class="home-app-name">Shadow</span>'));
 assert.ok(html.includes('class="home-app-name">WordDark Hub</span>'));
 assert.ok(html.includes('./apps/pessoal/index.html'));
+assert.ok(html.includes('./apps/entretenimento/index.html'));
+assert.ok(html.includes('class="home-app-name">Entretenimento</span>'), 'Ruan must keep the Entertainment app visible in its home');
 assert.ok(html.includes('./apps/shadow/index.html'));
 assert.ok(html.includes('href="../hub/index.html"'));
 assert.ok(html.includes('WordDark Hub'));
@@ -26,9 +28,10 @@ assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'
 assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
 assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(read('app.css').includes('body.ruan-launcher .top-actions{display:flex!important'), 'Ruan home must keep its notification bell visible');
-assert.ok(html.includes('app.css?v=20261013-1') && html.includes('app.js?v=20261013-1'), 'Ruan home must request refreshed assets');
+assert.ok(html.includes('app.css?v=20261014-anime-player-3') && html.includes('app.js?v=20261014-anime-player-3'), 'Ruan home must request refreshed assets');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
+assert.ok(existsSync(new URL('apps/entretenimento/index.html', root)), 'Ruan Entertainment player must exist in the integrated branch');
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
 assert.ok(existsSync(new URL('apps/pessoal/tarefas.html', root)));
 assert.ok(existsSync(new URL('apps/shadow/darkeye/index.html', root)));
@@ -67,5 +70,5 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v17'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v18'"));
 console.log('Ruan app structure tests passed.');
