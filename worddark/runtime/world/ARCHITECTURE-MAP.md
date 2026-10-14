@@ -125,3 +125,17 @@ This closes a code-level composition gap between the durable connection store an
 Foi criado `core/connections/ruan-hub-control-runtime.js` para compor o adaptador de controle com a autenticação de operador do backend. O runtime exige autenticador confiável, autorização, auditoria marcada como durável, idempotência marcada como durável/atômica, catálogo e centro de operações antes de permitir `enabled: true`. Encaminha apenas a identidade produzida pelo autenticador; não confia em `actorId` enviado pelo navegador. A submissão permanece em `TEST`, sem rota HTTP, e o runtime fica desligado por padrão.
 
 **Estado:** composição e testes de contrato adicionados. Ainda não existe sessão autenticada real, store de auditoria/idempotência ligado à nuvem nem endpoint de backend. Por isso, o Hub continua mostrando rascunhos locais e esta composição não foi ativada.
+
+
+## Cadeia comercial Terra → Core → Céu
+
+A integração de contrato está organizada em duas fronteiras:
+
+- Terra demanda → lead comercial: `worddark/runtime/world/core/earth-commercial-intake-adapter.js`; preserva `sourceDemandId` e o contexto do pedido.
+- Pedido comercial aceito → Core: `worddark/runtime/world/core/commercial-order-operation-bridge.js`; exige operador autenticado, autorização, aprovação, auditoria e idempotência injetadas.
+- O Core encaminha a operação pela Rodovia para a capacidade do Céu/Dark Factory; o resultado retorna com ID rastreável.
+- Uma operação interna concluída leva o pedido comercial a `REVIEW`; não declara que a entrega ao cliente foi feita.
+
+O teste `worddark/runtime/world/earth/commercial-world.integration.test.js` percorre a cadeia com a Terra comercial e o Core/Dark Factory montados no próprio cenário. `worddark/runtime/world/core/terra-commercial-core.integration.test.js` isola os contratos dos dois adapters com Core simulado.
+
+**Estado:** integração de código aprovada em CI. Identidade, auditoria e idempotência reais, persistência multiusuário e staging continuam pendentes. Não há endpoint novo, publicação, pagamento ou deploy ativado.
