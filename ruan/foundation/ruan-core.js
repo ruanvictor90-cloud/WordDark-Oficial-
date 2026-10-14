@@ -83,6 +83,8 @@ export function createEvent(state, type, entity, entityId, detail = {}, now = ne
   return next;
 }
 
+function localDateKey(date) { return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"); }
+
 export function calculateFinance(state, options = {}) {
   const now = options.now ? new Date(options.now) : new Date();
   const month = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
@@ -111,7 +113,7 @@ export function calculateFinance(state, options = {}) {
     investmentsRecorded: assets.filter(a => a.type === "investment").reduce((n, a) => n + (Number(a.amount) || 0), 0),
     budgets: budgetStatus,
     upcomingBills,
-    overdueBills: upcomingBills.filter(b => b.dueDate < now.toISOString().slice(0, 10)),
+    overdueBills: upcomingBills.filter(b => b.dueDate < localDateKey(now)),
     billsDueThisMonth: upcomingBills.filter(b => String(b.dueDate).slice(0, 7) === month)
   };
 }
@@ -142,7 +144,7 @@ export function searchPersonalData(state, query, options = {}) {
 /** Small summary contract for widgets; values come from actual stored records. */
 export function createDashboardSummary(state, options = {}) {
   const now = options.now ? new Date(options.now) : new Date();
-  const today = now.toISOString().slice(0, 10);
+  const today = localDateKey(now);
   const finance = calculateFinance(state, { now });
   const tasks = Array.isArray(state?.tasks) ? state.tasks : [];
   const reminders = Array.isArray(state?.reminders) ? state.reminders : [];
