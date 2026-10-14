@@ -505,3 +505,8 @@ O núcleo já possui:
 - comunicação e recibos.
 
 O próximo nível é transformar cada empresa em uma participante ativa desse circuito, conectando suas operações internas ao mesmo contrato central.
+
+
+## Darknet — central independente
+
+Darknet é um sistema independente fora da área privada Ruan. Seu contrato com o mundo está documentado em `core/connections/DARKNET-INTEGRATION.md`; a porta de saída fica em `darknet/darknet-world-bridge.js`, a entrada governada em `core/connections/darknet-world-adapter.js` e a composição de teste em `darknet/darknet-world-integration.js`. A ponte permanece desligada por padrão, sem endpoint HTTP ou rede externa. A Central de Conexões continua controlando os provedores externos e o Core conserva a autoridade sobre autorização, capacidades e roteamento.
