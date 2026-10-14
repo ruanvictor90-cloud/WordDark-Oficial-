@@ -4,10 +4,13 @@
  * Disabled by default; credentials and durable storage are injected by trusted backend services.
  */
 import { createDarknetKnowledgePipeline } from "./darknet-knowledge-pipeline.js";
+import { createCentralConnectionKnowledgeProvider } from "./darknet-central-connection-provider.js";
 import { createDarknetKnowledgeAdapter } from "../worddark/runtime/world/core/connections/darknet-knowledge-adapter.js";
 
 export function createDarknetKnowledgeIntegration({
   providers = [],
+  knowledgeConnections = [],
+  externalConnectionGateway = null,
   knowledgeRegistry = null,
   authorizeDarknet = async () => ({ allowed: false }),
   authorizeWordDark = async () => ({ allowed: false }),
@@ -22,8 +25,11 @@ export function createDarknetKnowledgeIntegration({
     audit: auditWordDark,
     enabled: enabled === true
   });
+  const gatewayProviders = Array.isArray(knowledgeConnections)
+    ? knowledgeConnections.map(connection => createCentralConnectionKnowledgeProvider({ gateway: externalConnectionGateway, ...connection }))
+    : [];
   const pipeline = createDarknetKnowledgePipeline({
-    providers,
+    providers: [...(Array.isArray(providers) ? providers : []), ...gatewayProviders],
     knowledgePort: { receive: (record, trustedContext) => worldAdapter.receive(record, trustedContext) },
     authorize: authorizeDarknet,
     audit: auditDarknet,
