@@ -11,6 +11,7 @@ const architecture = read('worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md'
 const scope = read('worddark/runtime/world/CURRENT-VERSION-SCOPE.md');
 const ruan = read('ruan/README.md');
 const ruanHome = read('ruan/index.html');
+const ruanEntertainment = read('ruan/apps/entretenimento/index.html');
 const hub = read('hub/index.html');
 const hubCentral = read('hub/central.html');
 const hubScript = read('hub/app.js');
@@ -71,6 +72,9 @@ assert.ok(architecture.includes('não é administrado pelo WordDark') && archite
 assert.ok(scope.includes('Darkbank é o setor de gestão financeira interna do mundo') && scope.includes('ponte com o Core permanece desativada'));
 assert.ok(ruan.includes('aplicativo pessoal') && ruan.includes('pertencente ao Ruan'));
 assert.ok(ruanHome.includes('../hub/index.html'), 'Ruan must retain the explicit Hub launcher');
+assert.ok(ruanHome.includes('./apps/entretenimento/index.html'), 'Ruan home must retain its separate Entertainment app');
+assert.ok(ruanEntertainment.includes('youtube-nocookie.com/embed/'), 'Entertainment must use embedded playback from supported sources');
+assert.ok(!ruanEntertainment.includes('download="'), 'Entertainment must not add episode download controls');
 assert.ok(!ruanHome.includes('apps/darknet'), 'Ruan must not own the legacy Darknet app');
 assert.ok(hub.includes('<title>Ruan Hub</title>') && hub.includes('../ruan/index.html'));
 assert.ok(hub.includes('Painel superior de gestão do mundo') && hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'));
