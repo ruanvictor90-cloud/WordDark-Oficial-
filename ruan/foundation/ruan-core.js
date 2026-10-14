@@ -8,7 +8,7 @@ export const COLLECTIONS = Object.freeze([
   "tasks", "shoppingLists", "reminders", "transactions", "assets",
   "budgets", "goals", "notes", "events", "projects", "calendarItems",
   "habits", "routineLogs", "documents", "wellbeingLogs", "quickCaptures",
-  "bills", "preferences"
+  "bills"
 ]);
 
 export function createInitialState() {
