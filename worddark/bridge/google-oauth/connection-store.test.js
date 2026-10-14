@@ -4,8 +4,11 @@ import {createConnectionStore} from "./connection-store.js";
 const docs=new Map();
 const firestore={collection(name){assert.equal(name,"connections-test");return{doc(id){return{
   async set(value,options){docs.set(id,{...value,options})},
-  async get(){const value=docs.get(id);return{exists:Boolean(value),data:()=>value}}
-}}}}};
+  async get(){const value=docs.get(id);return{exists:Boolean(value),data:()=>value}},
+  async update(patch){if(!docs.has(id))throw new Error("DOCUMENT_MISSING");docs.set(id,{...docs.get(id),...patch})}
+}}}} ,
+  async runTransaction(callback){return callback({get:ref=>ref.get(),update:(ref,patch)=>ref.update(patch)})}
+};
 const kms={
   async encrypt({name,plaintext}){assert.equal(name,"projects/test/locations/global/keyRings/wd/cryptoKeys/oauth");return[{ciphertext:Buffer.from(plaintext).toString("base64")}];},
   async decrypt({name,ciphertext}){assert.equal(name,"projects/test/locations/global/keyRings/wd/cryptoKeys/oauth");return[{plaintext:Buffer.from(Buffer.from(ciphertext).toString(),"base64")}];}
@@ -35,6 +38,12 @@ assert.ok(!("encryptedTokenBundle" in metadata),"Metadata reads must not expose 
 assert.ok(!JSON.stringify(metadata).includes("REFRESH_SECRET_TEST"),"Metadata reads must not expose tokens");
 const runtimeTokens=await store.loadTokens({providerId:"YOUTUBE",accountId:account.id});
 assert.equal(runtimeTokens.refresh_token,tokens.refresh_token);
+const capabilityUpdate=await store.setCapability({providerId:"YOUTUBE",accountId:account.id,capability:"CONTENT_PUBLICATION",granted:true});
+assert.deepEqual(capabilityUpdate.capabilities,["CONTENT_PUBLICATION"]);
+assert.deepEqual((await store.load({providerId:"YOUTUBE",accountId:account.id})).capabilities,["CONTENT_PUBLICATION"]);
+await store.setCapability({providerId:"YOUTUBE",accountId:account.id,capability:"CONTENT_PUBLICATION",granted:false});
+assert.deepEqual((await store.load({providerId:"YOUTUBE",accountId:account.id})).capabilities,[]);
+await assert.rejects(()=>store.setCapability({providerId:"YOUTUBE",accountId:"missing",capability:"CONTENT_PUBLICATION",granted:true}),/PERSISTED_CONNECTION_REQUIRED/);
 assert.equal(await store.load({providerId:"YOUTUBE",accountId:"missing"}),null);
 assert.equal(await store.loadTokens({providerId:"YOUTUBE",accountId:"missing"}),null);
 await assert.rejects(()=>store.load({providerId:"YOUTUBE"}),/ACCOUNT_ID_REQUIRED/);
