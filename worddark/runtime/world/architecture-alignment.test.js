@@ -24,6 +24,8 @@ const darknet = read('darknet/README.md');
 const architectureMap = read('worddark/runtime/world/ARCHITECTURE-MAP.md');
 const hubAdapter = read('worddark/runtime/world/core/connections/ruan-hub-control-adapter.js');
 const hubAdapterTest = read('worddark/runtime/world/core/connections/ruan-hub-control-adapter.test.js');
+const hubControlRuntime = read('worddark/runtime/world/core/connections/ruan-hub-control-runtime.js');
+const hubControlRuntimeTest = read('worddark/runtime/world/core/connections/ruan-hub-control-runtime.test.js');
 const persistedKnowledgeGateway = read('worddark/runtime/world/core/connections/persisted-knowledge-gateway.js');
 const persistedKnowledgeGatewayTest = read('worddark/runtime/world/core/connections/persisted-knowledge-gateway.test.js');
 const knowledgeSearchAdapter = read('worddark/runtime/world/core/connections/knowledge-search-adapter.js');
@@ -66,6 +68,8 @@ assert.ok(darknet.includes('sistema independente') && darknet.includes('Ruan'), 
 
 assert.ok(architectureMap.includes('Ruan Hub') && architectureMap.includes('Banco / Darkbank') && architectureMap.includes('O que falta para ativar a integração real'));
 assert.ok(hubAdapter.includes('HUB_CONTROL_ADAPTER_DISABLED') && hubAdapter.includes('HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED') && hubAdapter.includes('requiresAtomicIdempotency'));
+assert.ok(hubControlRuntime.includes('TRUSTED_OPERATOR_AUTHENTICATOR') && hubControlRuntime.includes('DURABLE_ATOMIC_IDEMPOTENCY') && hubControlRuntime.includes('HUB_CONTROL_RUNTIME_DISABLED'));
+assert.ok(hubControlRuntimeTest.includes('HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED') && hubControlRuntimeTest.includes('HUB_CONTROL_REQUEST_DENIED'));
 assert.ok(hubAdapterTest.includes('HUB_CONTROL_APPROVAL_REQUIRED') && hubAdapterTest.includes('HUB_CONTROL_IDEMPOTENCY_UNAVAILABLE'));
 assert.ok(knowledgePipeline.includes('RECEIVED_PENDING_REVIEW') && knowledgePipeline.includes('trustedContext'), 'Darknet must require trusted context and stage knowledge for review');
 assert.ok(centralProvider.includes('gateway.execute') && centralProvider.includes('credentialsExposed: false'), 'Darknet provider adapters must use the Central de Conexões gateway');
