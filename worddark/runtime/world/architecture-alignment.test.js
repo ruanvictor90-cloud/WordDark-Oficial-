@@ -1,8 +1,10 @@
-import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+const assert = require('node:assert/strict');
+const { readFileSync } = require('node:fs');
+const path = require('node:path');
 
-const read = path => readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8');
-const root = read('README.md');
+const root = path.resolve(__dirname, '../../..');
+const read = file => readFileSync(path.join(root, file), 'utf8');
+const repository = read('README.md');
 const architecture = read('worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md');
 const scope = read('worddark/runtime/world/CURRENT-VERSION-SCOPE.md');
 const ruan = read('ruan/README.md');
@@ -17,7 +19,7 @@ const world = read('worddark/runtime/world/README.md');
 const worldApp = read('worddark/app/index.html');
 const darknet = read('darknet/README.md');
 
-assert.ok(root.includes('ARCHITECTURE-CONSOLIDATION.md'), 'Repository README must point to the canonical architecture');
+assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md'), 'Repository README must point to the canonical architecture');
 assert.ok(architecture.includes('Ruan — aplicativo pessoal') && architecture.includes('Hub — painel superior pertencente ao Ruan'));
 assert.ok(architecture.includes('Banco — instituição financeira do WordDark') && architecture.includes('implementação/app atualmente identificada como Darkbank'));
 assert.ok(architecture.includes('não é administrado pelo WordDark') && architecture.includes('o Hub não cria um segundo Core'));
