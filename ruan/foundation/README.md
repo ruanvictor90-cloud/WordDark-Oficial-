@@ -10,7 +10,8 @@ Ruan é a plataforma pessoal; Pessoal organiza a vida diária; Shadow é indepen
 - Esquema de dados versão 3 com migração não destrutiva de coleções ausentes.
 - Tarefas, compras, lembretes, financeiro, ativos, orçamentos, objetivos, notas e eventos.
 - Estruturas para projetos, calendário, hábitos, rotina, documentos, bem-estar, capturas rápidas, contas futuras e preferências.
-- Cálculos financeiros, vencimentos atrasados, resumos de widgets, busca local, recorrência e backup JSON.
+- Serviços de domínio para contas futuras, baixa de pagamento, progresso de objetivos, captura rápida e encaminhamento local, conclusão de tarefas recorrentes.
+- Cálculos financeiros, vencimentos atrasados, resumos de widgets, busca local, recorrência e backup JSON com rejeição de esquemas futuros e datas inválidas.
 - Catálogo de módulos e contratos declarativos de escopo.
 - Arquitetura de Shadow/Darknet/DarkEye.
 
