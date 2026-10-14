@@ -44,6 +44,7 @@ const knowledgeRuntime = read('darknet/darknet-knowledge-runtime.js');
 const knowledgeServerComposition = read('darknet/darknet-knowledge-server-composition.js');
 const knowledgeServerCompositionTest = read('darknet/darknet-knowledge-server-composition.test.js');
 const knowledgeRuntimeIntegrationTest = read('darknet/darknet-knowledge-runtime.integration.test.js');
+const knowledgePersistedGatewayIntegrationTest = read('darknet/darknet-knowledge-persisted-gateway.integration.test.js');
 const packageScripts = read('package.json');
 const capabilityCatalog = read('worddark/runtime/world/core/capability-catalog.js');
 
@@ -92,6 +93,7 @@ assert.ok(knowledgeRuntime.includes('KNOWLEDGE_READ_AUTHORIZATION') && knowledge
 assert.ok(knowledgeServerComposition.includes('createPersistedKnowledgeGateway') && knowledgeServerComposition.includes('trustedContexts'), 'Server composition must join persisted connections without exposing trusted contexts');
 assert.ok(knowledgeServerCompositionTest.includes('server-only-access-token') && knowledgeServerCompositionTest.includes('EXTERNAL_KNOWLEDGE_REQUEST_AUTHORIZED'), 'Server composition must test credential isolation and connection audit');
 assert.ok(capabilityCatalog.includes('KNOWLEDGE_RESEARCH') && capabilityCatalog.includes('SEARCH_KNOWLEDGE'));
+assert.ok(knowledgePersistedGatewayIntegrationTest.includes('createPersistedKnowledgeGateway') && knowledgePersistedGatewayIntegrationTest.includes('runtime.searchValidated') && knowledgePersistedGatewayIntegrationTest.includes('SERVER_SIDE_ACCESS_SECRET'), 'Persisted connection gateway must be tested through validated knowledge retrieval');
 assert.ok(knowledgeRuntimeIntegrationTest.includes('runtime.learn') && knowledgeRuntimeIntegrationTest.includes('runtime.review') && knowledgeRuntimeIntegrationTest.includes('runtime.searchValidated'), 'Knowledge integration test must cover acquisition, review, archive and validated retrieval end to end');
 assert.ok(packageScripts.includes('darknet/darknet-knowledge-runtime.integration.test.js'), 'End-to-end knowledge integration test must be included in the standard test suites');
 assert.ok(sectors.includes('Verificação ponta a ponta da cadeia de conhecimento'), 'Sector alignment must record end-to-end evidence and production limitations');
