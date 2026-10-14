@@ -52,7 +52,7 @@ export function inspectDarknetKnowledgeReadiness(input = {}) {
   if (!fn(options.authenticateService)) missing.push("TRUSTED_SERVICE_AUTHENTICATOR");
   if (!fn(options.authorizeDarknet)) missing.push("DARKNET_AUTHORIZATION");
   if (!fn(options.authorizeWordDark)) missing.push("WORDDARK_AUTHORIZATION");
-  if (!fn(options.authorizeReview)) missing.push("KNOWLEDGE_REVIEW_AUTHORIZATION");
+  if (!fn(options.authorizeReview)) missing.push("KNOWLEDGE_REVIEW_AUTHORIZATION");\n  if (!fn(options.authorizeKnowledgeRead)) missing.push("KNOWLEDGE_READ_AUTHORIZATION");\n  if (!fn(options.auditKnowledgeRead)) missing.push("KNOWLEDGE_READ_AUDIT");
   if (!fn(options.auditDarknet)) missing.push("DARKNET_AUDIT");
   if (!fn(options.auditWordDark)) missing.push("WORDDARK_AUDIT");
   if (!fn(options.auditReview)) missing.push("REVIEW_AUDIT");
@@ -104,7 +104,7 @@ export function createDarknetKnowledgeRuntime(input = {}) {
     enabled: options.enabled === true,
     now: options.now
   });
-  async function learn({ providerId, query, limit = 10, requestContext = null } = {}) {
+  async function authenticateRequest(requestContext) {\n    let trustedContext;\n    try { trustedContext = await options.authenticateService(requestContext); }\n    catch { return { error: "TRUSTED_SERVICE_AUTHENTICATION_FAILED" }; }\n    if (trustedContext?.authenticated !== true || !trustedContext.actorId || !trustedContext.sessionId) {\n      return { error: "TRUSTED_SERVICE_IDENTITY_REQUIRED" };\n    }\n    return { trustedContext };\n  }\n  async function learn({ providerId, query, limit = 10, requestContext = null } = {}) {
     if (options.enabled !== true) return { success: false, status: "DARKNET_KNOWLEDGE_RUNTIME_DISABLED" };
     let trustedContext;
     try { trustedContext = await options.authenticateService(requestContext); }
