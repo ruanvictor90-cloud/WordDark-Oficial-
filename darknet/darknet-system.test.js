@@ -15,6 +15,9 @@ assert.equal(status.transportEnabled, false);
 assert.equal(status.externalNetworkEnabled, false);
 assert.equal(status.worldRuntimeEnabled, false);
 assert.equal(status.pluginExecutionEnabled, false);
+assert.equal(status.knowledge.enabled, false);
+assert.equal(status.knowledge.providerCount, 0);
+assert.equal(system.knowledge.getStatus().networkAccess, false);
 assert.equal(status.modules.length, 4);
 assert.equal(system.connections.listConnectors().length, 2);
 
