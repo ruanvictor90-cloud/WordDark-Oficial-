@@ -7,6 +7,7 @@ import { createApiGateway } from "./darknet-api-gateway.js";
 import { createPluginManager } from "./darknet-plugin-manager.js";
 import { createSecurityPolicy } from "./darknet-security-policy.js";
 import { createDarknetMonitor } from "./darknet-monitor.js";
+import { createWorldBridge } from "./darknet-world-bridge.js";
 
 export function createDarknetSystem(options = {}) {
   const connections = createConnectionEngine({
@@ -20,6 +21,7 @@ export function createDarknetSystem(options = {}) {
     now: options.now
   });
   const apiGateway = createApiGateway({ connectionEngine: connections });
+  const worldBridge = createWorldBridge({ worldPort: options.worldPort || null, enabled: options.worldBridgeEnabled === true, authorizeRequest: options.authorizeWorldRequest, audit: options.auditWorldRequest, });
   const monitor = createDarknetMonitor({ connections, plugins, security, gateway: apiGateway });
 
   return Object.freeze({
@@ -37,7 +39,7 @@ export function createDarknetSystem(options = {}) {
         transportEnabled: false,
         externalNetworkEnabled: false,
         worldRuntimeEnabled: false,
-        pluginExecutionEnabled: false,
+        pluginExecutionEnabled: false,\n        worldBridge: worldBridge.getStatus(),
         modules: snapshot.modules
       };
     }
