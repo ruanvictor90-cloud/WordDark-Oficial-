@@ -7,7 +7,7 @@ async function run(){
  const records=new Map();
  const idempotencyStore={executeOnce:async(key,fn)=>{if(records.has(key))return records.get(key);const value=await fn();records.set(key,value);return value;}};
  const operationCenter={submit:input=>{submissions++;assert.equal(input.requesterId,"operator-1");assert.equal(input.originId,"ruan-hub");assert.equal(input.environment,"TEST");return{success:true,status:"QUEUED",operationId:"OP-1"};},getStatus:()=>({status:"HEALTHY"})};
- const deps={enabled:true,operationCenter,capabilityCatalog:{listPublic:()=>["CREATE_CONTENT"]},authorizeRequest:async input=>{authorizationCalls++;assert.equal(input.actorId,"operator-1");return{allowed:true,approved:true,approvalId:"APR-1"};},audit:async event=>{audits.push(event);},idempotencyStore};
+ const deps={enabled:true,operationCenter,listOperations:async()=>[{operationId:"OP-LIST-1",status:"RUNNING",action:"CREATE_CONTENT",environment:"TEST",secret:"must-not-leak"}],capabilityCatalog:{listPublic:()=>["CREATE_CONTENT"]},authorizeRequest:async input=>{authorizationCalls++;assert.equal(input.actorId,"operator-1");return{allowed:true,approved:true,approvalId:"APR-1"};},audit:async event=>{audits.push(event);},idempotencyStore};
  const disabled=createAdapter();
  assert.equal((await disabled.handle(request,trusted)).status,"HUB_CONTROL_ADAPTER_DISABLED");
  const adapter=createAdapter(deps);
@@ -29,6 +29,8 @@ async function run(){
  assert.equal((await noIdempotency.handle({...request,requestId:"HUB-REQ-NO-IDEMPOTENCY"},trusted)).status,"HUB_CONTROL_IDEMPOTENCY_UNAVAILABLE");
  assert.equal((await adapter.handle({...request,requestId:"HUB-STATUS",action:"REQUEST_STATUS",need:""},trusted)).status,"WORDDARK_STATUS");
  assert.equal((await adapter.handle({...request,requestId:"HUB-CAPS",action:"CAPABILITY_DISCOVERY",need:""},trusted)).status,"CAPABILITIES_AVAILABLE");
+ const listed=await adapter.handle({...request,requestId:"HUB-LIST",action:"LIST_OPERATIONS",need:"",limit:20},trusted);
+ assert.equal(listed.status,"OPERATIONS_AVAILABLE");assert.equal(listed.operations[0].operationId,"OP-LIST-1");assert.equal("secret" in listed.operations[0],false,"operation listing must not expose unapproved fields");
  const status=adapter.getStatus();assert.equal(status.httpRoute,false);assert.equal(status.externalNetwork,false);assert.equal(status.environment,"TEST");
  console.log("ruan-hub-control-adapter.test: OK");
 }
