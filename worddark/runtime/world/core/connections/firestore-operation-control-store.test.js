@@ -1,61 +1,6 @@
 import assert from "node:assert/strict";
 import { createFirestoreOperationControlStore } from "./firestore-operation-control-store.js";
 
-function createFakeFirestore() {
-  const collections = new Map();
-  let sequence = 0;
-  let tail = Promise.resolve();
-  const getCollection = name => {
-    if (!collections.has(name)) collections.set(name, new Map());
-    const rows = collections.get(name);
-    const makeRef = id => ({
-      id,
-      async get() {
-        const value = rows.get(id);
-        return { exists: value !== undefined, data: () => value === undefined ? undefined : structuredClone(value) };
-      },
-      async create(value) {
-        if (rows.has(id)) throw new Error("ALREADY_EXISTS");
-        rows.set(id, structuredClone(value));
-      }
-    });
-    return {
-      doc(id) { return makeRef(id || "generated-" + (++sequence)); },
-      _rows: rows
-    };
-  };
-  return {
-    collection: getCollection,
-    async runTransaction(callback) {
-      let release;
-      const previous = tail;
-      tail = new Promise(resolve => { release = resolve; });
-      await previous;
-      const writes = [];
-      const tx = {
-        async get(ref) { return ref.get(); },
-        create(ref, value) { writes.push({ type: "create", ref, value: structuredClone(value) }); },
-        set(ref, value) { writes.push({ type: "set", ref, value: structuredClone(value) }); },
-        update(ref, value) { writes.push({ type: "update", ref, value: structuredClone(value) }); }
-      };
-      try {
-        const result = await callback(tx);
-        for (const write of writes) {
-          const rows = collections.get(write.ref.__collection);
-          // The fake references use their backing map attached below.
-          const target = write.ref.__rows;
-          const prior = target.get(write.ref.id);
-          if (write.type === "create" && prior !== undefined) throw new Error("ALREADY_EXISTS");
-          target.set(write.ref.id, write.type === "set" && prior && write.value.merge
-            ? { ...prior, ...write.value }
-            : structuredClone(write.value));
-        }
-        return result;
-      } finally { release(); }
-    }
-  };
-}
-
 // Use a minimal transactional Firestore fake whose transaction writes are atomic.
 function createTransactionalFirestore() {
   const collections = new Map();
