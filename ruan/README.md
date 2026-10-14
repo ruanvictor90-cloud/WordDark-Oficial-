@@ -4,9 +4,10 @@ Ruan é o aplicativo privado e independente de operação pessoal. Ele mantém o
 
 ## Estrutura atual
 
-- `index.html`: Central pessoal.
+- `index.html`: Central pessoal, com atalhos separados para Entretenimento, Pessoal, Shadow e Ruan Hub.
 - `app.css` / `app.js`: identidade visual, widgets e notificações locais.
 - `engine/central-engine.js`: motor local usado pelos módulos pessoais.
+- `apps/entretenimento/`: player incorporado para vídeos e playlists disponíveis em fontes autorizadas; não hospeda cópias de episódios.
 - `apps/pessoal/`: app Pessoal, com Financeiro e Tarefas.
 - `apps/shadow/`: app Shadow.
 - `apps/shadow/darkeye/`: protótipo de interface do navegador DarkEye.
