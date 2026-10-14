@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { createCommercialEngine } from "../earth/commercial-engine.js";
 import { createCommercialOrderOperationBridge } from "./commercial-order-operation-bridge.js";
 
 function memoryIdempotency() {
@@ -14,17 +13,30 @@ function memoryIdempotency() {
   };
 }
 
-function makeOrder(engine) {
-  engine.createLead({ leadId: "lead-bridge-1", requesterId: "client-1", name: "Cliente teste", need: "Pacote de conteúdo", category: "content" });
-  engine.qualifyLead("lead-bridge-1", "operator-1");
-  engine.createProposal({ proposalId: "proposal-bridge-1", leadId: "lead-bridge-1", title: "Pacote de conteúdo", scope: "3 textos e 1 roteiro", amount: 75 });
-  engine.decideProposal("proposal-bridge-1", "ACCEPTED", "client-1");
-  return engine.openOrder("proposal-bridge-1");
+function makeCommercialEngine() {
+  const order = {
+    orderId: "order-bridge-1", proposalId: "proposal-bridge-1",
+    companyId: "content-studio", sectorId: "earth", requesterId: "client-1",
+    title: "Pacote de conteúdo", scope: "3 textos e 1 roteiro",
+    amount: 75, currency: "BRL", recurrence: "ONE_TIME", deadline: null,
+    status: "ORDER_OPEN"
+  };
+  const orders = new Map([[order.orderId, order]]);
+  return {
+    getOrder(id) { const item = orders.get(id); return item ? structuredClone(item) : null; },
+    transitionOrder(id, status, actorId) {
+      const item = orders.get(id);
+      if (!item || item.status !== "ORDER_OPEN" || status !== "PLANNED") throw new Error("TRANSITION_NOT_ALLOWED");
+      const next = { ...item, status, lastActorId: actorId };
+      orders.set(id, next);
+      return structuredClone(next);
+    }
+  };
 }
 
 function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, operationId = "op-bridge-1" } = {}) {
-  const commercial = createCommercialEngine({ companyId: "content-studio", companyName: "Content Studio", idFactory: (() => { let i = 0; return () => String(++i); })() });
-  const order = makeOrder(commercial);
+  const commercial = makeCommercialEngine();
+  const order = commercial.getOrder("order-bridge-1");
   const calls = { core: [], audit: [] };
   const bridge = createCommercialOrderOperationBridge({
     commercialEngine: commercial,
