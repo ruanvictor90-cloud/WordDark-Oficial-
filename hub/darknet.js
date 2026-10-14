@@ -1,4 +1,4 @@
-import { searchCatalog, createEnvelope, createLocalStore, getSystemStatus, CONNECTORS } from "../ruan/apps/darknet/darknet-core.js";
+import { searchCatalog, createEnvelope, createLocalStore, getSystemStatus, CONNECTORS } from "../darknet/darknet-core.js";
 const $=id=>document.getElementById(id);const store=createLocalStore(globalThis.localStorage,"hub");let view="search",query="";
 const esc=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function cards(items){return items.length?items.map(item=>'<article class="result"><span class="kind">'+esc(item.kind)+'</span><h3>'+esc(item.title)+'</h3><p>'+esc(item.description)+'</p><small>'+esc(item.scope==="future"?"Aguardando alinhamento":"Diretório local")+'</small></article>').join(""):'<div class="empty">Nenhum resultado encontrado no catálogo local.</div>'}
