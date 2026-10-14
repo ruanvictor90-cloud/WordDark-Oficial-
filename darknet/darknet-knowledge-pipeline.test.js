@@ -58,6 +58,6 @@ const fetchPipeline = createDarknetKnowledgePipeline({
 });
 assert.equal((await fetchPipeline.learn({ providerId: "full-source", query: "guide", trustedContext })).received, 1);
 assert.equal(fetchCalls, 1);
-assert.equal(fetchedRecords[0].title, "Fetched guide");
+assert.equal(fetchedRecords[0].source.title, "Fetched guide");
 assert.equal(fetchedRecords[0].content, "Complete procedure from source.");
 console.log("darknet-knowledge-pipeline.test: OK");
