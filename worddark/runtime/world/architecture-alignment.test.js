@@ -16,10 +16,12 @@ const hubManifest = read('hub/manifest.webmanifest');
 const hubWorker = read('hub/sw.js');
 const hubTests = read('hub/app.test.js');
 const world = read('worddark/runtime/world/README.md');
+const sectors = read('worddark/runtime/world/SECTOR-ALIGNMENT.md');
+const interfaceBriefs = read('worddark/runtime/world/APP-INTERFACE-BRIEFS.md');
 const worldApp = read('worddark/app/index.html');
 const darknet = read('darknet/README.md');
 
-assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md'), 'Repository README must point to the canonical architecture');
+assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
 assert.ok(architecture.includes('Ruan — aplicativo pessoal') && architecture.includes('Hub — painel superior pertencente ao Ruan'));
 assert.ok(architecture.includes('Banco — instituição financeira do WordDark') && architecture.includes('implementação/app atualmente identificada como Darkbank'));
 assert.ok(architecture.includes('não é administrado pelo WordDark') && architecture.includes('o Hub não cria um segundo Core'));
@@ -35,6 +37,8 @@ assert.ok(hubManifest.includes('"name": "Ruan Hub"'));
 assert.ok(hubWorker.includes('ruan-hub-v14') && !hubWorker.includes('../ruan/apps/darknet/'));
 assert.ok(hubTests.includes('Ruan Hub') && hubTests.includes('migrateHubStorage'));
 assert.ok(world.includes('ARCHITECTURE-CONSOLIDATION.md') && world.includes('CURRENT-VERSION-SCOPE.md'));
+assert.ok(sectors.includes('Ruan permanece separado') && sectors.includes('Core operacional ativo'));
+assert.ok(interfaceBriefs.includes('Ruan Hub') && interfaceBriefs.includes('Banco/Darkbank') && interfaceBriefs.includes('Apps privados Ruan'));
 assert.ok(worldApp.includes('Darkbank'), 'WordDark interface must retain the current Banco/Darkbank app entry');
 assert.ok(darknet.includes('sistema independente') && darknet.includes('Ruan'), 'Darknet documentation must preserve the independent Ruan boundary');
 
