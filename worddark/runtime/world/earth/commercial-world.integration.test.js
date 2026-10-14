@@ -153,7 +153,7 @@ async function main() {
     approvalId: "commercial-integration-approval-1"
   });
 
-  assert.equal(result.success, true, JSON.stringify({ result, coreSubmissions }, null, 2));
+  assert.equal(result.success, true, JSON.stringify({ result, coreSubmissions, coreOperations: operationRegistry.list() }, null, 2));
   assert.equal(result.environment, "TEST");
   assert.equal(result.dispatched, true);
   assert.ok(result.operationId, "A operação precisa ter ID rastreável.");
