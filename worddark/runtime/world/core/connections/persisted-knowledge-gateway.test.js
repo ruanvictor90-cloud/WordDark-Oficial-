@@ -5,8 +5,8 @@ let audits = [];
 let executions = 0;
 const store = {
   async load({ providerId, accountId }) {
-    if (providerId !== "RESEARCH_API" || accountId !== "ACCOUNT-1") return null;
-    return { providerId, accountId, status: "PERSISTED", capabilities: ["KNOWLEDGE_RESEARCH"], title: "Research account" };
+    if (providerId !== "RESEARCH_API" || !["ACCOUNT-1", "NO-GRANT"].includes(accountId)) return null;
+    return { providerId, accountId, status: "PERSISTED", capabilities: accountId === "ACCOUNT-1" ? ["KNOWLEDGE_RESEARCH"] : [], title: "Research account" };
   },
   async loadTokens() { return { access_token: "ACCESS_SECRET", refresh_token: "REFRESH_SECRET" }; }
 };
@@ -43,6 +43,7 @@ assert.equal(JSON.stringify(result).includes("REFRESH_SECRET"), false);
 assert.equal(audits.length, 2);
 assert.equal((await gateway.execute({ ...request, capability: "CONTENT_PUBLICATION" }, { requestContext: { serviceToken: "trusted-test-token" } })).status, "PERSISTED_KNOWLEDGE_REQUEST_INVALID");
 assert.equal((await gateway.execute({ ...request, accountId: "MISSING" }, { requestContext: { serviceToken: "trusted-test-token" } })).status, "PERSISTED_CONNECTION_NOT_AVAILABLE");
+assert.equal((await gateway.execute({ ...request, accountId: "NO-GRANT" }, { requestContext: { serviceToken: "trusted-test-token" } })).status, "PERSISTED_CONNECTION_CAPABILITY_NOT_GRANTED");
 const disabled = createPersistedKnowledgeGateway({ ...deps, enabled: false });
 assert.equal((await disabled.execute(request, { requestContext: { serviceToken: "trusted-test-token" } })).status, "PERSISTED_KNOWLEDGE_GATEWAY_DISABLED");
 console.log("persisted-knowledge-gateway.test: OK");
