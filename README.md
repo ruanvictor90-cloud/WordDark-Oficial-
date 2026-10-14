@@ -4,7 +4,7 @@ Este repositório reúne o aplicativo pessoal Ruan, seu painel Hub, o mundo oper
 
 ## Fonte canônica de alinhamento
 
-Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md).
+Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md) e [Escopo funcional atual](worddark/runtime/world/CURRENT-VERSION-SCOPE.md). Para o inventário técnico, consulte [Alinhamento dos setores](worddark/runtime/world/SECTOR-ALIGNMENT.md) e [Requisitos de interfaces futuras](worddark/runtime/world/APP-INTERFACE-BRIEFS.md).
 
 **Regra principal:** manter os sistemas separados por responsabilidade. A presença de código legado ou de um motor no repositório não significa que ele esteja conectado ao fluxo ativo.
 
