@@ -45,7 +45,7 @@ A migração de esquema acrescenta coleções ausentes sem descartar as coleçõ
 | Tarefas, compras, lembretes, financeiro | Protótipo de interface |
 | Captura rápida e busca | Serviços locais de captura/encaminhamento e busca no núcleo; interface planejada |
 | Contas e vencimentos | Modelo, validação de datas, criação e baixa de pagamento no serviço de domínio |
-| Objetivos, projetos, calendário, hábitos | Coleções e catálogo; progresso de objetivos via serviço; interfaces planejadas |
+| Objetivos, projetos, calendário, hábitos | Serviços de progresso de objetivos, projetos/etapas, compromissos e registros de hábitos; interfaces planejadas |
 | Documentos e bem-estar | Coleções e catálogo; interface planejada |
 | Shadow/Darknet/DarkEye | Contratos de arquitetura; não funcionais ainda |
 | Sincronização, autenticação e notificações de sistema | Não implementadas |
