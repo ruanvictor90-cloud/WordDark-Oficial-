@@ -57,7 +57,7 @@ storage.setItem("wd.external.connections", JSON.stringify([{
 }]));
 assert.equal(registry.setRuntimeCredential("RESEARCH_API", "research-account", "test-only-secret"), true);
 
-const gateway = new Gateway({ registry });
+const gateway = new Gateway({ registry, enabled: true });
 registerKnowledgeSearchAdapter({
   gateway,
   providerId: "RESEARCH_API",
