@@ -99,7 +99,7 @@ export function calculateFinance(state, options = {}) {
   const monthIncome = sum(inMonth, "income");
   const monthExpenses = sum(inMonth, "expense");
   const budgetStatus = budgets.map(b => {
-    const spent = inMonth.filter(t => t.type === "expense" && t.category === b.category).reduce((n, t) => n + t.amount, 0);
+    const spent = inMonth.filter(t => t.type === "expense" && String(t.category || "").toLowerCase() === String(b.category || "").toLowerCase()).reduce((n, t) => n + t.amount, 0);
     const limit = Number(b.limit) || 0;
     return { id: b.id, category: b.category, limit, spent, remaining: limit - spent, percent: limit > 0 ? Math.round(spent / limit * 100) : null };
   });
