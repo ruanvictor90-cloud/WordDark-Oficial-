@@ -50,3 +50,14 @@ O pipeline `darknet-knowledge-pipeline.js` é a porta de aquisição e `darknet-
 - O pipeline e a entrada WordDark continuam desligados por padrão; não há rota HTTP nem chamada de API externa ativada por esta alteração.
 
 O `createDarknetSystem` e `createDarknetKnowledgeIntegration` aceitam `externalConnectionGateway` e `knowledgeConnections` para registrar os adapters reais por `providerId`, `accountId` e capacidade concedida. A configuração registra o provedor, mas não ativa a pesquisa: `knowledgeEnabled`/`enabled` permanece falso até que o backend confiável injete identidade, autorização, auditoria e o registry. Cada API só pode ser considerada conectada quando seu adapter real estiver registrado no gateway, com credenciais guardadas na Central de Conexões e testes de integração passando.
+
+
+## Validação direcionada
+
+Para executar somente os testes do fluxo de conhecimento:
+
+```bash
+npm run knowledge:test
+```
+
+A suíte completa continua sendo `npm test`. Nenhuma das duas substitui a validação com credenciais e serviços reais em staging.
