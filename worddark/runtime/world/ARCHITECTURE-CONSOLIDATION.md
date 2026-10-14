@@ -47,9 +47,9 @@ O WordDark coordena operações e administra a infraestrutura necessária para e
 
 Regra: **o WordDark coordena; as empresas operam; os setores executam; os resultados retornam à origem.** Céu e Terra são áreas do mundo, não sinônimos de empresas. Novas empresas devem ser adicionadas por registro de responsabilidade e capacidades, não por duplicação do Core.
 
-## 5. Banco — instituição financeira do WordDark
+## 5. Darkbank — gestão financeira interna do WordDark
 
-Banco (implementação/app atualmente identificada como Darkbank) é a instituição financeira responsável pela camada financeira do mundo. Sua responsabilidade conceitual inclui:
+Darkbank é, nesta fase, o setor de gestão financeira interna do mundo — não uma instituição financeira autorizada. Sua responsabilidade inicial é registrar e acompanhar: 
 - gestão financeira interna do WordDark;
 - contas e registros financeiros;
 - tesouraria e Cofre;
@@ -61,7 +61,7 @@ Fronteiras e estado:
 - os saldos/recursos internos do Cofre pertencem ao WordDark, não ao Ruan;
 - a área Financeiro do Ruan é pessoal e independente;
 - telas e registros locais não constituem conta bancária real, custódia, investimento executado ou transferência;
-- integração bancária real, movimentações, custódia ou investimento só poderão ser considerados ativos depois de provedor legítimo, backend seguro, autenticação, aprovação, trilha de auditoria, validação operacional e autorização explícita;
+- integração bancária real, movimentações, custódia ou investimento não fazem parte da operação atual. Uma futura expansão para instituição financeira exigirá enquadramento legal/regulatório aplicável, parceiros/provedores legítimos, backend seguro, autenticação, aprovação, auditoria, validação operacional e autorização explícita;
 - nenhuma capacidade financeira deve ser concedida apenas por existir um token ou uma conexão OAuth.
 
 ## 6. Contrato de operação comum
