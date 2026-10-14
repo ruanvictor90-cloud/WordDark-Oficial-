@@ -56,6 +56,7 @@ const commercialBridgeTest = read('worddark/runtime/world/core/commercial-order-
 const earthCommercialIntake = read('worddark/runtime/world/core/earth-commercial-intake-adapter.js');
 const earthCommercialIntakeTest = read('worddark/runtime/world/core/earth-commercial-intake-adapter.test.js');
 const terraCommercialCoreIntegrationTest = read('worddark/runtime/world/core/terra-commercial-core.integration.test.js');
+const commercialWorldIntegrationTest = read('worddark/runtime/world/earth/commercial-world.integration.test.js');
 const earthEngine = read('worddark/runtime/world/earth/earth-engine.js');
 const commercialEngine = read('worddark/runtime/world/earth/commercial-engine.js');
 
@@ -122,4 +123,6 @@ assert.ok(earthEngine.includes('linkCommercialLead') && commercialEngine.include
 assert.ok(packageScripts.includes('earth-commercial-intake-adapter.test.js') && readinessAudit.includes('Integração Terra: demanda capturada → lead comercial'), 'Terra demand-to-lead integration must be in the test suite and readiness map');
 assert.ok(terraCommercialCoreIntegrationTest.includes('COMMERCIAL_ORDER_REVIEW_REQUIRED') && terraCommercialCoreIntegrationTest.includes('repeatedDispatch') && terraCommercialCoreIntegrationTest.includes('coreCalls.length, 1'), 'End-to-end Terra/Core test must retain review and duplicate-dispatch safeguards');
 assert.ok(packageScripts.includes('terra-commercial-core.integration.test.js') && readinessAudit.includes('Verificação integrada Terra → Comercial → WordDark Core'), 'End-to-end Terra/Core integration must be tested and documented');
+assert.ok(commercialWorldIntegrationTest.includes('createEarthCommercialIntakeAdapter') && commercialWorldIntegrationTest.includes('center.submit(input)') && commercialWorldIntegrationTest.includes('commercial-world.integration: OK'), 'Commercial-world integration must connect Terra intake to the real test Core/Dark Factory path');
+assert.ok(readinessAudit.includes('Prova integrada Terra → Comercial → Core → Dark Factory') && sectors.includes('Prova integrada Terra → Comercial → Core → Dark Factory'), 'Full Terra-to-Dark-Factory proof and its production limits must remain documented');
 console.log('Architecture alignment tests passed.');
