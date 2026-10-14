@@ -18,7 +18,8 @@ function storage(){
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
   registry.setRuntimeCredential("RESEARCH_API","RESEARCH-001","RESEARCH-CREDENTIAL");
 
-  const gateway=new Gateway({registry});
+  const logs=[];
+  const gateway=new Gateway({registry,logger:{log:(event,metadata)=>logs.push({event,metadata})}});
   const waiting=await gateway.execute({
     requestId:"REQ-EXT-001",operationId:"OP-EXT-001",providerId:"YOUTUBE",accountId:"ACC-001",
     capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-001"}
@@ -28,15 +29,21 @@ function storage(){
   gateway.registerAdapter("YOUTUBE",{execute:async(request,context)=>{
     assert.strictEqual(request.providerId,"YOUTUBE");
     assert.strictEqual(context.credential,"TEST-CREDENTIAL");
-    return{success:true,status:"PUBLISHED",externalId:"YT-001"};
+    return{success:true,status:"PUBLISHED",externalId:"YT-001",access_token:"MUST_NOT_ESCAPE",metadata:{refresh_token:"MUST_NOT_ESCAPE",title:"Safe title"}};
   }});
 
   const done=await gateway.execute({
     requestId:"REQ-EXT-002",operationId:"OP-EXT-002",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-002"}
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-002",client_secret:"NEVER_LOG"}
   });
   assert.strictEqual(done.success,true);
   assert.strictEqual(done.result.status,"PUBLISHED");
+  assert.strictEqual(done.result.access_token,undefined);
+  assert.strictEqual(done.result.metadata.refresh_token,undefined);
+  assert.strictEqual(done.result.metadata.title,"Safe title");
+  assert(!JSON.stringify(logs).includes("TEST-CREDENTIAL"));
+  assert(!JSON.stringify(logs).includes("NEVER_LOG"));
+  assert(!JSON.stringify(logs).includes("MUST_NOT_ESCAPE"));
 
   const researchDenied=await gateway.execute({
     requestId:"REQ-RESEARCH-DENIED",operationId:"OP-RESEARCH-DENIED",providerId:"RESEARCH_API",accountId:"RESEARCH-001",
