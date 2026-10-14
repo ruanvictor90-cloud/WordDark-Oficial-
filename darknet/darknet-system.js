@@ -39,7 +39,8 @@ export function createDarknetSystem(options = {}) {
         transportEnabled: false,
         externalNetworkEnabled: false,
         worldRuntimeEnabled: false,
-        pluginExecutionEnabled: false,\n        worldBridge: worldBridge.getStatus(),
+        pluginExecutionEnabled: false,
+        worldBridge: worldBridge.getStatus(),
         modules: snapshot.modules
       };
     }
