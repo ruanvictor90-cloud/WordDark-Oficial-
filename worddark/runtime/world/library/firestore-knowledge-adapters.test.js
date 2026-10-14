@@ -29,10 +29,13 @@ function createFakeFirestore() {
       }
     };
   }
-  return {
+  const firestore = {
     collection(name) {
       return {
-        doc(id) { return { ...ref(name, id), _collection: name }; },
+        doc(id) {
+          const document = ref(name, id);
+          return { ...document, _collection: name };
+        },
         where(field, operator, expected) {
           assert.equal(operator, "==");
           return query(name, field, expected);
@@ -54,6 +57,7 @@ function createFakeFirestore() {
       });
     }
   };
+  return firestore;
 }
 
 const firestore = createFakeFirestore();
