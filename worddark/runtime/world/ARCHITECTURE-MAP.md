@@ -108,4 +108,6 @@ A composição de produção fica em `darknet/darknet-knowledge-runtime.js`. O a
 
 O runtime também protege revisão, listagem de pendências e busca validada: cada chamada precisa passar por `authenticateService`; leituras exigem autorização e auditoria próprias; revisão exige aprovação. Um objeto enviado pelo navegador com `authenticated: true` não constitui identidade confiável.
 
+**Evidência de integração:** `darknet/darknet-knowledge-runtime.integration.test.js` cobre o caminho completo com gateway, adaptador de pesquisa, identidade simulada, entrada pendente, revisão, arquivo e leitura validada. É uma prova de contrato em teste, não uma chamada real à API nem um teste do projeto Cloud.
+
 **Ainda não é uma ativação oficial.** Falta ligar a identidade/autorização/auditoria reais, registrar os adapters externos reais no gateway com conta e capacidade `KNOWLEDGE_RESEARCH`, configurar IAM/regras das coleções no projeto real e passar por uma execução controlada em staging. Não ativar com callbacks permissivos de teste.
