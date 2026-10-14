@@ -131,6 +131,13 @@ export function createDarknetKnowledgeRuntime(input = {}) {
     return registry.review(recordId, { decision, reason, trustedContext: auth.trustedContext });
   }
 
+  async function recoverStaleReviews({ staleAfterMs = 300000, requestContext = null } = {}) {
+    if (options.enabled !== true) return { success: false, status: "KNOWLEDGE_REGISTRY_DISABLED", recovered: 0 };
+    const auth = await authenticateRequest(requestContext);
+    if (auth.error) return { success: false, status: auth.error, recovered: 0 };
+    return registry.recoverStaleReviews({ staleAfterMs, trustedContext: auth.trustedContext });
+  }
+
   async function readKnowledge(action, requestContext, callback) {
     if (options.enabled !== true) return { success: false, status: "KNOWLEDGE_REGISTRY_DISABLED", records: [] };
     const auth = await authenticateRequest(requestContext);
@@ -174,6 +181,7 @@ export function createDarknetKnowledgeRuntime(input = {}) {
   return Object.freeze({
     learn,
     review,
+    recoverStaleReviews,
     listPending,
     searchValidated,
     getStatus: async () => ({
