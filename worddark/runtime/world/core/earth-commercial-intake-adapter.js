@@ -126,7 +126,7 @@ export function createEarthCommercialIntakeAdapter({
           };
         }
         return { success: true, status: "LEAD_CREATED", linked: true, demandId, leadId };
-      });
+      }, { fingerprint: JSON.stringify({ demandId, need: demand.need, category: demand.category, requesterId: demand.requesterId || null, businessContext: demand.businessContext || null }) });
     } catch (error) {
       return deny(error?.code === "IDEMPOTENCY_CONFLICT"
         ? "EARTH_COMMERCIAL_INTAKE_IDEMPOTENCY_CONFLICT"
