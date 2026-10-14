@@ -15,7 +15,7 @@ export function inspectRuanHubControlReadiness(options = {}) {
   if (!fn(options.authorizeRequest)) missing.push("HUB_OPERATION_AUTHORIZATION");
   if (!fn(options.audit)) missing.push("PERSISTENT_AUDIT");
   if (options.audit?.durable !== true) missing.push("DURABLE_AUDIT_STORE");
-  if (!options.idempotencyStore || fn(options.idempotencyStore.executeOnce) === false || !fn(options.idempotencyStore.executeOnce)) missing.push("ATOMIC_IDEMPOTENCY_STORE");
+  if (!options.idempotencyStore || !fn(options.idempotencyStore.executeOnce)) missing.push("ATOMIC_IDEMPOTENCY_STORE");
   if (options.idempotencyStore?.durable !== true || options.idempotencyStore?.atomic !== true) missing.push("DURABLE_ATOMIC_IDEMPOTENCY");
   return Object.freeze({
     ready: missing.length === 0,
