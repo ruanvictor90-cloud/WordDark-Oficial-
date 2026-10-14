@@ -11,6 +11,7 @@ const ESM_FILES = new Set([
   "worddark/runtime/world/core/connections/knowledge-search-adapter.js",
   "worddark/runtime/world/core/connections/darknet-knowledge-adapter.js",
   "worddark/runtime/world/core/connections/ruan-hub-control-runtime.js",
+  "worddark/runtime/world/core/connections/ruan-hub-control-adapter.js",
   "worddark/runtime/world/library/durable-knowledge-repository.js",
   "worddark/runtime/world/library/durable-knowledge-intake-registry.js",
   "worddark/runtime/world/library/firestore-knowledge-adapters.js",
