@@ -53,7 +53,7 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
     try{await audit({event:accepted?"RUAN_HUB_OPERATION_SUBMITTED":"RUAN_HUB_OPERATION_REJECTED",actorId,sessionId,requestId,action,approvalId:decision.approvalId,operationId:response.operationId,status:response.status});}
     catch{return deny("HUB_CONTROL_RESULT_AUDIT_UNAVAILABLE");}
     return response;
-   });
+   }, { fingerprint: JSON.stringify({ action, need, intent: String(request.intent || need).trim(), actorId, approvalId: decision.approvalId || null }) });
   }catch(error){return deny(error?.code==="IDEMPOTENCY_CONFLICT"?"HUB_CONTROL_IDEMPOTENCY_CONFLICT":"HUB_CONTROL_IDEMPOTENCY_FAILED");}
  }
  return Object.freeze({handle,getStatus:()=>({enabled:enabled===true,transport:"injected",supportedActions:[...ALLOWED_ACTIONS],httpRoute:false,externalNetwork:false,environment:"TEST",requiresTrustedIdentity:true,requiresPersistentAudit:true,requiresAtomicIdempotency:true})});
