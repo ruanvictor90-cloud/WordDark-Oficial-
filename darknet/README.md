@@ -36,3 +36,17 @@ A porta usa comunicação in-process injetada, não HTTP nem rede. Os dois lados
 3. Criar uma porta de integração backend (sem endpoint público nesta etapa) que injete o WordDark Core e o adaptador.
 4. Integrar capacidades e respostas por contratos versionados; tratar timeouts, idempotência e correlação de operações.
 5. Somente depois validar a ponte em ambiente de teste; manter rede externa e execução de plugins desligadas até revisão explícita.
+
+
+## Recepção e aprendizagem de conteúdo
+
+O pipeline `darknet-knowledge-pipeline.js` é a porta de aquisição: usa adaptadores de provedores injetados, valida origem HTTPS, declaração de direitos, tamanho e proveniência, e encaminha os registros ao WordDark. A Darknet não guarda tokens de provedores e não abre conexões de rede por conta própria.
+
+- O provedor externo é fornecido pela Central de Conexões por meio de um adaptador `search({ query, limit })`.
+- A transferência exige identidade autenticada confiável, autorização e auditoria.
+- A entrada WordDark fica em `worddark/runtime/world/core/connections/darknet-knowledge-adapter.js` e exige um registro de conhecimento pendente, identidade de serviço e um registro de destino injetado.
+- Todo conteúdo chega com estado `RECEIVED_PENDING_REVIEW`; não é promovido automaticamente à Biblioteca Central nem usado como verdade validada.
+- Duplicatas são evitadas dentro da instância atual. Para operação oficial, a chave idempotente deve ser persistida atomicamente no backend.
+- O pipeline e a entrada WordDark continuam desligados por padrão; não há rota HTTP nem chamada de API externa ativada por esta alteração.
+
+A interface do provedor está pronta para receber os adapters existentes, mas cada API só pode ser considerada conectada quando seu adapter real estiver registrado no runtime, com credenciais guardadas na Central de Conexões e testes de integração passando.
