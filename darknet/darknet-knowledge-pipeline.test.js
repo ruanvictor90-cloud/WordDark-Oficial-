@@ -8,7 +8,7 @@ const pipeline = createDarknetKnowledgePipeline({
   providers: [{ id: "public-search", search: async ({ query, limit }) => {
     calls++;
     assert.equal(query, "workflow automation");
-    assert.equal(limit, 2);
+    assert.equal(limit, 3);
     return [
       { id: "src-1", url: "https://example.org/a", title: "Public guide", content: "A useful guide.", rights: "PUBLIC", tags: ["guide"] },
       { id: "src-2", url: "http://unsafe.example/b", title: "Unsafe source", content: "Reject this.", rights: "PUBLIC" },
@@ -21,7 +21,7 @@ const pipeline = createDarknetKnowledgePipeline({
 });
 assert.deepEqual(pipeline.listProviders(), ["public-search"]);
 const trustedContext = { authenticated: true, actorId: "darknet-service", sessionId: "session-1" };
-assert.equal((await pipeline.learn({ providerId: "public-search", query: "workflow automation", principal: "operator", trustedContext, limit: 2 })).received, 1);
+assert.equal((await pipeline.learn({ providerId: "public-search", query: "workflow automation", principal: "operator", trustedContext, limit: 3 })).received, 1);
 assert.equal(calls, 1);
 assert.equal(received[0].status, "RECEIVED_PENDING_REVIEW");
 assert.equal(received[0].promotedToKnowledge, false);
@@ -29,6 +29,8 @@ assert.equal(received[0].rights, "PUBLIC");
 assert.equal(received[0].content, "A useful guide.");
 assert.equal(received[0].provenance.providerId, "public-search");
 assert.equal(audits, 2);
+const noLicense = await pipeline.learn({ providerId: "public-search", query: "workflow automation", trustedContext, limit: 3 });
+assert.equal(noLicense.rejected, 2);
 assert.equal((await pipeline.learn({ providerId: "missing", query: "x", trustedContext })).status, "KNOWLEDGE_PROVIDER_UNAVAILABLE");
 assert.equal((await pipeline.learn({ providerId: "public-search", query: "x" })).status, "KNOWLEDGE_TRUSTED_IDENTITY_REQUIRED");
 const disabled = createDarknetKnowledgePipeline();
