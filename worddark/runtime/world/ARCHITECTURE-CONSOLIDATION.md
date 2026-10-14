@@ -10,7 +10,7 @@ Cada sistema possui uma responsabilidade e uma fronteira de dados. A existência
 
 - É um aplicativo próprio, privado e separado.
 - É a raiz pessoal de navegação e o proprietário lógico do Hub.
-- Guarda os dados pessoais e oferece os aplicativos pessoais, incluindo Pessoal (Financeiro e Tarefas) e Shadow.
+- Guarda os dados pessoais e oferece Entretenimento (player incorporado a fontes autorizadas), Pessoal (Financeiro e Tarefas) e Shadow.
 - O financeiro do Ruan organiza registros pessoais. Não é a instituição financeira do WordDark, não movimenta dinheiro real e não concede ao WordDark acesso aos dados pessoais.
 - O WordDark não pode alterar a autoridade, os dados ou as regras internas do Ruan.
 - A Área ADM não faz parte da interface atual do Ruan.
