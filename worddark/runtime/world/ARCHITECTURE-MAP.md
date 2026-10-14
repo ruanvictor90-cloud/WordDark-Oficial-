@@ -99,7 +99,7 @@ flowchart LR
     LIB --> SKY["Céu / capacidades"]
 ```
 
-O pipeline está implementado como contrato de integração e usa adaptadores de provedores injetados. `darknet/darknet-central-connection-provider.js` encaminha pesquisas ao gateway da Central de Conexões usando uma conta e capacidade já autorizadas, sem expor credenciais à Darknet. Ele não ativa por si só uma API externa. A entrada WordDark também permanece desligada por padrão, exige identidade confiável e recebe conteúdo como pendente de revisão. Antes da operação oficial faltam conectar os adapters reais já disponíveis, injetar uma sessão de serviço autenticada, ligar armazenamento durável e idempotência, e testar a cadeia completa em staging.
+O pipeline está implementado como contrato de integração e usa adaptadores de provedores injetados. `darknet/darknet-central-connection-provider.js` encaminha pesquisas ao gateway da Central de Conexões usando uma conta e capacidade já autorizadas, sem expor credenciais à Darknet. Ele não ativa por si só uma API externa. A entrada WordDark também permanece desligada por padrão, exige identidade confiável e recebe conteúdo como pendente de revisão. A infraestrutura de persistência durável e idempotência agora tem adapters Firestore; ainda faltam conectar os adapters reais já disponíveis ao gateway, injetar identidade/autorização/auditoria reais, configurar IAM e validar a cadeia completa em staging.
 
 
 ## Preparação operacional de conhecimento
