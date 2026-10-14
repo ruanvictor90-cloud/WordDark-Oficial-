@@ -18,6 +18,12 @@ assert.equal(status.pluginExecutionEnabled, false);
 assert.equal(status.knowledge.enabled, false);
 assert.equal(status.knowledge.providerCount, 0);
 assert.equal(system.knowledge.getStatus().networkAccess, false);
+const wired = createDarknetSystem({
+  externalConnectionGateway: { execute: async () => ({ success: true, result: { results: [] } }) },
+  knowledgeConnections: [{ providerId: "research-api", accountId: "acct-1", capability: "KNOWLEDGE_RESEARCH" }]
+});
+assert.deepEqual(wired.knowledge.listProviders(), ["research-api"]);
+assert.equal(wired.knowledge.getStatus().enabled, false, "provider registration must not enable external calls");
 assert.equal(status.modules.length, 4);
 assert.equal(system.connections.listConnectors().length, 2);
 
