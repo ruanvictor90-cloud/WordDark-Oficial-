@@ -100,3 +100,12 @@ flowchart LR
 ```
 
 O pipeline está implementado como contrato de integração e usa adaptadores de provedores injetados. `darknet/darknet-central-connection-provider.js` encaminha pesquisas ao gateway da Central de Conexões usando uma conta e capacidade já autorizadas, sem expor credenciais à Darknet. Ele não ativa por si só uma API externa. A entrada WordDark também permanece desligada por padrão, exige identidade confiável e recebe conteúdo como pendente de revisão. Antes da operação oficial faltam conectar os adapters reais já disponíveis, injetar uma sessão de serviço autenticada, ligar armazenamento durável e idempotência, e testar a cadeia completa em staging.
+
+
+## Preparação operacional de conhecimento
+
+A composição de produção fica em `darknet/darknet-knowledge-runtime.js`. Ela pode receber a instância Firestore já criada no backend e construir os adapters duráveis usando as coleções `worddarkKnowledgeIntake` e `worddarkCentralLibrary`. O arquivo canônico recebe apenas registros de conhecimento validados e usa ID determinístico para evitar duplicação em novas tentativas.
+
+O runtime também protege revisão, listagem de pendências e busca validada: cada chamada precisa passar por `authenticateService`; leituras exigem autorização e auditoria próprias; revisão exige aprovação. Um objeto enviado pelo navegador com `authenticated: true` não constitui identidade confiável.
+
+**Ainda não é uma ativação oficial.** Falta ligar a identidade/autorização/auditoria reais, registrar os adapters externos reais no gateway com conta e capacidade `KNOWLEDGE_RESEARCH`, configurar IAM/regras das coleções no projeto real e passar por uma execução controlada em staging. Não ativar com callbacks permissivos de teste.
