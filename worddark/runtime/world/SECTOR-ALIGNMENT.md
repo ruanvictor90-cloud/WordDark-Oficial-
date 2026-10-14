@@ -238,6 +238,6 @@ O teste `darknet/darknet-knowledge-server-composition.test.js` cobre a composiç
 
 ## Integração Terra comercial → Core
 
-O motor comercial da Terra continua responsável por leads, propostas, aceite do cliente e pedidos. O novo adaptador `core/commercial-order-operation-bridge.js` encaminha apenas pedidos `ORDER_OPEN` após autenticação do operador, autorização e aprovação explícita. Ele chama o Centro de Operações canônico e exige um `operationId` rastreável antes de atualizar o pedido para `PLANNED`.
+O motor comercial da Terra continua responsável por leads, propostas, aceite do cliente e pedidos. O novo adaptador `core/commercial-order-operation-bridge.js` encaminha apenas pedidos `ORDER_OPEN` após autenticação do operador, autorização e aprovação explícita. Ele chama o Centro de Operações canônico e exige um `operationId` rastreável antes de sincronizar o estado comercial com o Core: `PLANNED` para aceito, `IN_PROGRESS` durante execução e `REVIEW` quando a operação interna conclui. A conclusão interna não pula revisão nem entrega humana.
 
 O adaptador fica desligado por padrão e usa ambiente `TEST`. A cobertura automatizada usa dependências simuladas e verifica negações, aprovação ausente, rejeição, idempotência e sincronização. Isso fecha uma lacuna de contrato entre o pedido comercial e o Core; não comprova identidade, auditoria, idempotência ou execução em nuvem reais. O pedido comercial aceito pelo cliente não substitui a autorização interna do operador para despachar a execução.
