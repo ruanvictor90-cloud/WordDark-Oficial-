@@ -137,3 +137,16 @@ Essa prova inclui a entrada de demanda e o despacho comercial na mesma cadeia de
 ## Atualização da matriz após CI — 14/10/2026
 
 A última bateria do CI passou para a integração de código Terra → Comercial → Core → Dark Factory e para a bateria de segurança de runtime. A aprovação refere-se ao ambiente de teste e a dependências simuladas de identidade, autorização, auditoria e idempotência. Não equivale a deploy, backend compartilhado ativo, validação de credenciais reais nem autorização para publicação ou cobrança automáticas.
+
+## Endurecimento financeiro do Darkbank — 14/10/2026
+
+A tela financeira continua sendo um registro local de apoio operacional, não um livro contábil persistente de produção. Nesta etapa, foi corrigida uma regra de segurança de cálculo:
+
+- Um pedido com custo de produto ausente/zero é marcado como `PROVISIONAL_COSTS_INCOMPLETE`.
+- O pagamento pode ser registrado após confirmação humana, mas o resultado desse pedido não entra no total de resultado estimado com custos completos.
+- Nenhuma parcela desse pedido é destinada ao Cofre enquanto os custos estiverem incompletos.
+- O Cofre ignora alocações históricas de eventos marcados com custos incompletos na soma exibida.
+- A interface separa **Resultado estimado** de **Resultado provisório** e pede revisão dos custos.
+- Mesmo quando os custos estão informados, o resultado continua estimado porque a alíquota tributária é uma estimativa e podem existir custos/obrigações não registrados.
+
+Testes de script e alinhamento arquitetural protegem essas regras. Isso reduz a chance de tratar faturamento ou margem incompleta como dinheiro disponível para reinvestimento, mas não substitui conciliação bancária, contabilidade, persistência de servidor nem apuração fiscal.
