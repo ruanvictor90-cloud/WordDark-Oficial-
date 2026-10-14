@@ -36,7 +36,7 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
     }
     if(typeof operationCenter?.submit!=="function")return deny("HUB_CONTROL_OPERATION_CENTER_UNAVAILABLE");
     let result;
-    try{result=operationCenter.submit({type:"OPERATION",need,intent:request.intent||need,requesterId:actorId,originId:"ruan-hub",environment:"TEST",context:{hubRequestId:requestId,source:"RUAN_HUB",approvalId:decision.approvalId}});}
+    try{result=operationCenter.submit({text:need,goal:need,intent:request.intent||need,requesterId:actorId,originId:"ruan-hub",environment:"TEST",context:{hubRequestId:requestId,source:"RUAN_HUB",approvalId:decision.approvalId}});}
     catch{return deny("HUB_CONTROL_SUBMISSION_FAILED");}
     const accepted=result?.success===true;
     const response={success:accepted,status:accepted?(result.status||"OPERATION_ACCEPTED"):(result.status||"OPERATION_REJECTED"),requestId,operationId:result.operationId||result.meta?.operationId||null,result,worldAccepted:accepted,environment:"TEST"};
