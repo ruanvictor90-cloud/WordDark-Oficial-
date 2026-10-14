@@ -82,7 +82,7 @@ npm test
 
 ## Persistência durável e prontidão do runtime
 
-- `worddark/runtime/world/library/firestore-knowledge-adapters.js` oferece adapters transacionais para a coleção de entrada e para o arquivo canônico do WordDark. O módulo recebe uma instância Firestore criada pelo backend confiável; não inicializa credenciais nem acessa o navegador.
+- `worddark/runtime/world/core/connections/knowledge-search-adapter.js` padroniza as ações `SEARCH_KNOWLEDGE` e `FETCH_KNOWLEDGE` para cada API já configurada, sem implementar uma chamada de rede genérica. Registre o handler real com `registerKnowledgeSearchAdapter` no gateway e mantenha credenciais dentro da Central de Conexões.\n- `worddark/runtime/world/library/firestore-knowledge-adapters.js` oferece adapters transacionais para a coleção de entrada e para o arquivo canônico do WordDark. O módulo recebe uma instância Firestore criada pelo backend confiável; não inicializa credenciais nem acessa o navegador.
 - `darknet/darknet-knowledge-runtime.js` monta os adapters, o registro durável, a ponte com a Central de Conexões e os controles de leitura/revisão.
 - O runtime recusa `enabled: true` quando faltar gateway, adapter registrado, conta/capacidade, repositório atômico, autenticação de serviço, autorização, auditoria ou arquivo canônico durável/idempotente.
 - `learn`, `review`, `listPending` e `searchValidated` recebem `requestContext`, mas nunca confiam em `actorId` ou `authenticated` enviados pelo navegador. A função `authenticateService` do backend precisa validar a sessão/token e devolver a identidade confiável.
