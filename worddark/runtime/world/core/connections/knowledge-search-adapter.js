@@ -4,6 +4,7 @@
  */
 const clean = value => String(value ?? "").trim();
 const MAX_RESULTS = 25;
+const RIGHTS = new Set(["PUBLIC", "LICENSED", "USER_PROVIDED"]);
 
 function normalizeSource(row = {}, now = () => new Date().toISOString()) {
   if (!row || typeof row !== "object" || Array.isArray(row)) return null;
@@ -59,6 +60,9 @@ export function createKnowledgeSearchAdapter({
       catch { return { success: false, status: "KNOWLEDGE_PROVIDER_FETCH_FAILED" }; }
       const row = normalizeSource(response, now);
       if (!row) return { success: false, status: "KNOWLEDGE_PROVIDER_RESPONSE_INVALID" };
+      if (!row.sourceId || !/^https:\/\//i.test(row.url) || !row.title || !row.content || !RIGHTS.has(row.rights) || (row.rights === "LICENSED" && !row.license)) {
+        return { success: false, status: "KNOWLEDGE_SOURCE_METADATA_INVALID" };
+      }
       return { success: true, status: "KNOWLEDGE_FETCH_COMPLETED", result: row };
     }
     return { success: false, status: "KNOWLEDGE_ACTION_UNSUPPORTED" };
