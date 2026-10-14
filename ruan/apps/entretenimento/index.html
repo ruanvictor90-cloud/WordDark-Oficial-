@@ -23,7 +23,7 @@
 <p class="notice">O catálogo é atualizado pela API pública do Jikan/MyAnimeList. A disponibilidade para assistir varia conforme o país e os direitos de cada obra. O botão “Onde assistir” ajuda a localizar opções oficiais; não hospedamos episódios.</p>
 </section>
 <section id="other-view" class="hidden"><div class="hero"><div class="eyebrow">Em preparação</div><h1 id="other-title">Games</h1><p id="other-copy">Essa área será conectada por etapas, sem encher o Ruan de funções que ainda não estão prontas.</p></div><button class="btn" id="back-categories">Voltar às categorias</button></section>
-<footer class="bottom"><a href="../../index.html">← Voltar ao Ruan</a><span>RUAN · ENTRETENIMENTO</span></footer>
+<footer class="bottom"><a href="../../index.html?from=entretenimento">← Voltar ao Ruan</a><span>RUAN · ENTRETENIMENTO</span></footer>
 </main>
 <script>
 (()=>{"use strict";const $=id=>document.getElementById(id);let view="home",feed="season",query="",requestId=0,debounce;
@@ -37,6 +37,6 @@ function loadFeed(which){feed=which;query="";$("search").value="";document.query
 document.querySelectorAll("[data-category]").forEach(b=>b.addEventListener("click",()=>{if(b.dataset.category==="anime"){show("anime")}else{$("other-title").textContent=b.querySelector("strong").textContent;$("other-copy").textContent=b.dataset.category==="games"?"A área de jogos será organizada em jogos clássicos, experiências de história e cloud gaming, conforme houver fontes disponíveis.":"Esta categoria será preenchida com catálogos e fontes autorizadas, mantendo a navegação dentro do Ruan.";show("other")}}));
 document.querySelectorAll("[data-feed]").forEach(b=>b.addEventListener("click",()=>loadFeed(b.dataset.feed)));
 $("search").addEventListener("input",()=>{clearTimeout(debounce);query=$("search").value.trim();debounce=setTimeout(()=>{if(query.length>=2){$("feed-title").textContent="Resultados para “"+query+"”";render("anime?q="+encodeURIComponent(query)+"&limit=24&sfw=true")}else if(!query){loadFeed(feed)}},450)});
-$("back-categories").addEventListener("click",()=>show("home"));$("back").addEventListener("click",()=>{if(view!=="home"){show("home")}else if(history.length>1){history.back()}else{location.href="../../index.html"}});show("home");
+$("back-categories").addEventListener("click",()=>show("home"));$("back").addEventListener("click",()=>{if(view!=="home"){show("home")}else{location.replace("../../index.html?from=entretenimento")}});show("home");
 })();
 </script></body></html>
