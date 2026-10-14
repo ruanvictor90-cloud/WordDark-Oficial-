@@ -34,6 +34,12 @@ Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE
 - Recursos internos do WordDark não são fundos pessoais do Ruan.
 - A interface e os registros atuais não constituem serviço bancário real nem comprovam transações ou investimentos executados.
 
+## Próxima fase comercial
+
+- [Alinhamento integral do mundo e limites da integração](worddark/runtime/world/WORLD-ALIGNMENT-NEXT-PHASE.md).
+- [Roteiro prático da primeira venda](COMMERCIAL-FIRST-SALE.md).
+- Livro-caixa manual de teste: `worddark/runtime/world/earth/commercial-ledger.js` (não verifica bancos nem substitui persistência durável).
+
 ## Fontes canônicas do runtime
 
 - Ruan: `ruan/`
