@@ -5,7 +5,8 @@ let calls = 0, audits = 0;
 const received = [];
 const pipeline = createDarknetKnowledgePipeline({
   enabled: true,
-  providers: [{ id: "public-search", search: async ({ query, limit }) => {
+  providers: [{ id: "public-search", search: async ({ query, limit, trustedContext: providerContext }) => {
+    assert.deepEqual(providerContext, trustedContext);
     calls++;
     assert.equal(query, "workflow automation");
     assert.equal(limit, 3);
