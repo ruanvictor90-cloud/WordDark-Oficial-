@@ -17,7 +17,7 @@ const repository = {
     return true;
   },
   async listByStatus(status, { limit = 100 } = {}) {
-    return [...records.values()].filter(x => x.status === status).slice(0, limit).map(structuredClone);
+    return [...records.values()].filter(x => x.status === status).slice(0, limit).map(x => structuredClone(x));
   },
   async searchValidated(query, { limit = 10 } = {}) {
     const q = String(query || "").toLowerCase();
