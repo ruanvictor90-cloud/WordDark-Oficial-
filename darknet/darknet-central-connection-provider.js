@@ -9,7 +9,7 @@ export function createCentralConnectionKnowledgeProvider({
   providerId,
   accountId,
   capability,
-  action = "KNOWLEDGE_SEARCH",
+  action = "SEARCH_KNOWLEDGE",
   operationIdFactory = () => "DNET-RESEARCH-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).slice(2, 8).toUpperCase()
 } = {}) {
   const provider = clean(providerId).toUpperCase();
