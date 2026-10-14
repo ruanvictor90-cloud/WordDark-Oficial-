@@ -71,7 +71,7 @@ assert.ok(durableKnowledgeRepository.includes('DURABLE_ATOMIC_KNOWLEDGE_BACKEND_
 assert.ok(durableKnowledgeRegistry.includes('KNOWLEDGE_REVIEW_CONFLICT') && durableKnowledgeRegistry.includes('DUPLICATE_SKIPPED'));
 assert.ok(knowledgeRuntime.includes('DARKNET_KNOWLEDGE_RUNTIME_NOT_READY') && knowledgeRuntime.includes('DURABLE_CANONICAL_KNOWLEDGE_ARCHIVE'));
 assert.ok(firestoreKnowledgeAdapters.includes('runTransaction') && firestoreKnowledgeAdapters.includes('idempotent: true'));
-assert.ok(firestoreKnowledgeTests.includes('insertIfAbsent') && firestoreKnowledgeTests.includes('DUPLICATE') === false, 'Firestore adapter tests must cover durable insert and archive idempotency');
+assert.ok(firestoreKnowledgeTests.includes('insertIfAbsent') && firestoreKnowledgeTests.includes('inserted, false') && firestoreKnowledgeTests.includes('central.idempotent'), 'Firestore adapter tests must cover durable insert and archive idempotency');
 assert.ok(knowledgeRuntime.includes('KNOWLEDGE_READ_AUTHORIZATION') && knowledgeRuntime.includes('authenticateRequest'), 'Knowledge review and retrieval must be gated by trusted backend identity');
 assert.ok(capabilityCatalog.includes('KNOWLEDGE_RESEARCH') && capabilityCatalog.includes('SEARCH_KNOWLEDGE'));
 console.log('Architecture alignment tests passed.');
