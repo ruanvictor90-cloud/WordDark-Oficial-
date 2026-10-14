@@ -2,7 +2,7 @@
 
 **Data:** 14/10/2026  
 **Base de trabalho:** branch `feature/darknet-foundation`, associada à PR #104.  
-**Estado:** plano de alinhamento + módulo inicial de livro-caixa; não significa merge, publicação ou operação comercial automática.
+**Estado:** alinhamento arquitetural, livro-caixa manual e orquestrador do primeiro ciclo comercial; não significa merge, publicação ou operação comercial automática.
 
 ## Regra central
 
