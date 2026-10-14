@@ -55,6 +55,13 @@ O módulo `youtube-publisher.js` prepara o envio server-side de vídeo pelo flux
 - Testes de composição verificam que operações negadas ou sem conexão não alcançam o adaptador, e que o resultado é registrado após a tentativa.
 - Ainda não existe rota HTTP que exponha esse runtime, nem provedores concretos de autenticação/aprovação já ligados a uma identidade real. A publicação permanece indisponível por endpoint e manual por padrão.
 
+### Concessão/revogação de capacidades — serviço backend preparado
+
+- `capability-grant-service.js` administra inicialmente apenas `CONTENT_PUBLICATION` para contas YouTube persistidas; não existe endpoint HTTP e o serviço não é importado pelo servidor público.
+- Para conceder ou revogar, exige identidade confiável de operador, permissão específica para a ação, aprovação cujo identificador corresponda à referência solicitada, conta persistida, chave de idempotência e auditoria prévia. A concessão de publicação também exige o escopo OAuth `youtube.upload`.
+- `connection-store.js` altera a lista de capacidades por transação Firestore. Uma conexão OAuth recém-salva continua com `capabilities: []`; o escopo OAuth sozinho não concede autorização operacional.
+- `capability-grant-service.test.js` cobre concessão, revogação, repetição, escopo ausente, conexão ausente, permissão negada, aprovação inválida e falha de auditoria. São testes simulados; autenticação/aprovação reais, IAM e concorrência no Firestore ainda precisam de validação de ambiente.
+
 **Permanece deliberadamente inativo:** o servidor HTTP não expõe rota de publicação e não importa `publication-runtime.js`. Antes de ligá-lo, precisamos integrar autenticação de operador confiável, aprovação operacional real, autorização de conta/capacidade, limites duráveis e controles de auditoria com as políticas do ambiente implantado. Os bytes do vídeo devem chegar por um caminho confiável do backend; não aceitar URL arbitrária fornecida pelo cliente para evitar SSRF.
 
 ## Ainda pendente antes de produção
