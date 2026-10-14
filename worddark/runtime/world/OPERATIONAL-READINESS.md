@@ -112,3 +112,16 @@ Foi criado `core/earth-commercial-intake-adapter.js` para encaminhar uma demanda
 - Testes cobrem modo desligado, autorização negada, identidade ausente, preservação de origem/contexto e repetição idempotente.
 
 **Limite:** os testes usam dependências simuladas. A ligação com identidade, auditoria e idempotência duráveis reais continua pendente; este contrato não deve ser ativado em produção sem backend confiável e staging.
+
+
+## Verificação integrada Terra → Comercial → WordDark Core
+
+O teste core/terra-commercial-core.integration.test.js exercita a cadeia de contrato: demanda capturada → lead rastreável → qualificação → proposta → aceite → pedido comercial → autorização explícita → despacho ao Centro de Operações → revisão humana. Ele combina os dois adapters de fronteira e usa um Centro de Operações simulado para isolar a integração comercial.
+
+- A origem sourceDemandId e o contexto comercial são preservados.
+- O pedido só é despachado após o aceite comercial e uma aprovação interna identificável.
+- A conclusão interna do Core move o pedido para REVIEW, sem declarar que o cliente recebeu a entrega.
+- A repetição da mesma demanda/pedido não cria lead nem despacho duplicado no cenário de teste.
+- Pagamento e execução externa permanecem desativados.
+
+Este teste comprova a colaboração dos contratos entre Terra e Core com dependências simuladas; não é uma prova de identidade, auditoria ou idempotência duráveis reais, nem substitui o teste separado da operação Core → Dark Factory. A integração só deve ser ativada em backend depois da validação de staging.
