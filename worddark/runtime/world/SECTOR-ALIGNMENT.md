@@ -212,7 +212,7 @@ Um bloco só passa de **preparado** para **integrado** quando seu contrato é co
 
 Foi adicionado `core/connections/persisted-knowledge-gateway.js` como gateway exclusivo de backend para pesquisa de conhecimento. Diferentemente do gateway legado/local usado em testes de interface, ele lê metadados e tokens pelo `connectionStore` persistido, exige identidade de serviço, autorização e auditoria, permite apenas `SEARCH_KNOWLEDGE` e `FETCH_KNOWLEDGE`, e filtra campos sensíveis da resposta. O pipeline agora encaminha o contexto confiável gerado pelo runtime ao provedor sem colocá-lo no payload de pesquisa.
 
-**Situação:** contrato e teste de isolamento de segredos implementados; ativação continua desligada por padrão. Ainda dependem de configuração de backend: autenticação real, política de autorização, auditoria durável, concessão explícita de `KNOWLEDGE_RESEARCH` à conta persistida, handlers reais dos provedores, IAM/KMS/Firestore e teste em staging. Isso não ativa pesquisas externas nem publicação.
+**Situação:** contrato, teste de isolamento de segredos e teste integrado gateway persistido → intake → revisão → arquivo → busca validada adicionados; ativação continua desligada por padrão. Ainda dependem de configuração de backend: autenticação real, política de autorização, auditoria durável, concessão explícita de `KNOWLEDGE_RESEARCH` à conta persistida, handlers reais dos provedores, IAM/KMS/Firestore e teste em staging. Isso não ativa pesquisas externas nem publicação.
 
 
 ## 11. Composição de controle do Hub → Core
