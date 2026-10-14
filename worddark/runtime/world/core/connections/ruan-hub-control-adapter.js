@@ -28,7 +28,7 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
   }
   if(action==="REQUEST_STATUS"){
    if(typeof operationCenter?.getStatus!=="function")return deny("HUB_CONTROL_STATUS_UNAVAILABLE");
-   try{return{success:true,status:"WORDDARK_STATUS",requestId,world:operationCenter.getStatus(),worldAccepted:false};}
+   try{const raw=operationCenter.getStatus()||{};const world={};for(const key of ["status","environment","activeOperations","queuedOperations","failedOperations","updatedAt","timestamp"])if(["string","number","boolean"].includes(typeof raw[key]))world[key]=raw[key];return{success:true,status:"WORDDARK_STATUS",requestId,world,worldAccepted:false};}
    catch{return deny("HUB_CONTROL_STATUS_UNAVAILABLE");}
   }
   if(action==="LIST_OPERATIONS"){
@@ -47,7 +47,9 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
     try{result=operationCenter.submit({text:need,goal:need,intent:request.intent||need,requesterId:actorId,originId:"ruan-hub",environment:"TEST",context:{hubRequestId:requestId,source:"RUAN_HUB",approvalId:decision.approvalId}});}
     catch{return deny("HUB_CONTROL_SUBMISSION_FAILED");}
     const accepted=result?.success===true;
-    const response={success:accepted,status:accepted?(result.status||"OPERATION_ACCEPTED"):(result.status||"OPERATION_REJECTED"),requestId,operationId:result.operationId||result.meta?.operationId||null,result,worldAccepted:accepted,environment:"TEST"};
+    const responseStatus=accepted?(result.status||"OPERATION_ACCEPTED"):(result.status||"OPERATION_REJECTED");
+    const operationId=result.operationId||result.meta?.operationId||null;
+    const response={success:accepted,status:responseStatus,requestId,operationId,result:{success:accepted,status:responseStatus,operationId},worldAccepted:accepted,environment:"TEST"};
     try{await audit({event:accepted?"RUAN_HUB_OPERATION_SUBMITTED":"RUAN_HUB_OPERATION_REJECTED",actorId,sessionId,requestId,action,approvalId:decision.approvalId,operationId:response.operationId,status:response.status});}
     catch{return deny("HUB_CONTROL_RESULT_AUDIT_UNAVAILABLE");}
     return response;
