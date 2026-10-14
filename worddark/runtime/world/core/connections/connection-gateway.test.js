@@ -94,7 +94,7 @@ function storage(){
   });
   const automaticPublish=await automaticGateway.execute({
     requestId:"REQ-PUBLISH-AUTO",operationId:"OP-PUBLISH-AUTO",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-AUTO"}
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",environment:"PROD",payload:{contentId:"CONTENT-AUTO"}
   });
   assert.strictEqual(automaticPublish.status,"PUBLISH_STUB_ACCEPTED","explicit server authorization can enable the prepared publication path");
   assert.strictEqual(realCalls,2,"only the explicit opt-in publication policy should reach the provider adapter");
@@ -109,14 +109,14 @@ function storage(){
   const sourcePayload={nested:{value:"original"}};
   const request=new ExternalRequest({
     requestId:"REQ-CLONE",operationId:"OP-CLONE",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:sourcePayload
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:sourcePayload
   });
   sourcePayload.nested.value="mutated";
   assert.strictEqual(request.payload.nested.value,"original","Request must clone input payload");
   const json=request.toJSON();
   json.payload.nested.value="mutated-again";
   assert.strictEqual(request.payload.nested.value,"original","toJSON must not leak mutable payload references");
-  assert.strictEqual(new ExternalRequest({requestId:"BAD-ENV",operationId:"BAD-ENV",providerId:"YOUTUBE",accountId:"ACC-001",capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",environment:"PRODUCTION"}).validate().valid,false);
+  assert.strictEqual(new ExternalRequest({requestId:"BAD-ENV",operationId:"BAD-ENV",providerId:"YOUTUBE",accountId:"ACC-001",capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",environment:"PRODUCTION"}).validate().valid,false);
 
   registry.disconnect("YOUTUBE","ACC-001");
   const disconnected=await gateway.execute({
