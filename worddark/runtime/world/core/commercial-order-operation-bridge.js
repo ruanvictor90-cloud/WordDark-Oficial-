@@ -149,7 +149,7 @@ export function createCommercialOrderOperationBridge({
               status: clean(coreResult?.status) || "CORE_REJECTED"
             });
           } catch {}
-          return { ...deny("COMMERCIAL_CORE_REJECTED"), coreStatus: clean(coreResult?.status) || "UNKNOWN" };
+          return { ...deny("COMMERCIAL_CORE_REJECTED"), coreStatus: clean(coreResult?.status) || "UNKNOWN", coreErrors: Array.isArray(coreResult?.errors) ? coreResult.errors.slice(0, 5).map(value => clean(value).slice(0, 240)) : [] };
         }
 
         const operationId = clean(coreResult.operationId || coreResult.meta?.operationId ||
