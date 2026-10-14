@@ -76,3 +76,24 @@ Automatizar somente uma etapa repetitiva depois de observar entregas reais. A de
 - controles humanos que permanecem obrigatórios.
 
 Assinaturas, propostas automáticas, publicação, pagamentos e movimentações financeiras ficam fora do primeiro ciclo. A primeira meta é provar uma entrega pequena, paga, repetível e rentável; depois o código deve automatizar o que foi comprovado na operação.
+
+
+## Estado técnico do primeiro ciclo comercial — 14/10/2026
+
+A integração de contrato para o primeiro ciclo agora tem testes automatizados que percorrem:
+
+1. demanda capturada na Terra;
+2. criação de lead comercial com origem e contexto preservados;
+3. qualificação e proposta;
+4. aceite do cliente e abertura do pedido;
+5. autenticação do operador, autorização e aprovação interna;
+6. despacho ao Centro de Operações do Core;
+7. passagem pela Rodovia e Dark Factory no teste integrado;
+8. retorno com ID rastreável e pedido em revisão humana;
+9. prevenção de lead e despacho duplicados.
+
+**O que isso libera:** operar o piloto manualmente com o código preparado para registrar a cadeia e validar o contrato. Não significa que a interface local já esteja ligada a um backend compartilhado nem que identidade, auditoria e idempotência simuladas sejam serviços reais.
+
+**Procedimento operacional para a primeira venda:** captar individualmente um negócio com uma necessidade visível; registrar a demanda; definir escopo, preço e prazo; enviar a proposta manualmente; aguardar o aceite; obter aprovação interna para executar; produzir e revisar; entregar manualmente; confirmar o recebimento; registrar separadamente receita recebida, custos diretos, taxas, obrigações estimadas e horas; só então decidir qual saldo está disponível para financiar o desenvolvimento.
+
+O primeiro pacote continua sendo uma hipótese de teste de R$ 50 a R$ 100, não uma garantia de preço de mercado. Não automatizar captação, envio, cobrança ou publicação; não comprar APIs premium; não criar assinatura antes de provar recorrência. A execução real inicial deve ser feita apenas com as capacidades que forem verificadas manualmente no ambiente disponível.
