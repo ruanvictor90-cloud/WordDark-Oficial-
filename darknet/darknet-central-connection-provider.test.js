@@ -19,6 +19,22 @@ assert.equal(provider.id, "research_api");
 assert.deepEqual(await provider.search({ query: "safe research", limit: 5 }), [{ id: "s1", title: "Guide" }]);
 assert.equal(calls, 1);
 assert.equal(provider.getStatus().credentialsExposed, false);
+const nested = createCentralConnectionKnowledgeProvider({
+  gateway: { execute: async request => ({
+    success: true,
+    result: {
+      success: true,
+      status: request.action === "FETCH_KNOWLEDGE" ? "KNOWLEDGE_FETCH_COMPLETED" : "KNOWLEDGE_SEARCH_COMPLETED",
+      result: request.action === "FETCH_KNOWLEDGE"
+        ? { sourceId: "doc-2", url: "https://example.org/doc-2", title: "Full guide", content: "Full text", rights: "PUBLIC" }
+        : { results: [{ sourceId: "doc-2", url: "https://example.org/doc-2", title: "Full guide", content: "Short text", rights: "PUBLIC" }] }
+    }
+  })},
+  providerId: "research_api", accountId: "acct-1", capability: "KNOWLEDGE_RESEARCH",
+  operationIdFactory: () => "REQ-NESTED"
+});
+assert.equal((await nested.search({ query: "nested" }))[0].sourceId, "doc-2");
+assert.equal((await nested.fetch({ sourceId: "doc-2" })).content, "Full text");
 const denied = createCentralConnectionKnowledgeProvider({
   gateway: { execute: async () => ({ success: false, status: "CAPABILITY_NOT_GRANTED" }) },
   providerId: "research_api", accountId: "acct-1", capability: "KNOWLEDGE_RESEARCH",
