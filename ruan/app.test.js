@@ -26,7 +26,7 @@ assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'
 assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
 assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(read('app.css').includes('body.ruan-launcher .top-actions{display:flex!important'), 'Ruan home must keep its notification bell visible');
-assert.ok(/app\\.css\\?v=[^"']+/.test(html) && /app\\.js\\?v=[^"']+/.test(html), 'Ruan home must request versioned assets');
+assert.ok(/app\.css\?v=[^"']+/.test(html) && /app\.js\?v=[^"']+/.test(html), 'Ruan home must request versioned assets');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
