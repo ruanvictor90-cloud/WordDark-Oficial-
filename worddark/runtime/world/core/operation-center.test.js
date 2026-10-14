@@ -24,4 +24,20 @@ assert.strictEqual(calls.length,3);
 assert.strictEqual(calls[1].action,"CREATE_CONTENT");
 assert.strictEqual(calls[2].action,"PUBLISH_CONTENT");
 assert.ok(calls[2].context.dependencies.length>0);
+const rejectedCenter = new Center({
+  operationCoordinator: { submit: () => ({
+    operationId: "OP-REJECTED",
+    status: "REJECTED",
+    result: { stage: "VALIDATION", errors: ["resourceId é obrigatório."] }
+  }) },
+  productionEngine,
+  planner,
+  requesterId: "TEST",
+  defaultOrigin: "world/test",
+  defaultEnvironment: "TEST"
+});
+const rejectedResult = rejectedCenter.submit({ type: "OPERATION", action: "CREATE_CONTENT", resourceId: "asset-2" });
+assert.strictEqual(rejectedResult.success, false);
+assert.ok(rejectedResult.errors.includes("resourceId é obrigatório."));
+assert.strictEqual(rejectedResult.meta.stage, "VALIDATION");
 console.log("operation-center: ok");
