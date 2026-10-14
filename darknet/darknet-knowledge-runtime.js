@@ -52,7 +52,9 @@ export function inspectDarknetKnowledgeReadiness(input = {}) {
   if (!fn(options.authenticateService)) missing.push("TRUSTED_SERVICE_AUTHENTICATOR");
   if (!fn(options.authorizeDarknet)) missing.push("DARKNET_AUTHORIZATION");
   if (!fn(options.authorizeWordDark)) missing.push("WORDDARK_AUTHORIZATION");
-  if (!fn(options.authorizeReview)) missing.push("KNOWLEDGE_REVIEW_AUTHORIZATION");\n  if (!fn(options.authorizeKnowledgeRead)) missing.push("KNOWLEDGE_READ_AUTHORIZATION");\n  if (!fn(options.auditKnowledgeRead)) missing.push("KNOWLEDGE_READ_AUDIT");
+  if (!fn(options.authorizeReview)) missing.push("KNOWLEDGE_REVIEW_AUTHORIZATION");
+  if (!fn(options.authorizeKnowledgeRead)) missing.push("KNOWLEDGE_READ_AUTHORIZATION");
+  if (!fn(options.auditKnowledgeRead)) missing.push("KNOWLEDGE_READ_AUDIT");
   if (!fn(options.auditDarknet)) missing.push("DARKNET_AUDIT");
   if (!fn(options.auditWordDark)) missing.push("WORDDARK_AUDIT");
   if (!fn(options.auditReview)) missing.push("REVIEW_AUDIT");
@@ -104,21 +106,76 @@ export function createDarknetKnowledgeRuntime(input = {}) {
     enabled: options.enabled === true,
     now: options.now
   });
-  async function authenticateRequest(requestContext) {\n    let trustedContext;\n    try { trustedContext = await options.authenticateService(requestContext); }\n    catch { return { error: "TRUSTED_SERVICE_AUTHENTICATION_FAILED" }; }\n    if (trustedContext?.authenticated !== true || !trustedContext.actorId || !trustedContext.sessionId) {\n      return { error: "TRUSTED_SERVICE_IDENTITY_REQUIRED" };\n    }\n    return { trustedContext };\n  }\n  async function learn({ providerId, query, limit = 10, requestContext = null } = {}) {
-    if (options.enabled !== true) return { success: false, status: "DARKNET_KNOWLEDGE_RUNTIME_DISABLED" };
+
+  async function authenticateRequest(requestContext) {
     let trustedContext;
     try { trustedContext = await options.authenticateService(requestContext); }
-    catch { return { success: false, status: "TRUSTED_SERVICE_AUTHENTICATION_FAILED" }; }
+    catch { return { error: "TRUSTED_SERVICE_AUTHENTICATION_FAILED" }; }
     if (trustedContext?.authenticated !== true || !trustedContext.actorId || !trustedContext.sessionId) {
-      return { success: false, status: "TRUSTED_SERVICE_IDENTITY_REQUIRED" };
+      return { error: "TRUSTED_SERVICE_IDENTITY_REQUIRED" };
     }
-    return integration.learn({ providerId, query, limit, trustedContext });
+    return { trustedContext };
   }
+
+  async function learn({ providerId, query, limit = 10, requestContext = null } = {}) {
+    if (options.enabled !== true) return { success: false, status: "DARKNET_KNOWLEDGE_RUNTIME_DISABLED" };
+    const auth = await authenticateRequest(requestContext);
+    if (auth.error) return { success: false, status: auth.error };
+    return integration.learn({ providerId, query, limit, trustedContext: auth.trustedContext });
+  }
+
+  async function review({ recordId, decision, reason = "", requestContext = null } = {}) {
+    if (options.enabled !== true) return { success: false, status: "KNOWLEDGE_REGISTRY_DISABLED" };
+    const auth = await authenticateRequest(requestContext);
+    if (auth.error) return { success: false, status: auth.error };
+    return registry.review(recordId, { decision, reason, trustedContext: auth.trustedContext });
+  }
+
+  async function readKnowledge(action, requestContext, callback) {
+    if (options.enabled !== true) return { success: false, status: "KNOWLEDGE_REGISTRY_DISABLED", records: [] };
+    const auth = await authenticateRequest(requestContext);
+    if (auth.error) return { success: false, status: auth.error, records: [] };
+    let permission;
+    try {
+      permission = await options.authorizeKnowledgeRead({
+        actorId: auth.trustedContext.actorId,
+        sessionId: auth.trustedContext.sessionId,
+        action
+      });
+    } catch {
+      return { success: false, status: "KNOWLEDGE_READ_AUTHORIZATION_UNAVAILABLE", records: [] };
+    }
+    if (permission?.allowed !== true) return { success: false, status: "KNOWLEDGE_READ_DENIED", records: [] };
+    try {
+      await options.auditKnowledgeRead({
+        event: "WORDDARK_KNOWLEDGE_READ",
+        actorId: auth.trustedContext.actorId,
+        action,
+        approvalId: permission.approvalId || null
+      });
+    } catch {
+      return { success: false, status: "KNOWLEDGE_READ_AUDIT_UNAVAILABLE", records: [] };
+    }
+    try {
+      return { success: true, status: "KNOWLEDGE_READ_OK", records: await callback() };
+    } catch {
+      return { success: false, status: "KNOWLEDGE_READ_FAILED", records: [] };
+    }
+  }
+
+  async function listPending({ limit = 100, requestContext = null } = {}) {
+    return readKnowledge("KNOWLEDGE_LIST_PENDING", requestContext, () => registry.listPending(limit));
+  }
+
+  async function searchValidated({ query = "", limit = 10, requestContext = null } = {}) {
+    return readKnowledge("KNOWLEDGE_SEARCH_VALIDATED", requestContext, () => registry.searchValidated(query, limit));
+  }
+
   return Object.freeze({
     learn,
-    review: registry.review,
-    listPending: registry.listPending,
-    searchValidated: registry.searchValidated,
+    review,
+    listPending,
+    searchValidated,
     getStatus: async () => ({
       readiness: inspectDarknetKnowledgeReadiness(options),
       integration: integration.getStatus(),
