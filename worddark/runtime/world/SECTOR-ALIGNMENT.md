@@ -180,3 +180,30 @@ O teste `darknet/darknet-knowledge-runtime.integration.test.js` cobre em conjunt
 8. Só automatizar uma etapa após comprovar que ela economiza tempo/custo e mantém aprovação humana onde há impacto externo.
 
 **Critério de conclusão:** integração testada e rastreável, não apenas documentada; qualquer serviço sem evidência permanece marcado como preparado, parcial ou desativado.
+## 9. Matriz geral de integração — estado honesto
+
+| Bloco | O que já existe | Estado verificável | Bloqueio para operação real |
+|---|---|---|---|
+| **Ruan** | App pessoal, Pessoal, Tarefas, Shadow/DarkEye e testes de fronteira | Estrutura e isolamento testados; dados principalmente locais | Não exige integração com WordDark; segurança/sincronização pessoal são etapas próprias |
+| **Ruan Hub** | Pedidos locais, consultas previstas, adaptador de controle e testes de autorização/idempotência | Rascunhos locais e contrato de controle em TEST | Identidade real, backend autenticado, auditoria persistente, idempotência durável e rota de serviço ainda não conectados |
+| **WordDark Core** | Operação, catálogo de capacidades, segurança, coordenação e runtime | Fluxo interno exercitado por testes de integração em TEST | Composição de produção precisa ser ligada a identidade, persistência e fonte de aprovações reais |
+| **Central de Operações / Rodovia** | Registro, roteamento, comunicação e retorno de resultados | O ensaio OP-001 cobre ida, execução e retorno com módulos simulados | Falta ligar o fluxo ao Hub autenticado e a fontes externas reais, sem pular autorização |
+| **Céu / Dark Factory** | Motores de produção e contratos de renderização de texto, imagem, vídeo e áudio | Módulos e um fluxo de produção de teste existem | A cobertura e a qualidade devem ser verificadas por tipo de entrega; produção não equivale a publicação/distribuição |
+| **Terra** | Engines de entidades, necessidades e operações comerciais | Estrutura e testes existem; fluxo comercial ainda parcial | Cliente real, pedido aprovado, aceite, entrega e registro de custo precisam de procedimento operacional |
+| **Central de Conexões** | OAuth Google backend, armazenamento criptografado Firestore/KMS, concessão de capacidade e runtime de publicação server-side | Contratos e testes com dependências simuladas; a tela distingue conexão persistida de ativação operacional | O gateway operacional ainda precisa consumir a conexão persistida do backend; identidade/aprovação reais e ambiente de staging faltam; publicação segue manual |
+| **Biblioteca / conhecimento** | Registro pendente, revisão, arquivo central e adapters duráveis | Contratos e testes por componente; foi adicionado teste ponta a ponta com gateway e armazenamento de teste | O novo teste integrado ainda precisa ser executado no CI; Firestore/IAM e auditoria reais precisam de validação em staging |
+| **Darknet** | Navegação modular, plugins, políticas e ponte de conhecimento | Testes de módulos; transportes e execução de plugins permanecem desligados | Adaptadores reais, autorização backend e transporte controlado ainda não estão ativados |
+| **Darkbank** | Conceito e estrutura para controles financeiros internos do mundo | Não deve ser tratado como banco real nem como fluxo de dinheiro ativo | Definir e testar livro-caixa interno, categorias, conciliação, aprovação e relatório; nenhuma custódia ou movimentação externa |
+| **Shadow / DarkEye** | App privado separado e núcleo experimental | Testes próprios; sem dependência do WordDark | Evolução independente, sem integrar dados pessoais automaticamente ao mundo |
+
+### Regra para declarar um bloco concluído
+
+Um bloco só passa de **preparado** para **integrado** quando seu contrato é consumido pelo próximo bloco, os testes de sucesso e falha passam e o estado retornado corresponde à operação real. Só passa para **operacional** quando identidade, autorização, persistência, auditoria e ambiente real foram validados. Uma simulação, uma tela ou um registro CONNECTED local não satisfazem esse critério.
+
+### Próximo caminho de menor risco
+
+1. Executar a suíte atual no commit mais recente e corrigir qualquer falha.
+2. Fechar o backend autenticado do Hub → Core e validar consultas/submissões em TEST.
+3. Unificar a conexão persistida do Google com o gateway server-side sem expor tokens ao navegador.
+4. Validar o ciclo interno pedido → execução → revisão → resultado → biblioteca.
+5. Fazer uma entrega comercial manual de baixo custo, registrar tempo/custos/aceite e só então automatizar etapas comprovadamente repetitivas.
