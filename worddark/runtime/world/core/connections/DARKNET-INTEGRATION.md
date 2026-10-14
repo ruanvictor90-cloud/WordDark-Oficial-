@@ -25,3 +25,10 @@ A ponte é desativada por padrão em ambos os lados. A habilitação exige uma i
 ## Testes
 
 `darknet/darknet-world-bridge.test.js` cobre modo desligado, encaminhamento autorizado, setor inválido, negação e falha de auditoria. `worddark/runtime/world/core/connections/darknet-world-adapter.test.js` cobre modo desligado, submissão em TEST, origem inválida, pedido incompleto, negação e descoberta de capacidades.
+
+
+## Integração de conhecimento — montagem de backend
+
+O fluxo de conhecimento usa `darknet/darknet-knowledge-runtime.js` e os adapters transacionais em `worddark/runtime/world/library/firestore-knowledge-adapters.js`. A identidade de serviço e as funções de autorização/auditoria são obrigatoriamente injetadas pelo backend; não usar dados de identidade recebidos diretamente do cliente. Consultas, revisão e leitura de pendências têm controles próprios.
+
+A configuração do runtime permanece desligada por padrão. A ativação é recusada se faltar qualquer dependência exigida pelo relatório de prontidão. Testes de contrato com Firestore falso não substituem a validação de IAM, dados, APIs e sessão real em staging.
