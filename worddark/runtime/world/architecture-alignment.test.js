@@ -1,8 +1,9 @@
-const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
-const path = require('node:path');
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(__dirname, '../../..');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 const read = file => readFileSync(path.join(root, file), 'utf8');
 const repository = read('README.md');
 const architecture = read('worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md');
@@ -20,8 +21,11 @@ const sectors = read('worddark/runtime/world/SECTOR-ALIGNMENT.md');
 const interfaceBriefs = read('worddark/runtime/world/APP-INTERFACE-BRIEFS.md');
 const worldApp = read('worddark/app/index.html');
 const darknet = read('darknet/README.md');
+const architectureMap = read('worddark/runtime/world/ARCHITECTURE-MAP.md');
+const hubAdapter = read('worddark/runtime/world/core/connections/ruan-hub-control-adapter.js');
+const hubAdapterTest = read('worddark/runtime/world/core/connections/ruan-hub-control-adapter.test.js');
 
-assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
+assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('ARCHITECTURE-MAP.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
 assert.ok(architecture.includes('Ruan — aplicativo pessoal') && architecture.includes('Hub — painel superior pertencente ao Ruan'));
 assert.ok(architecture.includes('Banco — instituição financeira do WordDark') && architecture.includes('implementação/app atualmente identificada como Darkbank'));
 assert.ok(architecture.includes('não é administrado pelo WordDark') && architecture.includes('o Hub não cria um segundo Core'));
@@ -42,4 +46,7 @@ assert.ok(interfaceBriefs.includes('Ruan Hub') && interfaceBriefs.includes('Banc
 assert.ok(worldApp.includes('Darkbank'), 'WordDark interface must retain the current Banco/Darkbank app entry');
 assert.ok(darknet.includes('sistema independente') && darknet.includes('Ruan'), 'Darknet documentation must preserve the independent Ruan boundary');
 
+assert.ok(architectureMap.includes('Ruan Hub') && architectureMap.includes('Banco / Darkbank') && architectureMap.includes('O que falta para ativar a integração real'));
+assert.ok(hubAdapter.includes('HUB_CONTROL_ADAPTER_DISABLED') && hubAdapter.includes('HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED') && hubAdapter.includes('requiresAtomicIdempotency'));
+assert.ok(hubAdapterTest.includes('HUB_CONTROL_APPROVAL_REQUIRED') && hubAdapterTest.includes('HUB_CONTROL_IDEMPOTENCY_UNAVAILABLE'));
 console.log('Architecture alignment tests passed.');
