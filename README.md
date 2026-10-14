@@ -12,7 +12,7 @@ Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE
 
 ### Ruan — aplicativo pessoal
 - Aplicativo privado e independente, com seus próprios dados.
-- Inclui Pessoal (Financeiro e Tarefas) e Shadow.
+- Inclui Entretenimento (player incorporado a fontes autorizadas), Pessoal (Financeiro e Tarefas) e Shadow.
 - O financeiro pessoal organiza registros locais; não é um banco e não movimenta dinheiro real.
 - Não é parte do mundo WordDark e não compartilha dados automaticamente com ele.
 
