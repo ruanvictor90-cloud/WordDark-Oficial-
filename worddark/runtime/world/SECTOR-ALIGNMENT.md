@@ -185,7 +185,7 @@ O teste `darknet/darknet-knowledge-runtime.integration.test.js` cobre em conjunt
 | Bloco | O que já existe | Estado verificável | Bloqueio para operação real |
 |---|---|---|---|
 | **Ruan** | App pessoal, Pessoal, Tarefas, Shadow/DarkEye e testes de fronteira | Estrutura e isolamento testados; dados principalmente locais | Não exige integração com WordDark; segurança/sincronização pessoal são etapas próprias |
-| **Ruan Hub** | Pedidos locais, consultas previstas, adaptador de controle e testes de autorização/idempotência | Rascunhos locais e contrato de controle em TEST | Identidade real, backend autenticado, auditoria persistente, idempotência durável e rota de serviço ainda não conectados |
+| **Ruan Hub** | Pedidos locais, adaptador de controle e runtime backend autenticado por dependência injetada | Rascunhos locais; runtime/testes de controle em TEST, desligados por padrão | Identidade real, auditoria/idempotência de nuvem, aprovação canônica e rota de serviço ainda não conectadas |
 | **WordDark Core** | Operação, catálogo de capacidades, segurança, coordenação e runtime | Fluxo interno exercitado por testes de integração em TEST | Composição de produção precisa ser ligada a identidade, persistência e fonte de aprovações reais |
 | **Central de Operações / Rodovia** | Registro, roteamento, comunicação e retorno de resultados | O ensaio OP-001 cobre ida, execução e retorno com módulos simulados | Falta ligar o fluxo ao Hub autenticado e a fontes externas reais, sem pular autorização |
 | **Céu / Dark Factory** | Motores de produção e contratos de renderização de texto, imagem, vídeo e áudio | Módulos e um fluxo de produção de teste existem | A cobertura e a qualidade devem ser verificadas por tipo de entrega; produção não equivale a publicação/distribuição |
@@ -213,3 +213,10 @@ Um bloco só passa de **preparado** para **integrado** quando seu contrato é co
 Foi adicionado `core/connections/persisted-knowledge-gateway.js` como gateway exclusivo de backend para pesquisa de conhecimento. Diferentemente do gateway legado/local usado em testes de interface, ele lê metadados e tokens pelo `connectionStore` persistido, exige identidade de serviço, autorização e auditoria, permite apenas `SEARCH_KNOWLEDGE` e `FETCH_KNOWLEDGE`, e filtra campos sensíveis da resposta. O pipeline agora encaminha o contexto confiável gerado pelo runtime ao provedor sem colocá-lo no payload de pesquisa.
 
 **Situação:** contrato e teste de isolamento de segredos implementados; ativação continua desligada por padrão. Ainda dependem de configuração de backend: autenticação real, política de autorização, auditoria durável, concessão explícita de `KNOWLEDGE_RESEARCH` à conta persistida, handlers reais dos provedores, IAM/KMS/Firestore e teste em staging. Isso não ativa pesquisas externas nem publicação.
+
+
+## 11. Composição de controle do Hub → Core
+
+`core/connections/ruan-hub-control-runtime.js` agora compõe o adaptador existente com autenticação de operador feita no backend. O runtime falha fechado se faltarem autenticador, política de autorização, auditoria durável, idempotência durável/atômica, catálogo público ou centro de operações. Mantém o ambiente `TEST`, sem rota HTTP e desligado por padrão. Os testes cobrem identidade ausente, autorização negada, submissão em TEST e filtragem de campos de operação.
+
+A composição não equivale a integração remota ativa: o Hub ainda guarda pedidos localmente até existir backend autenticado e persistência reais.
