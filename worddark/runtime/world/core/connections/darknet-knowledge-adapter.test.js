@@ -1,5 +1,5 @@
-const assert = require("node:assert/strict");
-const { createDarknetKnowledgeAdapter } = require("./darknet-knowledge-adapter.js");
+import assert from "node:assert/strict";
+import { createDarknetKnowledgeAdapter } from "./darknet-knowledge-adapter.js";
 (async () => {
   let saved = 0, audited = 0;
   const record = {
