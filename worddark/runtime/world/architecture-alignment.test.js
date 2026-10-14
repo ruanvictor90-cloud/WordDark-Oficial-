@@ -79,7 +79,7 @@ assert.ok(knowledgeRuntime.includes('DARKNET_KNOWLEDGE_RUNTIME_NOT_READY') && kn
 assert.ok(firestoreKnowledgeAdapters.includes('runTransaction') && firestoreKnowledgeAdapters.includes('idempotent: true'));
 assert.ok(firestoreKnowledgeTests.includes('insertIfAbsent') && firestoreKnowledgeTests.includes('inserted, false') && firestoreKnowledgeTests.includes('central.idempotent'), 'Firestore adapter tests must cover durable insert and archive idempotency');
 assert.ok(persistedKnowledgeGateway.includes('PERSISTED_KNOWLEDGE_TRUSTED_IDENTITY_REQUIRED') && persistedKnowledgeGateway.includes('connectionStore.loadTokens') && persistedKnowledgeGateway.includes('PERSISTED_KNOWLEDGE_FINAL_AUDIT_UNAVAILABLE'));
-assert.ok(persistedKnowledgeGatewayTest.includes('ACCESS_SECRET') && persistedKnowledgeGatewayTest.includes('PERSISTED_CONNECTION_CAPABILITY_NOT_GRANTED') === false);
+assert.ok(persistedKnowledgeGatewayTest.includes('ACCESS_SECRET') && persistedKnowledgeGatewayTest.includes('PERSISTED_CONNECTION_CAPABILITY_NOT_GRANTED'));
 assert.ok(knowledgeSearchAdapter.includes('KNOWLEDGE_RESEARCH') && knowledgeSearchAdapter.includes('registerKnowledgeSearchAdapter'));
 assert.ok(knowledgeSearchAdapterTest.includes('KNOWLEDGE_PROVIDER_MISMATCH') && knowledgeSearchAdapterTest.includes('KNOWLEDGE_FETCH_COMPLETED'));
 assert.ok(knowledgeRuntime.includes('KNOWLEDGE_READ_AUTHORIZATION') && knowledgeRuntime.includes('authenticateRequest'), 'Knowledge review and retrieval must be gated by trusted backend identity');
