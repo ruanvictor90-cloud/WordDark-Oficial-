@@ -29,6 +29,8 @@ const ESM_FILES = new Set([
   "worddark/runtime/world/core/commercial-order-operation-bridge.test.js",
   "worddark/runtime/world/sky/darkfactory/core/manual-execution-queue.js",
   "worddark/runtime/world/sky/darkfactory/core/manual-execution-queue.test.mjs",
+  "worddark/runtime/world/earth/commercial-ledger.js",
+  "worddark/runtime/world/earth/first-sale-workflow.js",
   "worddark/runtime/world/earth/commercial-ledger.test.js",
   "worddark/runtime/world/core/earth-commercial-intake-adapter.js",
   "worddark/runtime/world/core/earth-commercial-intake-adapter.test.js",
