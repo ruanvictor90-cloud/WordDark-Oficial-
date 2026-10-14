@@ -30,6 +30,17 @@
 | **Ruan Financeiro** | App pessoal separado do Darkbank | Organização pessoal independente | Não misturar seus registros com caixa do WordDark nem assumir movimentação bancária real |
 | **Comercialização** | Plano de operação sem investimento inicial documentado | Oferta piloto, prospecção, aceite, produção e entrega podem começar manualmente | Registrar resultado de cada trabalho e só automatizar etapas repetíveis depois de validar demanda, margem e qualidade |
 
+## Integração Terra → Core → Céu (código atual)
+
+O fluxo comercial agora possui uma ponte controlada de pedido aceito para o Core, com payload de produção explícito para a Dark Factory. A cobertura integrada exercita a criação de lead, qualificação, proposta, aceite, abertura do pedido, autorização do operador, despacho idempotente, roteamento pela Rodovia, execução no executor de conteúdo, retorno do resultado e entrada do pedido em revisão humana.
+
+- Teste: `worddark/runtime/world/earth/commercial-world.integration.test.js`.
+- Incluído na suíte `npm test` e no comando `npm run commercial:integration:test`.
+- A ponte continua desligada por padrão no uso normal, exige aprovação identificável e executa em `TEST`.
+- A conclusão técnica do Core não equivale à entrega ao cliente: o pedido fica em `REVIEW` para validação humana.
+- O teste usa identidade, autorização, auditoria, idempotência e infraestrutura de operação simuladas; não comprova configuração real, persistência durável ou prontidão de produção.
+- O resultado do CI para o novo head precisa ser confirmado antes de considerar esta integração validada.
+
 ## Contrato mínimo de uma operação vendável
 
 Uma entrega só deve ser tratada como operacional quando o caminho abaixo estiver completo, mesmo que algumas etapas sejam manuais:
