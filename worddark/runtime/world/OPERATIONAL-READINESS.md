@@ -89,3 +89,15 @@ Foi adicionado `core/commercial-order-operation-bridge.js` para encaminhar um pe
 - O teste cobre modo desligado, autorização negada, aprovação ausente, rejeição do Core, despacho aceito, sincronização do pedido, ausência de ID de operação e repetição.
 
 **Limite importante:** o teste usa Core, autorização, auditoria e idempotência simulados. Esta é a integração de contrato entre Terra comercial e Core, não a ativação do backend real. Antes de habilitar, é necessário injetar autenticação/aprovação/auditoria persistentes e armazenamento idempotente atômico reais, validar o resultado no ambiente de staging e decidir explicitamente a ativação. Não existe endpoint HTTP novo nem efeito externo ativado por este adaptador.
+
+## Integração Terra: demanda capturada → lead comercial
+
+Foi criado `core/earth-commercial-intake-adapter.js` para encaminhar uma demanda já capturada pelo motor da Terra ao motor comercial, preservando o identificador de origem e o contexto do negócio. A demanda muda para `LEAD_CREATED` apenas depois que o lead determinístico é localizado/criado; tentativas repetidas não devem gerar leads duplicados.
+
+- Exige operador autenticado, autorização para intake, auditoria e idempotência injetadas.
+- A identidade comercial do solicitante é resolvida por função confiável, não inferida de um campo livre do pedido.
+- O lead preserva `sourceDemandId` e `businessContext` para rastreabilidade.
+- O adapter fica desligado por padrão e não envia propostas, não inicia execução, não cobra e não habilita vendas.
+- Testes cobrem modo desligado, autorização negada, identidade ausente, preservação de origem/contexto e repetição idempotente.
+
+**Limite:** os testes usam dependências simuladas. A ligação com identidade, auditoria e idempotência duráveis reais continua pendente; este contrato não deve ser ativado em produção sem backend confiável e staging.
