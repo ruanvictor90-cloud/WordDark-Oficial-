@@ -1,7 +1,7 @@
 {
-  "name": "WordDark Hub",
-  "short_name": "WD Hub",
-  "description": "Portão de entrada do mundo com informações e avisos.",
+  "name": "Ruan Hub",
+  "short_name": "Ruan Hub",
+  "description": "Painel superior do Ruan para gerir e acompanhar o mundo WordDark.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
