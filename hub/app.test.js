@@ -20,5 +20,5 @@ assert.ok(sw.includes('worddark-hub-v13') && sw.includes('central.html') && sw.i
 assert.ok(hub.indexOf('</header>')<hub.indexOf('class="ruan-return hub-return-under-header"'), 'Hub return must sit below the header');
 assert.ok(central.indexOf('</header>')<central.indexOf('class="ruan-return hub-return-under-header"') && !central.includes('<a class="central-back"'), 'Hub Central must have only one return link below the header');
 assert.ok(css.includes('.test-app-tile{width:auto;min-height:0;max-width:max-content') && css.includes('width:auto;min-height:42px'), 'Teste and WordDark entry must stay compact');
-assert.ok(read('darknet.html').includes('sem ligação com o mundo WordDark'));
+assert.ok(read('darknet.html').includes('contrato estrutural'));
 console.log('WordDark Hub tests passed.');
