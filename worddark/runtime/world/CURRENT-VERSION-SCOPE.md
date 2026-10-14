@@ -6,6 +6,7 @@ Este arquivo descreve responsabilidades visíveis e limites da versão consolida
 
 - Aplicativo pessoal privado e independente.
 - Central pessoal com seus aplicativos e widgets.
+- Entretenimento permanece como app pessoal independente, com player incorporado e disponibilidade condicionada à fonte e à região.
 - Pessoal contém Financeiro e Tarefas.
 - Shadow é separado; DarkEye permanece experimental.
 - O atalho para o Hub abre o painel superior de gestão do mundo, pertencente ao Ruan.
