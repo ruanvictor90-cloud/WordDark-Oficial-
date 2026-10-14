@@ -1,0 +1,14 @@
+import assert from "node:assert/strict";
+import {createWorldBridge} from "./darknet-world-bridge.js";
+const base={requestId:"DNET-REQ-1",sector:"ceu",action:"REQUEST_OPERATION",payload:{need:"prepare content"}};
+const disabled=createWorldBridge();
+assert.equal((await disabled.request(base)).status,"DARKNET_WORLD_BRIDGE_DISABLED");
+let handled=0,audited=0;
+const bridge=createWorldBridge({enabled:true,worldPort:{handle:async request=>{handled++;assert.equal(request.source,"DARKNET");assert.equal(request.destination,"WORDDARK");return{success:true,status:"QUEUED"};}},authorizeRequest:async()=>({allowed:true,approvalId:"APR-1"}),audit:async event=>{audited++;assert.ok(event.event);}});
+assert.equal((await bridge.request(base)).status,"QUEUED");
+assert.equal(handled,1);assert.equal(audited,1);
+assert.equal((await bridge.request({...base,sector:"ruan"})).status,"DARKNET_REQUEST_INVALID");
+const denied=createWorldBridge({enabled:true,worldPort:{handle:async()=>{throw new Error("must not run");}},authorizeRequest:async()=>({allowed:false})});
+assert.equal((await denied.request(base)).status,"DARKNET_REQUEST_DENIED");
+assert.equal((await createWorldBridge({enabled:true,worldPort:{handle:async()=>({success:true})},authorizeRequest:async()=>({allowed:true}),audit:async()=>{throw new Error("audit down");}}).request(base)).status,"DARKNET_AUDIT_UNAVAILABLE");
+console.log("darknet-world-bridge.test: OK");
