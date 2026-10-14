@@ -84,7 +84,7 @@ Foi adicionado `core/commercial-order-operation-bridge.js` para encaminhar um pe
 
 - Estado inicial: desligado por padrão; o contrato mantém o ambiente em `TEST`.
 - A proposta precisa estar aceita e o pedido precisa estar em `ORDER_OPEN`.
-- O pedido só avança para `PLANNED` depois que o Core devolve uma operação rastreável com `operationId`.
+- O pedido só avança depois que o Core devolve uma operação rastreável com `operationId`: fica em `PLANNED` quando a operação foi aceita, passa a `IN_PROGRESS` quando o Core informa execução em andamento e chega a `REVIEW` quando a operação interna conclui — sem pular a revisão humana nem declarar entrega ao cliente.
 - Repetições do mesmo pedido usam uma chave de idempotência baseada no pedido, evitando um segundo despacho quando o armazenamento idempotente honra o contrato.
 - O teste cobre modo desligado, autorização negada, aprovação ausente, rejeição do Core, despacho aceito, sincronização do pedido, ausência de ID de operação e repetição.
 
