@@ -30,7 +30,7 @@ function storage(){
 
   const done=await gateway.execute({
     requestId:"REQ-EXT-002",operationId:"OP-EXT-002",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-002"}
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-002"}
   });
   assert.strictEqual(done.success,true);
   assert.strictEqual(done.result.status,"PUBLISHED");
@@ -38,7 +38,7 @@ function storage(){
   registry.disconnect("YOUTUBE","ACC-001");
   const disconnected=await gateway.execute({
     requestId:"REQ-EXT-003",operationId:"OP-EXT-003",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-003"}
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-003"}
   });
   assert.strictEqual(disconnected.status,"ACCOUNT_NOT_CONNECTED");
   console.log("connection-gateway.test: OK");
