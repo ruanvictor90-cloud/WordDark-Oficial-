@@ -128,9 +128,10 @@ async function main() {
 
   const auditEvents = [];
   const idempotency = new Map();
+  const coreSubmissions = [];
   const bridge = createCommercialOrderOperationBridge({
     commercialEngine: commercial,
-    operationCenter: center,
+    operationCenter: { submit(input) { const response = center.submit(input); coreSubmissions.push({ input, response }); return response; } },
     authenticateOperator: async () => ({ authenticated: true, actorId, sessionId: "commercial-test-session" }),
     authorizeDispatch: async ({ approvalId }) => ({ allowed: true, approved: true, approvalId }),
     resolveAction: async () => "CREATE_CONTENT",
@@ -152,7 +153,7 @@ async function main() {
     approvalId: "commercial-integration-approval-1"
   });
 
-  assert.equal(result.success, true, JSON.stringify(result, null, 2));
+  assert.equal(result.success, true, JSON.stringify({ result, coreSubmissions }, null, 2));
   assert.equal(result.environment, "TEST");
   assert.equal(result.dispatched, true);
   assert.ok(result.operationId, "A operação precisa ter ID rastreável.");
