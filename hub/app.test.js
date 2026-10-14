@@ -14,7 +14,9 @@ assert.ok(hub.includes('class="test-app-tile"') && hub.includes('>Teste</span>')
 assert.ok(hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'), 'Hub must keep the bottom WordDark entry');
 assert.ok(!hub.includes('class="hub-apps"'), 'Pedidos and Em execução must live inside Hub Central');
 assert.ok(central.includes('Pedidos') && central.includes('Em execução') && central.includes('independente da Central do WordDark'));
-assert.ok(central.includes('ruan.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
+assert.ok(central.includes('ruan.hub.quick-requests.v1') && central.includes('Nenhum pedido preparado neste dispositivo'));
+assert.ok(central.includes('Rascunho local — ainda não enviado ao mundo') && central.includes("status:'RASCUNHO_LOCAL',delivery:'LOCAL_ONLY'"), 'Hub must not label local drafts as received by WordDark');
+assert.ok(script.includes('status:"RASCUNHO_LOCAL",delivery:"LOCAL_ONLY"'), 'Quick requests must be marked local-only');
 assert.ok(script.includes('ruan.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
 assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('migrateHubStorage'), 'Hub must preserve existing local requests while migrating to its Ruan-owned namespace');
 assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('migrateHubStorage'), 'Hub Central must migrate previously saved requests');
