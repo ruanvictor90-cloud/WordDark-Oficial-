@@ -26,6 +26,8 @@ jobs:
         run: |
           node --check ruan/foundation/foundation.js
           node --check ruan/foundation/ruan-core.js
+          node --check ruan/foundation/ruan-domain-services.js
+          node --check ruan/foundation/ruan-domain-services.test.js
           node --check ruan/foundation/ruan-core.test.js
           node --check ruan/foundation/ruan-app-registry.js
           node --check ruan/foundation/ruan-app-registry.test.js
@@ -36,6 +38,7 @@ jobs:
       - name: Run automated tests
         run: |
           node ruan/foundation/ruan-core.test.js
+          node ruan/foundation/ruan-domain-services.test.js
           node ruan/foundation/ruan-app-registry.test.js
           node ruan/foundation/ruan-platform-registry.test.js
           node ruan/foundation/shadow/shadow-registry.test.js
