@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import {createPublicationRuntime} from "./publication-runtime.js";
 
-function setup({authorized=true,persisted=true,connectionAccountId="channel-1",capabilities=["CONTENT_PUBLISH"],scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload",publisherResult={success:true,status:"UPLOAD_COMPLETED",videoId:"video-1"}}={}){
+function setup({authorized=true,persisted=true,connectionAccountId="channel-1",capabilities=["CONTENT_PUBLICATION"],scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload",publisherResult={success:true,status:"UPLOAD_COMPLETED",videoId:"video-1"}}={}){
   const events=[];
   const claims=new Map();
   const publicationStore={
@@ -30,7 +30,7 @@ function setup({authorized=true,persisted=true,connectionAccountId="channel-1",c
 }
 const request={
   requestId:"request-1",operationId:"operation-1",providerId:"YOUTUBE",accountId:"channel-1",
-  action:"CONTENT_PUBLISH",capability:"CONTENT_PUBLISH",environment:"PROD",
+  action:"CONTENT_PUBLISH",capability:"CONTENT_PUBLICATION",environment:"PROD",
   payload:{title:"Test upload",description:"Test",tags:["test"],privacyStatus:"private"}
 };
 const media={videoBuffer:Buffer.from("trusted test bytes"),mimeType:"video/mp4"};
@@ -58,7 +58,7 @@ assert.equal(wrongProviderResult.status,"PUBLICATION_PROVIDER_UNSUPPORTED");
 assert.equal(wrongProvider.calls,0);
 
 const wrongAction=setup();
-const wrongActionResult=await wrongAction.runtime.publishYouTube({request:{...request,action:"CONTENT_SCHEDULE",capability:"CONTENT_SCHEDULE"},idempotencyKey:"runtime-key-wrong-action",media});
+const wrongActionResult=await wrongAction.runtime.publishYouTube({request:{...request,action:"CONTENT_SCHEDULE",capability:"CONTENT_PUBLICATION"},idempotencyKey:"runtime-key-wrong-action",media});
 assert.equal(wrongActionResult.status,"PUBLICATION_ACTION_UNSUPPORTED");
 assert.equal(wrongAction.calls,0);
 
