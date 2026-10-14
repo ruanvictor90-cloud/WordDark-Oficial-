@@ -190,7 +190,7 @@ export function setProjectMilestoneDone(state, projectId, milestoneId, done = tr
 export function createCalendarItem(state, input = {}, options = {}) {
   if (!nonEmpty(input.title)) return resultError("title_required", "Informe o nome do compromisso.");
   if (!validDate(input.date)) return resultError("invalid_date", "Informe uma data válida no formato AAAA-MM-DD.");
-  if (input.time && !/^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(input.time)) return resultError("invalid_time", "Use um horário válido no formato HH:MM.");
+  if (input.time && !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(input.time)) return resultError("invalid_time", "Use um horário válido no formato HH:MM.");
   const now = options.now || new Date().toISOString();
   const id = (options.idFactory || createId)("calendar");
   const next = normalizeState(state, now);
