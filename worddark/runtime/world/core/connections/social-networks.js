@@ -1,8 +1,8 @@
 export const SOCIAL_NETWORKS=Object.freeze({
-  INSTAGRAM:{id:"INSTAGRAM",name:"Instagram",connectorStatus:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
-  TIKTOK:{id:"TIKTOK",name:"TikTok",connectorStatus:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
-  YOUTUBE:{id:"YOUTUBE",name:"YouTube",connectorStatus:"READY",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
-  FACEBOOK:{id:"FACEBOOK",name:"Facebook",connectorStatus:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]}
+  INSTAGRAM:{id:"INSTAGRAM",name:"Instagram",connectorStatus:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]},
+  TIKTOK:{id:"TIKTOK",name:"TikTok",connectorStatus:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]},
+  YOUTUBE:{id:"YOUTUBE",name:"YouTube",connectorStatus:"READY",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]},
+  FACEBOOK:{id:"FACEBOOK",name:"Facebook",connectorStatus:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]}
 });
 
 export const YOUTUBE_SCOPES=Object.freeze([
