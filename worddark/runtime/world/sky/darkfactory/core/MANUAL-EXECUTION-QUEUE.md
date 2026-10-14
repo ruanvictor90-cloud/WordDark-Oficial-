@@ -28,9 +28,12 @@ Este módulo é uma fila operacional em memória, não um serviço publicado nem
 
 O registro de recebimento é manual e não equivale a confirmação bancária automática. A revisão feita pela mesma pessoa que produziu o material fica marcada como não independente.
 
-## Próxima integração obrigatória antes da operação pública
+## Integração e próximos bloqueios
 
-1. Conectar a fila ao despacho autenticado do WordDark Core e à ordem comercial da Terra.
-2. Trocar armazenamento em memória por backend persistente com auditoria e controle de acesso.
-3. Disponibilizar painel autenticado para operadores e uma entrada de pedidos que chegue a esse backend.
+A ponte comercial do WordDark Core já pode, quando explicitamente habilitada e com operador/autorização válidos, encaminhar a ordem aceita para esta fila. A integração permanece em ambiente TEST; o despacho continua desativado por padrão. O teste integrado cobre ordem aceita → Core → fila → conteúdo real anexado → revisão → entrega confirmada → recebimento manual.
+
+Antes da operação pública ainda é obrigatório:
+1. Trocar armazenamento em memória por backend persistente com auditoria e controle de acesso.
+2. Disponibilizar painel autenticado para operadores e uma entrada de pedidos que chegue a esse backend.
+3. Configurar autenticação/autorização de produção, monitoramento e recuperação de falhas.
 4. Testar todo o ciclo em staging e só promover para produção após revisão/aprovação.
