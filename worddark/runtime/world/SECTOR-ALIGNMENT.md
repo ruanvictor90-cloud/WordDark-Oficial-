@@ -2,6 +2,10 @@
 
 **Objetivo:** consolidar responsabilidades e fronteiras antes de ampliar funcionalidades. Este documento não cria interfaces e não declara um módulo pronto para produção apenas porque seu arquivo existe.
 
+## Contrato canônico de publicação
+
+O catálogo `worddark/runtime/world/core/capability-catalog.js` define `CONTENT_PUBLICATION` como capacidade do Core. `CONTENT_PUBLISH` é uma ação de transporte, não um nome alternativo da capacidade. A Central de Conexões deve preservar essa distinção: `action=CONTENT_PUBLISH` mapeia para `capability=CONTENT_PUBLICATION`. A conexão OAuth recém-salva permanece sem capacidades concedidas até existir um fluxo de concessão confiável; o escopo OAuth `youtube.upload` sozinho não concede permissão operacional.
+
 ## 1. Regra de autoridade
 
 | Camada | Papel | Pode fazer | Não pode assumir |
