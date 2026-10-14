@@ -111,6 +111,22 @@ export function createCommercialOrderOperationBridge({
             need: clean(current.scope),
             intent: clean(current.title) + ": " + clean(current.scope),
             environment: "TEST",
+            // The Core's Dark Factory executor requires a concrete, traceable content payload.
+            // Keep the commercial order as the source of truth; do not execute the generic title alone.
+            parameters: {
+              action,
+              content: true,
+              contentId: orderId,
+              title: clean(current.title),
+              type: clean(current.contentType || current.deliverableType || "TEXT"),
+              task: clean(current.scope),
+              requirements: {
+                commercialOrderId: orderId,
+                proposalId: clean(current.proposalId),
+                scope: clean(current.scope),
+                deadline: current.deadline || null
+              }
+            },
             context: {
               source: "TERRA_COMMERCIAL_ORDER",
               commercialOrderId: orderId,
