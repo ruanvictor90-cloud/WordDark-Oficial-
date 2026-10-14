@@ -156,20 +156,31 @@ export function createCommercialOrderOperationBridge({
           };
         }
 
+        let orderStatus = "PLANNED";
+        const coreStatus = clean(coreResult.status).toUpperCase() || "ACCEPTED";
         try {
           commercialEngine.transitionOrder(orderId, "PLANNED", principal.actorId);
+          if (["IN_PROGRESS", "EXECUTING", "COMPLETED"].includes(coreStatus)) {
+            commercialEngine.transitionOrder(orderId, "IN_PROGRESS", principal.actorId);
+            orderStatus = "IN_PROGRESS";
+          }
+          // A Core operation may be complete while the customer deliverable still needs human review.
+          if (coreStatus === "COMPLETED") {
+            commercialEngine.transitionOrder(orderId, "REVIEW", principal.actorId);
+            orderStatus = "REVIEW";
+          }
         } catch {
           return {
             success: true, status: "DISPATCHED_ORDER_SYNC_WARNING",
             dispatched: true, environment: "TEST", orderId, operationId,
-            warning: "O Core aceitou a operação, mas o estado comercial não foi sincronizado; reconciliar manualmente."
+            coreStatus, warning: "O Core aceitou a operação, mas o estado comercial não foi sincronizado; reconciliar manualmente."
           };
         }
 
         return {
-          success: true, status: "COMMERCIAL_ORDER_DISPATCHED",
-          dispatched: true, environment: "TEST", orderId, operationId,
-          coreStatus: clean(coreResult.status) || "ACCEPTED"
+          success: true,
+          status: orderStatus === "REVIEW" ? "COMMERCIAL_ORDER_REVIEW_REQUIRED" : "COMMERCIAL_ORDER_DISPATCHED",
+          dispatched: true, environment: "TEST", orderId, operationId, orderStatus, coreStatus
         };
       });
     } catch (error) {
