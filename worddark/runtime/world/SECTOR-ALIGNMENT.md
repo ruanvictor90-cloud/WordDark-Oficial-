@@ -207,3 +207,9 @@ Um bloco só passa de **preparado** para **integrado** quando seu contrato é co
 3. Unificar a conexão persistida do Google com o gateway server-side sem expor tokens ao navegador.
 4. Validar o ciclo interno pedido → execução → revisão → resultado → biblioteca.
 5. Fazer uma entrega comercial manual de baixo custo, registrar tempo/custos/aceite e só então automatizar etapas comprovadamente repetitivas.
+
+## 10. Fechamento da fronteira Darknet → Central de Conexões
+
+Foi adicionado `core/connections/persisted-knowledge-gateway.js` como gateway exclusivo de backend para pesquisa de conhecimento. Diferentemente do gateway legado/local usado em testes de interface, ele lê metadados e tokens pelo `connectionStore` persistido, exige identidade de serviço, autorização e auditoria, permite apenas `SEARCH_KNOWLEDGE` e `FETCH_KNOWLEDGE`, e filtra campos sensíveis da resposta. O pipeline agora encaminha o contexto confiável gerado pelo runtime ao provedor sem colocá-lo no payload de pesquisa.
+
+**Situação:** contrato e teste de isolamento de segredos implementados; ativação continua desligada por padrão. Ainda dependem de configuração de backend: autenticação real, política de autorização, auditoria durável, concessão explícita de `KNOWLEDGE_RESEARCH` à conta persistida, handlers reais dos provedores, IAM/KMS/Firestore e teste em staging. Isso não ativa pesquisas externas nem publicação.
