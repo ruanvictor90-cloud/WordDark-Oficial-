@@ -28,4 +28,11 @@ assert.ok(bridge.includes("REFRESH_TOKEN_REQUIRED"), "Bridge must not activate a
 assert.ok(store.includes("kms.encrypt"), "Token bundles must be encrypted with Cloud KMS");
 assert.ok(store.includes("collection.doc(documentId).set(record,{merge:true})"), "Connection metadata and encrypted token bundle must be stored durably");
 assert.ok(store.includes("encryptedTokenBundle"), "Only encrypted token material may be stored in Firestore");
+const socialNetworks = readFileSync(path.join(__dirname, "social-networks.js"), "utf8");
+const legacyController = readFileSync(path.join(__dirname, "app.js"), "utf8");
+const gateway = readFileSync(path.join(__dirname, "connection-gateway.js"), "utf8");
+assert.ok(socialNetworks.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]'), "Social connector metadata must use the canonical publication capability");
+assert.ok(legacyController.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]'), "Connection metadata must use the canonical publication capability");
+assert.ok(!socialNetworks.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]') && !legacyController.includes('capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]'), "Transport action names must not be stored as capability grants");
+assert.ok(gateway.includes('CONTENT_PUBLISH:"CONTENT_PUBLICATION"'), "The gateway must map the publish transport action to the canonical capability");
 console.log("YouTube OAuth connection page and bridge contract tests: OK");
