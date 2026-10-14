@@ -90,5 +90,6 @@ assert.equal(parsed.valid, true);
 assert.equal(parsed.data.tasks.length, 1);
 assert.equal(parseImportPayload({ app: "Other" }).valid, false);
 assert.equal(parseImportPayload({ app: "Ruan", kind: "personal-data-export", schemaVersion: SCHEMA_VERSION + 1, data: { schemaVersion: SCHEMA_VERSION + 1 } }).valid, false);
+assert.equal(parseImportPayload({ app: "Ruan", kind: "personal-data-export", schemaVersion: SCHEMA_VERSION + 1, data: { schemaVersion: SCHEMA_VERSION } }).valid, false);
 
 console.log("Ruan personal core tests passed.");
