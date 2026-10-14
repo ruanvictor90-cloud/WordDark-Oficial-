@@ -106,11 +106,56 @@ export function createDurableKnowledgeIntakeRegistry({
     if (!enabled) return [];
     return repository.searchValidated(clean(query), { limit: Math.min(Math.max(Number(limit) || 10, 1), 100) });
   }
+  async function recoverStaleReviews({ trustedContext = null, staleAfterMs = 300000 } = {}) {
+    if (!enabled) return { success: false, status: "KNOWLEDGE_REGISTRY_DISABLED", recovered: 0 };
+    const reviewerId = clean(trustedContext?.actorId);
+    const sessionId = clean(trustedContext?.sessionId);
+    if (trustedContext?.authenticated !== true || !reviewerId || !sessionId) {
+      return { success: false, status: "KNOWLEDGE_REVIEW_IDENTITY_REQUIRED", recovered: 0 };
+    }
+    const staleMs = Math.min(Math.max(Number(staleAfterMs) || 300000, 60000), 86400000);
+    let permission;
+    try {
+      permission = await authorizeReview({ reviewerId, sessionId, action: "RECOVER_STALE_REVIEWS", decision: "RECOVER" });
+    } catch {
+      return { success: false, status: "KNOWLEDGE_REVIEW_AUTHORIZATION_UNAVAILABLE", recovered: 0 };
+    }
+    if (permission?.allowed !== true || !clean(permission.approvalId)) {
+      return { success: false, status: "KNOWLEDGE_REVIEW_RECOVERY_DENIED", recovered: 0 };
+    }
+    try {
+      await audit({ event: "WORDDARK_KNOWLEDGE_STALE_REVIEW_RECOVERY_STARTED", reviewerId, approvalId: permission.approvalId, staleAfterMs: staleMs });
+    } catch {
+      return { success: false, status: "KNOWLEDGE_REVIEW_AUDIT_UNAVAILABLE", recovered: 0 };
+    }
+    let rows;
+    try { rows = await repository.listByStatus("REVIEWING", { limit: 500 }); }
+    catch { return { success: false, status: "DURABLE_KNOWLEDGE_READ_FAILED", recovered: 0 }; }
+    const cutoff = Date.parse(now()) - staleMs;
+    let recovered = 0, skipped = 0;
+    for (const row of rows) {
+      const claimedAt = Date.parse(row?.metadata?.reviewClaim?.claimedAt || "");
+      const id = clean(row?.intakeRecordId);
+      if (!id || !Number.isFinite(claimedAt) || claimedAt > cutoff) { skipped++; continue; }
+      const metadata = { ...(row.metadata || {}) };
+      delete metadata.reviewClaim;
+      metadata.recovery = { reviewerId, approvalId: permission.approvalId, recoveredAt: now(), reason: "STALE_REVIEW_CLAIM" };
+      const proposed = { ...row, status: "PROPOSED", metadata };
+      try {
+        if (await repository.compareAndSet(id, "REVIEWING", proposed)) {
+          recovered++;
+          await audit({ event: "WORDDARK_KNOWLEDGE_STALE_REVIEW_RECOVERED", reviewerId, recordId: id, approvalId: permission.approvalId });
+        } else skipped++;
+      } catch { skipped++; }
+    }
+    return { success: true, status: "KNOWLEDGE_REVIEW_RECOVERY_COMPLETED", recovered, skipped };
+  }
+
   async function getStatus() {
     if (!enabled) return { enabled: false, persistence: validRepository ? "durable-atomic" : "unavailable" };
     const [pending, reviewing, validated, rejected] = await Promise.all(["PROPOSED", "REVIEWING", "VALIDATED", "REJECTED"].map(status => repository.countByStatus(status)));
     return { enabled: true, persistence: "durable-atomic", pending, reviewing, validated, rejected, recoveryRequired: reviewing > 0 };
   }
 
-  return Object.freeze({ receivePending, review, listPending, searchValidated, getStatus });
+  return Object.freeze({ receivePending, review, recoverStaleReviews, listPending, searchValidated, getStatus });
 }
