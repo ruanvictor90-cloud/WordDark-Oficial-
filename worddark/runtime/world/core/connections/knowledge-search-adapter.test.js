@@ -37,6 +37,15 @@ const fetched = await adapter.execute({ providerId: "RESEARCH_API", capability: 
 assert.equal(fetched.status, "KNOWLEDGE_FETCH_COMPLETED");
 assert.equal(fetched.result.content, "Full article");
 assert.equal(fetchCalls, 1);
+const invalidFetch = createKnowledgeSearchAdapter({
+  providerId: "RESEARCH_API",
+  search: async () => [],
+  fetchSource: async () => ({ id: "doc-bad", url: "https://example.org/bad", title: "Unlicensed", content: "Must not be accepted" })
+});
+assert.equal((await invalidFetch.execute({
+  providerId: "RESEARCH_API", capability: "KNOWLEDGE_RESEARCH", action: "FETCH_KNOWLEDGE",
+  requestId: "REQ-3", payload: { sourceId: "doc-bad" }
+}, context)).status, "KNOWLEDGE_SOURCE_METADATA_INVALID");
 let registered = null;
 assert.deepEqual(registerKnowledgeSearchAdapter({
   gateway: { registerAdapter: (id, value) => { registered = { id, value }; return { success: true, status: "ADAPTER_REGISTERED" }; } },
