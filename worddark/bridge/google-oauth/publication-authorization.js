@@ -4,7 +4,8 @@
  */
 import {createHash} from "node:crypto";
 
-const ALLOWED_ACTIONS=new Set(["CONTENT_PUBLISH","CONTENT_UNPUBLISH","CONTENT_SCHEDULE"]);
+const ACTION_CAPABILITIES=Object.freeze({CONTENT_PUBLISH:"CONTENT_PUBLICATION",CONTENT_UNPUBLISH:"CONTENT_PUBLICATION",CONTENT_SCHEDULE:"CONTENT_PUBLICATION"});
+const ALLOWED_ACTIONS=new Set(Object.keys(ACTION_CAPABILITIES));
 
 function deny(status,reason){return{allowed:false,status,reason};}
 function fingerprint(value){
@@ -55,9 +56,9 @@ function createPublicationAuthorizationGate({
     const capability=String(request.capability||"").toUpperCase();
     const base={requestId:request.requestId,operationId:request.operationId,providerId:request.providerId,accountId:request.accountId};
 
-    if(!ALLOWED_ACTIONS.has(action)||action!==capability){
+    if(!ALLOWED_ACTIONS.has(action)||ACTION_CAPABILITIES[action]!==capability){
       await record({...base,type:"PUBLICATION_DENIED",status:"PUBLICATION_ACTION_MISMATCH"});
-      return deny("PUBLICATION_ACTION_MISMATCH","A ação e a capacidade de publicação precisam corresponder.");
+      return deny("PUBLICATION_ACTION_MISMATCH","A ação de transporte precisa mapear para a capacidade canônica CONTENT_PUBLICATION.");
     }
     if(!request.requestId||!request.operationId||!request.providerId||!request.accountId){
       await record({...base,type:"PUBLICATION_DENIED",status:"PUBLICATION_CONTEXT_REQUIRED"});
