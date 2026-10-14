@@ -62,7 +62,7 @@ flowchart TB
 
 ## Implementação feita nesta etapa
 
-- Criado `core/connections/ruan-hub-control-adapter.js`: contrato de entrada do Hub com default-deny, identidade confiável separada do pedido, autorização, aprovação, auditoria, idempotência injetada e ambiente fixado em TEST.
+- Criado `core/connections/ruan-hub-control-adapter.js` e documentado em [`RUAN-HUB-CONTROL.md`](./core/connections/RUAN-HUB-CONTROL.md): contrato de entrada do Hub com default-deny, identidade confiável separada do pedido, autorização, aprovação, auditoria, idempotência injetada e ambiente fixado em TEST.
 - Criados testes para modo desligado, identidade ausente, autorização negada, aprovação ausente, falha de auditoria, ausência de idempotência, descoberta de capacidades, consulta de estado e submissão sem duplicação.
 - Hub agora rotula novos pedidos como `RASCUNHO_LOCAL` / `LOCAL_ONLY`; a tela não afirma que foram recebidos pelo WordDark.
 - Não foi criado endpoint HTTP nem foi conectada uma sessão de operador real. O adaptador permanece desligado por padrão.
