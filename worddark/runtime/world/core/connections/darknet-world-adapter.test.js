@@ -1,5 +1,6 @@
 const assert=require("node:assert/strict");
 const createDarknetWorldAdapter=require("./darknet-world-adapter.js");
+(async()=>{
 let submissions=0,audits=0;
 const operationCenter={submit:input=>{submissions++;assert.equal(input.requesterId,"DARKNET");assert.equal(input.originId,"darknet");assert.equal(input.environment,"TEST");return{success:true,status:"QUEUED"};},getStatus:()=>({status:"HEALTHY"})};
 const request={requestId:"DNET-REQ-1",source:"DARKNET",destination:"WORDDARK",sector:"ceu",action:"REQUEST_OPERATION",payload:{need:"Preparar conteúdo"}};
@@ -15,3 +16,4 @@ assert.equal((await denied.handle(request)).status,"DARKNET_WORLD_REQUEST_DENIED
 const catalog=await adapter.handle({...request,action:"CAPABILITY_DISCOVERY",payload:{}});
 assert.equal(catalog.status,"CAPABILITIES_AVAILABLE");assert.deepEqual(catalog.capabilities,["PUBLISH_CONTENT"]);
 console.log("darknet-world-adapter.test: OK");
+})().catch(error=>{console.error(error);process.exitCode=1;});
