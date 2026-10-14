@@ -254,6 +254,6 @@ O teste core/terra-commercial-core.integration.test.js cobre a sequência Terra 
 
 ## Prova integrada Terra → Comercial → Core → Dark Factory
 
-O teste worddark/runtime/world/earth/commercial-world.integration.test.js combina os dois adapters e exercita a cadeia inteira no ambiente de teste: demanda capturada → lead comercial → proposta aceita → pedido → aprovação interna → Core/Rodovia → Dark Factory → retorno rastreável. O teste verifica a preservação de sourceDemandId, a prevenção de lead duplicado, o ID da operação, os registros centrais e a parada em REVIEW.
+O teste worddark/runtime/world/earth/commercial-world.integration.test.js combina os dois adapters e exercita a cadeia inteira no ambiente de teste: demanda capturada → lead comercial → proposta aceita → pedido → aprovação interna → Core/Rodovia → Dark Factory → retorno rastreável. O teste verifica a preservação de sourceDemandId, a prevenção de lead duplicado, o ID da operação, os registros centrais e a parada em REVIEW. Os módulos executores de conteúdo, a identidade, a autorização, a auditoria e a idempotência são simulados.
 
 O cenário usa identidade, autorização, auditoria e idempotência simuladas; portanto, comprova a integração de código entre os setores, mas não substitui validação em staging nem autoriza execução em produção.
