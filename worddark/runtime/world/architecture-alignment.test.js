@@ -53,6 +53,10 @@ const packageScripts = read('package.json');
 const capabilityCatalog = read('worddark/runtime/world/core/capability-catalog.js');
 const commercialBridge = read('worddark/runtime/world/core/commercial-order-operation-bridge.js');
 const commercialBridgeTest = read('worddark/runtime/world/core/commercial-order-operation-bridge.test.js');
+const earthCommercialIntake = read('worddark/runtime/world/core/earth-commercial-intake-adapter.js');
+const earthCommercialIntakeTest = read('worddark/runtime/world/core/earth-commercial-intake-adapter.test.js');
+const earthEngine = read('worddark/runtime/world/earth/earth-engine.js');
+const commercialEngine = read('worddark/runtime/world/earth/commercial-engine.js');
 
 assert.ok(repository.includes('COMMERCIAL-BOOTSTRAP.md') && commercialPlan.includes('Sem APIs premium antes de provar retorno') && commercialPlan.includes('Faturamento não é lucro') && commercialPlan.includes('Nenhuma proposta ou execução externa automática sem autorização'));
 assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('ARCHITECTURE-MAP.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
@@ -111,4 +115,8 @@ assert.ok(connectionGatewayTest.includes('MUST_NOT_ESCAPE') && connectionGateway
 assert.ok(commercialBridge.includes('COMMERCIAL_ORDER_DISPATCH:') && commercialBridge.includes('COMMERCIAL_ORDER_APPROVAL_REQUIRED') && commercialBridge.includes('environment: "TEST"'), 'Terra-to-Core handoff must be idempotent, approval-gated and test-only by default');
 assert.ok(commercialBridgeTest.includes('COMMERCIAL_DISPATCH_DENIED') && commercialBridgeTest.includes('COMMERCIAL_CORE_OPERATION_ID_REQUIRED') && commercialBridgeTest.includes('same commercial order must not be dispatched twice'), 'Terra-to-Core handoff must test denial, traceability and duplicate prevention');
 assert.ok(packageScripts.includes('commercial-order-operation-bridge.test.js') && sectors.includes('Integração Terra comercial → Core') && readinessAudit.includes('Integração comercial Terra → WordDark Core'), 'Commercial handoff test and readiness documentation must stay aligned');
+assert.ok(earthCommercialIntake.includes('TERRA_DEMAND_TO_LEAD:') && earthCommercialIntake.includes('EARTH_COMMERCIAL_INTAKE_DISABLED') && earthCommercialIntake.includes('sourceDemandId'), 'Terra demand intake must preserve provenance and remain gated');
+assert.ok(earthCommercialIntakeTest.includes('EARTH_COMMERCIAL_INTAKE_DENIED') && earthCommercialIntakeTest.includes('same demand must not create multiple leads'), 'Terra intake tests must cover denial and idempotency');
+assert.ok(earthEngine.includes('linkCommercialLead') && commercialEngine.includes('sourceDemandId:x.sourceDemandId'), 'Terra demand and commercial lead must share a traceable source link');
+assert.ok(packageScripts.includes('earth-commercial-intake-adapter.test.js') && readinessAudit.includes('Integração Terra: demanda capturada → lead comercial'), 'Terra demand-to-lead integration must be in the test suite and readiness map');
 console.log('Architecture alignment tests passed.');
