@@ -1,7 +1,9 @@
 import assert from "node:assert/strict";
 import { createDarknetKnowledgeIntegration } from "./darknet-knowledge-integration.js";
+import { createKnowledgeIntakeRegistry } from "../worddark/runtime/world/library/knowledge-intake-registry.js";
 
 let saved = 0, darknetAudits = 0, worldAudits = 0, providerCalls = 0;
+const registry = createKnowledgeIntakeRegistry({ enabled: true, authorizeReview: async () => ({ allowed: true }), audit: async () => {}, archiveValidated: async () => ({ success: true }) });
 const integration = createDarknetKnowledgeIntegration({
   enabled: true,
   providers: [{
@@ -30,7 +32,7 @@ const result = await integration.learn({ providerId: "external-research", query:
 assert.equal(result.status, "KNOWLEDGE_RECEIVED_PENDING_REVIEW");
 assert.equal(result.received, 1);
 assert.equal(providerCalls, 1);
-assert.equal(saved, 1);
+assert.equal(saved, 1);\nassert.equal(registry.listPending().length, 1);\nassert.equal(registry.searchValidated("reusable").length, 0);
 assert.equal(darknetAudits, 2);
 assert.equal(worldAudits, 1);
 assert.equal(integration.getStatus().networkAccess, false);
