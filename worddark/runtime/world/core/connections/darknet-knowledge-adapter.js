@@ -40,7 +40,7 @@ export function createDarknetKnowledgeAdapter({
     try {
       const result = await knowledgeRegistry.receivePending(structuredClone(record), { actorId, approvalId: decision.approvalId || null });
       if (result?.success !== true) return deny(result?.status || "WORDDARK_KNOWLEDGE_STORE_FAILED");
-      return { success: true, status: "RECEIVED_PENDING_REVIEW", recordId: record.recordId, promoted: false };
+      return { success: true, status: result.status || "RECEIVED_PENDING_REVIEW", recordId: record.recordId, promoted: false };
     } catch { return deny("WORDDARK_KNOWLEDGE_STORE_FAILED"); }
   }
   return Object.freeze({
