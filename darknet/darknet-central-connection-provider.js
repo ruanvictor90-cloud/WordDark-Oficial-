@@ -21,7 +21,7 @@ export function createCentralConnectionKnowledgeProvider({
   if (!provider || !account || !grant) throw new Error("providerId, accountId e capability concedida são obrigatórios.");
   if (!gateway || typeof gateway.execute !== "function") throw new Error("Central de Conexões indisponível.");
 
-  async function execute(operation, payload) {
+  async function execute(operation, payload, trustedContext = null) {
     const requestId = clean(operationIdFactory());
     if (!requestId) throw new Error("requestId de pesquisa não gerado.");
     const response = await gateway.execute({
@@ -32,7 +32,7 @@ export function createCentralConnectionKnowledgeProvider({
       capability: grant,
       action: operation,
       payload
-    });
+    }, { requestContext: trustedContext });
     if (response?.success !== true) {
       const error = new Error(response?.status || "KNOWLEDGE_PROVIDER_REQUEST_FAILED");
       error.code = response?.status || "KNOWLEDGE_PROVIDER_REQUEST_FAILED";
@@ -53,19 +53,19 @@ export function createCentralConnectionKnowledgeProvider({
 
   return Object.freeze({
     id: provider.toLowerCase(),
-    async search({ query, limit = 10 } = {}) {
+    async search({ query, limit = 10, trustedContext = null } = {}) {
       const searchQuery = clean(query);
       if (!searchQuery || searchQuery.length > 1000) throw new Error("Consulta de conhecimento inválida.");
-      const body = await execute(searchAction, { query: searchQuery, limit: Math.min(Math.max(Number(limit) || 10, 1), 25) });
+      const body = await execute(searchAction, { query: searchQuery, limit: Math.min(Math.max(Number(limit) || 10, 1), 25) }, trustedContext);
       const rows = Array.isArray(body) ? body : Array.isArray(body?.results) ? body.results : Array.isArray(body?.items) ? body.items : null;
       if (!rows) throw new Error("KNOWLEDGE_PROVIDER_RESPONSE_INVALID");
       return rows.slice(0, 25);
     },
-    async fetch({ sourceId, url } = {}) {
+    async fetch({ sourceId, url, trustedContext = null } = {}) {
       const id = clean(sourceId);
       const sourceUrl = clean(url);
       if (!id && !/^https:\/\//i.test(sourceUrl)) throw new Error("KNOWLEDGE_SOURCE_REQUIRED");
-      const body = await execute(retrieveAction, { sourceId: id || null, url: sourceUrl || null });
+      const body = await execute(retrieveAction, { sourceId: id || null, url: sourceUrl || null }, trustedContext);
       if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("KNOWLEDGE_PROVIDER_RESPONSE_INVALID");
       return body;
     },
