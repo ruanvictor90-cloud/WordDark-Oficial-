@@ -42,9 +42,9 @@ A porta usa comunicação in-process injetada, não HTTP nem rede. Os dois lados
 
 O pipeline `darknet-knowledge-pipeline.js` é a porta de aquisição e `darknet-knowledge-integration.js` compõe a entrada da Darknet com o adaptador do WordDark em memória: usa adaptadores de provedores injetados, valida origem HTTPS, declaração de direitos, tamanho e proveniência, e encaminha os registros ao WordDark. A Darknet não guarda tokens de provedores e não abre conexões de rede por conta própria.
 
-- O provedor externo é fornecido pela Central de Conexões por meio de um adaptador `search({ query, limit })`.
+- O provedor externo pode ser adaptado pela Central de Conexões por meio de `darknet-central-connection-provider.js`, que usa o gateway oficial e mantém credenciais fora da Darknet. O adaptador exige `providerId`, `accountId` e uma capacidade já concedida; a resposta da API deve retornar uma lista de registros com URL, conteúdo e declaração de direitos.
 - A transferência exige identidade autenticada confiável, autorização e auditoria.
-- A entrada WordDark fica em `worddark/runtime/world/core/connections/darknet-knowledge-adapter.js` e exige um registro de conhecimento pendente, identidade de serviço e um registro de destino injetado.
+- A entrada WordDark fica em `worddark/runtime/world/core/connections/darknet-knowledge-adapter.js` e exige um registro de conhecimento pendente, identidade de serviço e um registro de destino injetado. `worddark/runtime/world/library/knowledge-intake-registry.js` mantém candidatos propostos e só os torna consultáveis como conhecimento validado após revisão autenticada e arquivamento explícito.
 - Todo conteúdo chega com estado `RECEIVED_PENDING_REVIEW`; não é promovido automaticamente à Biblioteca Central nem usado como verdade validada.
 - Duplicatas são evitadas dentro da instância atual. Para operação oficial, a chave idempotente deve ser persistida atomicamente no backend.
 - O pipeline e a entrada WordDark continuam desligados por padrão; não há rota HTTP nem chamada de API externa ativada por esta alteração.
