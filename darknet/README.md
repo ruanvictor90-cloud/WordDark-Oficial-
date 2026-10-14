@@ -93,6 +93,8 @@ npm test
 
 ### Testes
 
+`darknet/darknet-knowledge-runtime.integration.test.js` exercises the full mocked path: Central de Conexões → Darknet → entrada pendente no WordDark → revisão autorizada → arquivo canônico → busca validada. It uses a test-only credential and an atomic in-memory test double; it does not call an external API or prove production readiness.
+
 ```bash
 npm run knowledge:test
 npm test
