@@ -137,6 +137,105 @@ export function completeTask(state, taskId, options = {}) {
   return committed.ok ? { ...committed, record: task, nextTask } : committed;
 }
 
+/** Create a project with a stable milestone collection. */
+export function createProject(state, input = {}, options = {}) {
+  if (!nonEmpty(input.title)) return resultError("title_required", "Informe o nome do projeto.");
+  const now = options.now || new Date().toISOString();
+  const id = (options.idFactory || createId)("project");
+  const next = normalizeState(state, now);
+  const record = { id, title: input.title.trim(), description: nonEmpty(input.description) ? input.description.trim() : "",
+    status: "active", progress: 0, milestones: [], dueDate: input.dueDate || null, createdAt: now, updatedAt: now };
+  if (record.dueDate && !validDate(record.dueDate)) return resultError("invalid_due_date", "Use uma data válida no formato AAAA-MM-DD.");
+  next.projects.unshift(record);
+  const committed = commit(next, now, "project", id, { action: "created" });
+  return committed.ok ? { ...committed, record } : committed;
+}
+
+/** Add a milestone and recalculate progress from completed milestones. */
+export function addProjectMilestone(state, projectId, title, options = {}) {
+  if (!nonEmpty(title)) return resultError("title_required", "Informe o nome da etapa.");
+  const now = options.now || new Date().toISOString();
+  const next = normalizeState(state, now);
+  const project = next.projects.find(item => item.id === projectId);
+  if (!project) return resultError("project_not_found", "Projeto não encontrado.");
+  if (!Array.isArray(project.milestones)) project.milestones = [];
+  const milestone = { id: (options.idFactory || createId)("milestone"), title: title.trim(), done: false, createdAt: now };
+  project.milestones.push(milestone);
+  project.progress = Math.round(project.milestones.filter(item => item.done).length / project.milestones.length * 100);
+  project.updatedAt = now;
+  const committed = commit(next, now, "project", projectId, { action: "milestone_added", milestoneId: milestone.id });
+  return committed.ok ? { ...committed, record: project, milestone } : committed;
+}
+
+/** Toggle a milestone; project progress is always derived from its milestones. */
+export function setProjectMilestoneDone(state, projectId, milestoneId, done = true, options = {}) {
+  const now = options.now || new Date().toISOString();
+  const next = normalizeState(state, now);
+  const project = next.projects.find(item => item.id === projectId);
+  if (!project) return resultError("project_not_found", "Projeto não encontrado.");
+  const milestone = (Array.isArray(project.milestones) ? project.milestones : []).find(item => item.id === milestoneId);
+  if (!milestone) return resultError("milestone_not_found", "Etapa não encontrada.");
+  milestone.done = Boolean(done);
+  milestone.completedAt = milestone.done ? now : null;
+  project.progress = project.milestones.length
+    ? Math.round(project.milestones.filter(item => item.done).length / project.milestones.length * 100)
+    : 0;
+  project.status = project.progress === 100 && project.milestones.length ? "done" : "active";
+  project.updatedAt = now;
+  const committed = commit(next, now, "project", projectId, { action: "milestone_toggled", milestoneId, done: milestone.done });
+  return committed.ok ? { ...committed, record: project, milestone } : committed;
+}
+
+/** Add a calendar entry after validating its local date and optional time. */
+export function createCalendarItem(state, input = {}, options = {}) {
+  if (!nonEmpty(input.title)) return resultError("title_required", "Informe o nome do compromisso.");
+  if (!validDate(input.date)) return resultError("invalid_date", "Informe uma data válida no formato AAAA-MM-DD.");
+  if (input.time && !/^(?:[01]\\d|2[0-3]):[0-5]\\d$/.test(input.time)) return resultError("invalid_time", "Use um horário válido no formato HH:MM.");
+  const now = options.now || new Date().toISOString();
+  const id = (options.idFactory || createId)("calendar");
+  const next = normalizeState(state, now);
+  const record = { id, title: input.title.trim(), description: nonEmpty(input.description) ? input.description.trim() : "",
+    date: input.date, time: input.time || null, allDay: !input.time, type: input.type || "event",
+    status: "scheduled", createdAt: now, updatedAt: now };
+  next.calendarItems.unshift(record);
+  const committed = commit(next, now, "calendarItem", id, { action: "created" });
+  return committed.ok ? { ...committed, record } : committed;
+}
+
+/** Create a habit definition; individual completions live in routineLogs. */
+export function createHabit(state, input = {}, options = {}) {
+  if (!nonEmpty(input.title)) return resultError("title_required", "Informe o nome do hábito.");
+  const frequency = input.frequency || "daily";
+  if (!["daily", "weekly"].includes(frequency)) return resultError("invalid_frequency", "A frequência deve ser diária ou semanal.");
+  const now = options.now || new Date().toISOString();
+  const id = (options.idFactory || createId)("habit");
+  const next = normalizeState(state, now);
+  const record = { id, title: input.title.trim(), frequency, active: true, createdAt: now, updatedAt: now };
+  next.habits.unshift(record);
+  const committed = commit(next, now, "habit", id, { action: "created" });
+  return committed.ok ? { ...committed, record } : committed;
+}
+
+/** Upsert one completion log per habit and calendar date. */
+export function recordHabit(state, habitId, date, completed = true, options = {}) {
+  if (!validDate(date)) return resultError("invalid_date", "Informe uma data válida no formato AAAA-MM-DD.");
+  const now = options.now || new Date().toISOString();
+  const next = normalizeState(state, now);
+  const habit = next.habits.find(item => item.id === habitId);
+  if (!habit) return resultError("habit_not_found", "Hábito não encontrado.");
+  if (!habit.active) return resultError("habit_inactive", "Este hábito está pausado.");
+  let log = next.routineLogs.find(item => item.habitId === habitId && item.date === date);
+  if (log) {
+    log.completed = Boolean(completed);
+    log.updatedAt = now;
+  } else {
+    log = { id: (options.idFactory || createId)("habitlog"), habitId, date, completed: Boolean(completed), createdAt: now, updatedAt: now };
+    next.routineLogs.unshift(log);
+  }
+  const committed = commit(next, now, "habit", habitId, { action: "logged", date, completed: log.completed });
+  return committed.ok ? { ...committed, record: log } : committed;
+}
+
 /** A narrow helper for callers that need a supported collection check. */
 export function isPersonalCollection(value) { return COLLECTIONS.includes(value) && value !== "events"; }
 export function getDomainServiceVersion() { return SCHEMA_VERSION; }
