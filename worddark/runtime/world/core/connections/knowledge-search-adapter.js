@@ -5,7 +5,7 @@
 const clean = value => String(value ?? "").trim();
 const MAX_RESULTS = 25;
 
-function normalizeSource(row = {}) {
+function normalizeSource(row = {}, now = () => new Date().toISOString()) {
   if (!row || typeof row !== "object" || Array.isArray(row)) return null;
   const source = {
     sourceId: clean(row.sourceId || row.id),
@@ -16,7 +16,7 @@ function normalizeSource(row = {}) {
     license: clean(row.license) || null,
     language: clean(row.language) || "und",
     tags: Array.isArray(row.tags) ? row.tags.map(clean).filter(Boolean).slice(0, 20) : [],
-    retrievedAt: clean(row.retrievedAt) || new Date().toISOString()
+    retrievedAt: clean(row.retrievedAt) || now()
   };
   return source;
 }
@@ -46,7 +46,7 @@ export function createKnowledgeSearchAdapter({
       return {
         success: true,
         status: "KNOWLEDGE_SEARCH_COMPLETED",
-        result: { results: rows.slice(0, limit).map(normalizeSource).filter(Boolean).map(row => ({ ...row, retrievedAt: row.retrievedAt || now() })) }
+        result: { results: rows.slice(0, limit).map(row => normalizeSource(row, now)).filter(Boolean) }
       };
     }
     if (request.action === "FETCH_KNOWLEDGE") {
@@ -57,7 +57,7 @@ export function createKnowledgeSearchAdapter({
       let response;
       try { response = await fetchSource({ sourceId: sourceId || null, url: url || null, account: context.account || null, credential: context.credential ?? null, requestId: request.requestId }); }
       catch { return { success: false, status: "KNOWLEDGE_PROVIDER_FETCH_FAILED" }; }
-      const row = normalizeSource(response);
+      const row = normalizeSource(response, now);
       if (!row) return { success: false, status: "KNOWLEDGE_PROVIDER_RESPONSE_INVALID" };
       return { success: true, status: "KNOWLEDGE_FETCH_COMPLETED", result: row };
     }
