@@ -1,7 +1,7 @@
 /**
  * Ruan -> Darknet client bridge v0.1.
  * Browser-safe, read-only adapter. Provider URLs are allowlisted; no credentials,
- * mutations, arbitrary URLs, or WordDark privileged operations are exposed here.
+ * mutations or arbitrary URLs are exposed here.
  * Replace the transport behind this contract when the authenticated Darknet API exists.
  */
 export const DARKNET_CLIENT_VERSION = "0.1.0";
