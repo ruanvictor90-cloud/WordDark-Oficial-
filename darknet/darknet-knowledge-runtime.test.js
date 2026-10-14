@@ -48,6 +48,6 @@ assert.equal(spoofedRead.status, "TRUSTED_SERVICE_AUTHENTICATION_FAILED");
 const authenticatedReview = await protectedRuntime.review({
   recordId: "DNET-UNKNOWN", decision: "VALIDATE", requestContext: { serviceToken: "test-secret" }
 });
-assert.equal(authenticatedReview.status, "KNOWLEDGE_CANDIDATE_NOT_FOUND");
+assert.equal(authenticatedReview.status, "DURABLE_KNOWLEDGE_READ_FAILED", "a trusted request must pass authentication before touching the repository");
 
 console.log("darknet-knowledge-runtime.test: OK");
