@@ -58,14 +58,17 @@ assert.equal(store.audit.durable, true);
 
 let callbackCount = 0;
 let releaseCallback;
+let markCallbackStarted;
+const callbackStarted = new Promise(resolve => { markCallbackStarted = resolve; });
 const blockedCallback = new Promise(resolve => { releaseCallback = resolve; });
 const first = store.idempotencyStore.executeOnce("RUAN_HUB:req-1", async () => {
   callbackCount++;
+  markCallbackStarted();
   await blockedCallback;
   return { success: true, status: "OPERATION_ACCEPTED", operationId: "op-1", access_token: "never-persist" };
 }, { fingerprint: '{"action":"SUBMIT_NEED","need":"sample"}' });
 
-await Promise.resolve();
+await callbackStarted;
 const duplicateInFlight = await store.idempotencyStore.executeOnce(
   "RUAN_HUB:req-1",
   async () => { callbackCount++; return { success: true, status: "DUPLICATE_SIDE_EFFECT" }; },
