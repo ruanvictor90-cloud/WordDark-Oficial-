@@ -35,6 +35,10 @@ export function inspectDarknetKnowledgeReadiness({
   if (!fn(auditWordDark)) missing.push("WORDDARK_AUDIT");
   if (!fn(auditReview)) missing.push("REVIEW_AUDIT");
   if (!fn(createKnowledgeRecord) || !centralKnowledgeStore || typeof centralKnowledgeStore.archive !== "function") missing.push("CANONICAL_KNOWLEDGE_ARCHIVE");
+  else {
+    if (centralKnowledgeStore.durable !== true) missing.push("DURABLE_CANONICAL_KNOWLEDGE_ARCHIVE");
+    if (centralKnowledgeStore.idempotent !== true) missing.push("IDEMPOTENT_CANONICAL_ARCHIVE");
+  }
   return Object.freeze({ ready: missing.length === 0, enabled: enabled === true, activationAllowed: enabled === true && missing.length === 0, missing: [...new Set(missing)], registeredProviderIds: [...registered], configuredProviderIds: configuredProviders.map(x => String(x?.providerId || "").toUpperCase()).filter(Boolean), networkAccess: "delegated-to-central-connection-gateway" });
 }
 
