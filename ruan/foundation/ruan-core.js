@@ -45,7 +45,8 @@ export function validateState(input) {
   if (!input || typeof input !== "object" || Array.isArray(input)) {
     return { valid: false, errors: ["O arquivo precisa conter um objeto de dados do Ruan."] };
   }
-  if (input.schemaVersion !== undefined && !Number.isInteger(input.schemaVersion)) errors.push("Versão do esquema inválida.");
+  if (input.schemaVersion !== undefined && (!Number.isInteger(input.schemaVersion) || input.schemaVersion < 1)) errors.push("Versão do esquema inválida.");
+  if (Number.isInteger(input.schemaVersion) && input.schemaVersion > SCHEMA_VERSION) errors.push("Este backup foi criado por uma versão mais nova do Ruan. Atualize o aplicativo antes de importá-lo.");
   for (const key of COLLECTIONS) {
     if (input[key] !== undefined && !Array.isArray(input[key])) errors.push('A coleção "' + key + '" precisa ser uma lista.');
   }
@@ -53,8 +54,8 @@ export function validateState(input) {
     errors.push("As preferências precisam ser um objeto.");
   }
   for (const item of (Array.isArray(input.transactions) ? input.transactions : [])) {
-    if (!item || typeof item.title !== "string" || !["income", "expense"].includes(item.type) ||
-        !Number.isFinite(item.amount) || item.amount <= 0) {
+    if (!item || typeof item.title !== "string" || !item.title.trim() || !["income", "expense"].includes(item.type) ||
+        !Number.isFinite(item.amount) || item.amount <= 0 || (item.date != null && !isDateKey(item.date))) {
       errors.push("Há um lançamento financeiro inválido.");
       break;
     }
@@ -62,6 +63,7 @@ export function validateState(input) {
   for (const item of (Array.isArray(input.bills) ? input.bills : [])) {
     if (!item || typeof item.title !== "string" || !item.title.trim() ||
         !Number.isFinite(item.amount) || item.amount < 0 ||
+        (item.dueDate != null && item.dueDate !== "" && !isDateKey(item.dueDate)) ||
         (item.status && !["open", "paid", "cancelled"].includes(item.status))) {
       errors.push("Há uma conta futura inválida.");
       break;
@@ -84,6 +86,11 @@ export function createEvent(state, type, entity, entityId, detail = {}, now = ne
 }
 
 function localDateKey(date) { return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"); }
+function isDateKey(value) {
+  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  const parsed = new Date(value + "T12:00:00");
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
 
 export function calculateFinance(state, options = {}) {
   const now = options.now ? new Date(options.now) : new Date();
