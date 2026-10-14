@@ -1,7 +1,7 @@
-const CACHE="worddark-hub-v13";
-const CORE=["./","./index.html","./central.html","./darknet.html","./darknet.js","../ruan/apps/darknet/darknet-core.js","../ruan/apps/darknet/darknet.css","./app.css?v=20261013-8","./app.js?v=20261013-8","./manifest.webmanifest","./app-icon.svg"];
+const CACHE="ruan-hub-v14";
+const CORE=["./","./index.html","./central.html","./darknet.html","./darknet.js","./app.css?v=20261014-1","./app.js?v=20261014-1","./manifest.webmanifest","./app-icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
-self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("worddark-hub-")&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
+self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("ruan-hub-")&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{
  if(event.request.method!=="GET"||new URL(event.request.url).origin!==self.location.origin)return;
  const requestUrl=new URL(event.request.url);
