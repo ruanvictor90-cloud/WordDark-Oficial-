@@ -30,6 +30,9 @@ const knowledgeIntegration = read('darknet/darknet-knowledge-integration.js');
 const knowledgeAdapter = read('worddark/runtime/world/core/connections/darknet-knowledge-adapter.js');
 const knowledgeRegistry = read('worddark/runtime/world/library/knowledge-intake-registry.js');
 const knowledgeArchiver = read('worddark/runtime/world/library/central-knowledge-archiver.js');
+const durableKnowledgeRepository = read('worddark/runtime/world/library/durable-knowledge-repository.js');
+const durableKnowledgeRegistry = read('worddark/runtime/world/library/durable-knowledge-intake-registry.js');
+const knowledgeRuntime = read('darknet/darknet-knowledge-runtime.js');
 const capabilityCatalog = read('worddark/runtime/world/core/capability-catalog.js');
 
 assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('ARCHITECTURE-MAP.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
@@ -62,5 +65,8 @@ assert.ok(knowledgeIntegration.includes('worldAdapter.receive') && knowledgeInte
 assert.ok(knowledgeAdapter.includes('WORDDARK_TRUSTED_IDENTITY_REQUIRED') && knowledgeAdapter.includes('WORDDARK_KNOWLEDGE_AUDIT_UNAVAILABLE'));
 assert.ok(knowledgeRegistry.includes('searchValidated') && knowledgeRegistry.includes('KNOWLEDGE_REVIEW_IDENTITY_REQUIRED') && knowledgeRegistry.includes('in-memory-test-only'));
 assert.ok(knowledgeArchiver.includes('DARKNET_KNOWLEDGE_VALIDATED') && knowledgeArchiver.includes('centralKnowledgeStore.archive'));
+assert.ok(durableKnowledgeRepository.includes('DURABLE_ATOMIC_KNOWLEDGE_BACKEND_REQUIRED') && durableKnowledgeRepository.includes('compareAndSet'));
+assert.ok(durableKnowledgeRegistry.includes('KNOWLEDGE_REVIEW_CONFLICT') && durableKnowledgeRegistry.includes('DUPLICATE_SKIPPED'));
+assert.ok(knowledgeRuntime.includes('DARKNET_KNOWLEDGE_RUNTIME_NOT_READY') && knowledgeRuntime.includes('DURABLE_CANONICAL_KNOWLEDGE_ARCHIVE'));
 assert.ok(capabilityCatalog.includes('KNOWLEDGE_RESEARCH') && capabilityCatalog.includes('SEARCH_KNOWLEDGE'));
 console.log('Architecture alignment tests passed.');
