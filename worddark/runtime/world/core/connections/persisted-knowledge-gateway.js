@@ -132,6 +132,8 @@ export function createPersistedKnowledgeGateway({
     getStatus: () => ({
       enabled: enabled === true,
       transport: "server-only-persisted-connection-store",
+      adapters: adapters instanceof Map ? [...adapters.keys()].map(id => String(id).toUpperCase()) : Object.keys(adapters).map(id => String(id).toUpperCase()),
+      adapterCount: adapters instanceof Map ? adapters.size : Object.keys(adapters).length,
       actions: Object.keys(ACTION_CAPABILITIES),
       credentialsExposed: false,
       requiresTrustedIdentity: true,
