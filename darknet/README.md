@@ -61,3 +61,20 @@ npm run knowledge:test
 ```
 
 A suíte completa continua sendo `npm test`. Nenhuma das duas substitui a validação com credenciais e serviços reais em staging.
+
+
+## Runtime de conhecimento preparado para operação
+
+`darknet/darknet-knowledge-runtime.js` é o ponto de composição para o backend confiável. Ele reúne os providers registrados na Central de Conexões, autenticação do serviço, autorizações, auditoria, revisão autenticada, repositório atômico e arquivo canônico. A ativação falha fechada se algum requisito estiver ausente.
+
+`worddark/runtime/world/library/durable-knowledge-repository.js` define o contrato para o backend persistente. A implementação real deve garantir durabilidade entre reinicializações, inserção idempotente e compare-and-set atômico entre múltiplas instâncias. `durable-knowledge-intake-registry.js` usa esse contrato para impedir duplicação e revisão concorrente. Registros deixados em `REVIEWING` após queda do processo aparecem como recuperação necessária no status.
+
+**Ainda não é produção:** não foi fornecido neste código um driver real de banco durável, nem foi confirmada a disponibilidade dos adapters externos registrados. A biblioteca central atual também não declara persistência/idempotência durável, então o verificador de prontidão mantém a ativação bloqueada até existir um arquivo canônico idempotente e persistente.
+
+Comandos:
+
+```bash
+npm run knowledge:test
+npm run knowledge:readiness
+npm test
+```
