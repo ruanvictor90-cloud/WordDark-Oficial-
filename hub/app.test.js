@@ -18,6 +18,9 @@ assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes
 assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
 assert.ok(css.includes('.quick-request-bar') && css.includes('.test-app-tile') && css.includes('.launch-dock'));
 assert.ok(sw.includes('ruan-hub-v14') && sw.includes('central.html') && sw.includes('darknet.html'));
+assert.ok(!sw.includes('../ruan/apps/darknet/'), 'Hub cache must not reference the removed Ruan-owned Darknet copy');
+assert.ok(read('manifest.webmanifest').includes('Ruan Hub'), 'Install metadata must use Ruan Hub identity');
+assert.ok(read('darknet.html').includes('Sistema independente'), 'Darknet must remain an independent system');
 
 assert.ok(hub.indexOf('</header>')<hub.indexOf('class="ruan-return hub-return-under-header"'), 'Hub return must sit below the header');
 assert.ok(central.indexOf('</header>')<central.indexOf('class="ruan-return hub-return-under-header"') && !central.includes('<a class="central-back"'), 'Hub Central must have only one return link below the header');
