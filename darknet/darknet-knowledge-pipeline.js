@@ -103,6 +103,7 @@ export function createDarknetKnowledgePipeline({
       if (seen.has(item.recordId)) { duplicates++; outcomes.push({ recordId: item.recordId, status: "DUPLICATE_SKIPPED" }); continue; }
       try {
         const result = await knowledgePort.receive(item, trustedContext);
+        if (result?.status === "DUPLICATE_SKIPPED") { seen.add(item.recordId); duplicates++; outcomes.push({ recordId: item.recordId, status: "DUPLICATE_SKIPPED" }); continue; }
         if (result?.success !== true) { rejected++; outcomes.push({ recordId: item.recordId, status: result?.status || "WORLD_REJECTED" }); continue; }
         seen.add(item.recordId);
         received++;
