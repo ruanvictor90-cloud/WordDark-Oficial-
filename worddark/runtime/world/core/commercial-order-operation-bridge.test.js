@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createCommercialOrderOperationBridge } from "./commercial-order-operation-bridge.js";
+import { createManualExecutionQueue } from "../sky/darkfactory/core/manual-execution-queue.js";
 
 function memoryIdempotency() {
   const results = new Map();
@@ -40,8 +41,9 @@ function makeCommercialEngine() {
   };
 }
 
-function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, coreStatus = "ACCEPTED", operationId = "op-bridge-1" } = {}) {
+function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, coreStatus = "ACCEPTED", operationId = "op-bridge-1", executionQueueEnabled = false, executionServiceType = "content.digital-package" } = {}) {
   const commercial = makeCommercialEngine();
+  const executionQueue = executionQueueEnabled ? createManualExecutionQueue({ operatorId: "operator-1", idFactory: () => "task-bridge-1" }) : null;
   const order = commercial.getOrder("order-bridge-1");
   const calls = { core: [], audit: [] };
   const bridge = createCommercialOrderOperationBridge({
@@ -55,9 +57,11 @@ function setup({ enabled = true, allowed = true, approved = true, coreSuccess = 
     resolveAction: async () => "CREATE_CONTENT",
     audit: async event => { calls.audit.push(event); },
     idempotencyStore: memoryIdempotency(),
-    enabled
+    enabled,
+    executionQueue,
+    resolveExecutionService: async () => executionServiceType
   });
-  return { bridge, commercial, order, calls };
+  return { bridge, commercial, order, calls, executionQueue };
 }
 
 const disabled = setup({ enabled: false });
@@ -104,5 +108,38 @@ const missingOperationId = setup({ operationId: "" });
 const noId = await missingOperationId.bridge.dispatch({ requestId: "req-7", orderId: missingOperationId.order.orderId, approvalId: "approval-1" });
 assert.equal(noId.status, "COMMERCIAL_CORE_OPERATION_ID_REQUIRED");
 assert.equal(missingOperationId.commercial.getOrder(missingOperationId.order.orderId).status, "ORDER_OPEN");
+
+const operational = setup({ executionQueueEnabled: true });
+const operationalResult = await operational.bridge.dispatch({
+  requestId: "req-operational", orderId: operational.order.orderId, approvalId: "approval-operational"
+});
+assert.equal(operationalResult.success, true);
+assert.equal(operationalResult.executionTaskId, "DF-task-bridge-1");
+assert.equal(operationalResult.orderStatus, "PLANNED");
+let task = operational.executionQueue.getTask(operationalResult.executionTaskId);
+assert.equal(task.status, "QUEUED");
+assert.equal(task.executorId, "CEU/DARK_FACTORY/MANUAL_OPERATOR");
+assert.equal(task.assignedTo, "operator-1");
+assert.equal(operational.executionQueue.claim(task.taskId, "operator-1").task.status, "IN_PROGRESS");
+assert.equal(operational.executionQueue.submitDeliverables(task.taskId, "operator-1", [
+  { name: "Texto 1", format: "text", content: "Texto real preparado para a primeira publicação do cliente." },
+  { name: "Roteiro", format: "text", content: "Roteiro real preparado para o vídeo curto do cliente." }
+]).task.status, "SUBMITTED");
+assert.equal(operational.executionQueue.review(task.taskId, "reviewer-2", "APPROVE", "Conferido").task.status, "READY_TO_DELIVER");
+assert.equal(operational.executionQueue.markDelivered(task.taskId, "operator-1", {
+  customerConfirmed: true, reference: "delivery-confirmation-1"
+}).task.status, "DELIVERED");
+assert.equal(operational.executionQueue.confirmPayment(task.taskId, "operator-1", {
+  confirmed: true, amount: 75, reference: "manual-receipt-1"
+}).task.payment.status, "CONFIRMED");
+assert.equal(operational.executionQueue.getTask(task.taskId).payment.amount, 75);
+assert.equal(operational.bridge.getStatus().manualExecutionQueueEnabled, true);
+
+const unsupported = setup({ executionQueueEnabled: true, executionServiceType: "social.publish" });
+const unsupportedResult = await unsupported.bridge.dispatch({
+  requestId: "req-unsupported", orderId: unsupported.order.orderId, approvalId: "approval-unsupported"
+});
+assert.equal(unsupportedResult.status, "COMMERCIAL_EXECUTION_SERVICE_UNSUPPORTED");
+assert.equal(unsupported.calls.core.length, 0, "unsupported services must be rejected before Core dispatch");
 
 console.log("commercial-order-operation-bridge: OK");
