@@ -139,3 +139,6 @@ A integração de contrato está organizada em duas fronteiras:
 O teste `worddark/runtime/world/earth/commercial-world.integration.test.js` percorre a cadeia com a Terra comercial e o Core/Dark Factory montados no próprio cenário. `worddark/runtime/world/core/terra-commercial-core.integration.test.js` isola os contratos dos dois adapters com Core simulado.
 
 **Estado:** integração de código aprovada em CI. Identidade, auditoria e idempotência reais, persistência multiusuário e staging continuam pendentes. Não há endpoint novo, publicação, pagamento ou deploy ativado.
+
+
+Nota de evidência: a integração Terra → Core → Dark Factory passou em CI no ambiente TEST. Os módulos executores de conteúdo, identidade, autorização, auditoria e idempotência usados no cenário são simulados; isso não demonstra produção real nem publicação ativa.
