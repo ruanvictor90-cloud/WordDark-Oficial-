@@ -13,7 +13,10 @@ function requireFirestore(firestore) {
   }
 }
 
-export function createFirestoreKnowledgeBackend({ firestore = null, collectionName = "worddarkKnowledgeIntake" } = {}) {
+export function createFirestoreKnowledgeBackend({
+  firestore = null,
+  collectionName = "worddarkKnowledgeIntake"
+} = {}) {
   requireFirestore(firestore);
   const collection = firestore.collection(collectionName);
   const refFor = id => collection.doc(hash(id));
@@ -83,6 +86,10 @@ export function createFirestoreKnowledgeBackend({ firestore = null, collectionNa
   });
 }
 
+/**
+ * Durable/idempotent canonical knowledge archive adapter. It stores only validated
+ * WordDarkKnowledgeRecord objects and uses a deterministic document ID for retries.
+ */
 export function createFirestoreCentralKnowledgeStore({
   firestore = null,
   collectionName = "worddarkCentralLibrary",
@@ -102,8 +109,12 @@ export function createFirestoreCentralKnowledgeStore({
     const recordId = "KNOWLEDGE-" + knowledgeId;
     const ref = collection.doc(hash(recordId));
     const payload = {
-      recordId, libraryId, type: "KNOWLEDGE", source: "CENTRAL_KNOWLEDGE_STORE",
-      reason: clean(reason) || "KNOWLEDGE_VALIDATED", knowledgeId,
+      recordId,
+      libraryId,
+      type: "KNOWLEDGE",
+      source: "CENTRAL_KNOWLEDGE_STORE",
+      reason: clean(reason) || "KNOWLEDGE_VALIDATED",
+      knowledgeId,
       data: typeof record.toJSON === "function" ? record.toJSON() : structuredClone(record),
       archivedAt: new Date().toISOString()
     };
