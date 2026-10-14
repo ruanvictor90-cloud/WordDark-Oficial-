@@ -9,6 +9,7 @@ import { createSecurityPolicy } from "./darknet-security-policy.js";
 import { createDarknetMonitor } from "./darknet-monitor.js";
 import { createWorldBridge } from "./darknet-world-bridge.js";
 import { createDarknetKnowledgePipeline } from "./darknet-knowledge-pipeline.js";
+import { createCentralConnectionKnowledgeProvider } from "./darknet-central-connection-provider.js";
 
 export function createDarknetSystem(options = {}) {
   const connections = createConnectionEngine({
@@ -24,8 +25,11 @@ export function createDarknetSystem(options = {}) {
   const apiGateway = createApiGateway({ connectionEngine: connections });
   const worldBridge = createWorldBridge({ worldPort: options.worldPort || null, enabled: options.worldBridgeEnabled === true, authorizeRequest: options.authorizeWorldRequest, audit: options.auditWorldRequest, });
   const monitor = createDarknetMonitor({ connections, plugins, security, gateway: apiGateway });
+  const gatewayProviders = Array.isArray(options.knowledgeConnections)
+    ? options.knowledgeConnections.map(connection => createCentralConnectionKnowledgeProvider({ gateway: options.externalConnectionGateway, ...connection }))
+    : [];
   const knowledge = createDarknetKnowledgePipeline({
-    providers: Array.isArray(options.knowledgeProviders) ? options.knowledgeProviders : [],
+    providers: [...(Array.isArray(options.knowledgeProviders) ? options.knowledgeProviders : []), ...gatewayProviders],
     knowledgePort: options.knowledgePort || null,
     authorize: options.authorizeKnowledgeRequest,
     audit: options.auditKnowledgeRequest,
