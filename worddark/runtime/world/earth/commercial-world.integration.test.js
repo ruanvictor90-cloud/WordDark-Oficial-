@@ -3,6 +3,8 @@ const { createCommercialEngine } = require("./commercial-engine.js");
 
 async function main() {
   const { createCommercialOrderOperationBridge } = await import("../core/commercial-order-operation-bridge.js");
+  const { createEarthCommercialIntakeAdapter } = await import("../core/earth-commercial-intake-adapter.js");
+  const { createEarthEngine } = require("./earth-engine.js");
 
   const Road = require("../core/road.js");
   const CompanyRegistry = require("../core/company-registry.js").WordDarkCompanyRegistry;
@@ -106,15 +108,47 @@ async function main() {
     description: "Entrega manual para teste integrado",
     price: 75
   });
-  const lead = commercial.createLead({
-    leadId: "lead-commercial-integration",
-    requesterId: "client-demo",
-    name: "Cliente de demonstração",
+
+  const earth = createEarthEngine({ idFactory: () => "demand-commercial-integration" });
+  const demand = earth.captureDemand({
+    requester: "Cliente de demonstração",
     need: "Criar conteúdo para redes sociais",
     category: "CONTENT",
-    channel: "MANUAL",
-    budget: 100
+    budget: 100,
+    recurrence: "ONE_TIME",
+    businessContext: { source: "commercial-world.integration" }
   });
+  const auditEvents = [];
+  const idempotency = new Map();
+  const idempotencyStore = {
+    async executeOnce(key, callback) {
+      if (idempotency.has(key)) return idempotency.get(key);
+      const value = await callback();
+      idempotency.set(key, value);
+      return value;
+    }
+  };
+  const intake = createEarthCommercialIntakeAdapter({
+    earthEngine: earth,
+    commercialEngine: commercial,
+    authenticateOperator: async () => ({ authenticated: true, actorId, sessionId: "commercial-test-session" }),
+    authorizeIntake: async () => ({ allowed: true }),
+    resolveRequester: async source => ({ requesterId: "client-demo", name: source.requester, channel: "MANUAL" }),
+    audit: async event => { auditEvents.push(event); },
+    idempotencyStore,
+    enabled: true
+  });
+  const intakeResult = await intake.intake({ requestId: "commercial-intake-request-1", demandId: demand.demandId });
+  assert.equal(intakeResult.status, "LEAD_CREATED");
+  const lead = commercial.getLead(intakeResult.leadId);
+  assert.equal(lead.sourceDemandId, demand.demandId);
+  assert.equal(lead.businessContext.source, "commercial-world.integration");
+  assert.equal(earth.getDemand(demand.demandId).status, "LEAD_CREATED");
+
+  const duplicateIntake = await intake.intake({ requestId: "commercial-intake-request-2", demandId: demand.demandId });
+  assert.deepEqual(duplicateIntake, intakeResult);
+  assert.equal(commercial.listLeads().length, 1);
+
   commercial.qualifyLead(lead.leadId, actorId);
   const proposal = commercial.createProposal({
     proposalId: "proposal-commercial-integration",
@@ -126,8 +160,6 @@ async function main() {
   commercial.decideProposal(proposal.proposalId, "ACCEPTED", "client-demo");
   const order = commercial.openOrder(proposal.proposalId);
 
-  const auditEvents = [];
-  const idempotency = new Map();
   const coreSubmissions = [];
   const bridge = createCommercialOrderOperationBridge({
     commercialEngine: commercial,
@@ -136,14 +168,7 @@ async function main() {
     authorizeDispatch: async ({ approvalId }) => ({ allowed: true, approved: true, approvalId }),
     resolveAction: async () => "CREATE_CONTENT",
     audit: async event => { auditEvents.push(event); },
-    idempotencyStore: {
-      async executeOnce(key, callback) {
-        if (idempotency.has(key)) return idempotency.get(key);
-        const value = await callback();
-        idempotency.set(key, value);
-        return value;
-      }
-    },
+    idempotencyStore,
     enabled: true
   });
 
