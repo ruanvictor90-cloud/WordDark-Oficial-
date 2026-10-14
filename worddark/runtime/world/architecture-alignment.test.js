@@ -24,7 +24,7 @@ assert.ok(architecture.includes('Ruan — aplicativo pessoal') && architecture.i
 assert.ok(architecture.includes('Banco — instituição financeira do WordDark') && architecture.includes('implementação/app atualmente identificada como Darkbank'));
 assert.ok(architecture.includes('não é administrado pelo WordDark') && architecture.includes('o Hub não cria um segundo Core'));
 assert.ok(scope.includes('Banco (interface atual Darkbank)') && scope.includes('ponte com o Core permanece desativada'));
-assert.ok(ruan.includes('aplicativo pessoal') && ruan.includes('proprietário lógico do Hub'));
+assert.ok(ruan.includes('aplicativo pessoal') && ruan.includes('pertencente ao Ruan'));
 assert.ok(ruanHome.includes('../hub/index.html'), 'Ruan must retain the explicit Hub launcher');
 assert.ok(!ruanHome.includes('apps/darknet'), 'Ruan must not own the legacy Darknet app');
 assert.ok(hub.includes('<title>Ruan Hub</title>') && hub.includes('../ruan/index.html'));
