@@ -126,7 +126,7 @@ export function nextRecurrenceDate(task, after = new Date()) {
   const date = new Date(task.dueDate + "T12:00:00");
   if (Number.isNaN(date.getTime())) return null;
   const target = new Date(after);
-  target.setHours(0, 0, 0, 0);
+  target.setHours(23, 59, 59, 999);
   const candidate = new Date(date);
   let guard = 0;
   while (candidate <= target && guard < 400) {
