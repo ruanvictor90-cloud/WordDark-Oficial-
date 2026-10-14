@@ -12,6 +12,7 @@ assert.deepEqual(initial.budgets, []);
 assert.deepEqual(initial.projects, []);
 assert.deepEqual(initial.bills, []);
 assert.deepEqual(initial.preferences, { weekStartsOn: 1, currency: "BRL" });
+assert.equal(validateState(initial).valid, true);
 
 const migrated = normalizeState({ schemaVersion: 2, tasks: [{ id: "t1" }], transactions: null }, "2026-10-14T12:00:00.000Z");
 assert.equal(migrated.schemaVersion, SCHEMA_VERSION);
