@@ -18,8 +18,19 @@ function storage(){
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
   registry.setRuntimeCredential("RESEARCH_API","RESEARCH-001","RESEARCH-CREDENTIAL");
 
+  let disabledAdapterCalls=0;
+  const disabledGateway=new Gateway({registry});
+  disabledGateway.registerAdapter("YOUTUBE",{execute:async()=>{disabledAdapterCalls++;return{success:true,status:"SHOULD_NOT_RUN"};}});
+  const blockedByDefault=await disabledGateway.execute({
+    requestId:"REQ-EXT-DISABLED",operationId:"OP-EXT-DISABLED",providerId:"YOUTUBE",accountId:"ACC-001",
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-DISABLED"}
+  });
+  assert.strictEqual(blockedByDefault.status,"EXTERNAL_CONNECTION_GATEWAY_DISABLED");
+  assert.strictEqual(disabledAdapterCalls,0,"client gateway must never call an external adapter while disabled");
+  assert.strictEqual(disabledGateway.getStatus().productionSafe,false);
+
   const logs=[];
-  const gateway=new Gateway({registry,logger:{log:(event,metadata)=>logs.push({event,metadata})}});
+  const gateway=new Gateway({registry,logger:{log:(event,metadata)=>logs.push({event,metadata})},enabled:true});
   const waiting=await gateway.execute({
     requestId:"REQ-EXT-001",operationId:"OP-EXT-001",providerId:"YOUTUBE",accountId:"ACC-001",
     capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-001"}
