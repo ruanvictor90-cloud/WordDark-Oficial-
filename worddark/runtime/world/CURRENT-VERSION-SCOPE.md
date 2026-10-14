@@ -1,6 +1,6 @@
 # Escopo funcional da versão atual
 
-Este arquivo descreve responsabilidades visíveis e limites da versão consolidada. A fonte arquitetural completa é [ARCHITECTURE-CONSOLIDATION.md](./ARCHITECTURE-CONSOLIDATION.md).
+Este arquivo descreve responsabilidades visíveis e limites da versão consolidada. A fonte arquitetural completa é [ARCHITECTURE-CONSOLIDATION.md](./ARCHITECTURE-CONSOLIDATION.md); os detalhes por setor e os requisitos futuros ficam em [SECTOR-ALIGNMENT.md](./SECTOR-ALIGNMENT.md) e [APP-INTERFACE-BRIEFS.md](./APP-INTERFACE-BRIEFS.md).
 
 ## Ruan
 
