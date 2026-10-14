@@ -65,13 +65,13 @@ export function createDarknetKnowledgePipeline({
     const providerKey = clean(providerId).toLowerCase();
     const searchQuery = clean(query);
     const caller = clean(trustedContext?.actorId || principal);
+    if (!enabled) return { success: false, status: "DARKNET_KNOWLEDGE_PIPELINE_DISABLED", received: 0, rejected: 0 };
     if (trustedContext?.authenticated !== true || !clean(trustedContext?.actorId) || !clean(trustedContext?.sessionId)) {
       return { success: false, status: "KNOWLEDGE_TRUSTED_IDENTITY_REQUIRED", received: 0, rejected: 0 };
     }
     if (!providerKey || !searchQuery || searchQuery.length > 1000) {
       return { success: false, status: "KNOWLEDGE_REQUEST_INVALID", received: 0, rejected: 0 };
     }
-    if (!enabled) return { success: false, status: "DARKNET_KNOWLEDGE_PIPELINE_DISABLED", received: 0, rejected: 0 };
     const provider = registry.get(providerKey);
     if (!provider) return { success: false, status: "KNOWLEDGE_PROVIDER_UNAVAILABLE", received: 0, rejected: 0 };
     if (!knowledgePort || typeof knowledgePort.receive !== "function") {
