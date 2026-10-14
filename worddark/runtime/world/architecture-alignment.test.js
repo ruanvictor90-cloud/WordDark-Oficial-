@@ -83,6 +83,8 @@ assert.ok(worldApp.includes('Darkbank'), 'WordDark interface must retain the cur
 assert.ok(darknet.includes('sistema independente') && darknet.includes('Ruan'), 'Darknet documentation must preserve the independent Ruan boundary');
 
 assert.ok(architectureMap.includes('Ruan Hub') && architectureMap.includes('Banco / Darkbank') && architectureMap.includes('O que falta para ativar a integração real'));
+assert.ok(architectureMap.includes('Cadeia comercial Terra → Core → Céu') && architectureMap.includes('commercial-order-operation-bridge.js'), 'Architecture map must describe the tested Terra-to-Core handoff and its production limits');
+assert.ok(commercialPlan.includes('Estado técnico do primeiro ciclo comercial') && commercialPlan.includes('confirmar o recebimento'), 'Commercial bootstrap must distinguish tested code from the manual revenue workflow');
 assert.ok(hubAdapter.includes('HUB_CONTROL_ADAPTER_DISABLED') && hubAdapter.includes('HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED') && hubAdapter.includes('requiresAtomicIdempotency'));
 assert.ok(hubControlRuntime.includes('TRUSTED_OPERATOR_AUTHENTICATOR') && hubControlRuntime.includes('DURABLE_ATOMIC_IDEMPOTENCY') && hubControlRuntime.includes('HUB_CONTROL_RUNTIME_DISABLED'));
 assert.ok(hubControlRuntimeTest.includes('HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED') && hubControlRuntimeTest.includes('HUB_CONTROL_REQUEST_DENIED'));
