@@ -13,10 +13,10 @@ const connectionRegistry=new window.ExternalConnectionRegistry();
 const $=s=>document.querySelector(s);
 const safe=v=>String(v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const providers=[
-{id:"YOUTUBE",name:"YouTube",status:"READY",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
-{id:"INSTAGRAM",name:"Instagram",status:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
-{id:"TIKTOK",name:"TikTok",status:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]},
-{id:"FACEBOOK",name:"Facebook",status:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"]}
+{id:"YOUTUBE",name:"YouTube",status:"READY",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]},
+{id:"INSTAGRAM",name:"Instagram",status:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]},
+{id:"TIKTOK",name:"TikTok",status:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]},
+{id:"FACEBOOK",name:"Facebook",status:"OAUTH_BACKEND_REQUIRED",capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"]}
 ];
 
 function connections(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch{return[]}}
@@ -46,7 +46,7 @@ async function connectYouTube(){
   try{
     const result=await new YouTubeConnector({clientId}).authorize();
     const items=connections().filter(x=>!(x.providerId==="YOUTUBE"&&x.accountId===result.channel.channelId));
-    items.push({providerId:"YOUTUBE",status:"CONNECTED",accountId:result.channel.channelId,displayName:result.channel.displayName,handle:result.channel.customUrl||"",channelUrl:result.channel.url,capabilities:["ACCOUNT_READ","CONTENT_PUBLISH"],connectedAt:new Date().toISOString()});
+    items.push({providerId:"YOUTUBE",status:"CONNECTED",accountId:result.channel.channelId,displayName:result.channel.displayName,handle:result.channel.customUrl||"",channelUrl:result.channel.url,capabilities:["ACCOUNT_READ","CONTENT_PUBLICATION"],connectedAt:new Date().toISOString()});
     save(items);runtimeCredentials.set("YOUTUBE:"+result.channel.channelId,result.accessToken);
     connectionRegistry.setRuntimeCredential("YOUTUBE",result.channel.channelId,result.accessToken);
     window.WD_EXTERNAL_RUNTIME={get:(providerId,accountId)=>runtimeCredentials.get(String(providerId).toUpperCase()+":"+accountId)||null};
