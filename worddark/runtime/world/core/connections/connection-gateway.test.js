@@ -12,8 +12,11 @@ function storage(){
   const registry=new Registry(store);
   store.setItem("wd.external.connections",JSON.stringify([{
     providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLICATION"]
+  },{
+    providerId:"RESEARCH_API",accountId:"RESEARCH-001",status:"CONNECTED",capabilities:["KNOWLEDGE_RESEARCH"]
   }]));
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
+  registry.setRuntimeCredential("RESEARCH_API","RESEARCH-001","RESEARCH-CREDENTIAL");
 
   const gateway=new Gateway({registry});
   const waiting=await gateway.execute({
@@ -34,6 +37,23 @@ function storage(){
   });
   assert.strictEqual(done.success,true);
   assert.strictEqual(done.result.status,"PUBLISHED");
+
+  const researchDenied=await gateway.execute({
+    requestId:"REQ-RESEARCH-DENIED",operationId:"OP-RESEARCH-DENIED",providerId:"RESEARCH_API",accountId:"RESEARCH-001",
+    capability:"CONTENT_PUBLICATION",action:"SEARCH_KNOWLEDGE",payload:{query:"test"}
+  });
+  assert.strictEqual(researchDenied.status,"ACTION_CAPABILITY_MISMATCH");
+  gateway.registerAdapter("RESEARCH_API",{execute:async(request,context)=>{
+    assert.strictEqual(request.action,"SEARCH_KNOWLEDGE");
+    assert.strictEqual(context.credential,"RESEARCH-CREDENTIAL");
+    return {success:true,status:"SEARCH_COMPLETED",results:[{id:"DOC-1",url:"https://example.org/doc",title:"Research",content:"Useful",rights:"PUBLIC"}]};
+  }});
+  const research=await gateway.execute({
+    requestId:"REQ-RESEARCH-001",operationId:"OP-RESEARCH-001",providerId:"RESEARCH_API",accountId:"RESEARCH-001",
+    capability:"KNOWLEDGE_RESEARCH",action:"SEARCH_KNOWLEDGE",payload:{query:"test"}
+  });
+  assert.strictEqual(research.success,true);
+  assert.strictEqual(research.result.results[0].id,"DOC-1");
 
   registry.disconnect("YOUTUBE","ACC-001");
   const disconnected=await gateway.execute({
