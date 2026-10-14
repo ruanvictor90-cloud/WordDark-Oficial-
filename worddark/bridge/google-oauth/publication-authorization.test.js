@@ -30,7 +30,7 @@ function dependencies(overrides={}){
 }
 const request={
   requestId:"req-1",operationId:"op-1",providerId:"YOUTUBE",accountId:"channel-1",
-  action:"CONTENT_PUBLISH",capability:"CONTENT_PUBLISH",environment:"PROD",
+  action:"CONTENT_PUBLISH",capability:"CONTENT_PUBLICATION",environment:"PROD",
   payload:{title:"Launch",secret:"MUST_NOT_BE_LOGGED",mediaBytes:"MUST_NOT_BE_LOGGED"}
 };
 
