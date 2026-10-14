@@ -75,3 +75,13 @@ Somente depois de uma venda real e fluxo repetível: conectar os adapters necess
 - Entretenimento permanece no Ruan e seu player só usa fontes licenciadas/autorizadas.
 - O ciclo comercial distingue lead, proposta, aceite, pedido, entrega e dinheiro recebido.
 - Nenhum módulo declara produção, sincronização, banco ou integração real sem evidência verificável.
+
+
+## Implementação adicionada nesta branch — primeiro ciclo comercial
+
+- worddark/runtime/world/earth/first-sale-workflow.js coordena pedido aceito, contrato manual, início da execução, entrega, aceite, fatura, recebimentos e despesas.
+- worddark/runtime/world/earth/first-sale-workflow.test.js cobre o fluxo completo e bloqueia início sem contrato, contrato duplicado, faturamento antes do aceite da entrega e recebimento acima da fatura.
+- O módulo reutiliza o motor comercial e o livro-caixa existentes; não cria um segundo Core nem substitui Terra → Core → Céu.
+- O estado permanece IN_MEMORY_ONLY: melhora as regras de fluxo e os testes, mas não declara persistência entre sessões, verificação bancária ou produção.
+- O app Entretenimento da versão atual de main é restaurado na home integrada do Ruan e incluído no cache do service worker (ruan-central-v18). O player continua incorporado e limitado a vídeos/playlists disponíveis e autorizados; não hospeda episódios.
+- Mudanças restritas à branch de integração: sem alterar main, sem mesclar a PR #104 e sem publicar automaticamente.
