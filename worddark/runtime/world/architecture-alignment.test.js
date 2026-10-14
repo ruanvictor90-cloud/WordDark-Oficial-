@@ -80,6 +80,8 @@ assert.ok(world.includes('ARCHITECTURE-CONSOLIDATION.md') && world.includes('CUR
 assert.ok(sectors.includes('Sistema privado separado') && sectors.includes('Core operacional ativo'));
 assert.ok(interfaceBriefs.includes('Ruan Hub') && interfaceBriefs.includes('Banco/Darkbank') && interfaceBriefs.includes('Apps privados Ruan'));
 assert.ok(worldApp.includes('Darkbank'), 'WordDark interface must retain the current Banco/Darkbank app entry');
+assert.ok(worldApp.includes('PROVISIONAL_COSTS_INCOMPLETE') && worldApp.includes('HELD_FOR_COST_REVIEW') && worldApp.includes("stat('Resultado provisório'") && worldApp.includes('costsIncomplete!==true'), 'Darkbank must keep incomplete-cost results provisional and out of coffer totals');
+assert.ok(readinessAudit.includes('Endurecimento financeiro do Darkbank') && readinessAudit.includes('Resultado provisório'), 'Operational readiness must document the financial allocation safeguard');
 assert.ok(darknet.includes('sistema independente') && darknet.includes('Ruan'), 'Darknet documentation must preserve the independent Ruan boundary');
 
 assert.ok(architectureMap.includes('Ruan Hub') && architectureMap.includes('Banco / Darkbank') && architectureMap.includes('O que falta para ativar a integração real'));
