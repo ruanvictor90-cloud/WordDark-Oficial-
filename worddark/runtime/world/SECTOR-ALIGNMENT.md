@@ -4,7 +4,7 @@
 
 ## Contrato canônico de publicação
 
-O catálogo `worddark/runtime/world/core/capability-catalog.js` define `CONTENT_PUBLICATION` como capacidade do Core. `CONTENT_PUBLISH` é uma ação de transporte, não um nome alternativo da capacidade. A Central de Conexões deve preservar essa distinção: `action=CONTENT_PUBLISH` mapeia para `capability=CONTENT_PUBLICATION`. A conexão OAuth recém-salva permanece sem capacidades concedidas até existir um fluxo de concessão confiável; o escopo OAuth `youtube.upload` sozinho não concede permissão operacional.
+O catálogo `worddark/runtime/world/core/capability-catalog.js` define `CONTENT_PUBLICATION` como capacidade do Core. `CONTENT_PUBLISH` é uma ação de transporte, não um nome alternativo da capacidade. A Central de Conexões deve preservar essa distinção: `action=CONTENT_PUBLISH` mapeia para `capability=CONTENT_PUBLICATION`. A conexão OAuth recém-salva permanece sem capacidades concedidas até existir um fluxo de concessão confiável; o escopo OAuth `youtube.upload` sozinho não concede permissão operacional. **Estado desta consolidação:** a divergência foi identificada e documentada; a adaptação do runtime/portão para o contrato canônico ainda está pendente e deve ser testada antes de qualquer integração. Não considerar esse alinhamento implementado ainda.
 
 ## 1. Regra de autoridade
 
