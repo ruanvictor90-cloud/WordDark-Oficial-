@@ -1,73 +1,63 @@
-# WordDark Oficial — versão consolidada em construção
+# WordDark Oficial — arquitetura consolidada em construção
 
-Este repositório contém a versão atual dos aplicativos **Ruan**, **WordDark Hub** e **WordDark**, além dos motores e setores que serão conectados progressivamente.
+Este repositório reúne o aplicativo pessoal Ruan, seu painel Hub, o mundo operacional WordDark e os motores que serão conectados progressivamente.
 
-## Regra principal desta versão
+## Fonte canônica de alinhamento
 
-**Manter o aplicativo simples e os setores brutos; não integrar módulos antigos só porque eles já existem no repositório.**
+Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE-CONSOLIDATION.md).
 
-A interface atual é a fonte do que está exposto nesta versão. Os motores e módulos detalhados são reutilizáveis, mas só entram no fluxo ativo quando forem conectados e testados explicitamente.
+**Regra principal:** manter os sistemas separados por responsabilidade. A presença de código legado ou de um motor no repositório não significa que ele esteja conectado ao fluxo ativo.
 
-## Aplicativos atuais
+## Sistemas e responsabilidades
 
-### Ruan — privado e independente
-- Central pessoal com gaveta global de aplicativos.
-- Pessoal: Financeiro e Tarefas.
-- Shadow: área separada, com protótipo DarkEye.
-- WordDark Hub: entrada para o ambiente WordDark.
-- Ruan não faz parte do mundo interno do WordDark. Não há compartilhamento automático de dados nem autoridade do WordDark sobre Ruan.
+### Ruan — aplicativo pessoal
+- Aplicativo privado e independente, com seus próprios dados.
+- Inclui Pessoal (Financeiro e Tarefas) e Shadow.
+- O financeiro pessoal organiza registros locais; não é um banco e não movimenta dinheiro real.
+- Não é parte do mundo WordDark e não compartilha dados automaticamente com ele.
 
-### WordDark Hub
-- Central do Hub: Pedidos e Em execução.
-- Teste: entrada compacta para testar o mundo ou setores.
-- WordDark: entrada para o aplicativo principal do mundo.
+### Hub — painel superior do Ruan
+- Pertence logicamente ao Ruan e é acessado por ele.
+- Centraliza pedidos, execução, avisos e verificações do mundo.
+- Deve permitir gerir o WordDark sem abrir cada setor, usando contratos autorizados.
+- Não é um segundo Core e não executa operações por conta própria.
+- Pedidos salvos localmente ainda não comprovam recebimento ou execução no mundo.
 
 ### WordDark — mundo operacional
-- **WordDark:** coordenação, gerenciamento e infraestrutura.
-- **Céu:** Dark Factory e Central Social.
-- **Terra:** Empresa social e Empresa comercial.
-- Aplicativos centrais visíveis nesta versão: Central, Darkbank, Central de conexão, Automação, Biblioteca, Escola do Mundo, Governança, Segurança e Teste.
-- Dark Factory mantém as entradas Em criação e Biblioteca, com categorias de mídia.
-- Central Social mantém Gestor de redes sociais, Gestor de marketing digital e Gestor de projetos.
-- Darkbank mantém Financeiro, Cofre e Investimentos. Os fundos do Cofre pertencem ao WordDark; não existe uma área financeira do Ruan dentro dele.
+- Coordena necessidades, operações, capacidades, empresas e resultados.
+- **WordDark/Core** coordena; **Céu** executa capacidades especializadas; **Terra** organiza empresas e necessidades externas.
+- A Central de Conexões controla a fronteira com provedores externos.
+- Darknet é independente do Ruan e solicita operações ao mundo por contrato governado.
 
-SucoCast, SucoGeek, SucoComed e SucoFactor são perfis externos de canais de teste/operação, não setores internos nem a raiz da arquitetura.
+### Banco — instituição financeira do mundo
+- Banco (interface atualmente chamada Darkbank) é responsável pela camada financeira interna do WordDark: registros, contas, tesouraria, Cofre, investimentos e controles.
+- Recursos internos do WordDark não são fundos pessoais do Ruan.
+- A interface e os registros atuais não constituem serviço bancário real nem comprovam transações ou investimentos executados.
 
-## Fonte canônica do runtime
+## Fontes canônicas do runtime
 
+- Ruan: `ruan/`
+- Hub: `hub/`
+- Interface WordDark: `worddark/app/`
 - Core: `worddark/runtime/world/core/`
 - Céu: `worddark/runtime/world/sky/`
 - Terra: `worddark/runtime/world/earth/`
-- Interface WordDark: `worddark/app/`
-- Hub: `hub/`
-- Ruan: `ruan/`
+- Darknet independente: `darknet/`
 
-O Core coordena contratos e operações; Céu e Terra mantêm responsabilidades próprias. A interface e os motores ainda não devem ser considerados totalmente integrados apenas porque coexistem no repositório.
+A pasta `hub/` continua separada por conveniência de implementação/publicação, sem alterar sua propriedade lógica pelo Ruan. `worddark/core-central/` é legado e não deve virar um segundo Core ativo.
 
-## Código legado e módulos futuros
+## Estado real e limites
 
-- `worddark/core-central/` é uma implementação anterior e está fora do caminho ativo e da suíte padrão de testes.
-- Outras implementações detalhadas podem permanecer no repositório para reaproveitamento, mas não devem ser conectadas automaticamente à versão atual.
-- Nenhum código legado deve criar um segundo Core, adicionar telas não definidas ou ligar integrações reais por conta própria.
+- Várias funções de Ruan e Hub usam armazenamento local; não há sincronização central garantida entre dispositivos.
+- A ponte Darknet–WordDark está desativada por padrão, sem rota HTTP ou transporte externo ativo.
+- Publicação de conteúdo permanece manual por padrão; testes simulados não são publicação real.
+- Credenciais, aprovações, permissões e auditoria reais precisam ser validadas no backend antes de produção.
+- Banco/Darkbank não deve ser descrito como banco regulado operacional sem integração real e validação específica.
 
-## Limites atuais
-
-- As interfaces usam armazenamento local do navegador em várias áreas.
-- Não há sincronização central garantida entre dispositivos.
-- Conectores, publicação automática, pagamentos e movimentações bancárias reais não são considerados ativos sem integração de backend e evidência de execução.
-- TEST deve usar simulação. PROD exige autorização explícita, credenciais seguras, auditoria e possibilidade de interrupção.
-- Os impostos no Darkbank são estimativas configuráveis, não apuração tributária.
-
-## Desenvolvimento
+## Desenvolvimento e testes
 
 - `main`: produção publicada.
 - `develop`: criação.
 - `staging`: integração e testes.
 
-Antes de considerar uma mudança concluída, executar `npm test` e revisar o comportamento no navegador. A publicação do GitHub Pages deve ser verificada separadamente.
-
-## Testes
-
-```bash
-npm test
-```
+Executar `npm test` antes de concluir mudanças. Validar a publicação do GitHub Pages separadamente.
