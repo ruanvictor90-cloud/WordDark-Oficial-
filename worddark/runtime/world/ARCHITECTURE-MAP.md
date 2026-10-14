@@ -104,7 +104,7 @@ O pipeline está implementado como contrato de integração e usa adaptadores de
 
 ## Preparação operacional de conhecimento
 
-A composição de produção fica em `darknet/darknet-knowledge-runtime.js`. Ela pode receber a instância Firestore já criada no backend e construir os adapters duráveis usando as coleções `worddarkKnowledgeIntake` e `worddarkCentralLibrary`. O arquivo canônico recebe apenas registros de conhecimento validados e usa ID determinístico para evitar duplicação em novas tentativas.
+A composição de produção fica em `darknet/darknet-knowledge-runtime.js`. O adapter `worddark/runtime/world/core/connections/knowledge-search-adapter.js` fornece o contrato de registro para os handlers das APIs já configuradas via `registerKnowledgeSearchAdapter`. Ela pode receber a instância Firestore já criada no backend e construir os adapters duráveis usando as coleções `worddarkKnowledgeIntake` e `worddarkCentralLibrary`. O arquivo canônico recebe apenas registros de conhecimento validados e usa ID determinístico para evitar duplicação em novas tentativas.
 
 O runtime também protege revisão, listagem de pendências e busca validada: cada chamada precisa passar por `authenticateService`; leituras exigem autorização e auditoria próprias; revisão exige aprovação. Um objeto enviado pelo navegador com `authenticated: true` não constitui identidade confiável.
 
