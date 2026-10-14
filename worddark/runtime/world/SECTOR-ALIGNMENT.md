@@ -1,4 +1,4 @@
-> **Hierarquia de documentação:** a fonte canônica de responsabilidade e limites é [ARCHITECTURE-CONSOLIDATION.md](./ARCHITECTURE-CONSOLIDATION.md), seguida por [CURRENT-VERSION-SCOPE.md](./CURRENT-VERSION-SCOPE.md). Este arquivo é o inventário técnico detalhado dos setores. Se um texto histórico divergir da arquitetura canônica, prevalece a arquitetura canônica. O Hub é o painel superior pertencente ao Ruan; o Banco/Darkbank é a instituição financeira do mundo. Nenhuma seção aqui autoriza criar novas telas ou ativar integrações reais.
+> **Hierarquia de documentação:** a fonte canônica de responsabilidade e limites é [ARCHITECTURE-CONSOLIDATION.md](./ARCHITECTURE-CONSOLIDATION.md), seguida por [CURRENT-VERSION-SCOPE.md](./CURRENT-VERSION-SCOPE.md). Este arquivo é o inventário técnico detalhado dos setores. Se um texto histórico divergir da arquitetura canônica, prevalece a arquitetura canônica. O Hub é o painel superior pertencente ao Ruan; o Darkbank começa como gestão financeira interna do mundo, sem status de instituição autorizada. Nenhuma seção aqui autoriza criar novas telas ou ativar integrações reais.
 
 # WordDark — alinhamento bruto dos setores
 
