@@ -34,7 +34,7 @@ function makeCommercialEngine() {
   };
 }
 
-function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, operationId = "op-bridge-1" } = {}) {
+function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, coreStatus = "ACCEPTED", operationId = "op-bridge-1" } = {}) {
   const commercial = makeCommercialEngine();
   const order = commercial.getOrder("order-bridge-1");
   const calls = { core: [], audit: [] };
@@ -42,7 +42,7 @@ function setup({ enabled = true, allowed = true, approved = true, coreSuccess = 
     commercialEngine: commercial,
     operationCenter: { submit: async input => {
       calls.core.push(input);
-      return coreSuccess ? { success: true, status: "ACCEPTED", operationId } : { success: false, status: "REJECTED" };
+      return coreSuccess ? { success: true, status: coreStatus, operationId } : { success: false, status: "REJECTED" };
     } },
     authenticateOperator: async () => ({ authenticated: true, actorId: "operator-1", sessionId: "session-1" }),
     authorizeDispatch: async ({ approvalId }) => ({ allowed, approved, approvalId }),
@@ -86,6 +86,13 @@ assert.deepEqual(duplicate, result);
 assert.equal(ready.calls.core.length, 1, "the same commercial order must not be dispatched twice");
 assert.ok(ready.calls.audit.some(item => item.event === "COMMERCIAL_ORDER_DISPATCH_AUTHORIZED"));
 assert.ok(ready.calls.audit.some(item => item.event === "COMMERCIAL_ORDER_CORE_ACCEPTED"));
+
+const completed = setup({ coreStatus: "COMPLETED", operationId: "op-completed" });
+const completedResult = await completed.bridge.dispatch({ requestId: "req-completed", orderId: completed.order.orderId, approvalId: "approval-1" });
+assert.equal(completedResult.status, "COMMERCIAL_ORDER_REVIEW_REQUIRED");
+assert.equal(completedResult.orderStatus, "REVIEW");
+assert.equal(completed.commercial.getOrder(completed.order.orderId).status, "REVIEW",
+  "Core completion must not bypass human review and delivery");
 
 const missingOperationId = setup({ operationId: "" });
 const noId = await missingOperationId.bridge.dispatch({ requestId: "req-7", orderId: missingOperationId.order.orderId, approvalId: "approval-1" });
