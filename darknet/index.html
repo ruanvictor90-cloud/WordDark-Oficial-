@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#09070f"><meta name="description" content="Darknet — seu navegador e central de acesso personalizada.">
+<link rel="stylesheet" href="./darknet.css"><title>Darknet · Internet pessoal</title>
+</head>
+<body>
+<main class="shell">
+<header class="topbar">
+<a class="brand" href="./index.html" aria-label="Darknet início"><span class="mark">D</span><span><strong>DARKNET</strong><small>Internet do seu jeito</small></span></a>
+<button class="profile-pill" id="profile-open" type="button"><span class="dot"></span><span id="profile-label">Pessoal</span><span aria-hidden="true">⌄</span></button>
+</header>
+<section class="hero">
+<p class="eyebrow">NAVEGADOR PESSOAL</p><h1 id="greeting">A internet, do seu jeito.</h1>
+<p class="sub" id="profile-description">Pesquisa, ferramentas e conexões organizadas para você.</p>
+<form id="search-form" class="searchbar"><span class="search-icon" aria-hidden="true">⌕</span><input id="address" type="text" maxlength="500" placeholder="Pesquisar ou digitar endereço HTTPS" autocomplete="off" aria-label="Pesquisar ou digitar endereço"><button type="submit">Ir</button></form>
+<div class="engine-row"><label for="engine">Pesquisar com</label><select id="engine"><option value="duckduckgo">DuckDuckGo</option><option value="google">Google</option><option value="bing">Bing</option></select><span class="privacy">Sem conta Darknet necessária</span></div>
+</section>
+<nav class="tabs" aria-label="Navegação Darknet"><button class="tab active" data-view="home">Início</button><button class="tab" data-view="favorites">Favoritos</button><button class="tab" data-view="connections">Conexões</button></nav>
+<section id="home-view">
+<div class="section-title"><div><p class="eyebrow">ATALHOS</p><h2>Seu espaço</h2></div><button id="add-favorite" class="quiet" type="button">+ Adicionar</button></div>
+<div id="shortcut-grid" class="shortcut-grid">
+<button class="shortcut" data-url="https://duckduckgo.com/"><span class="shortcut-icon">⌕</span><strong>Pesquisa web</strong><small>Encontrar na internet</small></button>
+<button class="shortcut" data-url="https://www.youtube.com/"><span class="shortcut-icon">▶</span><strong>YouTube</strong><small>Vídeos e canais</small></button>
+<button class="shortcut" data-url="https://wikipedia.org/"><span class="shortcut-icon">W</span><strong>Wikipedia</strong><small>Conhecimento</small></button>
+<button class="shortcut" data-url="https://github.com/"><span class="shortcut-icon">⌘</span><strong>GitHub</strong><small>Projetos e código</small></button>
+</div>
+<div class="section-title"><div><p class="eyebrow">SISTEMA</p><h2>Central de acesso</h2></div></div>
+<div class="connection-card"><span class="connection-icon">↗</span><div><strong>Conexões Darknet</strong><p>Uma porta comum para os aplicativos solicitarem dados e serviços usando políticas compartilhadas.</p><small id="connection-status">Ponte de leitura pública ativa no Ruan · conectores privados ainda desligados</small></div></div>
+<p class="footnote">A Darknet é uma interface de acesso à internet. Sites externos podem abrir fora deste aplicativo quando bloqueiam incorporação. Preferências e favoritos ficam neste dispositivo.</p>
+</section>
+<section id="favorites-view" hidden><div class="section-title"><div><p class="eyebrow">SALVOS NESTE DISPOSITIVO</p><h2>Favoritos</h2></div></div><div id="favorites-list" class="shortcut-grid"></div><p class="footnote">Os favoritos não são enviados para um servidor.</p></section>
+<section id="connections-view" hidden><div class="section-title"><div><p class="eyebrow">APLICATIVOS E SERVIÇOS</p><h2>Conexões</h2></div></div>
+<article class="connection-card"><span class="connection-icon">R</span><div><strong>Ruan · ponte de catálogo</strong><p>Consulta pública de dados de animes, com destinos limitados e somente leitura.</p><small class="state-on">Disponível no código do Ruan</small></div></article>
+<article class="connection-card"><span class="connection-icon">W</span><div><strong>WordDark · conexão governada</strong><p>Integração preparada para passar por identidade, permissões, aprovação e auditoria do sistema central.</p><small class="state-pending">Aguardando integração autenticada; nenhuma ação operacional habilitada</small></div></article>
+<article class="connection-card"><span class="connection-icon">＋</span><div><strong>Novos conectores</strong><p>APIs e plugins serão adicionados por capacidade, com permissões explícitas e sem compartilhar todos os dados do Ruan.</p><small class="state-pending">Desativados até configuração e testes</small></div></article>
+</section>
+<dialog id="profile-dialog"><form method="dialog" id="profile-form"><div class="dialog-head"><div><p class="eyebrow">PERSONALIZAÇÃO</p><h2>Seu perfil Darknet</h2></div><button class="quiet" value="cancel" aria-label="Fechar">✕</button></div><label for="profile">Como você vai usar a internet?</label><select id="profile" class="wide"><option value="personal">Pessoal — meu uso diário</option><option value="study">Estudos — pesquisa e aprendizado</option><option value="work">Trabalho — serviços e produtividade</option><option value="creator">Criador — conteúdo e mídia</option><option value="general">Geral — sem foco específico</option></select><p class="footnote">Esse perfil só personaliza esta interface. Ele não cria uma conta nem envia seus dados.</p><button class="primary" id="save-profile" value="save">Salvar preferência</button></form></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</main><script type="module" src="./darknet.js"></script></body></html>
