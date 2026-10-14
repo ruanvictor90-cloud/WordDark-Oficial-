@@ -49,4 +49,5 @@ const authenticatedReview = await protectedRuntime.review({
   recordId: "DNET-UNKNOWN", decision: "VALIDATE", requestContext: { serviceToken: "test-secret" }
 });
 assert.equal(authenticatedReview.status, "KNOWLEDGE_CANDIDATE_NOT_FOUND");
-\nconsole.log("darknet-knowledge-runtime.test: OK");
+
+console.log("darknet-knowledge-runtime.test: OK");
