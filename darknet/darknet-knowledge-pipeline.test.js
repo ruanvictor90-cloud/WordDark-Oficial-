@@ -37,4 +37,26 @@ const disabled = createDarknetKnowledgePipeline();
 assert.equal((await disabled.learn({ providerId: "public-search", query: "x" })).status, "DARKNET_KNOWLEDGE_PIPELINE_DISABLED");
 const denied = createDarknetKnowledgePipeline({ enabled: true, providers: [{ id: "public-search", search: async () => [] }], knowledgePort: { receive: async () => ({ success: true }) } });
 assert.equal((await denied.learn({ providerId: "public-search", query: "x", trustedContext })).status, "KNOWLEDGE_REQUEST_DENIED");
+let fetchCalls = 0;
+const fetchedRecords = [];
+const fetchPipeline = createDarknetKnowledgePipeline({
+  enabled: true,
+  providers: [{
+    id: "full-source",
+    search: async () => [{ id: "full-1", url: "https://example.org/full", title: "Source metadata", rights: "PUBLIC" }],
+    fetch: async ({ sourceId, url }) => {
+      fetchCalls++;
+      assert.equal(sourceId, "full-1");
+      assert.equal(url, "https://example.org/full");
+      return { sourceId, url, title: "Fetched guide", content: "Complete procedure from source.", rights: "PUBLIC" };
+    }
+  }],
+  knowledgePort: { receive: async record => { fetchedRecords.push(record); return { success: true, status: "RECEIVED_PENDING_REVIEW" }; } },
+  authorize: async () => ({ allowed: true, approvalId: "FETCH-APPROVAL" }),
+  audit: async () => {}
+});
+assert.equal((await fetchPipeline.learn({ providerId: "full-source", query: "guide", trustedContext })).received, 1);
+assert.equal(fetchCalls, 1);
+assert.equal(fetchedRecords[0].title, "Fetched guide");
+assert.equal(fetchedRecords[0].content, "Complete procedure from source.");
 console.log("darknet-knowledge-pipeline.test: OK");
