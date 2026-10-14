@@ -17,7 +17,13 @@ export function createKnowledgeIntakeRegistry({
   async function receivePending(input, context = {}) {
     if (!enabled) return { success: false, status: "KNOWLEDGE_REGISTRY_DISABLED" };
     const recordId = clean(input?.recordId);
-    if (!recordId || input?.contract !== "worddark.knowledge-intake" || input?.version !== 1) {
+    const rights = clean(input?.rights).toUpperCase();
+    const license = clean(input?.license);
+    if (!recordId || input?.contract !== "worddark.knowledge-intake" || input?.version !== 1 ||
+        !/^https:\/\//i.test(clean(input?.source?.url)) || !clean(input?.source?.title) ||
+        !clean(input?.content) || clean(input.content).length > 20000 ||
+        !["PUBLIC", "LICENSED", "USER_PROVIDED"].includes(rights) || (rights === "LICENSED" && !license) ||
+        !clean(context?.actorId)) {
       return { success: false, status: "KNOWLEDGE_INTAKE_RECORD_INVALID" };
     }
     if (records.has(recordId)) return { success: true, status: "DUPLICATE_SKIPPED", recordId };
