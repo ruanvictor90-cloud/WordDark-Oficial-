@@ -58,7 +58,7 @@ export function createDarknetKnowledgePipeline({
       throw new Error("Provedor de conhecimento inválido: informe id e search().");
     }
     if (registry.has(id)) throw new Error("Provedor duplicado: " + id);
-    registry.set(id, Object.freeze({ id, search: provider.search }));
+    registry.set(id, Object.freeze({ id, search: provider.search, fetch: typeof provider.fetch === "function" ? provider.fetch : null }));
   }
 
   async function learn({ providerId, query, principal, trustedContext = null, limit = 10 } = {}) {
@@ -97,7 +97,20 @@ export function createDarknetKnowledgePipeline({
     let received = 0, rejected = 0, duplicates = 0;
     const outcomes = [];
     for (const raw of rows.slice(0, Math.min(Math.max(Number(limit) || 10, 1), MAX_RESULTS))) {
-      const normalized = normalizeRecord(raw, providerKey, now);
+      let sourceRecord = raw;
+      if (raw && typeof raw === "object" && !clean(raw.content || raw.text || raw.snippet) && typeof provider.fetch === "function") {
+        try {
+          const fetched = await provider.fetch({ sourceId: raw.sourceId || raw.id, url: raw.url });
+          if (fetched && typeof fetched === "object" && !Array.isArray(fetched)) {
+            sourceRecord = { ...raw, ...fetched, sourceId: fetched.sourceId || raw.sourceId || raw.id, url: fetched.url || raw.url, title: fetched.title || raw.title, rights: fetched.rights || raw.rights, license: fetched.license || raw.license };
+          }
+        } catch {
+          rejected++;
+          outcomes.push({ recordId: clean(raw.sourceId || raw.id) || null, status: "KNOWLEDGE_SOURCE_FETCH_FAILED" });
+          continue;
+        }
+      }
+      const normalized = normalizeRecord(sourceRecord, providerKey, now);
       if (normalized.error) { rejected++; outcomes.push({ status: normalized.error }); continue; }
       const item = normalized.record;
       if (seen.has(item.recordId)) { duplicates++; outcomes.push({ recordId: item.recordId, status: "DUPLICATE_SKIPPED" }); continue; }
