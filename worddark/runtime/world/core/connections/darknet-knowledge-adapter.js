@@ -22,6 +22,7 @@ export function createDarknetKnowledgeAdapter({
         !clean(record.source?.sourceId) || !/^https:\/\//i.test(clean(record.source?.url)) ||
         !clean(record.source?.title) || !clean(record.content) ||
         record.content.length > 20000 || !RIGHTS.has(clean(record.rights).toUpperCase()) ||
+        (clean(record.rights).toUpperCase() === "LICENSED" && !clean(record.license)) ||
         record.status !== "RECEIVED_PENDING_REVIEW" || record.promotedToKnowledge !== false) {
       return deny("WORDDARK_KNOWLEDGE_RECORD_INVALID");
     }
