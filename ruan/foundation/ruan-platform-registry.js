@@ -11,7 +11,7 @@ export const RUAN_PLATFORM = Object.freeze({
   globalNavigationOwner: true,
   apps: Object.freeze([
     { id: "home", name: "Central", path: "/", status: "active", dataScopes: ["platform.preferences", "platform.appStatus"] },
-    { id: "personal", name: "Pessoal", path: "/pessoal/", status: "foundation", dataScopes: ["personal.tasks", "personal.shopping", "personal.reminders", "personal.finance", "personal.goals", "personal.projects", "personal.notes"] },
+    { id: "personal", name: "Pessoal", path: "/pessoal/", status: "foundation", dataScopes: ["personal.tasks", "personal.shopping", "personal.reminders", "personal.finance", "personal.goals", "personal.projects", "personal.notes", "personal.calendar", "personal.habits", "personal.documents", "personal.wellbeing", "personal.bills", "personal.quickCaptures"] },
     { id: "shadow", name: "Shadow", path: "/shadow/", status: "foundation", dataScopes: ["shadow.preferences", "shadow.browserProfiles", "shadow.permissions", "shadow.extensions"] }
   ])
 });
