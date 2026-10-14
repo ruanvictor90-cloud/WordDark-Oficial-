@@ -204,7 +204,7 @@ Um bloco só passa de **preparado** para **integrado** quando seu contrato é co
 
 1. Executar a suíte atual no commit mais recente e corrigir qualquer falha.
 2. Fechar o backend autenticado do Hub → Core e validar consultas/submissões em TEST.
-3. Unificar a conexão persistida do Google com o gateway server-side sem expor tokens ao navegador.
+3. Validar a composição server-side da Central de Conexões persistida → provider adapter → Darknet → intake durável, sem expor tokens ao navegador.
 4. Validar o ciclo interno pedido → execução → revisão → resultado → biblioteca.
 5. Fazer uma entrega comercial manual de baixo custo, registrar tempo/custos/aceite e só então automatizar etapas comprovadamente repetitivas.
 
@@ -220,3 +220,17 @@ Foi adicionado `core/connections/persisted-knowledge-gateway.js` como gateway ex
 `core/connections/ruan-hub-control-runtime.js` agora compõe o adaptador existente com autenticação de operador feita no backend. O runtime falha fechado se faltarem autenticador, política de autorização, auditoria durável, idempotência durável/atômica, catálogo público ou centro de operações. Mantém o ambiente `TEST`, sem rota HTTP e desligado por padrão. Os testes cobrem identidade ausente, autorização negada, submissão em TEST e filtragem de campos de operação.
 
 A composição não equivale a integração remota ativa: o Hub ainda guarda pedidos localmente até existir backend autenticado e persistência reais.
+
+
+## 11. Composição server-side da pesquisa de conhecimento
+
+Foi adicionado `darknet/darknet-knowledge-server-composition.js` para fechar o fio entre a conexão persistida e o runtime de conhecimento, sem criar uma segunda central:
+
+- recebe o `connectionStore` server-side já usado pelo OAuth/Firestore;
+- monta handlers de pesquisa por `providerId` através do contrato `knowledge-search-adapter`;
+- compõe `persisted-knowledge-gateway`, que exige conta persistida, capacidade explícita `KNOWLEDGE_RESEARCH`, identidade confiável, autorização e auditoria;
+- entrega somente os resultados normalizados ao pipeline Darknet; credenciais ficam no contexto interno do backend;
+- exige o conjunto de persistência, revisão, autorização e arquivo canônico do runtime durável antes de permitir `enabled: true`;
+- não devolve o gateway interno, não cria rota HTTP e permanece desativado por padrão.
+
+O teste `darknet/darknet-knowledge-server-composition.test.js` cobre a composição usando dependências simuladas, incluindo rejeição de identidade forjada, leitura da credencial apenas no handler server-side, auditoria e resultado sem token. Isso fecha a composição de código para pesquisa de conhecimento; **não** prova que um handler de API real, IAM, Firestore/KMS, identidade ou política de aprovação do projeto Cloud estejam configurados. Essa confirmação continua sendo um ensaio separado em staging.
