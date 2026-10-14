@@ -121,3 +121,6 @@ body.ruan-launcher .ruan-home-app .brand-mark svg{width:29px;height:29px}
 body.ruan-launcher .home-app-name{font-size:11px;line-height:1.2;text-align:center}
 body.ruan-launcher footer{margin-top:auto;padding-top:12px}
 @media(max-width:360px){body.ruan-launcher .ruan-home-grid{gap:7px;padding-top:6px}body.ruan-launcher .ruan-home-app{min-height:86px;padding:6px}body.ruan-launcher .ruan-home-app .brand-mark{width:39px;height:39px;flex-basis:39px}}
+
+/* Entretenimento pessoal — identidade própria no lançador Ruan. */
+body.ruan-launcher .ruan-home-app.entertainment-launch{background:linear-gradient(145deg,#302044,#130d1d);border-color:#7650a0}body.ruan-launcher .ruan-home-app .entertainment-logo{color:#e0b8ff;border-color:#8b5cba;background:radial-gradient(circle at 30% 18%,#46275f,#241433 58%,#100c18)}
