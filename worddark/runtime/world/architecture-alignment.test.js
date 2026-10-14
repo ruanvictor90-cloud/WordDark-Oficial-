@@ -55,6 +55,7 @@ const commercialBridge = read('worddark/runtime/world/core/commercial-order-oper
 const commercialBridgeTest = read('worddark/runtime/world/core/commercial-order-operation-bridge.test.js');
 const earthCommercialIntake = read('worddark/runtime/world/core/earth-commercial-intake-adapter.js');
 const earthCommercialIntakeTest = read('worddark/runtime/world/core/earth-commercial-intake-adapter.test.js');
+const terraCommercialCoreIntegrationTest = read('worddark/runtime/world/core/terra-commercial-core.integration.test.js');
 const earthEngine = read('worddark/runtime/world/earth/earth-engine.js');
 const commercialEngine = read('worddark/runtime/world/earth/commercial-engine.js');
 
@@ -119,4 +120,6 @@ assert.ok(earthCommercialIntake.includes('TERRA_DEMAND_TO_LEAD:') && earthCommer
 assert.ok(earthCommercialIntakeTest.includes('EARTH_COMMERCIAL_INTAKE_DENIED') && earthCommercialIntakeTest.includes('same demand must not create multiple leads'), 'Terra intake tests must cover denial and idempotency');
 assert.ok(earthEngine.includes('linkCommercialLead') && commercialEngine.includes('sourceDemandId:x.sourceDemandId'), 'Terra demand and commercial lead must share a traceable source link');
 assert.ok(packageScripts.includes('earth-commercial-intake-adapter.test.js') && readinessAudit.includes('Integração Terra: demanda capturada → lead comercial'), 'Terra demand-to-lead integration must be in the test suite and readiness map');
+assert.ok(terraCommercialCoreIntegrationTest.includes('COMMERCIAL_ORDER_REVIEW_REQUIRED') && terraCommercialCoreIntegrationTest.includes('repeatedDispatch') && terraCommercialCoreIntegrationTest.includes('coreCalls.length, 1'), 'End-to-end Terra/Core test must retain review and duplicate-dispatch safeguards');
+assert.ok(packageScripts.includes('terra-commercial-core.integration.test.js') && readinessAudit.includes('Verificação integrada Terra → Comercial → WordDark Core'), 'End-to-end Terra/Core integration must be tested and documented');
 console.log('Architecture alignment tests passed.');
