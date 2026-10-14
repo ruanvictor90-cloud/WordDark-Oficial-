@@ -37,6 +37,8 @@ const durableKnowledgeRegistry = read('worddark/runtime/world/library/durable-kn
 const firestoreKnowledgeAdapters = read('worddark/runtime/world/library/firestore-knowledge-adapters.js');
 const firestoreKnowledgeTests = read('worddark/runtime/world/library/firestore-knowledge-adapters.test.js');
 const knowledgeRuntime = read('darknet/darknet-knowledge-runtime.js');
+const knowledgeRuntimeIntegrationTest = read('darknet/darknet-knowledge-runtime.integration.test.js');
+const packageScripts = read('package.json');
 const capabilityCatalog = read('worddark/runtime/world/core/capability-catalog.js');
 
 assert.ok(repository.includes('ARCHITECTURE-CONSOLIDATION.md') && repository.includes('ARCHITECTURE-MAP.md') && repository.includes('SECTOR-ALIGNMENT.md') && repository.includes('APP-INTERFACE-BRIEFS.md'), 'Repository README must link canonical and detailed architecture references');
@@ -78,4 +80,7 @@ assert.ok(knowledgeSearchAdapter.includes('KNOWLEDGE_RESEARCH') && knowledgeSear
 assert.ok(knowledgeSearchAdapterTest.includes('KNOWLEDGE_PROVIDER_MISMATCH') && knowledgeSearchAdapterTest.includes('KNOWLEDGE_FETCH_COMPLETED'));
 assert.ok(knowledgeRuntime.includes('KNOWLEDGE_READ_AUTHORIZATION') && knowledgeRuntime.includes('authenticateRequest'), 'Knowledge review and retrieval must be gated by trusted backend identity');
 assert.ok(capabilityCatalog.includes('KNOWLEDGE_RESEARCH') && capabilityCatalog.includes('SEARCH_KNOWLEDGE'));
+assert.ok(knowledgeRuntimeIntegrationTest.includes('runtime.learn') && knowledgeRuntimeIntegrationTest.includes('runtime.review') && knowledgeRuntimeIntegrationTest.includes('runtime.searchValidated'), 'Knowledge integration test must cover acquisition, review, archive and validated retrieval end to end');
+assert.ok(packageScripts.includes('darknet/darknet-knowledge-runtime.integration.test.js'), 'End-to-end knowledge integration test must be included in the standard test suites');
+assert.ok(sectors.includes('Verificação ponta a ponta da cadeia de conhecimento'), 'Sector alignment must record end-to-end evidence and production limitations');
 console.log('Architecture alignment tests passed.');
