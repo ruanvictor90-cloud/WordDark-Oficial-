@@ -6,7 +6,7 @@ async function run(){
  let submissions=0,audits=[],authorizationCalls=0;
  const records=new Map();
  const idempotencyStore={executeOnce:async(key,fn)=>{if(records.has(key))return records.get(key);const value=await fn();records.set(key,value);return value;}};
- const operationCenter={submit:input=>{submissions++;assert.equal(input.requesterId,"operator-1");assert.equal(input.originId,"ruan-hub");assert.equal(input.environment,"TEST");return{success:true,status:"QUEUED",operationId:"OP-1"};},getStatus:()=>({status:"HEALTHY"})};
+ const operationCenter={submit:input=>{submissions++;assert.equal(input.requesterId,"operator-1");assert.equal(input.originId,"ruan-hub");assert.equal(input.environment,"TEST");return{success:true,status:"QUEUED",operationId:"OP-1",secretToken:"must-not-leak",internalDebug:{authorization:"must-not-leak"}};},getStatus:()=>({status:"HEALTHY",environment:"TEST",internalSecret:"must-not-leak"})};
  const deps={enabled:true,operationCenter,listOperations:async()=>[{operationId:"OP-LIST-1",status:"RUNNING",action:"CREATE_CONTENT",environment:"TEST",secret:"must-not-leak"}],capabilityCatalog:{listPublic:()=>["CREATE_CONTENT"]},authorizeRequest:async input=>{authorizationCalls++;assert.equal(input.actorId,"operator-1");return{allowed:true,approved:true,approvalId:"APR-1"};},audit:async event=>{audits.push(event);},idempotencyStore};
  const disabled=createAdapter();
  assert.equal((await disabled.handle(request,trusted)).status,"HUB_CONTROL_ADAPTER_DISABLED");
@@ -14,7 +14,7 @@ async function run(){
  assert.equal((await adapter.handle(request)).status,"HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED");
  assert.equal((await adapter.handle(request,{authenticated:true,actorId:"operator-1"})).status,"HUB_CONTROL_TRUSTED_IDENTITY_REQUIRED");
  const first=await adapter.handle(request,trusted);
- assert.equal(first.status,"QUEUED");assert.equal(first.worldAccepted,true);assert.equal(first.environment,"TEST");
+ assert.equal(first.status,"QUEUED");assert.equal(first.worldAccepted,true);assert.equal(first.environment,"TEST");assert.equal(JSON.stringify(first).includes("must-not-leak"),false,"submission response must not expose internal fields");
  const second=await adapter.handle(request,trusted);
  assert.equal(second.operationId,"OP-1");assert.equal(submissions,1,"idempotency must prevent duplicate operation submission");
  assert.equal(authorizationCalls,2,"each repeated call must still be authorized");
@@ -27,7 +27,7 @@ async function run(){
  assert.equal((await noAudit.handle({...request,requestId:"HUB-REQ-NO-AUDIT"},trusted)).status,"HUB_CONTROL_AUDIT_UNAVAILABLE");
  const noIdempotency=createAdapter({...deps,idempotencyStore:null});
  assert.equal((await noIdempotency.handle({...request,requestId:"HUB-REQ-NO-IDEMPOTENCY"},trusted)).status,"HUB_CONTROL_IDEMPOTENCY_UNAVAILABLE");
- assert.equal((await adapter.handle({...request,requestId:"HUB-STATUS",action:"REQUEST_STATUS",need:""},trusted)).status,"WORDDARK_STATUS");
+ const worldStatus=await adapter.handle({...request,requestId:"HUB-STATUS",action:"REQUEST_STATUS",need:""},trusted);assert.equal(worldStatus.status,"WORDDARK_STATUS");assert.equal(JSON.stringify(worldStatus).includes("must-not-leak"),false,"status response must allowlist fields");
  assert.equal((await adapter.handle({...request,requestId:"HUB-CAPS",action:"CAPABILITY_DISCOVERY",need:""},trusted)).status,"CAPABILITIES_AVAILABLE");
  const listed=await adapter.handle({...request,requestId:"HUB-LIST",action:"LIST_OPERATIONS",need:"",limit:20},trusted);
  assert.equal(listed.status,"OPERATIONS_AVAILABLE");assert.equal(listed.operations[0].operationId,"OP-LIST-1");assert.equal("secret" in listed.operations[0],false,"operation listing must not expose unapproved fields");
