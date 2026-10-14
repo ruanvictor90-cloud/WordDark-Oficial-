@@ -118,3 +118,10 @@ O runtime também protege revisão, listagem de pendências e busca validada: ca
 `worddark/runtime/world/core/connections/persisted-knowledge-gateway.js` provides a server-only gateway for the Darknet's read-only research actions. It loads account metadata and tokens from the encrypted persistent connection store, requires trusted service identity, authorization and audit before/after provider calls, and filters secret-bearing fields from returned data. The Darknet provider passes the runtime-authenticated context only through the in-process backend call. This gateway is disabled by default, has no HTTP route, and supports only `SEARCH_KNOWLEDGE` and `FETCH_KNOWLEDGE`.
 
 This closes a code-level composition gap between the durable connection store and knowledge adapters; it does **not** prove the real provider handlers, capability grants, IAM, Firestore/KMS configuration, or staging deployment are active. A backend operator must explicitly grant `KNOWLEDGE_RESEARCH` to the persisted account through a trusted grant flow before any provider request can run.
+
+
+## Composição autenticada do Hub → Core
+
+Foi criado `core/connections/ruan-hub-control-runtime.js` para compor o adaptador de controle com a autenticação de operador do backend. O runtime exige autenticador confiável, autorização, auditoria marcada como durável, idempotência marcada como durável/atômica, catálogo e centro de operações antes de permitir `enabled: true`. Encaminha apenas a identidade produzida pelo autenticador; não confia em `actorId` enviado pelo navegador. A submissão permanece em `TEST`, sem rota HTTP, e o runtime fica desligado por padrão.
+
+**Estado:** composição e testes de contrato adicionados. Ainda não existe sessão autenticada real, store de auditoria/idempotência ligado à nuvem nem endpoint de backend. Por isso, o Hub continua mostrando rascunhos locais e esta composição não foi ativada.
