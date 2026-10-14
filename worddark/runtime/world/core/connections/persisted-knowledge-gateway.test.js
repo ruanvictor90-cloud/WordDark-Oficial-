@@ -28,6 +28,7 @@ const deps = {
   enabled: true
 };
 const gateway = createPersistedKnowledgeGateway(deps);
+assert.deepEqual(gateway.getStatus().adapters, ["RESEARCH_API"]);
 const request = {
   requestId: "REQ-1", operationId: "OP-1", providerId: "RESEARCH_API", accountId: "ACCOUNT-1",
   capability: "KNOWLEDGE_RESEARCH", action: "SEARCH_KNOWLEDGE", payload: { query: "source", limit: 5 }
