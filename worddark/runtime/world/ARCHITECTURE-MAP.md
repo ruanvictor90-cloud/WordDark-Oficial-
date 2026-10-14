@@ -111,3 +111,10 @@ O runtime também protege revisão, listagem de pendências e busca validada: ca
 **Evidência de integração:** `darknet/darknet-knowledge-runtime.integration.test.js` cobre o caminho completo com gateway, adaptador de pesquisa, identidade simulada, entrada pendente, revisão, arquivo e leitura validada. É uma prova de contrato em teste, não uma chamada real à API nem um teste do projeto Cloud.
 
 **Ainda não é uma ativação oficial.** Falta ligar a identidade/autorização/auditoria reais, registrar os adapters externos reais no gateway com conta e capacidade `KNOWLEDGE_RESEARCH`, configurar IAM/regras das coleções no projeto real e passar por uma execução controlada em staging. Não ativar com callbacks permissivos de teste.
+
+
+## Conexões persistidas — nova fronteira backend
+
+`worddark/runtime/world/core/connections/persisted-knowledge-gateway.js` provides a server-only gateway for the Darknet's read-only research actions. It loads account metadata and tokens from the encrypted persistent connection store, requires trusted service identity, authorization and audit before/after provider calls, and filters secret-bearing fields from returned data. The Darknet provider passes the runtime-authenticated context only through the in-process backend call. This gateway is disabled by default, has no HTTP route, and supports only `SEARCH_KNOWLEDGE` and `FETCH_KNOWLEDGE`.
+
+This closes a code-level composition gap between the durable connection store and knowledge adapters; it does **not** prove the real provider handlers, capability grants, IAM, Firestore/KMS configuration, or staging deployment are active. A backend operator must explicitly grant `KNOWLEDGE_RESEARCH` to the persisted account through a trusted grant flow before any provider request can run.
