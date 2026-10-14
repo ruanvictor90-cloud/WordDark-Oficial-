@@ -129,7 +129,7 @@ Este teste comprova a colaboração dos contratos entre Terra e Core com depend�
 
 ## Prova integrada Terra → Comercial → Core → Dark Factory
 
-O teste worddark/runtime/world/earth/commercial-world.integration.test.js agora inicia com uma demanda real do motor Terra, converte-a em lead comercial rastreável, qualifica o lead, cria e aceita a proposta, abre o pedido e usa o bridge para encaminhar a operação ao Centro de Operações real do teste, com a Rodovia, o Core, a Biblioteca Central e a Dark Factory configurados no próprio cenário.
+O teste worddark/runtime/world/earth/commercial-world.integration.test.js agora inicia com uma demanda real do motor Terra, converte-a em lead comercial rastreável, qualifica o lead, cria e aceita a proposta, abre o pedido e usa o bridge para encaminhar a operação ao Centro de Operações real do teste, com a Rodovia, o Core, a Biblioteca Central e a Dark Factory configurados no próprio cenário. Os módulos executores de conteúdo, a identidade, a autorização, a auditoria e a idempotência são simulados.
 
 Essa prova inclui a entrada de demanda e o despacho comercial na mesma cadeia de teste. A execução é controlada em TEST e usa identidade, auditoria e idempotência simuladas; não prova que os serviços de identidade, armazenamento ou auditoria da nuvem estejam ligados. O resultado interno concluído ainda deixa o pedido em REVIEW para revisão humana antes da entrega ao cliente.
 
