@@ -28,7 +28,7 @@ Este arquivo descreve responsabilidades visíveis e limites da versão consolida
 - Dark Factory continua sob Céu.
 - Empresas sociais/de conteúdo e comerciais/de negócio ficam sob Terra conforme o catálogo ativo.
 - Central de Conexões governa adaptadores, credenciais e comunicação com serviços externos.
-- Banco (interface atual Darkbank) é a instituição financeira interna do mundo, separada do Financeiro pessoal do Ruan.
+- Darkbank é o setor de gestão financeira interna do mundo, separado do Financeiro pessoal do Ruan; não é uma instituição financeira autorizada nem movimenta dinheiro de clientes.
 - Darknet é um sistema independente; sua ponte com o Core permanece desativada por padrão.
 
 ## Limites técnicos atuais
