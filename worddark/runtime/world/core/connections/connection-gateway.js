@@ -44,7 +44,9 @@ class ExternalConnectionGateway {
     const request=built.request;
     if(!this.registry)return{success:false,status:"CONNECTION_REGISTRY_UNAVAILABLE",operationId:request.operationId};
 
-    const requiredCapability=ACTION_CAPABILITIES[request.action];\n    if(requiredCapability&&request.capability!==requiredCapability)return{success:false,status:"ACTION_CAPABILITY_MISMATCH",operationId:request.operationId,action:request.action,capability:request.capability};\n    const registryCapability=request.capability;
+    const requiredCapability=ACTION_CAPABILITIES[request.action];
+    if(requiredCapability&&request.capability!==requiredCapability)return{success:false,status:"ACTION_CAPABILITY_MISMATCH",operationId:request.operationId,action:request.action,capability:request.capability};
+    const registryCapability=request.capability;
     const access=this.registry.authorizeContext(request.providerId,request.accountId,registryCapability);
     if(!access.allowed)return{success:false,status:access.status,stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,capability:registryCapability};
 
