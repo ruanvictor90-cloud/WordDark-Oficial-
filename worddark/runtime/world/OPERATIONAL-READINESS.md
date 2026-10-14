@@ -151,6 +151,18 @@ A tela financeira continua sendo um registro local de apoio operacional, não um
 
 Testes de script e alinhamento arquitetural protegem essas regras. Isso reduz a chance de tratar faturamento ou margem incompleta como dinheiro disponível para reinvestimento, mas não substitui conciliação bancária, contabilidade, persistência de servidor nem apuração fiscal.
 
+## Persistência compartilhada para Hub e pontes operacionais — 14/10/2026
+
+Foi adicionado `core/connections/firestore-operation-control-store.js` como adapter reutilizável para auditoria append-only e idempotência atômica em Firestore. Ele é injetado pelo backend, não inicializa credenciais, não abre rota HTTP e não ativa os consumidores sozinho.
+
+- O Ruan Hub, a ponte de pedido comercial Terra → Core e a ponte demanda Terra → lead agora fornecem fingerprints estáveis ao contrato `executeOnce`; reutilizar a mesma chave com outro conteúdo gera conflito em vez de reaproveitar silenciosamente uma execução diferente.
+- Repetições concorrentes encontram `IN_PROGRESS` e não chamam novamente a função de operação. Respostas persistidas são sanitizadas para retirar campos com aparência de segredo.
+- Eventos de auditoria aceitam apenas uma allowlist de metadados e não armazenam payloads, tokens ou conteúdo do pedido.
+- Se o processo cair depois de reservar a chave, o estado fica bloqueado em `IN_PROGRESS`; não existe recuperação automática porque repetir uma operação de resultado incerto pode duplicar efeitos. A revisão/reconciliação precisa ser explícita.
+- `operation-control-integration.test.js` exercita o mesmo store injetado no runtime do Hub e na ponte comercial, verifica repetição sem segundo despacho e confirma que a conclusão do Core para em `REVIEW`.
+
+**O que isso fecha:** existe agora uma implementação Firestore reutilizável para os contratos de auditoria/idempotência que antes precisavam ser fornecidos como doubles nos testes. **O que continua pendente:** conectar uma instância Firestore autorizada no backend real, identidade/sessão e política de aprovação reais, regras IAM/retention/monitoramento e validação de staging. A integração permanece em `TEST`, sem endpoint, publicação ou envio automático.
+
 ## Endurecimento da Central de Conexões — 14/10/2026
 
 O gateway carregado pela interface da Dark Factory (connection-gateway.js) agora usa enabled=false por padrão e devolve EXTERNAL_CONNECTION_GATEWAY_DISABLED antes de consultar credenciais ou executar adapters. Seu estado declara explicitamente productionSafe=false e serverGatewayRequiredForProduction=true.
