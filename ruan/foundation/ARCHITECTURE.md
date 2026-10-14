@@ -1,141 +1,124 @@
-# Ruan — Arquitetura geral do aplicativo pessoal
+# Ruan — Arquitetura geral da plataforma pessoal
 
-**Estado:** fundação isolada em `feature/ruan-personal-foundation`.  
+**Estado:** fundação isolada em feature/ruan-personal-foundation.  
 **Regra de integração:** não substituir nem editar a central oficial até a fundação ser validada.
 
 ## Missão
 
-Ruan é o ambiente pessoal privado do usuário. Deve ajudar a capturar informações, organizar a rotina, gerir tarefas e dinheiro, acompanhar objetivos e facilitar decisões. Não deve exigir registro constante, encher a tela de métricas nem tornar a organização uma obrigação.
+Ruan é a plataforma pessoal privada. Deve reunir apps independentes, facilitar a organização diária e crescer sem virar uma interface monolítica. A central apresenta atalhos e resumos; os apps são responsáveis pelos próprios registros.
+
+## Estrutura fixa
+
+### Ruan — plataforma e central
+- Única área com a gaveta global de aplicativos.
+- Mantém navegação global, preferências da plataforma, captura rápida e widgets.
+- Exibe resumos autorizados dos apps, sem criar cópias paralelas dos registros.
+- Não deve mostrar uma área ADM.
+
+### Pessoal — app independente
+Responsável pela organização da vida pessoal:
+- Tarefas, recorrência e prioridades.
+- Compras e listas.
+- Lembretes.
+- Financeiro manual, reservas registradas, investimentos informados e orçamento.
+- Futuramente: objetivos, projetos, notas, calendário, rotina/hábitos, documentos e bem-estar.
+
+Pessoal pode ter navegação própria, mas não deve renderizar a gaveta global do Ruan nem conter cópias de outros apps da plataforma.
+
+### Shadow — app independente
+Responsável por ferramentas de navegação e futuras integrações.
+- DarkEye: conceito planejado de navegador/overlay.
+- Conectores: contratos futuros para APIs externas.
+- Plugins: catálogo, permissões, compatibilidade e revogação.
+- Permissões: escopos mínimos e concessões explícitas.
+- Atividade: histórico legível e controlado pelo usuário.
+
+Shadow não contém IA nesta etapa, não executa plugins, não chama APIs e não é ainda um navegador funcional. O detalhamento está em shadow/ARCHITECTURE.md.
+
+## Contrato da plataforma
+
+O arquivo ruan-platform-registry.js declara três superfícies: Central, Pessoal e Shadow. Somente a superfície raiz Ruan pode exibir a gaveta global. O catálogo declara escopos permitidos por app e nega por padrão escopos desconhecidos.
+
+Esse registro é um contrato de arquitetura para orientar a implementação; não oferece sozinho autenticação, isolamento entre origens, criptografia nem autorização de servidor.
 
 ## Princípios de produto
 
-- **Uma informação, uma fonte:** cada módulo é responsável pelos seus próprios registros; a central apresenta resumos.
-- **Ação rápida:** registrar uma tarefa, item de compra, lembrete ou movimentação em poucos passos.
+- **Uma informação, uma fonte:** cada módulo é responsável pelos seus registros; a central só lê resumos autorizados.
+- **Ação rápida:** capturar uma tarefa, item de compra, lembrete ou movimentação em poucos passos.
 - **Mobile-first:** interfaces simples, legíveis e confortáveis no celular.
-- **Autonomia do usuário:** editar, concluir, apagar, exportar e recuperar os próprios dados.
-- **Sem falsa certeza:** dados manuais devem ser identificados como registros, nunca como saldo bancário verificado.
-- **Privacidade por padrão:** nenhum módulo recebe acesso total só por existir.
-- **Crescimento modular:** novos aplicativos são adicionados por contratos, não por duplicação da central.
-- **Falha segura:** importações inválidas, ações não autorizadas e integrações indisponíveis não devem destruir dados.
+- **Autonomia:** editar, concluir, apagar, exportar e recuperar os próprios dados.
+- **Sem falsa certeza:** dados manuais não são apresentados como saldo bancário verificado.
+- **Privacidade por padrão:** nenhum app recebe acesso total apenas por existir.
+- **Crescimento modular:** novos apps são adicionados por contratos, não por duplicação da central.
+- **Falha segura:** dados inválidos ou integrações indisponíveis não devem destruir registros.
 
-## Camadas
+## Apps pessoais e estado
 
-### 1. Central Ruan
-Responsável por navegação, captura rápida, widgets e resumos autorizados:
-- agenda e tarefas prioritárias;
-- lembretes;
-- compras pendentes;
-- resumo financeiro;
-- objetivos e progresso;
-- alertas de dados ou integração.
-
-A central não deve manter uma segunda cópia dos registros.
-
-### 2. Aplicativos pessoais
 | Área | Responsabilidade | Estado |
 |---|---|---|
 | Tarefas | Pendências, prioridades, recorrência, conclusão | Protótipo |
-| Compras | Listas independentes, itens e marcação de compra | Protótipo |
-| Lembretes | Data/hora, conclusão e gestão de avisos | Protótipo |
+| Compras | Listas, itens e marcação de compra | Protótipo |
+| Lembretes | Data/hora, conclusão e avisos futuros | Protótipo |
 | Financeiro | Entradas, saídas, reservas, investimentos registrados e orçamentos | Protótipo parcial |
-| Objetivos | Metas pessoais e marcos de progresso | Planejado |
-| Projetos | Projetos pessoais, etapas e próximas ações | Planejado |
-| Notas e ideias | Captura rápida, organização e pesquisa | Planejado |
-| Calendário | Eventos e visão temporal unificada | Planejado |
-| Rotina e hábitos | Rotinas recorrentes e histórico de conclusão | Planejado |
-| Documentos | Referências a documentos pessoais, com proteção reforçada | Planejado |
+| Objetivos | Metas pessoais e marcos | Planejado |
+| Projetos | Projetos, etapas e próximas ações | Planejado |
+| Notas e ideias | Captura, organização e pesquisa | Planejado |
+| Calendário | Eventos e visão temporal | Planejado |
+| Rotina e hábitos | Rotinas recorrentes e histórico | Planejado |
+| Documentos | Referências a documentos com proteção reforçada | Planejado |
 | Bem-estar | Registros voluntários de rotina e autocuidado | Planejado |
 
-O registro de bem-estar é opcional e não substitui orientação profissional. Dados de documentos e bem-estar exigem proteção adicional antes de serem implementados.
+## Núcleo de domínio e persistência
 
-### 3. Núcleo de domínio
-- esquema versionado e normalização de dados;
-- validação antes de salvar ou importar;
-- cálculos financeiros centralizados;
-- cálculo de recorrência de tarefas;
-- trilha de eventos para diagnóstico;
-- exportação e importação de backup;
-- registro de módulos e limites de acesso.
+O núcleo de domínio inclui esquema versionado, normalização, validação, cálculos financeiros, recorrência, eventos de aplicação e exportação/importação. O protótipo usa armazenamento local do navegador: não sincroniza entre dispositivos e não é um cofre seguro.
 
-### 4. Persistência
-O protótipo usa armazenamento local do navegador. É adequado para testar a experiência, mas não oferece sincronização, recuperação remota ou proteção equivalente a um cofre de dados.
+Antes de guardar dados sensíveis, será necessário definir autenticação, criptografia, controle de acesso, recuperação e um modelo de ameaça. Não armazenar senhas, cartões, tokens, credenciais bancárias ou documentos sensíveis no protótipo.
 
-Futura interface de persistência:
-- leitura e escrita validadas;
-- versionamento/migração;
-- cópia de segurança;
-- sincronização opcional com resolução de conflitos;
-- tratamento explícito de falhas;
-- criptografia e autenticação antes de armazenar informações sensíveis.
+## Integrações
 
-### 5. Integrações
-Integrações futuras (notificações, calendário externo ou dados financeiros) devem ser conectores independentes, com permissões específicas, indicação de estado e possibilidade de revogação. Nenhuma conexão externa é presumida ou ativada pelo protótipo.
+Notificações do sistema, calendário externo e dados financeiros devem ser conectores independentes, com escopos específicos, indicação de estado e possibilidade de revogação. Nenhuma integração é presumida ou ativada pelo protótipo.
 
-## Contrato mínimo entre módulos
+## Marcos
 
-Uma ação entre áreas deve ter:
-- identificador da ação;
-- módulo de origem e módulo responsável;
-- tipo de operação;
-- referência ao registro, quando aplicável;
-- permissões necessárias;
-- estado e horário;
-- resultado ou erro legível.
-
-A central consulta apenas resumos definidos pelo módulo responsável. Dados financeiros detalhados não devem ser enviados para tarefas, e tarefas não devem receber dados financeiros completos.
-
-## Segurança e limites atuais
-
-- O protótipo não possui autenticação ou sincronização entre dispositivos.
-- Os dados em `localStorage` podem ser acessados por código executado na mesma origem; não armazenar senhas, cartões, credenciais bancárias ou documentos sensíveis.
-- O financeiro é manual: sem conexão bancária, pagamento, transferência ou ordem de investimento.
-- A estimativa de saldo é calculada apenas pelos lançamentos existentes.
-- Lembretes com data/hora ainda não geram notificações do sistema em segundo plano.
-- O histórico é uma trilha de aplicação editável pelo ambiente, não uma auditoria inviolável.
-- O registro de acesso do núcleo é uma regra inicial, não substitui autenticação real nem uma política de segurança do servidor.
-
-## Marcos de desenvolvimento
-
-### Marco A — Fundação isolada
-- [x] Central e navegação básica.
-- [x] Tarefas, listas de compras, lembretes e registros financeiros.
+### A — Fundação isolada
+- [x] Central pessoal e navegação básica.
+- [x] Tarefas, compras, lembretes e registros financeiros.
 - [x] Núcleo de domínio versionado.
-- [x] Recorrência diária/semanal/mensal em nível de cálculo e criação da próxima ocorrência ao concluir.
+- [x] Recorrência diária/semanal/mensal no núcleo e criação da próxima ocorrência.
 - [x] Orçamento por categoria.
 - [x] Exportação/importação JSON com validação e confirmação.
-- [x] Catálogo modular e limites de acesso descritos.
-- [x] Testes automatizados iniciais e workflow dedicado.
-- [ ] Confirmar execução de CI e testar visualmente em celular.
+- [x] Registro modular pessoal e testes iniciais.
+- [x] Registro da plataforma e estrutura declarativa de Shadow/DarkEye.
+- [ ] Confirmar CI e testar visualmente em celular.
 
-### Marco B — Gestão pessoal consistente
-- [ ] Datas de vencimento e planejamento semanal.
-- [ ] Contas futuras e despesas previstas.
+### B — Gestão pessoal consistente
+- [ ] Datas de vencimento, contas futuras e despesas previstas.
 - [ ] Objetivos de economia e acompanhamento de metas.
 - [ ] Busca global e captura rápida unificada.
-- [ ] Exportação com backup prévio automático antes de importar.
-- [ ] Testes para recorrência, orçamentos, migração e casos de erro.
+- [ ] Backup prévio automático antes de importar.
+- [ ] Testes de migração, recorrência, orçamento e erros.
 
-### Marco C — Uso cotidiano confiável
-- [ ] Notificações reais e preferências por tipo de aviso.
-- [ ] Calendário integrado.
-- [ ] Sincronização e recuperação entre dispositivos.
-- [ ] Acessibilidade e testes em diferentes tamanhos de tela.
-- [ ] Proteção de dados sensíveis e modelo de ameaça revisado.
+### C — Shadow e integrações
+- [ ] Criar shell próprio de Shadow, sem gaveta global duplicada.
+- [ ] Definir interface inicial de DarkEye como protótipo.
+- [ ] Especificar contratos de conectores e plugins.
+- [ ] Implementar permissões técnicas antes de habilitar extensões.
+- [ ] Revisar armazenamento, privacidade e revogação.
 
-### Marco D — Integração com o Ruan oficial
-- [ ] Congelar o contrato de dados e a navegação final.
+### D — Integração com a versão oficial
+- [ ] Congelar contratos de navegação e dados.
 - [ ] Mapear cada módulo para a arquitetura oficial existente.
-- [ ] Migrar em mudanças pequenas, com testes de regressão.
-- [ ] Preservar identidade visual, URLs e comportamento que já funcionam.
-- [ ] Integrar somente após revisão; nunca mesclar automaticamente esta fundação inteira.
+- [ ] Migrar em mudanças pequenas com testes de regressão.
+- [ ] Preservar identidade visual, URLs e comportamento existentes.
+- [ ] Integrar somente após revisão; nunca mesclar automaticamente toda a fundação.
 
-## Critérios para considerar o Ruan pronto para o uso diário
+## Critérios de aceite
 
-1. Dados persistem sem desaparecer durante recargas normais.
-2. Backup pode ser exportado e restaurado com validação.
-3. Tarefas recorrentes não criam duplicatas.
-4. Cálculos financeiros são testados e deixam claras as limitações.
-5. Notificações indicam corretamente o que foi configurado e o que ainda não está ativo.
-6. A central mostra informações reais e não duplica registros.
-7. Cada módulo só acessa os dados necessários.
-8. Falhas e erros são comunicados sem apagar dados silenciosamente.
+1. Dados persistem durante recargas normais e podem ser exportados.
+2. Tarefas recorrentes não criam duplicatas.
+3. Cálculos financeiros são testados e suas limitações ficam claras.
+4. A central mostra resumos reais sem duplicar registros.
+5. Apenas Ruan exibe a gaveta global.
+6. Pessoal e Shadow não recebem dados um do outro sem escopo explícito.
+7. Erros são comunicados sem apagar dados silenciosamente.
+8. Nenhuma função futura é descrita como pronta antes de estar implementada e testada.
