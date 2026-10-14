@@ -60,7 +60,7 @@ const hub = createRuanHubControlRuntime({
     ? { authenticated: true, actorId: "operator-1", sessionId: "session-hub-1" }
     : null,
   authorizeRequest: async () => ({ allowed: true, approved: true, approvalId: "HUB-APPROVAL-1" }),
-  audit: controls.audit,
+  audit,
   idempotencyStore: controls.idempotencyStore,
   capabilityCatalog: { listPublic: () => [{ capability: "KNOWLEDGE_RESEARCH" }] },
   listOperations: async () => [],
