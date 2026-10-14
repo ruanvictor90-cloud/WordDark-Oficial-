@@ -34,7 +34,11 @@ Ruan deve ser um ambiente pessoal extensível: simples para o uso diário, mas c
 - eventos de histórico limitados;
 - pacote de exportação/importação validado.
 
-Teste local: `node ruan/foundation/ruan-core.test.js`.
+Testes locais:
+- `node ruan/foundation/ruan-core.test.js`
+- `node ruan/foundation/ruan-app-registry.test.js`
+
+A visão geral de módulos, contratos, limites e marcos está em `ARCHITECTURE.md`.
 
 ## Limites de segurança atuais
 
@@ -49,7 +53,7 @@ Teste local: `node ruan/foundation/ruan-core.test.js`.
 
 ### Fundação
 - Ligar a interface ao núcleo de domínio.
-- Adicionar orçamentos e objetivos financeiros à interface.
+- Adicionar objetivos financeiros e datas de vencimento à interface.
 - Exportação/importação com confirmação e backup prévio.
 - Testes de cálculos, recorrência, migração e regressão.
 
