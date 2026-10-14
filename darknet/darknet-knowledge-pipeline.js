@@ -87,7 +87,7 @@ export function createDarknetKnowledgePipeline({
 
     let rows;
     try {
-      rows = await provider.search({ query: searchQuery, limit: Math.min(Math.max(Number(limit) || 10, 1), MAX_RESULTS) });
+      rows = await provider.search({ query: searchQuery, limit: Math.min(Math.max(Number(limit) || 10, 1), MAX_RESULTS), trustedContext });
     } catch {
       try { await audit({ event: "DARKNET_KNOWLEDGE_PROVIDER_FAILED", providerId: providerKey }); } catch {}
       return { success: false, status: "KNOWLEDGE_PROVIDER_FAILED", received: 0, rejected: 0 };
@@ -100,7 +100,7 @@ export function createDarknetKnowledgePipeline({
       let sourceRecord = raw;
       if (raw && typeof raw === "object" && !clean(raw.content || raw.text || raw.snippet) && typeof provider.fetch === "function") {
         try {
-          const fetched = await provider.fetch({ sourceId: raw.sourceId || raw.id, url: raw.url });
+          const fetched = await provider.fetch({ sourceId: raw.sourceId || raw.id, url: raw.url, trustedContext });
           if (fetched && typeof fetched === "object" && !Array.isArray(fetched)) {
             sourceRecord = { ...raw, ...fetched, sourceId: fetched.sourceId || raw.sourceId || raw.id, url: fetched.url || raw.url, title: fetched.title || raw.title, rights: fetched.rights || raw.rights, license: fetched.license || raw.license };
           }
