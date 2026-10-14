@@ -48,5 +48,6 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
  }
  return Object.freeze({handle,getStatus:()=>({enabled:enabled===true,transport:"injected",httpRoute:false,externalNetwork:false,environment:"TEST",requiresTrustedIdentity:true,requiresPersistentAudit:true,requiresAtomicIdempotency:true})});
 }
-if(typeof module!=="undefined"&&module.exports)module.exports=createRuanHubControlAdapter;
 if(typeof window!=="undefined")window.createRuanHubControlAdapter=createRuanHubControlAdapter;
+export { createRuanHubControlAdapter };
+export default createRuanHubControlAdapter;
