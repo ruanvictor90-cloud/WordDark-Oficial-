@@ -151,3 +151,32 @@ Todo app precisa definir antes de ganhar uma interface:
 8. Só após contratos estáveis, criar as interfaces conforme `APP-INTERFACE-BRIEFS.md`.
 
 **Regra de avanço:** implementação → teste → auditoria → integração controlada. Não pular diretamente de um arquivo criado para uma declaração de prontidão.
+
+## 7. Verificação ponta a ponta da cadeia de conhecimento
+
+O teste `darknet/darknet-knowledge-runtime.integration.test.js` cobre em conjunto:
+
+1. Conta de provedor e capacidade `KNOWLEDGE_RESEARCH` no registro de conexões de teste.
+2. Pesquisa passando pelo gateway da Central de Conexões e pelo adaptador de provedor.
+3. Normalização da fonte e validação de HTTPS, conteúdo e declaração de direitos.
+4. Autenticação de serviço, autorização e auditoria antes da entrada no WordDark.
+5. Persistência atômica simulada, deduplicação e estado inicial pendente de revisão.
+6. Revisão autenticada, aprovação identificável, promoção para `VALIDATED` e arquivo canônico idempotente.
+7. Consulta autorizada e auditada apenas dos registros validados.
+
+**O que essa evidência prova:** os contratos e a composição conseguem trabalhar juntos sob dependências controladas de teste.
+
+**O que ela não prova:** credenciais reais, rede externa, IAM, regras do Firestore real, identidade operacional real, configuração dos handlers de API do usuário ou operação em produção. Esses pontos precisam ser validados em staging com as conexões já configuradas e sem publicar, pagar ou movimentar dinheiro.
+
+## 8. Ordem de fechamento antes da primeira operação comercial
+
+1. Executar a suíte completa em CI no commit atual e resolver todos os bloqueios.
+2. Conferir cada setor pelo contrato comum: entrada, autorização, estado, saída, falha, repetição e auditoria.
+3. Integrar o Hub ao Core por backend autenticado; manter rascunhos locais identificados como locais até essa etapa.
+4. Ligar os handlers das APIs existentes à Central de Conexões, um provedor por vez, começando por pesquisa/leitura sem efeitos externos.
+5. Confirmar persistência, identidade, aprovação e auditoria em staging.
+6. Fazer um ensaio operacional interno: pedido → classificação → capacidade do Céu → resultado → revisão → biblioteca/histórico.
+7. Escolher uma entrega comercial pequena que possa ser feita manualmente, com custo e critérios de aceite registrados.
+8. Só automatizar uma etapa após comprovar que ela economiza tempo/custo e mantém aprovação humana onde há impacto externo.
+
+**Critério de conclusão:** integração testada e rastreável, não apenas documentada; qualquer serviço sem evidência permanece marcado como preparado, parcial ou desativado.
