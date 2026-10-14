@@ -4,6 +4,8 @@ const root = new URL('./', import.meta.url);
 const read = path => readFileSync(new URL(path, root), 'utf8');
 const hub=read('index.html'),css=read('app.css'),script=read('app.js'),sw=read('sw.js'),central=read('central.html');
 assert.ok(hub.includes('href="../ruan/index.html"'), 'Hub must return to Ruan');
+assert.ok(hub.includes('<title>Ruan Hub</title>') && hub.includes('RUAN <i>HUB</i>'), 'Hub identity must belong to Ruan');
+assert.ok(hub.includes('Painel superior de gestão do mundo'), 'Hub must be the superior world-management panel');
 assert.ok(hub.includes('id="quick-request-form"') && hub.includes('id="quick-request-input"'), 'Hub must restore the request bar');
 assert.ok(hub.includes('href="./central.html"'), 'Hub Central must open its own independent screen');
 assert.ok(!hub.includes('area=central&fromHub=1'), 'Hub Central must not route into WordDark Central');
@@ -12,10 +14,15 @@ assert.ok(hub.includes('class="test-app-tile"') && hub.includes('>Teste</span>')
 assert.ok(hub.includes('class="launch-dock"') && hub.includes('href="../index.html"'), 'Hub must keep the bottom WordDark entry');
 assert.ok(!hub.includes('class="hub-apps"'), 'Pedidos and Em execução must live inside Hub Central');
 assert.ok(central.includes('Pedidos') && central.includes('Em execução') && central.includes('independente da Central do WordDark'));
-assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
-assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
+assert.ok(central.includes('ruan.hub.quick-requests.v1') && central.includes('Nenhum pedido ainda'));
+assert.ok(script.includes('ruan.hub.quick-requests.v1') && script.includes('location.href="./central.html?view=pedidos"'));
+assert.ok(script.includes('worddark.hub.quick-requests.v1') && script.includes('migrateHubStorage'), 'Hub must preserve existing local requests while migrating to its Ruan-owned namespace');
+assert.ok(central.includes('worddark.hub.quick-requests.v1') && central.includes('migrateHubStorage'), 'Hub Central must migrate previously saved requests');
 assert.ok(css.includes('.quick-request-bar') && css.includes('.test-app-tile') && css.includes('.launch-dock'));
-assert.ok(sw.includes('worddark-hub-v13') && sw.includes('central.html') && sw.includes('darknet.html'));
+assert.ok(sw.includes('ruan-hub-v14') && sw.includes('central.html') && sw.includes('darknet.html'));
+assert.ok(!sw.includes('../ruan/apps/darknet/'), 'Hub cache must not reference the removed Ruan-owned Darknet copy');
+assert.ok(read('manifest.webmanifest').includes('Ruan Hub'), 'Install metadata must use Ruan Hub identity');
+assert.ok(read('darknet.html').includes('Sistema independente'), 'Darknet must remain an independent system');
 
 assert.ok(hub.indexOf('</header>')<hub.indexOf('class="ruan-return hub-return-under-header"'), 'Hub return must sit below the header');
 assert.ok(central.indexOf('</header>')<central.indexOf('class="ruan-return hub-return-under-header"') && !central.includes('<a class="central-back"'), 'Hub Central must have only one return link below the header');
