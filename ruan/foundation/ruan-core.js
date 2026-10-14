@@ -205,6 +205,9 @@ export function parseImportPayload(payload) {
   if (!payload || payload.app !== "Ruan" || payload.kind !== "personal-data-export" || !payload.data) {
     return { valid: false, errors: ["Este arquivo não parece ser uma exportação válida do Ruan."] };
   }
+  if (payload.schemaVersion !== undefined && (!Number.isInteger(payload.schemaVersion) || payload.schemaVersion < 1 || payload.schemaVersion > SCHEMA_VERSION)) {
+    return { valid: false, errors: ["A versão deste backup não é compatível com esta versão do Ruan."] };
+  }
   const validation = validateState(payload.data);
   if (!validation.valid) return validation;
   return { valid: true, errors: [], data: normalizeState(payload.data) };
