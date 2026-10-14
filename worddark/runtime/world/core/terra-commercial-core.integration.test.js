@@ -62,7 +62,7 @@ commercial.createProposal({
   proposalId: "proposal-pilot-001",
   leadId: lead.leadId,
   title: "Pacote de conteúdo básico",
-  scope: "3 textos de publicação, 1 roteiro curto e 1 revisão",
+  scope: "3 textos de publicação, 1 roteiro curto, 1 bio/descrição de perfil e 1 rodada de ajustes",
   amount: 75
 });
 commercial.decideProposal("proposal-pilot-001", "ACCEPTED", "client-pilot-001");
