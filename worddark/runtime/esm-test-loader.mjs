@@ -26,6 +26,7 @@ const ESM_FILES = new Set([
   "worddark/runtime/world/core/commercial-order-operation-bridge.test.js",
   "worddark/runtime/world/core/earth-commercial-intake-adapter.js",
   "worddark/runtime/world/core/earth-commercial-intake-adapter.test.js",
+  "worddark/runtime/world/core/terra-commercial-core.integration.test.js",
   "worddark/runtime/world/library/durable-knowledge-intake-registry.test.js",
   "worddark/runtime/world/library/firestore-knowledge-adapters.test.js",
   "worddark/runtime/world/library/central-knowledge-archiver.test.js",
