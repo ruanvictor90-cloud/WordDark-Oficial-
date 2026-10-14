@@ -11,14 +11,14 @@ function storage(){
   const store=storage();
   const registry=new Registry(store);
   store.setItem("wd.external.connections",JSON.stringify([{
-    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH"]
+    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLICATION"]
   }]));
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
 
   const gateway=new Gateway({registry});
   const waiting=await gateway.execute({
     requestId:"REQ-EXT-001",operationId:"OP-EXT-001",providerId:"YOUTUBE",accountId:"ACC-001",
-    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-001"}
+    capability:"CONTENT_PUBLICATION",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-001"}
   });
   assert.strictEqual(waiting.status,"WAITING_EXTERNAL_CONNECTION");
 
