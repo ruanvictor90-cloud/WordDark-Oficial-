@@ -20,23 +20,29 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
   catch{return deny("HUB_CONTROL_AUTHORIZATION_UNAVAILABLE");}
   if(!decision||decision.allowed!==true)return deny("HUB_CONTROL_REQUEST_DENIED");
   if(action==="SUBMIT_NEED"&&(!String(decision.approvalId||"").trim()||decision.approved!==true))return deny("HUB_CONTROL_APPROVAL_REQUIRED");
-  if(typeof audit!=="function")return deny("HUB_CONTROL_AUDIT_UNAVAILABLE");
   try{await audit({event:"RUAN_HUB_CONTROL_REQUEST_AUTHORIZED",actorId,sessionId,requestId,action,approvalId:decision.approvalId||null});}
   catch{return deny("HUB_CONTROL_AUDIT_UNAVAILABLE");}
   if(action==="CAPABILITY_DISCOVERY"){
-     if(!capabilityCatalog||typeof capabilityCatalog.listPublic!=="function")return deny("HUB_CONTROL_CAPABILITY_CATALOG_UNAVAILABLE");
-     return{success:true,status:"CAPABILITIES_AVAILABLE",requestId,capabilities:capabilityCatalog.listPublic(),worldAccepted:false};
-    }
-    if(action==="REQUEST_STATUS"){
-     if(typeof operationCenter?.getStatus!=="function")return deny("HUB_CONTROL_STATUS_UNAVAILABLE");
-     return{success:true,status:"WORDDARK_STATUS",requestId,world:operationCenter.getStatus(),worldAccepted:false};
-    }
-    if(action==="LIST_OPERATIONS"){
-     if(typeof listOperations!=="function")return deny("HUB_CONTROL_OPERATION_QUERY_UNAVAILABLE");
-     try{const rows=await listOperations({actorId,limit:Math.min(Math.max(Number(request.limit)||20,1),100)});return{success:true,status:"OPERATIONS_AVAILABLE",requestId,operations:(Array.isArray(rows)?rows:[]).map(op=>({operationId:String(op.operationId||op.id||""),status:String(op.status||"UNKNOWN"),action:String(op.action||op.operationType||"UNKNOWN"),originId:String(op.originId||""),destinationId:String(op.destinationId||""),createdAt:op.createdAt||op.created_at||null,updatedAt:op.updatedAt||op.updated_at||null,environment:String(op.environment||"UNKNOWN")})).filter(op=>op.operationId),worldAccepted:false};}catch{return deny("HUB_CONTROL_OPERATION_QUERY_FAILED");}
-    }
-    if(typeof operationCenter?.submit!=="function")return deny("HUB_CONTROL_OPERATION_CENTER_UNAVAILABLE");
-    if(typeof idempotencyStore?.executeOnce!=="function")return deny("HUB_CONTROL_IDEMPOTENCY_UNAVAILABLE");
+   if(!capabilityCatalog||typeof capabilityCatalog.listPublic!=="function")return deny("HUB_CONTROL_CAPABILITY_CATALOG_UNAVAILABLE");
+   return{success:true,status:"CAPABILITIES_AVAILABLE",requestId,capabilities:capabilityCatalog.listPublic(),worldAccepted:false};
+  }
+  if(action==="REQUEST_STATUS"){
+   if(typeof operationCenter?.getStatus!=="function")return deny("HUB_CONTROL_STATUS_UNAVAILABLE");
+   try{return{success:true,status:"WORDDARK_STATUS",requestId,world:operationCenter.getStatus(),worldAccepted:false};}
+   catch{return deny("HUB_CONTROL_STATUS_UNAVAILABLE");}
+  }
+  if(action==="LIST_OPERATIONS"){
+   if(typeof listOperations!=="function")return deny("HUB_CONTROL_OPERATION_QUERY_UNAVAILABLE");
+   try{
+    const rows=await listOperations({actorId,limit:Math.min(Math.max(Number(request.limit)||20,1),100)});
+    const operations=(Array.isArray(rows)?rows:[]).map(op=>({operationId:String(op.operationId||op.id||""),status:String(op.status||"UNKNOWN"),action:String(op.action||op.operationType||"UNKNOWN"),originId:String(op.originId||""),destinationId:String(op.destinationId||""),createdAt:op.createdAt||op.created_at||null,updatedAt:op.updatedAt||op.updated_at||null,environment:String(op.environment||"UNKNOWN")})).filter(op=>op.operationId);
+    return{success:true,status:"OPERATIONS_AVAILABLE",requestId,operations,worldAccepted:false};
+   }catch{return deny("HUB_CONTROL_OPERATION_QUERY_FAILED");}
+  }
+  if(typeof operationCenter?.submit!=="function")return deny("HUB_CONTROL_OPERATION_CENTER_UNAVAILABLE");
+  if(typeof idempotencyStore?.executeOnce!=="function")return deny("HUB_CONTROL_IDEMPOTENCY_UNAVAILABLE");
+  try{
+   return await idempotencyStore.executeOnce("RUAN_HUB:"+requestId,async()=>{
     let result;
     try{result=operationCenter.submit({text:need,goal:need,intent:request.intent||need,requesterId:actorId,originId:"ruan-hub",environment:"TEST",context:{hubRequestId:requestId,source:"RUAN_HUB",approvalId:decision.approvalId}});}
     catch{return deny("HUB_CONTROL_SUBMISSION_FAILED");}
@@ -45,7 +51,8 @@ function createRuanHubControlAdapter({operationCenter=null,capabilityCatalog=nul
     try{await audit({event:accepted?"RUAN_HUB_OPERATION_SUBMITTED":"RUAN_HUB_OPERATION_REJECTED",actorId,sessionId,requestId,action,approvalId:decision.approvalId,operationId:response.operationId,status:response.status});}
     catch{return deny("HUB_CONTROL_RESULT_AUDIT_UNAVAILABLE");}
     return response;
-  try{return await idempotencyStore.executeOnce("RUAN_HUB:"+requestId,async()=>{\n    let result;\n    try{result=operationCenter.submit({text:need,goal:need,intent:request.intent||need,requesterId:actorId,originId:"ruan-hub",environment:"TEST",context:{hubRequestId:requestId,source:"RUAN_HUB",approvalId:decision.approvalId}});}\n    catch{return deny("HUB_CONTROL_SUBMISSION_FAILED");}\n    const accepted=result?.success===true;\n    const response={success:accepted,status:accepted?(result.status||"OPERATION_ACCEPTED"):(result.status||"OPERATION_REJECTED"),requestId,operationId:result.operationId||result.meta?.operationId||null,result,worldAccepted:accepted,environment:"TEST"};\n    try{await audit({event:accepted?"RUAN_HUB_OPERATION_SUBMITTED":"RUAN_HUB_OPERATION_REJECTED",actorId,sessionId,requestId,action,approvalId:decision.approvalId,operationId:response.operationId,status:response.status});}\n    catch{return deny("HUB_CONTROL_RESULT_AUDIT_UNAVAILABLE");}\n    return response;\n   });}catch(error){return deny(error?.code==="IDEMPOTENCY_CONFLICT"?"HUB_CONTROL_IDEMPOTENCY_CONFLICT":"HUB_CONTROL_IDEMPOTENCY_FAILED");}
+   });
+  }catch(error){return deny(error?.code==="IDEMPOTENCY_CONFLICT"?"HUB_CONTROL_IDEMPOTENCY_CONFLICT":"HUB_CONTROL_IDEMPOTENCY_FAILED");}
  }
  return Object.freeze({handle,getStatus:()=>({enabled:enabled===true,transport:"injected",supportedActions:[...ALLOWED_ACTIONS],httpRoute:false,externalNetwork:false,environment:"TEST",requiresTrustedIdentity:true,requiresPersistentAudit:true,requiresAtomicIdempotency:true})});
 }
