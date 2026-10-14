@@ -29,8 +29,8 @@ Leia primeiro: [Consolidação arquitetural](worddark/runtime/world/ARCHITECTURE
 - A Central de Conexões controla a fronteira com provedores externos.
 - Darknet é independente do Ruan e solicita operações ao mundo por contrato governado.
 
-### Banco — instituição financeira do mundo
-- Banco (interface atualmente chamada Darkbank) é responsável pela camada financeira interna do WordDark: registros, contas, tesouraria, Cofre, investimentos e controles.
+### Darkbank — gestão financeira interna do mundo
+- Darkbank começa como gestão financeira interna do WordDark: livro-caixa, receitas, custos, tesouraria, Cofre e controles. Uma instituição financeira real é uma possibilidade futura, não o estado atual.
 - Recursos internos do WordDark não são fundos pessoais do Ruan.
 - A interface e os registros atuais não constituem serviço bancário real nem comprovam transações ou investimentos executados.
 
