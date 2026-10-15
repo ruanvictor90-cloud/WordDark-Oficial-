@@ -1,9 +1,9 @@
-> **Hierarquia de documentação:** a fonte canônica de responsabilidade e limites é [ARCHITECTURE-CONSOLIDATION.md](./ARCHITECTURE-CONSOLIDATION.md), seguida por [CURRENT-VERSION-SCOPE.md](./CURRENT-VERSION-SCOPE.md). Este documento é apenas um inventário de requisitos para interfaces futuras, não uma autorização para construí-las nesta fase. O Hub pertence ao Ruan e é o painel superior de gestão do mundo; o Banco/Darkbank pertence à estrutura financeira do WordDark. Se houver divergência, prevalece a arquitetura canônica.
+> **Hierarquia de documentação:** a fonte canônica de responsabilidade e limites é [ARCHITECTURE-CONSOLIDATION.md](./ARCHITECTURE-CONSOLIDATION.md), seguida por [CURRENT-VERSION-SCOPE.md](./CURRENT-VERSION-SCOPE.md). O Hub pertence ao Ruan e é o painel superior de gestão do mundo; o Banco/Darkbank pertence à estrutura financeira do WordDark. Se houver divergência, prevalece a arquitetura canônica.
 
 # WordDark — mapa de aplicativos e requisitos de interface futura
 
-**Estado deste documento:** especificação funcional, sem implementação visual.  
-**Regra:** não criar telas, componentes, rotas visuais nem recuperar interfaces legadas enquanto os setores e contratos operacionais ainda estão sendo consolidados.
+**Estado deste documento:** especificação funcional; não é implementação visual.  
+**Regra atual autorizada em 14/10/2026:** preservar todas as interfaces existentes. Para apps/categorias novos, permitir apenas identidade mínima (cabeçalho, logo/nome, retorno e área neutra) e uma caixa de diálogo que descreva os requisitos da futura interface. Não criar telas operacionais, fluxos visuais funcionais nem recuperar interfaces legadas sem definição do usuário. Ver [APP-SHELL-AND-INTERFACE-DIALOG-CONTRACT.md](./APP-SHELL-AND-INTERFACE-DIALOG-CONTRACT.md) e [APP-CATALOG.json](./APP-CATALOG.json).
 
 Este documento serve como guia para criar as interfaces depois, app por app. A existência de um módulo ou contrato no repositório não significa que a função esteja pronta para produção ou conectada a serviços externos.
 

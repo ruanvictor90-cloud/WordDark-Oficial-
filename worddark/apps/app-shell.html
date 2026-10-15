@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09070f">
+  <title>App do WordDark</title>
+  <link rel="stylesheet" href="./app-shell.css">
+  <script src="./app-shell.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Voltar ao catálogo de apps">
+        <span class="logo" aria-hidden="true">W</span>
+        <span><strong id="system-name">WORDDARK</strong><small id="app-sector">Mundo operacional</small></span>
+      </a>
+      <a class="back" href="./index.html">← Apps</a>
+    </header>
+    <section class="placeholder">
+      <div class="app-mark" aria-hidden="true">◇</div>
+      <p class="eyebrow">ESTRUTURA PREPARADA</p>
+      <h1 id="app-title">App</h1>
+      <p id="app-responsibility" class="muted">Este espaço ainda não tem interface operacional.</p>
+      <button id="open-requirements" class="primary" type="button">Ver requisitos da interface</button>
+      <p class="note">Nenhuma operação externa é executada nesta tela.</p>
+    </section>
+    <footer>WordDark · Identidade padrão · Interface funcional pendente de definição</footer>
+  </main>
+
+  <dialog id="requirements-dialog" aria-labelledby="dialog-title">
+    <form method="dialog" class="dialog-card">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">BRIEF DA INTERFACE</p>
+          <h2 id="dialog-title">O que esta interface precisa ter?</h2>
+        </div>
+        <button class="close" aria-label="Fechar" value="close">×</button>
+      </div>
+      <p id="dialog-intro" class="muted"></p>
+      <h3>Elementos necessários</h3>
+      <ul id="requirements-list"></ul>
+      <h3>Limites e dependências</h3>
+      <p id="dialog-limits" class="muted"></p>
+      <p class="note">Este brief descreve requisitos, não define o layout. Você decide a organização visual antes de desenvolvermos a interface funcional.</p>
+      <div class="dialog-actions">
+        <button class="secondary" value="close">Fechar</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

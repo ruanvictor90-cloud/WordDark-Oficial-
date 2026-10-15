@@ -1,0 +1,45 @@
+:root{color-scheme:dark;--bg:#09070f;--panel:#13101d;--panel2:#1b1528;--line:#30233f;--text:#f5f0ff;--muted:#b6a9c8;--accent:#9b6cff;--accent2:#d0b6ff}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#281740 0,transparent 55%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+.shell{width:min(100% - 28px,900px);margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:16px}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand>span:last-child{display:grid;gap:1px}
+.brand strong{font-size:13px;letter-spacing:.18em}
+.brand small{font-size:11px;color:var(--muted)}
+.logo{display:grid;place-items:center;width:42px;height:42px;border:1px solid #8f67c7;border-radius:14px;background:linear-gradient(145deg,#392052,#171021);font-weight:800;color:#e1c9ff;font-size:21px}
+.back{border:1px solid var(--line);padding:8px 12px;border-radius:12px;color:var(--muted);font-size:13px;white-space:nowrap}
+.intro{padding:34px 0 18px}
+.eyebrow{font-size:10px;letter-spacing:.19em;color:var(--accent2);font-weight:700}
+h1{font-size:clamp(25px,5vw,38px);line-height:1.15;letter-spacing:-.035em;margin:8px 0 12px}
+.intro>p:last-child{max-width:680px;color:var(--muted);margin:0}
+.app-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;padding:16px 0 34px}
+.app-card{display:flex;align-items:flex-start;gap:13px;border:1px solid var(--line);border-radius:18px;background:#120e1bcc;padding:17px;min-height:115px;transition:border-color .15s,transform .15s}
+.app-card:hover{border-color:#75539c;transform:translateY(-1px)}
+.app-card .app-mark{flex:0 0 40px;width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:var(--panel2);border:1px solid var(--line);color:var(--accent2);font-size:21px}
+.app-card strong{display:block;font-size:14px;margin:2px 0 5px}
+.app-card small{display:block;color:var(--muted);font-size:12px;line-height:1.45}
+.app-card .tag{display:inline-block;margin-top:9px;color:#d9c5f6;font-size:10px;letter-spacing:.04em}
+.placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:55px 0;min-height:400px}
+.placeholder .app-mark{width:76px;height:76px;border:1px solid #5a3c7b;border-radius:24px;display:grid;place-items:center;background:linear-gradient(145deg,#2a193b,#130f1d);font-size:36px;color:var(--accent2);margin-bottom:16px}
+.placeholder h1{margin:6px 0 12px}
+.placeholder .muted{max-width:540px}
+.muted,.note{color:var(--muted)}
+.primary,.secondary{border-radius:13px;padding:11px 16px;border:1px solid #6e4b98}
+.primary{background:linear-gradient(135deg,#8655ce,#5e3695);color:white;margin-top:20px}
+.secondary{background:transparent;color:var(--text)}
+.note{font-size:12px;max-width:600px;margin-top:22px}
+footer{border-top:1px solid var(--line);padding:18px 0;color:#897b9b;font-size:11px;text-align:center;margin-top:auto}
+dialog{width:min(620px,calc(100% - 24px));max-height:85vh;overflow:auto;padding:0;border:1px solid #49335f;border-radius:20px;background:#100c18;color:var(--text);box-shadow:0 25px 90px #000b}
+dialog::backdrop{background:#05030bbd;backdrop-filter:blur(5px)}
+.dialog-card{padding:22px;margin:0}
+.dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.dialog-head h2{font-size:22px;line-height:1.2;margin:6px 0 12px}
+.close{border:1px solid var(--line);background:transparent;color:var(--text);border-radius:10px;width:36px;height:36px;font-size:22px}
+dialog h3{font-size:13px;margin:22px 0 8px}
+dialog ul{padding-left:21px;color:#ded4eb}
+dialog li{padding:3px 0}
+.dialog-actions{display:flex;justify-content:flex-end;margin-top:18px}
+@media(max-width:520px){.topbar{height:66px}.logo{width:38px;height:38px}.brand strong{font-size:12px}.back{padding:8px 10px}.intro{padding-top:26px}.dialog-card{padding:17px}.dialog-head h2{font-size:20px}}
