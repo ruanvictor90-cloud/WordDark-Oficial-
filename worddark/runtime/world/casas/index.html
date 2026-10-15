@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090914">
+<title>Casas Iniciais — WordDark</title>
+<link rel="stylesheet" href="../ui/worddark-ui.css">
+<style>
+.wd-houses-hero{position:relative;overflow:hidden;padding:clamp(24px,5vw,46px);border:1px solid var(--wd-line);border-radius:26px;background:radial-gradient(ellipse at 90% 10%,rgba(139,92,246,.24),transparent 38%),linear-gradient(145deg,#171527,#0e1320 72%);margin-bottom:22px}
+.wd-houses-hero:after{content:"";position:absolute;width:230px;height:230px;border:1px solid rgba(177,140,255,.13);border-radius:50%;right:-70px;bottom:-140px;box-shadow:0 0 0 24px rgba(139,92,246,.035),0 0 0 48px rgba(139,92,246,.025);pointer-events:none}
+.wd-houses-hero h1{font-size:clamp(2.3rem,7vw,4.6rem);letter-spacing:-.055em;line-height:.98;margin:13px 0}
+.wd-houses-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0}
+.wd-houses-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.wd-house{--wood1:#775039;--wood2:#38271f;position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:235px;padding:18px;border:1px solid rgba(205,163,119,.28);border-radius:18px;overflow:hidden;text-decoration:none;color:var(--wd-text);background:linear-gradient(160deg,rgba(91,61,43,.24),rgba(14,19,32,.98) 55%),repeating-linear-gradient(0deg,rgba(188,132,84,.07) 0 2px,transparent 2px 13px),linear-gradient(135deg,var(--wood1),var(--wood2));transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.wd-house:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(125deg,transparent 20%,rgba(255,255,255,.035) 21%,transparent 23%,transparent 65%,rgba(0,0,0,.14) 66%,transparent 69%);pointer-events:none}
+.wd-house:hover,.wd-house:focus-visible{transform:translateY(-4px);border-color:var(--wd-accent2);box-shadow:0 15px 36px rgba(0,0,0,.25);outline:none}
+.wd-house-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.wd-house-code{font-size:.68rem;font-weight:800;letter-spacing:.13em;color:#d8c2ad;text-transform:uppercase}
+.wd-house-status{font-size:.66rem;color:#c8f7df;border:1px solid rgba(56,217,150,.25);background:rgba(10,40,31,.55);padding:4px 7px;border-radius:999px;white-space:nowrap}
+.wd-house-icon{height:76px;display:flex;align-items:center;justify-content:center;margin:13px 0 9px}
+.wd-cabin{position:relative;width:78px;height:48px;border:2px solid #c49a70;border-radius:4px;background:linear-gradient(90deg,#68442d 0 18%,#815638 18% 34%,#68442d 34% 50%,#815638 50% 68%,#68442d 68% 84%,#815638 84%);box-shadow:0 8px 20px #0005}
+.wd-cabin:before{content:"";position:absolute;left:-8px;top:-27px;width:88px;height:39px;background:linear-gradient(145deg,#bd956d,#70472d);clip-path:polygon(50% 0,100% 100%,0 100%);border-bottom:3px solid #d0a77c}
+.wd-cabin:after{content:"";position:absolute;bottom:0;left:30px;width:17px;height:29px;border:2px solid #d1aa80;border-bottom:0;background:linear-gradient(#30251f,#17151a)}
+.wd-house h2{font-size:1.22rem;line-height:1.15;margin:0 0 7px;letter-spacing:-.025em}
+.wd-house p{font-size:.84rem;line-height:1.5;color:#d0c5bb;margin:0;max-width:34ch}
+.wd-house-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:16px;color:#e6d2bd;font-size:.74rem}
+.wd-house-arrow{font-size:1.1rem;color:var(--wd-accent2)}
+.wd-house-note{border:1px solid var(--wd-line);border-radius:15px;padding:15px 17px;background:var(--wd-panel);color:var(--wd-muted);font-size:.86rem;line-height:1.55;margin-top:18px}
+@media(max-width:900px){.wd-houses-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.wd-houses-grid{grid-template-columns:1fr}.wd-house{min-height:205px}.wd-house-icon{height:64px}.wd-houses-hero{border-radius:20px}}
+@media(prefers-reduced-motion:reduce){.wd-house{transition:none}.wd-house:hover{transform:none}}
+</style>
+</head>
+<body class="wd-body">
+<button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false" aria-label="Abrir menu">☰</button>
+<div class="wd-shell">
+<aside id="wd-sidebar" class="wd-sidebar">
+<div class="wd-brand"><div class="wd-mark">◎</div><div><strong>WORDDARK</strong><small>Casas iniciais</small></div></div>
+<nav class="wd-nav">
+<a href="../core/">◎ Praça Central</a>
+<a class="active" href="./">⌂ Casas iniciais</a>
+<a href="../core/central/">◈ Prefeitura</a>
+<a href="../library/">▤ Biblioteca</a>
+<a href="../core/connections/">⌕ Descobertas</a>
+<a href="../core/operations/">↻ Rodovia</a>
+</nav>
+<div class="wd-footer">POVOADO INICIAL · ESTRUTURAS FUNCIONAIS E SUBSTITUÍVEIS</div>
+</aside>
+<main class="wd-main"><div class="wd-surface">
+<section class="wd-houses-hero">
+<div class="wd-eyebrow">WORDDARK · MAPA DO POVOADO</div>
+<h1>As primeiras casas do Mundo.</h1>
+<p class="wd-sub">Construções simples para começar a operar. Cada casa tem uma função e leva ao módulo correspondente; a aparência provisória pode evoluir depois sem mudar a responsabilidade de cada lugar.</p>
+<div class="wd-houses-toolbar"><span class="wd-badge">FASE 01 · MADEIRA</span><a class="wd-btn" href="../core/">← Voltar à Praça Central</a></div>
+</section>
+<section aria-label="Casas iniciais" class="wd-houses-grid">
+<a class="wd-house" href="../core/"><div class="wd-house-top"><span class="wd-house-code">CASA 01 · NÚCLEO</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Praça Central</h2><p>O ponto de orientação para entender o Mundo e chegar às áreas principais.</p><div class="wd-house-foot"><span>Entrada do Mundo</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../core/central/"><div class="wd-house-top"><span class="wd-house-code">CASA 02 · GOVERNO</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Prefeitura</h2><p>Coordenação, encaminhamento e organização das responsabilidades.</p><div class="wd-house-foot"><span>Coordenação central</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../library/"><div class="wd-house-top"><span class="wd-house-code">CASA 03 · MEMÓRIA</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Biblioteca</h2><p>Conhecimento validado, registros e resultados preservados.</p><div class="wd-house-foot"><span>Memória do Mundo</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../core/connections/"><div class="wd-house-top"><span class="wd-house-code">CASA 04 · DESCOBERTA</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Central de Descobertas</h2><p>Ponto de entrada para explorar fontes e serviços externos autorizados.</p><div class="wd-house-foot"><span>Fontes e conexões</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../core/sectors/tests/"><div class="wd-house-top"><span class="wd-house-code">CASA 05 · PESQUISA</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Laboratório</h2><p>Testes, diagnóstico e validação antes de qualquer promoção.</p><div class="wd-house-foot"><span>Área de testes</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../sky/darkfactory/"><div class="wd-house-top"><span class="wd-house-code">CASA 06 · PRODUÇÃO</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Estúdio</h2><p>Preparação e produção de conteúdo por meio da Dark Factory.</p><div class="wd-house-foot"><span>Produção do Céu</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../infraestrutura/"><div class="wd-house-top"><span class="wd-house-code">CASA 07 · INFRA</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Centro de Dados</h2><p>Infraestrutura, serviços de base e sustentação técnica do Mundo.</p><div class="wd-house-foot"><span>Infraestrutura</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../security/"><div class="wd-house-top"><span class="wd-house-code">CASA 08 · PROTEÇÃO</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Guarda</h2><p>Proteção de acesso, dados, operações e recuperação.</p><div class="wd-house-foot"><span>Segurança do Mundo</span><span class="wd-house-arrow">↗</span></div></a>
+<a class="wd-house" href="../core/operations/"><div class="wd-house-top"><span class="wd-house-code">CASA 09 · PASSAGEM</span><span class="wd-house-status">Destino disponível</span></div><div class="wd-house-icon"><span class="wd-cabin" aria-hidden="true"></span></div><h2>Portão da Rodovia</h2><p>Entrada para acompanhar o encaminhamento de operações e seus estados.</p><div class="wd-house-foot"><span>Rotas operacionais</span><span class="wd-house-arrow">↗</span></div></a>
+</section>
+<div class="wd-house-note"><strong>Nota de funcionamento:</strong> os cartões levam às interfaces atuais dos módulos relacionados. Isso não significa que integrações externas, execução automática ou serviços de produção estejam ativos. As casas são uma camada visual inicial e poderão ser substituídas por construções definitivas sem alterar a arquitetura do Mundo.</div>
+</div></main></div>
+<script src="../ui/worddark-ui.js"></script>
+</body></html>
