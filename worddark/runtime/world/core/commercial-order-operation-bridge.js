@@ -171,8 +171,29 @@ export function createCommercialOrderOperationBridge({
         const operationId = clean(coreResult.operationId || coreResult.meta?.operationId ||
           coreResult.operation?.operationId || coreResult.result?.operationId);
         if (!operationId) {
-          // Do not claim a traceable handoff if the Core did not return its operation ID.
-          return deny("COMMERCIAL_CORE_OPERATION_ID_REQUIRED");
+          // Core already accepted the operation. Never report this as a simple rejection,
+          // because a caller might retry and create duplicate work. Keep the order unadvanced
+          // and return an explicit reconciliation state until the operation can be located.
+          let auditWarning = false;
+          try {
+            await audit({
+              event: "COMMERCIAL_ORDER_CORE_ACCEPTED_WITHOUT_OPERATION_ID",
+              actorId: principal.actorId, sessionId: principal.sessionId,
+              requestId, orderId, approvalId,
+              coreStatus: clean(coreResult.status).toUpperCase() || "ACCEPTED"
+            });
+          } catch { auditWarning = true; }
+          return {
+            success: true,
+            status: "COMMERCIAL_CORE_ACCEPTED_RECONCILIATION_REQUIRED",
+            dispatched: true,
+            environment: "TEST",
+            orderId,
+            coreStatus: clean(coreResult.status).toUpperCase() || "ACCEPTED",
+            reconciliationRequired: true,
+            auditWarning,
+            warning: "O Core aceitou a operação, mas não devolveu um identificador rastreável. Não repetir o despacho; localizar a operação no Core e reconciliar o pedido."
+          };
         }
 
         let auditWarning = false;
@@ -207,19 +228,25 @@ export function createCommercialOrderOperationBridge({
         let executionTaskId = null;
         let executionQueueWarning = null;
         if (executionQueue) {
-          const queued = executionQueue.enqueue({
-            orderId,
-            proposalId: clean(current.proposalId),
-            title: clean(current.title),
-            scope: clean(current.scope),
-            serviceType: executionServiceType,
-            assignedTo: principal.actorId,
-            approved: true,
-            approvedBy: principal.actorId,
-            approvalId,
-            clientId: clean(current.requesterId),
-            deadline: current.deadline || null
-          });
+          let queued;
+          try {
+            queued = executionQueue.enqueue({
+              orderId,
+              proposalId: clean(current.proposalId),
+              title: clean(current.title),
+              scope: clean(current.scope),
+              serviceType: executionServiceType,
+              assignedTo: principal.actorId,
+              approved: true,
+              approvedBy: principal.actorId,
+              approvalId,
+              clientId: clean(current.requesterId),
+              deadline: current.deadline || null
+            });
+          } catch {
+            // The Core already accepted the operation; preserve that fact and require reconciliation.
+            queued = { success: false, code: "EXECUTION_QUEUE_EXCEPTION" };
+          }
           if (queued?.success === true) {
             executionTaskId = clean(queued.task?.taskId) || null;
             try { await audit({ event: "COMMERCIAL_ORDER_ASSIGNED_TO_DARK_FACTORY", actorId: principal.actorId, requestId, orderId, approvalId, operationId, taskId: executionTaskId, serviceType: executionServiceType }); }
