@@ -1,0 +1,102 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createCommercialIntakeApi } from "./commercial-intake-api.js";
+
+const base = {
+  method: "POST",
+  path: "/api/v1/commercial/intakes",
+  headers: { origin: "https://example.test", "content-type": "application/json" },
+  body: {
+    contactName: "Cliente Teste",
+    contactMethod: "cliente@example.test",
+    need: "Preciso de conteúdo para redes sociais.",
+    category: "conteudo",
+    consent: true
+  },
+  clientFingerprint: "test-client"
+};
+function makeApi(overrides = {}) {
+  const saved = [];
+  const audited = [];
+  const limiterCalls = [];
+  const api = createCommercialIntakeApi({
+    store: { async createIntake(value) { saved.push(value); } },
+    audit: { async write(value) { audited.push(value); } },
+    rateLimiter: { async consume(value) { limiterCalls.push(value); return { allowed: true }; } },
+    allowedOrigins: ["https://example.test"],
+    now: () => "2026-10-15T12:00:00.000Z",
+    idFactory: (() => { let n = 0; return () => "test-id-" + (++n); })(),
+    ...overrides
+  });
+  return { api, saved, audited, limiterCalls };
+}
+
+test("rejects missing durable store, audit and limiter dependencies", () => {
+  assert.throws(() => createCommercialIntakeApi(), /DURABLE_STORE_REQUIRED/);
+  assert.throws(() => createCommercialIntakeApi({
+    store: { createIntake() {} }
+  }), /AUDIT_REQUIRED/);
+  assert.throws(() => createCommercialIntakeApi({
+    store: { createIntake() {} }, audit: { write() {} }
+  }), /RATE_LIMITER_REQUIRED/);
+});
+
+test("stores a minimal valid intake and audits before success", async () => {
+  const { api, saved, audited, limiterCalls } = makeApi();
+  const result = await api(base);
+  assert.equal(result.status, 201);
+  assert.equal(result.body.status, "INTAKE_RECEIVED");
+  assert.equal(saved.length, 1);
+  assert.equal(audited.length, 1);
+  assert.equal(saved[0].status, "RECEIVED");
+  assert.equal(saved[0].contactName, "Cliente Teste");
+  assert.equal("authorization" in saved[0], false);
+  assert.equal(limiterCalls.length, 1);
+});
+
+test("rejects unknown origins without touching storage", async () => {
+  const { api, saved } = makeApi();
+  const result = await api({ ...base, headers: { ...base.headers, origin: "https://evil.test" } });
+  assert.equal(result.status, 403);
+  assert.equal(saved.length, 0);
+});
+
+test("rejects missing consent and malformed input", async () => {
+  const { api, saved } = makeApi();
+  const noConsent = await api({ ...base, body: { ...base.body, consent: false } });
+  assert.equal(noConsent.status, 400);
+  const malformed = await api({ ...base, rawBody: "{" });
+  assert.equal(malformed.status, 400);
+  assert.equal(saved.length, 0);
+});
+
+test("rejects oversized payload and non-JSON content", async () => {
+  const { api } = makeApi({ maxBodyBytes: 20 });
+  const large = await api({ ...base, rawBody: "x".repeat(21) });
+  assert.equal(large.status, 413);
+  const other = await api({ ...base, headers: { ...base.headers, "content-type": "text/plain" } });
+  assert.equal(other.status, 415);
+});
+
+test("rate limits before persistence", async () => {
+  const { api, saved } = makeApi({
+    rateLimiter: { async consume() { return { allowed: false }; } }
+  });
+  const result = await api(base);
+  assert.equal(result.status, 429);
+  assert.equal(saved.length, 0);
+});
+
+test("does not claim success if storage or audit is unavailable", async () => {
+  const storageFailure = makeApi({ store: { async createIntake() { throw Error("offline"); } } });
+  assert.equal((await storageFailure.api(base)).status, 503);
+  assert.equal(storageFailure.audited.length, 0);
+  const auditFailure = makeApi({ audit: { async write() { throw Error("offline"); } } });
+  assert.equal((await auditFailure.api(base)).status, 503);
+});
+
+test("returns generic not-found and method responses", async () => {
+  const { api } = makeApi();
+  assert.equal((await api({ ...base, path: "/not-a-route" })).status, 404);
+  assert.equal((await api({ ...base, method: "GET" })).status, 404);
+});
