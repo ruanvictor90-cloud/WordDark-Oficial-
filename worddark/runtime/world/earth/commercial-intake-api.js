@@ -152,7 +152,14 @@ export function createCommercialIntakeApi({
           at: intake.receivedAt
         }
       });
-    } catch {
+    } catch (error) {
+      if (error?.code === "IDEMPOTENCY_KEY_REUSED_WITH_DIFFERENT_PAYLOAD") {
+        return json(409, {
+          success: false,
+          error: { code: "IDEMPOTENCY_KEY_CONFLICT", message: "Esta solicitação já foi usada com dados diferentes. Gere uma nova chave." },
+          requestId
+        });
+      }
       return json(503, {
         success: false,
         error: { code: "INTAKE_STORAGE_UNAVAILABLE", message: "Não foi possível registrar agora. Tente novamente mais tarde." },
