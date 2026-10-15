@@ -67,5 +67,5 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v20'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v21'"));
 console.log('Ruan app structure tests passed.');
