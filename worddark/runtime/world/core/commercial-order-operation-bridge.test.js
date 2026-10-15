@@ -41,9 +41,11 @@ function makeCommercialEngine() {
   };
 }
 
-function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, coreStatus = "ACCEPTED", operationId = "op-bridge-1", executionQueueEnabled = false, executionServiceType = "content.digital-package" } = {}) {
+function setup({ enabled = true, allowed = true, approved = true, coreSuccess = true, coreStatus = "ACCEPTED", operationId = "op-bridge-1", executionQueueEnabled = false, executionQueueThrows = false, executionServiceType = "content.digital-package" } = {}) {
   const commercial = makeCommercialEngine();
-  const executionQueue = executionQueueEnabled ? createManualExecutionQueue({ operatorId: "operator-1", idFactory: () => "task-bridge-1" }) : null;
+  const executionQueue = !executionQueueEnabled ? null : executionQueueThrows
+    ? { enqueue() { throw new Error("QUEUE_UNAVAILABLE"); }, getStatus() { return { supportedServices: ["content.digital-package"] }; } }
+    : createManualExecutionQueue({ operatorId: "operator-1", idFactory: () => "task-bridge-1" });
   const order = commercial.getOrder("order-bridge-1");
   const calls = { core: [], audit: [] };
   const bridge = createCommercialOrderOperationBridge({
@@ -139,6 +141,16 @@ assert.equal(operational.executionQueue.confirmPayment(task.taskId, "operator-1"
 }).task.payment.status, "CONFIRMED");
 assert.equal(operational.executionQueue.getTask(task.taskId).payment.amount, 75);
 assert.equal(operational.bridge.getStatus().manualExecutionQueueEnabled, true);
+
+const queueFailure = setup({ executionQueueEnabled: true, executionQueueThrows: true });
+const queueFailureResult = await queueFailure.bridge.dispatch({
+  requestId: "req-queue-failure", orderId: queueFailure.order.orderId, approvalId: "approval-queue-failure"
+});
+assert.equal(queueFailureResult.status, "COMMERCIAL_CORE_ACCEPTED_QUEUE_WARNING");
+assert.equal(queueFailureResult.dispatched, true);
+assert.equal(queueFailureResult.queueStatus, "EXECUTION_QUEUE_EXCEPTION");
+assert.equal(queueFailure.commercial.getOrder(queueFailure.order.orderId).status, "PLANNED");
+assert.equal(queueFailure.calls.core.length, 1, "queue failure after Core acceptance must not be reported as a simple dispatch failure");
 
 const unsupported = setup({ executionQueueEnabled: true, executionServiceType: "social.publish" });
 const unsupportedResult = await unsupported.bridge.dispatch({
