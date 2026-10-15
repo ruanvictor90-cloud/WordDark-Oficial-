@@ -32,9 +32,9 @@ Os nomes são contrato proposto, não rotas já existentes. Não publicar nem co
 
 ### Implementação parcial nesta branch
 
-Existe `worddark/runtime/world/earth/commercial-intake-api.js`, um handler independente de framework para `POST /api/v1/commercial/intakes`, com validação de origem, tipo/tamanho de corpo, campos obrigatórios, consentimento, chave de idempotência e rate limiter injetado. Ele exige que o adaptador de armazenamento implemente `createIntakeOnce({ idempotencyKey, intake, auditEvent })` e grave intake, idempotência e auditoria atomicamente. A suíte `commercial-intake-api.test.js` cobre os guardrails do handler.
+Existe `worddark/runtime/world/earth/commercial-intake-api.js`, um handler independente de framework para `POST /api/v1/commercial/intakes`, com validação de origem, tipo/tamanho de corpo, campos obrigatórios, consentimento, chave de idempotência e rate limiter injetado. Agora também existe `firestore-commercial-intake-store.js`, adaptador para instância server-side do Firestore Admin SDK, que usa transação para gravar intake, resultado idempotente e auditoria no mesmo commit. A mesma chave e payload devolvem o pedido existente; a mesma chave com payload diferente é rejeitada como conflito. Os testes usam Firestore falso para validar o contrato e não substituem testes com o emulador/Firestore real.
 
-**Limite importante:** o contrato do store ainda não tem implementação Firestore real; não existe listener HTTP ligado, rate limiter distribuído, autenticação de operador ou deploy. O handler isolado não pode ser ligado ao formulário público até esses itens e CORS/HTTPS do adaptador estarem concluídos.
+**Limite importante:** o adaptador foi implementado, mas ainda não foi executado contra o SDK/Firestore real nem o emulador. Não existe listener HTTP ligado, rate limiter distribuído, autenticação de operador ou deploy. O handler não pode ser ligado ao formulário público até testes de integração reais, adaptador HTTP com HTTPS/CORS estrito e limites distribuídos estarem concluídos.
 
 ## 3. Dados e persistência
 
