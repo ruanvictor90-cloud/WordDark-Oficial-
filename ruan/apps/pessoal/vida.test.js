@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
-import { COLLECTIONS } from "../../../engine/personal-core.js";
+import { COLLECTIONS } from "../../engine/personal-core.js";
 
 const root = new URL("../../../", import.meta.url);
 const read = path => readFileSync(new URL(path, root), "utf8");
