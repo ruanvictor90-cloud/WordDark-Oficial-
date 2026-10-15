@@ -25,6 +25,7 @@ assert.ok(script.includes('$("summary-documents").textContent=(s.documents||[]).
 assert.ok(script.includes('$("summary-wellbeing").textContent=(s.wellbeingLogs||[]).length'), "O resumo deve contar registros de bem-estar.");
 assert.ok(script.includes('Editar categoria:'), "Os registros devem permitir editar a categoria.");
 assert.ok(script.includes('Editar data ou prazo'), "Os registros devem permitir editar data ou prazo.");
+assert.ok(script.includes('/^\\\\d{4}-\\\\d{2}-\\\\d{2}$/'), "A edição deve validar o formato da data.");
 
 const match = script.match(/const collections=\[([^\]]+)\]/);
 assert.ok(match, "Vida deve declarar explicitamente as coleções usadas.");
