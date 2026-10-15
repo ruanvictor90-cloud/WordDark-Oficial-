@@ -3,7 +3,7 @@
  * No DOM, network, account access or external side effects.
  */
 export const SCHEMA_VERSION = 3;
-export const DATA_KEY = "ruan.personal.foundation.v1";
+export const DATA_KEY = "ruan.personal.data.v1";
 export const COLLECTIONS = Object.freeze([
   "tasks", "shoppingLists", "reminders", "transactions", "assets",
   "budgets", "goals", "notes", "events", "projects", "calendarItems",
@@ -132,7 +132,7 @@ export function searchPersonalData(state, query, options = {}) {
   const sourceMap = {
     tasks: "tasks", shopping: "shoppingLists", reminders: "reminders", finance: "transactions",
     goals: "goals", notes: "notes", projects: "projects", calendar: "calendarItems",
-    habits: "habits", documents: "documents", bills: "bills", wellbeing: "wellbeingLogs"
+    habits: "habits", documents: "documents", bills: "bills", wellbeing: "wellbeingLogs", quickCaptures: "quickCaptures"
   };
   const allowed = options.collections ? new Set(options.collections) : new Set(Object.keys(sourceMap));
   const results = [];
