@@ -99,7 +99,7 @@ export function createCommercialIntakeApi({
       });
     }
 
-    const fingerprint = clean(request.clientFingerprint) || "unknown";
+    // The HTTP adapter must derive this from a trusted network boundary; never accept it from JSON.\n    const fingerprint = clean(request.clientFingerprint) || "unknown";
     let limit;
     try { limit = await rateLimiter.consume({ key: fingerprint, action: "commercial-intake" }); }
     catch {
