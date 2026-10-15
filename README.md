@@ -71,3 +71,7 @@ Antes de considerar uma mudança concluída, executar `npm test` e revisar o com
 ```bash
 npm test
 ```
+
+## Operação comercial inicial
+
+O roteiro prático para iniciar um primeiro serviço pago com execução e entrega manuais está em [`COMMERCIAL-FIRST-SALE.md`](./COMMERCIAL-FIRST-SALE.md). Ele distingue os recursos locais já utilizáveis das integrações que ainda exigem backend e validação real.
