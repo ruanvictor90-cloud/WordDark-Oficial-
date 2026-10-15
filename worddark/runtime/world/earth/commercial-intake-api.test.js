@@ -96,3 +96,17 @@ test("returns generic not-found and method responses", async () => {
   assert.equal((await api({ ...base, path: "/not-a-route" })).status, 404);
   assert.equal((await api({ ...base, method: "GET" })).status, 404);
 });
+
+test("returns conflict when an idempotency key is reused with different data", async () => {
+  const { api, saved } = makeApi({
+    store: { async createIntakeOnce() {
+      const error = new Error("conflict");
+      error.code = "IDEMPOTENCY_KEY_REUSED_WITH_DIFFERENT_PAYLOAD";
+      throw error;
+    } }
+  });
+  const result = await api(base);
+  assert.equal(result.status, 409);
+  assert.equal(result.body.error.code, "IDEMPOTENCY_KEY_CONFLICT");
+  assert.equal(saved.length, 0);
+});
