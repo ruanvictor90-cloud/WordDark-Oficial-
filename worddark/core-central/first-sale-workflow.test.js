@@ -41,7 +41,7 @@ assert.throws(() => workflow.recordExecutionResult("sale-1", { actorId: "operato
 const recorded = workflow.recordExecutionResult("sale-1", { content: "Entrega de teste para revisão.", actorId: "operator" });
 assert.equal(recorded.status, "READY_FOR_HUMAN_REVIEW");
 assert.equal(recorded.result.executionMode, "MANUAL_RECORDED");
-assert.throws(() => workflow.reviewResult("sale-1", { decision: "APPROVE", actorId: "owner" }), /decisão|Decisão/);
+assert.throws(() => workflow.reviewResult("sale-1", { decision: "NOPE", actorId: "owner" }), /Decisão deve ser APPROVE ou REWORK/);
 const rework = workflow.reviewResult("sale-1", { decision: "REWORK", actorId: "owner", notes: "Ajustar o texto." });
 assert.equal(rework.status, "REWORK_REQUIRED");
 const revised = workflow.recordExecutionResult("sale-1", { content: "Entrega revisada.", actorId: "operator", resultId: "result-2" });
