@@ -29,11 +29,8 @@ export function createCommercialIntakeApi({
   idFactory = () => randomUUID(),
   maxBodyBytes = 8192
 } = {}) {
-  if (!store || typeof store.createIntake !== "function") {
-    throw new Error("COMMERCIAL_INTAKE_DURABLE_STORE_REQUIRED");
-  }
-  if (!audit || typeof audit.write !== "function") {
-    throw new Error("COMMERCIAL_INTAKE_AUDIT_REQUIRED");
+  if (!store || typeof store.createIntakeOnce !== "function") {
+    throw new Error("COMMERCIAL_INTAKE_TRANSACTIONAL_STORE_REQUIRED");
   }
   if (!rateLimiter || typeof rateLimiter.consume !== "function") {
     throw new Error("COMMERCIAL_INTAKE_RATE_LIMITER_REQUIRED");
@@ -121,6 +118,15 @@ export function createCommercialIntakeApi({
       });
     }
 
+    const idempotencyKey = clean(headers["idempotency-key"] || headers["Idempotency-Key"]);
+    if (!/^[A-Za-z0-9._:-]{8,160}$/.test(idempotencyKey)) {
+      return json(400, {
+        success: false,
+        error: { code: "IDEMPOTENCY_KEY_REQUIRED", message: "Não foi possível identificar a solicitação com segurança." },
+        requestId
+      });
+    }
+
     const intake = {
       intakeId: idFactory(),
       status: "RECEIVED",
@@ -133,8 +139,20 @@ export function createCommercialIntakeApi({
       requestId
     };
 
+    let stored;
     try {
-      await store.createIntake(intake);
+      // The adapter must atomically persist the intake, idempotency result and audit event.
+      stored = await store.createIntakeOnce({
+        idempotencyKey,
+        intake,
+        auditEvent: {
+          event: "COMMERCIAL_INTAKE_RECEIVED",
+          requestId,
+          intakeId: intake.intakeId,
+          status: intake.status,
+          at: intake.receivedAt
+        }
+      });
     } catch {
       return json(503, {
         success: false,
@@ -143,28 +161,20 @@ export function createCommercialIntakeApi({
       });
     }
 
-    try {
-      await audit.write({
-        event: "COMMERCIAL_INTAKE_RECEIVED",
-        requestId,
-        intakeId: intake.intakeId,
-        status: intake.status,
-        at: intake.receivedAt
-      });
-    } catch {
-      // Do not report success when the required audit record could not be persisted.
+    if (!stored || !stored.intake || typeof stored.created !== "boolean") {
       return json(503, {
         success: false,
-        error: { code: "INTAKE_AUDIT_UNAVAILABLE", message: "O registro precisa ser verificado antes de confirmar o recebimento." },
+        error: { code: "INTAKE_STORAGE_UNCONFIRMED", message: "O registro precisa ser verificado antes de confirmar o recebimento." },
         requestId
       });
     }
+    const resultIntake = stored.intake;
 
-    return json(201, {
+    return json(stored.created ? 201 : 200, {
       success: true,
       status: "INTAKE_RECEIVED",
-      protocol: intake.intakeId,
-      receivedAt: intake.receivedAt,
+      protocol: resultIntake.intakeId,
+      receivedAt: resultIntake.receivedAt,
       requestId
     });
   };
