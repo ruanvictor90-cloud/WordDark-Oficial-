@@ -1,34 +1,173 @@
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WordDark — Conexões</title><link rel="stylesheet" href="../../ui/worddark-ui.css"></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#070912">
+  <meta name="description" content="Central governada de conexões externas do WordDark.">
+  <title>WordDark — Central de Conexões</title>
+  <link rel="stylesheet" href="../../ui/worddark-ui.css">
+  <style>
+    .connection-hero{position:relative;overflow:hidden;border:1px solid var(--wd-line);border-radius:22px;padding:clamp(20px,4vw,34px);background:radial-gradient(circle at 90% 10%,rgba(139,92,246,.24),transparent 34%),linear-gradient(135deg,var(--wd-panel),var(--wd-panel2));}
+    .connection-hero:after{content:"";position:absolute;width:190px;height:190px;border:1px solid rgba(177,140,255,.2);border-radius:50%;right:-70px;bottom:-110px;pointer-events:none}
+    .connection-kicker{display:flex;align-items:center;gap:8px;color:var(--wd-accent2);font-size:.74rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+    .connection-title{font-size:clamp(1.65rem,4vw,2.55rem);line-height:1.08;margin:12px 0 10px;letter-spacing:-.035em}
+    .connection-lead{max-width:760px;color:var(--wd-muted);line-height:1.65;margin:0}
+    .connection-statusline{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+    .connection-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid var(--wd-line);border-radius:999px;background:rgba(255,255,255,.025);font-size:.78rem;color:var(--wd-muted)}
+    .connection-dot{width:7px;height:7px;border-radius:50%;background:var(--wd-warn);display:inline-block}
+    .connection-dot.ok{background:var(--wd-ok)}
+    .connection-section{margin-top:24px}
+    .connection-section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;margin-bottom:13px}
+    .connection-section-head h2{font-size:1.15rem;margin:0}
+    .connection-section-head p{margin:5px 0 0;color:var(--wd-muted);font-size:.88rem;line-height:1.5}
+    .provider-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .provider-card{border:1px solid var(--wd-line);border-radius:18px;padding:18px;background:linear-gradient(180deg,var(--wd-panel),rgba(21,27,43,.72));min-width:0}
+    .provider-head{display:flex;align-items:center;gap:12px}
+    .provider-icon{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-weight:850;font-size:1.08rem;color:#fff;background:linear-gradient(135deg,#5b35d5,#9b76ff);flex:0 0 44px}
+    .provider-icon.youtube{background:linear-gradient(135deg,#b91c1c,#ef4444)}
+    .provider-icon.instagram{background:linear-gradient(135deg,#7c3aed,#db2777,#f97316)}
+    .provider-icon.tiktok{background:linear-gradient(135deg,#111827,#334155)}
+    .provider-icon.facebook{background:linear-gradient(135deg,#1d4ed8,#60a5fa)}
+    .provider-head h3{margin:0;font-size:1rem}
+    .provider-head p{margin:4px 0 0;color:var(--wd-muted);font-size:.78rem}
+    .provider-state{display:inline-flex;align-items:center;gap:7px;margin-top:16px;padding:6px 9px;border:1px solid var(--wd-line);border-radius:999px;font-size:.72rem;font-weight:750;letter-spacing:.035em}
+    .provider-card>p{color:var(--wd-muted);font-size:.86rem;line-height:1.55;min-height:56px;margin:12px 0}
+    .provider-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+    .provider-actions .wd-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer}
+    .connection-config{border:1px solid var(--wd-line);border-radius:18px;background:var(--wd-panel);padding:18px;margin-top:14px}
+    .connection-config label{display:block;font-size:.82rem;font-weight:750;margin-bottom:8px}
+    .connection-config input{width:100%;min-height:46px;padding:12px 14px;border:1px solid var(--wd-line);border-radius:12px;background:var(--wd-bg);color:var(--wd-text);font:inherit}
+    .connection-config input:focus{outline:2px solid var(--wd-accent);outline-offset:2px}
+    .connection-note{color:var(--wd-muted);font-size:.84rem;line-height:1.55;margin:10px 0 0}
+    .connection-note[role=status]{overflow-wrap:anywhere}
+    .connection-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+    .flow-step{border:1px solid var(--wd-line);border-radius:14px;padding:13px;background:var(--wd-panel)}
+    .flow-step b{display:block;font-size:.83rem;margin-bottom:5px}
+    .flow-step span{font-size:.77rem;color:var(--wd-muted);line-height:1.45}
+    .internal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .internal-card{display:flex;align-items:flex-start;gap:12px;padding:15px;border:1px solid var(--wd-line);border-radius:15px;background:var(--wd-panel)}
+    .internal-card .provider-icon{width:38px;height:38px;flex-basis:38px;font-size:.9rem}
+    .internal-card h3{margin:0 0 5px;font-size:.92rem}
+    .internal-card p{margin:0;color:var(--wd-muted);font-size:.8rem;line-height:1.5}
+    .connection-warning{border-left:3px solid var(--wd-warn);padding:12px 14px;background:rgba(245,184,61,.06);border-radius:0 12px 12px 0;color:var(--wd-muted);font-size:.84rem;line-height:1.6}
+    .connection-footer{color:var(--wd-muted);font-size:.75rem;padding:22px 4px 8px}
+    @media(max-width:760px){.wd-shell{display:block}.wd-sidebar{position:fixed;z-index:30;left:0;top:0;bottom:0;width:min(280px,86vw);height:100dvh;transform:translateX(-105%);transition:transform .2s ease}.wd-sidebar.is-open{transform:translateX(0)}.wd-main{padding:68px 12px 22px}.provider-grid,.internal-grid{grid-template-columns:1fr}.connection-flow{grid-template-columns:repeat(2,minmax(0,1fr))}.connection-section-head{align-items:start;flex-direction:column}.provider-card>p{min-height:0}}
+    @media(prefers-reduced-motion:reduce){.wd-sidebar{transition:none}}
+  </style>
+</head>
 <body class="wd-body">
-<button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false" aria-label="Abrir menu">☰</button><div class="wd-menu-backdrop" data-wd-menu-close></div>
-<div class="wd-shell"><aside id="wd-sidebar" class="wd-sidebar"><div class="wd-brand"><div class="wd-mark">🔗</div><div><strong>WORDDARK</strong><small>Conexões</small></div></div>
-<nav class="wd-nav"><a href="../">◎ Central</a><a class="active" href="./">🔗 Conexões</a><a href="../../sky/dark-channels/">◉ Dark Channels</a><a href="../../sky/">☁ Céu</a></nav><div class="wd-footer">WORDDARK · FRONTEIRA EXTERNA</div></aside>
-<main class="wd-main"><div class="wd-surface"><div class="wd-top"><div><div class="wd-eyebrow">WordDark · infraestrutura</div><h1 class="wd-title">Central de Conexões</h1><p class="wd-sub">A porta controlada entre o Mundo e serviços externos. Primeiro recebemos identidade e autorização; depois liberamos capacidades para as empresas.</p></div></div>
-<section class="wd-grid">
-<article class="wd-card full"><div class="wd-eyebrow">Próxima integração</div><h2>YouTube / Google</h2><p class="wd-muted">O ambiente Google Cloud já foi criado e o OAuth Client existe. O próximo passo é executar a autorização real e registrar a conexão. Nenhuma conta é considerada conectada antes de uma autorização confirmada.</p>
-<div class="wd-flow"><span>DESCOBERTA</span><i class="wd-arrow">→</i><span>AUTORIZAÇÃO</span><i class="wd-arrow">→</i><span>CONEXÃO ATIVA</span><i class="wd-arrow">→</i><span>CAPACIDADES</span></div>
-<div class="wd-actions" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><a class="wd-btn primary" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Abrir Google Cloud</a><button id="wd-connect-google" class="wd-btn" type="button">Conectar Google / YouTube</button><span id="wd-connection-status" class="wd-badge warn">AGUARDANDO AUTORIZAÇÃO</span></div>
-<div style="margin-top:14px"><label for="wd-client-id" class="wd-eyebrow" style="display:block;margin-bottom:7px">Client ID público</label><input id="wd-client-id" type="text" autocomplete="off" placeholder="Cole aqui o Client ID que termina em .apps.googleusercontent.com" style="width:100%;max-width:760px;padding:12px 14px;border:1px solid rgba(255,255,255,.15);border-radius:10px;background:rgba(255,255,255,.04);color:inherit"><p id="wd-connection-note" class="wd-muted" style="margin-top:8px">O Client ID é público. Nunca coloque o Client Secret aqui.</p></div></article>
-<article class="wd-card"><div class="wd-eyebrow">Regra</div><h2>Credencial fica isolada.</h2><p class="wd-muted">Empresas não recebem segredo bruto. Recebem uma capacidade autorizada.</p></article>
-<article class="wd-card"><div class="wd-eyebrow">Receber</div><h2>Informação entra com origem.</h2><p class="wd-muted">Toda entrada externa precisa de origem, finalidade e política de acesso.</p></article>
-<article class="wd-card"><div class="wd-eyebrow">Enviar</div><h2>Resultado sai com recibo.</h2><p class="wd-muted">Toda saída externa deve retornar evidência de entrega quando o provedor oferecer.</p></article>
-<article class="wd-card full"><div class="wd-eyebrow">O que a conexão vai entregar</div><div class="wd-entry-grid"><div class="wd-entry-card"><div class="wd-card-icon">1</div><strong>Identidade</strong><small>Identificação da conta autorizada.</small></div><div class="wd-entry-card"><div class="wd-card-icon">2</div><strong>Canal</strong><small>Dados do canal YouTube autorizado.</small></div><div class="wd-entry-card"><div class="wd-card-icon">3</div><strong>Capacidades</strong><small>Somente leitura, criação, mídia e publicação quando autorizadas.</small></div><div class="wd-entry-card"><div class="wd-card-icon">4</div><strong>Registro</strong><small>Estado da conexão e evidência da autorização.</small></div></div></article><article class="wd-card full"><div class="wd-eyebrow">Preparação</div><div class="wd-entry-grid">
-<div class="wd-entry-card"><div class="wd-card-icon">1</div><strong>Identidade</strong><small>Cliente OAuth e identidade do provedor.</small></div>
-<div class="wd-entry-card"><div class="wd-card-icon">2</div><strong>Autorização</strong><small>Conta de teste autoriza os escopos necessários.</small></div>
-<div class="wd-entry-card"><div class="wd-card-icon">3</div><strong>Registro</strong><small>Conexão recebe estado e identificador interno.</small></div>
-<div class="wd-entry-card"><div class="wd-card-icon">4</div><strong>Capacidade</strong><small>Dark Channels solicita publicar, ler ou receber eventos.</small></div>
-</div></article>
-</section></div></main></div><script src="./connection-config.js"></script><script src="../../ui/worddark-ui.js"></script><script>
+  <button class="wd-menu-toggle" type="button" aria-controls="wd-sidebar" aria-expanded="false" aria-label="Abrir menu">☰</button>
+  <div class="wd-menu-backdrop" data-wd-menu-close></div>
+  <div class="wd-shell">
+    <aside id="wd-sidebar" class="wd-sidebar">
+      <div class="wd-brand"><div class="wd-mark">W</div><div><strong>WORDDARK</strong><small>Infraestrutura do mundo</small></div></div>
+      <nav class="wd-nav">
+        <a href="../">◎ Central</a>
+        <a class="active" href="./">↔ Central de Conexões</a>
+        <a href="../../sky/dark-channels/">◉ Dark Channels</a>
+        <a href="../../sky/">☁ Céu</a>
+        <a href="../../earth/">⌂ Terra</a>
+      </nav>
+      <div class="wd-footer">WORDDARK · FRONTEIRA EXTERNA</div>
+    </aside>
+
+    <main class="wd-main">
+      <div class="wd-surface">
+        <section class="connection-hero" aria-labelledby="connection-title">
+          <div class="connection-kicker"><span class="connection-dot"></span> WordDark Core · conexões governadas</div>
+          <h1 id="connection-title" class="connection-title">Central de Conexões</h1>
+          <p class="connection-lead">O ponto controlado entre o mundo e os serviços externos. Cada provedor precisa de identidade confirmada, autorização, armazenamento seguro e capacidade concedida antes de executar operações.</p>
+          <div class="connection-statusline">
+            <span class="connection-chip"><span class="connection-dot"></span><strong>Ambiente:</strong> TEST / preparação</span>
+            <span class="connection-chip"><span class="connection-dot" id="wd-gateway-dot"></span><strong>Gateway:</strong> <span id="wd-gateway-state">Desativado por padrão</span></span>
+            <span class="connection-chip"><strong>Contas conectadas:</strong> <span id="wd-connected-count">0 confirmadas aqui</span></span>
+          </div>
+        </section>
+
+        <section class="connection-section" aria-labelledby="providers-title">
+          <div class="connection-section-head">
+            <div><h2 id="providers-title">Provedores externos</h2><p>O estado de cada provedor é independente. Preparado não significa conectado nem autorizado a publicar.</p></div>
+          </div>
+          <div class="provider-grid">
+            <article class="provider-card">
+              <div class="provider-head"><div class="provider-icon youtube" aria-hidden="true">▶</div><div><h3>YouTube / Google</h3><p>Identidade do canal e mídia autorizada</p></div></div>
+              <div id="wd-youtube-state" class="provider-state"><span class="connection-dot"></span> BACKEND NÃO CONFIGURADO</div>
+              <p>Fluxo OAuth de autorização por código preparado. A ativação real depende do endpoint seguro publicado, Firestore, Cloud KMS, IAM e integração do registro com o gateway.</p>
+              <div class="provider-actions"><button id="wd-connect-google" class="wd-btn primary" type="button">Iniciar autorização</button><a class="wd-btn" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">Google Cloud ↗</a></div>
+              <div class="connection-config">
+                <label for="wd-client-id">Client ID público do Google</label>
+                <input id="wd-client-id" type="text" autocomplete="off" inputmode="url" placeholder="...apps.googleusercontent.com" aria-describedby="wd-connection-note">
+                <p class="connection-note">O Client ID é público. Nunca cole Client Secret, tokens ou chaves privadas nesta página.</p>
+                <p id="wd-connection-note" class="connection-note" role="status" aria-live="polite">A autorização não será considerada operacional enquanto o backend não confirmar persistência e ativação.</p>
+              </div>
+            </article>
+
+            <article class="provider-card">
+              <div class="provider-head"><div class="provider-icon instagram" aria-hidden="true">◎</div><div><h3>Instagram</h3><p>Contas profissionais e publicação</p></div></div>
+              <div class="provider-state"><span class="connection-dot"></span> BACKEND OAUTH NECESSÁRIO</div>
+              <p>O contrato e os escopos estão preparados. Ainda é necessário concluir OAuth server-side, revisão de permissões e teste com uma conta autorizada.</p>
+              <div class="provider-actions"><a class="wd-btn" href="https://developers.facebook.com/apps/" target="_blank" rel="noopener noreferrer">Configurar no provedor ↗</a></div>
+            </article>
+
+            <article class="provider-card">
+              <div class="provider-head"><div class="provider-icon tiktok" aria-hidden="true">♪</div><div><h3>TikTok</h3><p>Identidade e conteúdo de vídeo</p></div></div>
+              <div class="provider-state"><span class="connection-dot"></span> BACKEND OAUTH NECESSÁRIO</div>
+              <p>Conector de preparação disponível. Autorização, revisão de aplicativo, troca segura de código, armazenamento e publicação real não estão confirmados.</p>
+              <div class="provider-actions"><a class="wd-btn" href="https://developers.tiktok.com/" target="_blank" rel="noopener noreferrer">Configurar no provedor ↗</a></div>
+            </article>
+
+            <article class="provider-card">
+              <div class="provider-head"><div class="provider-icon facebook" aria-hidden="true">f</div><div><h3>Facebook Pages</h3><p>Páginas e gestão de conteúdo</p></div></div>
+              <div class="provider-state"><span class="connection-dot"></span> BACKEND OAUTH NECESSÁRIO</div>
+              <p>Escopos previstos para leitura e gestão de páginas. Faltam a integração server-side, permissões aprovadas e validação operacional real.</p>
+              <div class="provider-actions"><a class="wd-btn" href="https://developers.facebook.com/apps/" target="_blank" rel="noopener noreferrer">Configurar no provedor ↗</a></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="connection-section" aria-labelledby="internal-title">
+          <div class="connection-section-head"><div><h2 id="internal-title">Pontes internas do mundo</h2><p>Conexões de sistema também precisam de contratos e autorização; não são logins de redes sociais.</p></div></div>
+          <div class="internal-grid">
+            <article class="internal-card"><div class="provider-icon">D</div><div><h3>Darknet ↔ WordDark</h3><p>Contrato e adapters testados em ambiente controlado. Ponte desativada por padrão; falta transporte backend confiável, identidade e auditoria persistente reais.</p></div></article>
+            <article class="internal-card"><div class="provider-icon">H</div><div><h3>Ruan Hub ↔ WordDark</h3><p>Adaptador e runtime de controle existentes. Pedidos locais não são operações remotas; ativação depende de sessão, aprovação, persistência e transporte backend reais.</p></div></article>
+            <article class="internal-card"><div class="provider-icon">C</div><div><h3>WordDark Core ↔ Céu</h3><p>Contrato de roteamento e integração comercial testados em TEST. Validar executor, fila durável, artefatos e retorno antes de operação de produção.</p></div></article>
+            <article class="internal-card"><div class="provider-icon">T</div><div><h3>Terra ↔ WordDark Core</h3><p>Fluxo de demanda e pedido tem cobertura de integração simulada. A entrada pública autenticada e a persistência real ainda precisam ser implantadas e verificadas.</p></div></article>
+          </div>
+        </section>
+
+        <section class="connection-section" aria-labelledby="flow-title">
+          <div class="connection-section-head"><div><h2 id="flow-title">Caminho para liberar uma conexão</h2><p>Uma etapa não pula a seguinte, e nenhuma tela pode conceder autoridade sozinha.</p></div></div>
+          <div class="connection-flow">
+            <div class="flow-step"><b>01 · Identidade</b><span>Provedor, conta e operador identificados.</span></div>
+            <div class="flow-step"><b>02 · Autorização</b><span>OAuth, escopos mínimos e aprovação verificada.</span></div>
+            <div class="flow-step"><b>03 · Persistência</b><span>Credenciais cifradas no backend e auditoria durável.</span></div>
+            <div class="flow-step"><b>04 · Capacidade</b><span>Gateway validado, ação limitada e recibo rastreável.</span></div>
+          </div>
+        </section>
+
+        <section class="connection-section connection-warning" aria-label="Aviso de segurança">
+          <strong>Modo seguro:</strong> nenhuma conexão externa é ativada por esta interface. Não coloque segredos no navegador. A presença de um conector ou de um teste automatizado não prova que a API esteja implantada, autorizada ou pronta para uso real.
+        </section>
+        <footer class="connection-footer">WordDark · Central de Conexões · interface de operação e diagnóstico · produção permanece bloqueada até validação do ambiente real.</footer>
+      </div>
+    </main>
+  </div>
+  <script src="./connection-config.js"></script>
+  <script src="../../ui/worddark-ui.js"></script>
+  <script>
 (function(){
   const button=document.getElementById("wd-connect-google");
-  const status=document.getElementById("wd-connection-status");
+  const status=document.getElementById("wd-youtube-state");
   const note=document.getElementById("wd-connection-note");
   const input=document.getElementById("wd-client-id");
   const cfg=window.WORDDARK_CONNECTION_CONFIG||{};
   const saved=localStorage.getItem("wd.google.clientId")||cfg.googleClientId||"";
   input.value=saved;
+  if(cfg.codeEndpoint){
+    status.textContent="ENDPOINT CONFIGURADO · AGUARDANDO AUTORIZAÇÃO";
+    document.getElementById("wd-gateway-state").textContent="Endpoint configurado; ativação ainda não confirmada";
+  }
   button.addEventListener("click",function(){
     const clientId=input.value.trim();
     if(!clientId || !clientId.endsWith(".apps.googleusercontent.com")){
@@ -106,4 +245,6 @@
     client.requestCode();
   }
 })();
-</script></body></html>
+  </script>
+</body>
+</html>
