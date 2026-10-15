@@ -106,8 +106,13 @@ assert.equal(completed.commercial.getOrder(completed.order.orderId).status, "REV
 
 const missingOperationId = setup({ operationId: "" });
 const noId = await missingOperationId.bridge.dispatch({ requestId: "req-7", orderId: missingOperationId.order.orderId, approvalId: "approval-1" });
-assert.equal(noId.status, "COMMERCIAL_CORE_OPERATION_ID_REQUIRED");
-assert.equal(missingOperationId.commercial.getOrder(missingOperationId.order.orderId).status, "ORDER_OPEN");
+assert.equal(noId.status, "COMMERCIAL_CORE_ACCEPTED_RECONCILIATION_REQUIRED");
+assert.equal(noId.success, true, "Core acceptance must not be misreported as a simple dispatch rejection");
+assert.equal(noId.dispatched, true);
+assert.equal(noId.reconciliationRequired, true);
+assert.equal(missingOperationId.commercial.getOrder(missingOperationId.order.orderId).status, "ORDER_OPEN",
+  "the commercial order stays unadvanced until the missing Core operation ID is reconciled");
+assert.ok(missingOperationId.calls.audit.some(item => item.event === "COMMERCIAL_ORDER_CORE_ACCEPTED_WITHOUT_OPERATION_ID"));
 
 const operational = setup({ executionQueueEnabled: true });
 const operationalResult = await operational.bridge.dispatch({
