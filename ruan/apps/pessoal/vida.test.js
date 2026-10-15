@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { COLLECTIONS } from "../../../engine/personal-core.js";
 
-const root = new URL("../../../../", import.meta.url);
+const root = new URL("../../../", import.meta.url);
 const read = path => readFileSync(new URL(path, root), "utf8");
 const html = read("ruan/apps/pessoal/vida.html");
 const script = read("ruan/apps/pessoal/vida.js");
