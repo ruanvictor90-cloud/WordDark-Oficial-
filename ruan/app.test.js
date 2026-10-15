@@ -67,5 +67,7 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v22'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v23'"));
+assert.ok(read('apps/pessoal/app.js').includes('const localDateKey='), 'Pessoal dashboard must use local calendar dates for deadlines');
+assert.ok(!read('apps/pessoal/app.js').includes('new Date().toISOString().slice(0,10)'), 'Dashboard must not derive local today from UTC');
 console.log('Ruan app structure tests passed.');
