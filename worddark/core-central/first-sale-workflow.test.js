@@ -37,7 +37,7 @@ assert.equal(worldEngine.getRequest(routed.planRequestId).status, "PREPARED_FOR_
 const approved = workflow.approvePlan("sale-1", { confirmed: true, approverId: "owner" });
 assert.equal(approved.status, "AWAITING_MANUAL_EXECUTION");
 assert.equal(worldEngine.getRequest(approved.planRequestId).status, "APPROVED_FOR_EXECUTION");
-assert.throws(() => workflow.recordExecutionResult("sale-1", { content: "resultado", actorId: "operator" }), /resultado produzido|Resultado produzido/);
+assert.throws(() => workflow.recordExecutionResult("sale-1", { actorId: "operator" }), /resultado produzido|Resultado produzido/);
 const recorded = workflow.recordExecutionResult("sale-1", { content: "Entrega de teste para revisão.", actorId: "operator" });
 assert.equal(recorded.status, "READY_FOR_HUMAN_REVIEW");
 assert.equal(recorded.result.executionMode, "MANUAL_RECORDED");
