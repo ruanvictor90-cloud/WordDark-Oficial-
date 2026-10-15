@@ -18,11 +18,10 @@ function validText(value, max) {
 /**
  * Framework-neutral public commercial intake handler.
  * No network listener, credentials, or cloud resources are initialized here.
- * Production use requires real persistent store, audit sink, origin allowlist and limiter.
+ * Production use requires an atomic persistent store (including audit + idempotency),\n * origin allowlist, a distributed limiter and a real HTTP/security adapter.
  */
 export function createCommercialIntakeApi({
   store,
-  audit,
   rateLimiter,
   allowedOrigins = [],
   now = () => new Date().toISOString(),
