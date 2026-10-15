@@ -23,4 +23,10 @@ assert.equal(catalog.apps.find(app => app.id === "ruan")?.interface, "preserve")
 assert.equal(catalog.apps.find(app => app.id === "darknet")?.owner, "independent-system");
 assert.equal(catalog.apps.find(app => app.id === "darkfactory")?.owner, "Céu");
 assert.equal(catalog.apps.find(app => app.id === "darkbank")?.owner, "WordDark");
+for (const id of ["sky", "terra", "darkfactory", "social-operations", "marketing", "project-management", "business-operations", "connections", "library", "security-governance", "operations-center", "world-school", "darkbank", "commercial-intake", "first-sale-operations"]) {
+  const app = catalog.apps.find(item => item.id === id);
+  assert.ok(app, "registered shell app required: " + id);
+  assert.equal(app.interface, "shell-and-requirements-dialog-only", "new app must not gain a functional UI without design: " + id);
+  assert.equal(app.route, "worddark/apps/app-shell.html?app=" + id, "minimal shell route required: " + id);
+}
 console.log("APP-CATALOG: invariants passed (" + catalog.apps.length + " apps/categories)");
