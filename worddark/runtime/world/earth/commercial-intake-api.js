@@ -18,7 +18,8 @@ function validText(value, max) {
 /**
  * Framework-neutral public commercial intake handler.
  * No network listener, credentials, or cloud resources are initialized here.
- * Production use requires an atomic persistent store (including audit + idempotency),\n * origin allowlist, a distributed limiter and a real HTTP/security adapter.
+ * Production use requires an atomic persistent store (including audit + idempotency),
+ * origin allowlist, a distributed limiter and a real HTTP/security adapter.
  */
 export function createCommercialIntakeApi({
   store,
@@ -99,7 +100,8 @@ export function createCommercialIntakeApi({
       });
     }
 
-    // The HTTP adapter must derive this from a trusted network boundary; never accept it from JSON.\n    const fingerprint = clean(request.clientFingerprint) || "unknown";
+    // The HTTP adapter must derive this from a trusted network boundary; never accept it from JSON.
+    const fingerprint = clean(request.clientFingerprint) || "unknown";
     let limit;
     try { limit = await rateLimiter.consume({ key: fingerprint, action: "commercial-intake" }); }
     catch {
