@@ -1,6 +1,6 @@
 # Contrato do backend comercial — versão 0.1
 
-**Estado:** especificação técnica; não é backend implantado nem autoriza operação pública.
+**Estado:** contrato técnico + handler de intake isolado com testes unitários; não é servidor HTTP implantado, store Firestore nem autorização para operação pública.
 **Alvo:** branch `feature/world-alignment-audit-20261014`, PR #116 para `staging`.
 **Regra de interface:** não alterar telas existentes. A entrada pública futura pode ser uma integração separada; novas telas internas continuam usando apenas o shell padrão e o diálogo de requisitos.
 
@@ -29,6 +29,12 @@ Prefixo versionado: `/api/v1`.
 | `GET /health/ready` | Sem autenticação; resposta mínima | Retornar apenas pronto/não pronto; nunca expor nomes de serviços, credenciais ou detalhes internos |
 
 Os nomes são contrato proposto, não rotas já existentes. Não publicar nem conectar o frontend antes de implementar e testar o backend.
+
+### Implementação parcial nesta branch
+
+Existe `worddark/runtime/world/earth/commercial-intake-api.js`, um handler independente de framework para `POST /api/v1/commercial/intakes`, com validação de origem, tipo/tamanho de corpo, campos obrigatórios, consentimento, chave de idempotência e rate limiter injetado. Ele exige que o adaptador de armazenamento implemente `createIntakeOnce({ idempotencyKey, intake, auditEvent })` e grave intake, idempotência e auditoria atomicamente. A suíte `commercial-intake-api.test.js` cobre os guardrails do handler.
+
+**Limite importante:** o contrato do store ainda não tem implementação Firestore real; não existe listener HTTP ligado, rate limiter distribuído, autenticação de operador ou deploy. O handler isolado não pode ser ligado ao formulário público até esses itens e CORS/HTTPS do adaptador estarem concluídos.
 
 ## 3. Dados e persistência
 
