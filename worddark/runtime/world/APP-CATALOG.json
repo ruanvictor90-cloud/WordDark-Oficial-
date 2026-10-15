@@ -9,29 +9,245 @@
     "productionRequiresExplicitApproval": true
   },
   "apps": [
-    {"id":"ruan","name":"Ruan","owner":"Ruan","area":"personal","status":"existing","route":"ruan/index.html","responsibility":"Aplicativo pessoal privado; apps e dados pessoais isolados.","interface":"preserve"},
-    {"id":"ruan-entertainment","name":"Entretenimento","owner":"Ruan","area":"personal","status":"existing","route":"ruan/apps/entretenimento/index.html","responsibility":"Catálogo e reprodução de mídia por fontes autorizadas.","interface":"preserve"},
-    {"id":"ruan-personal","name":"Pessoal","owner":"Ruan","area":"personal","status":"existing-or-partial","route":"ruan/apps/pessoal/index.html","responsibility":"Financeiro pessoal e tarefas, sem compartilhar dados com o WordDark.","interface":"preserve"},
-    {"id":"shadow","name":"Shadow","owner":"Ruan","area":"personal","status":"existing-or-partial","route":"ruan/apps/shadow/index.html","responsibility":"App pessoal separado; lógica futura não autorizada nesta fase.","interface":"preserve"},
-    {"id":"darkeye","name":"darkEye","owner":"Ruan","area":"personal-experimental","status":"experimental","route":"ruan/apps/shadow/darkeye/","responsibility":"Conceito experimental de sobreposição/contexto, separado da Darknet.","interface":"preserve"},
-    {"id":"ruan-hub","name":"Ruan Hub","owner":"Ruan","area":"world-control-panel","status":"existing","route":"hub/index.html","responsibility":"Painel superior de acompanhamento do mundo; pedidos locais não são operações remotas.","interface":"preserve"},
-    {"id":"darknet","name":"Darknet","owner":"independent-system","area":"connections-and-discovery","status":"foundation-existing","route":"darknet/index.html","responsibility":"Sistema independente de navegação, descoberta, preparação de solicitações e conectores governados.","interface":"preserve"},
-    {"id":"worddark","name":"WordDark","owner":"WordDark Core","area":"world-core","status":"existing","route":"worddark/app/index.html","responsibility":"Coordenação, política, autorização, auditoria, roteamento e estado operacional.","interface":"preserve"},
-    {"id":"sky","name":"Céu","owner":"WordDark","area":"execution","status":"registered-in-architecture","route":null,"responsibility":"Catálogo e execução de capacidades especializadas.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"terra","name":"Terra","owner":"WordDark","area":"external-needs","status":"registered-in-architecture","route":null,"responsibility":"Entidades, clientes, canais, oportunidades, pedidos e entregas externas.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"darkfactory","name":"Dark Factory","owner":"Céu","area":"production","status":"runtime-and-tests-exist","route":null,"responsibility":"Produzir, transformar e validar entregáveis; não é dona de canais nem publica diretamente.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"social-operations","name":"Gestão de Conteúdos e Canais","owner":"Terra","area":"external-business","status":"specification","route":null,"responsibility":"Operar canais, pautas, calendário, entregas e estado de publicação.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"marketing","name":"Marketing","owner":"Céu","area":"specialized-capability","status":"specification","route":null,"responsibility":"Pesquisa de mercado, posicionamento, estratégia, campanhas e oportunidades.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"project-management","name":"Gestor de Projetos","owner":"Terra","area":"operations","status":"specification","route":null,"responsibility":"Projetos, tarefas, responsáveis, prazos, dependências, custos e entregas.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"business-operations","name":"Gestão de Negócios","owner":"Terra","area":"external-business","status":"specification","route":null,"responsibility":"Negócios, produtos, fornecedores, ofertas, pedidos, vendas e pós-venda.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"connections","name":"Central de Conexões","owner":"WordDark Core","area":"shared-infrastructure","status":"backend-contracts-exist","route":null,"responsibility":"Credenciais, contas, capacidades, adaptadores, diagnóstico e auditoria de provedores.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"library","name":"Biblioteca Central","owner":"WordDark Core","area":"knowledge-and-artifacts","status":"contracts-and-adapters-exist","route":null,"responsibility":"Conhecimento validado e artefatos versionados relacionados a operações.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"security-governance","name":"Segurança e Governança","owner":"WordDark Core","area":"governance","status":"contracts-and-tests-exist","route":null,"responsibility":"Permissões, aprovações, trilha de auditoria, incidentes e recuperação.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"operations-center","name":"Central de Operações e Rodovia","owner":"WordDark Core","area":"orchestration","status":"runtime-and-tests-exist","route":null,"responsibility":"Submissão, roteamento, acompanhamento, correlação e recuperação de operações.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"world-school","name":"Escola do Mundo","owner":"WordDark Core","area":"knowledge-and-training","status":"specification","route":null,"responsibility":"Guias, padrões, lições e aprendizados validados.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"creationdark","name":"CreationDark","owner":"WordDark Hub","area":"inventory-and-audit","status":"existing-or-partial","route":null,"responsibility":"Inventário de módulos, contratos, testes, integrações e pendências.","interface":"preserve-if-existing"},
-    {"id":"darkbank","name":"Darkbank","owner":"WordDark","area":"internal-finance","status":"architecture-defined","route":null,"responsibility":"Livro-caixa interno, custos, receitas, tesouraria, reservas e reconciliação; não é banco autorizado.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"commercial-intake","name":"Captação Comercial","owner":"Terra","area":"commercial","status":"partial-contracts-exist","route":null,"responsibility":"Necessidade, lead, qualificação, proposta, aceite e criação de pedido rastreável.","interface":"shell-and-requirements-dialog-only"},
-    {"id":"first-sale-operations","name":"Operação da Primeira Venda","owner":"Terra-and-Céu","area":"commercial-execution","status":"draft-branch-exists","route":"worddark/app/primeira-venda.html (branch feature/first-sale-console; não mesclada em staging)","responsibility":"Acompanhar manualmente lead, proposta, execução, entrega, custos e recebimento confirmado.","interface":"review-before-integration"}
+    {
+      "id": "ruan",
+      "name": "Ruan",
+      "owner": "Ruan",
+      "area": "personal",
+      "status": "existing",
+      "route": "ruan/index.html",
+      "responsibility": "Aplicativo pessoal privado; apps e dados pessoais isolados.",
+      "interface": "preserve"
+    },
+    {
+      "id": "ruan-entertainment",
+      "name": "Entretenimento",
+      "owner": "Ruan",
+      "area": "personal",
+      "status": "existing",
+      "route": "ruan/apps/entretenimento/index.html",
+      "responsibility": "Catálogo e reprodução de mídia por fontes autorizadas.",
+      "interface": "preserve"
+    },
+    {
+      "id": "ruan-personal",
+      "name": "Pessoal",
+      "owner": "Ruan",
+      "area": "personal",
+      "status": "existing-or-partial",
+      "route": "ruan/apps/pessoal/index.html",
+      "responsibility": "Financeiro pessoal e tarefas, sem compartilhar dados com o WordDark.",
+      "interface": "preserve"
+    },
+    {
+      "id": "shadow",
+      "name": "Shadow",
+      "owner": "Ruan",
+      "area": "personal",
+      "status": "existing-or-partial",
+      "route": "ruan/apps/shadow/index.html",
+      "responsibility": "App pessoal separado; lógica futura não autorizada nesta fase.",
+      "interface": "preserve"
+    },
+    {
+      "id": "darkeye",
+      "name": "darkEye",
+      "owner": "Ruan",
+      "area": "personal-experimental",
+      "status": "experimental",
+      "route": "ruan/apps/shadow/darkeye/",
+      "responsibility": "Conceito experimental de sobreposição/contexto, separado da Darknet.",
+      "interface": "preserve"
+    },
+    {
+      "id": "ruan-hub",
+      "name": "Ruan Hub",
+      "owner": "Ruan",
+      "area": "world-control-panel",
+      "status": "existing",
+      "route": "hub/index.html",
+      "responsibility": "Painel superior de acompanhamento do mundo; pedidos locais não são operações remotas.",
+      "interface": "preserve"
+    },
+    {
+      "id": "darknet",
+      "name": "Darknet",
+      "owner": "independent-system",
+      "area": "connections-and-discovery",
+      "status": "foundation-existing",
+      "route": "darknet/index.html",
+      "responsibility": "Sistema independente de navegação, descoberta, preparação de solicitações e conectores governados.",
+      "interface": "preserve"
+    },
+    {
+      "id": "worddark",
+      "name": "WordDark",
+      "owner": "WordDark Core",
+      "area": "world-core",
+      "status": "existing",
+      "route": "worddark/app/index.html",
+      "responsibility": "Coordenação, política, autorização, auditoria, roteamento e estado operacional.",
+      "interface": "preserve"
+    },
+    {
+      "id": "sky",
+      "name": "Céu",
+      "owner": "WordDark",
+      "area": "execution",
+      "status": "registered-in-architecture",
+      "route": "worddark/apps/app-shell.html?app=sky",
+      "responsibility": "Catálogo e execução de capacidades especializadas.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "terra",
+      "name": "Terra",
+      "owner": "WordDark",
+      "area": "external-needs",
+      "status": "registered-in-architecture",
+      "route": "worddark/apps/app-shell.html?app=terra",
+      "responsibility": "Entidades, clientes, canais, oportunidades, pedidos e entregas externas.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "darkfactory",
+      "name": "Dark Factory",
+      "owner": "Céu",
+      "area": "production",
+      "status": "runtime-and-tests-exist",
+      "route": "worddark/apps/app-shell.html?app=darkfactory",
+      "responsibility": "Produzir, transformar e validar entregáveis; não é dona de canais nem publica diretamente.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "social-operations",
+      "name": "Gestão de Conteúdos e Canais",
+      "owner": "Terra",
+      "area": "external-business",
+      "status": "specification",
+      "route": "worddark/apps/app-shell.html?app=social-operations",
+      "responsibility": "Operar canais, pautas, calendário, entregas e estado de publicação.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "owner": "Céu",
+      "area": "specialized-capability",
+      "status": "specification",
+      "route": "worddark/apps/app-shell.html?app=marketing",
+      "responsibility": "Pesquisa de mercado, posicionamento, estratégia, campanhas e oportunidades.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "project-management",
+      "name": "Gestor de Projetos",
+      "owner": "Terra",
+      "area": "operations",
+      "status": "specification",
+      "route": "worddark/apps/app-shell.html?app=project-management",
+      "responsibility": "Projetos, tarefas, responsáveis, prazos, dependências, custos e entregas.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "business-operations",
+      "name": "Gestão de Negócios",
+      "owner": "Terra",
+      "area": "external-business",
+      "status": "specification",
+      "route": "worddark/apps/app-shell.html?app=business-operations",
+      "responsibility": "Negócios, produtos, fornecedores, ofertas, pedidos, vendas e pós-venda.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "connections",
+      "name": "Central de Conexões",
+      "owner": "WordDark Core",
+      "area": "shared-infrastructure",
+      "status": "backend-contracts-exist",
+      "route": "worddark/apps/app-shell.html?app=connections",
+      "responsibility": "Credenciais, contas, capacidades, adaptadores, diagnóstico e auditoria de provedores.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "library",
+      "name": "Biblioteca Central",
+      "owner": "WordDark Core",
+      "area": "knowledge-and-artifacts",
+      "status": "contracts-and-adapters-exist",
+      "route": "worddark/apps/app-shell.html?app=library",
+      "responsibility": "Conhecimento validado e artefatos versionados relacionados a operações.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "security-governance",
+      "name": "Segurança e Governança",
+      "owner": "WordDark Core",
+      "area": "governance",
+      "status": "contracts-and-tests-exist",
+      "route": "worddark/apps/app-shell.html?app=security-governance",
+      "responsibility": "Permissões, aprovações, trilha de auditoria, incidentes e recuperação.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "operations-center",
+      "name": "Central de Operações e Rodovia",
+      "owner": "WordDark Core",
+      "area": "orchestration",
+      "status": "runtime-and-tests-exist",
+      "route": "worddark/apps/app-shell.html?app=operations-center",
+      "responsibility": "Submissão, roteamento, acompanhamento, correlação e recuperação de operações.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "world-school",
+      "name": "Escola do Mundo",
+      "owner": "WordDark Core",
+      "area": "knowledge-and-training",
+      "status": "specification",
+      "route": "worddark/apps/app-shell.html?app=world-school",
+      "responsibility": "Guias, padrões, lições e aprendizados validados.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "creationdark",
+      "name": "CreationDark",
+      "owner": "WordDark Hub",
+      "area": "inventory-and-audit",
+      "status": "existing-or-partial",
+      "route": null,
+      "responsibility": "Inventário de módulos, contratos, testes, integrações e pendências.",
+      "interface": "preserve-if-existing"
+    },
+    {
+      "id": "darkbank",
+      "name": "Darkbank",
+      "owner": "WordDark",
+      "area": "internal-finance",
+      "status": "architecture-defined",
+      "route": "worddark/apps/app-shell.html?app=darkbank",
+      "responsibility": "Livro-caixa interno, custos, receitas, tesouraria, reservas e reconciliação; não é banco autorizado.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "commercial-intake",
+      "name": "Captação Comercial",
+      "owner": "Terra",
+      "area": "commercial",
+      "status": "partial-contracts-exist",
+      "route": "worddark/apps/app-shell.html?app=commercial-intake",
+      "responsibility": "Necessidade, lead, qualificação, proposta, aceite e criação de pedido rastreável.",
+      "interface": "shell-and-requirements-dialog-only"
+    },
+    {
+      "id": "first-sale-operations",
+      "name": "Operação da Primeira Venda",
+      "owner": "Terra-and-Céu",
+      "area": "commercial-execution",
+      "status": "draft-branch-exists",
+      "route": "worddark/apps/app-shell.html?app=first-sale-operations",
+      "responsibility": "Acompanhar manualmente lead, proposta, execução, entrega, custos e recebimento confirmado.",
+      "interface": "shell-and-requirements-dialog-only"
+    }
   ]
 }
