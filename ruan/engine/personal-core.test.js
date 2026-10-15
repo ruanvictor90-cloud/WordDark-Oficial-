@@ -3,7 +3,7 @@ import {
   SCHEMA_VERSION, createInitialState, normalizeState, validateState,
   createEvent, calculateFinance, nextRecurrenceDate, createExportPayload,
   parseImportPayload, searchPersonalData, createDashboardSummary
-} from "./ruan-core.js";
+} from "./personal-core.js";
 
 const initial = createInitialState();
 assert.equal(initial.schemaVersion, SCHEMA_VERSION);
