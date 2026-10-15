@@ -5,7 +5,7 @@ import { createCommercialIntakeApi } from "./commercial-intake-api.js";
 const base = {
   method: "POST",
   path: "/api/v1/commercial/intakes",
-  headers: { origin: "https://example.test", "content-type": "application/json" },
+  headers: { origin: "https://example.test", "content-type": "application/json", "idempotency-key": "intake-test-key-001" },
   body: {
     contactName: "Cliente Teste",
     contactMethod: "cliente@example.test",
@@ -20,8 +20,7 @@ function makeApi(overrides = {}) {
   const audited = [];
   const limiterCalls = [];
   const api = createCommercialIntakeApi({
-    store: { async createIntake(value) { saved.push(value); } },
-    audit: { async write(value) { audited.push(value); } },
+    store: { async createIntakeOnce({ intake, auditEvent }) { saved.push(intake); audited.push(auditEvent); return { intake, created: true }; } },
     rateLimiter: { async consume(value) { limiterCalls.push(value); return { allowed: true }; } },
     allowedOrigins: ["https://example.test"],
     now: () => "2026-10-15T12:00:00.000Z",
@@ -32,12 +31,9 @@ function makeApi(overrides = {}) {
 }
 
 test("rejects missing durable store, audit and limiter dependencies", () => {
-  assert.throws(() => createCommercialIntakeApi(), /DURABLE_STORE_REQUIRED/);
+  assert.throws(() => createCommercialIntakeApi(), /TRANSACTIONAL_STORE_REQUIRED/);
   assert.throws(() => createCommercialIntakeApi({
-    store: { createIntake() {} }
-  }), /AUDIT_REQUIRED/);
-  assert.throws(() => createCommercialIntakeApi({
-    store: { createIntake() {} }, audit: { write() {} }
+    store: { createIntakeOnce() {} }
   }), /RATE_LIMITER_REQUIRED/);
 });
 
@@ -88,11 +84,11 @@ test("rate limits before persistence", async () => {
 });
 
 test("does not claim success if storage or audit is unavailable", async () => {
-  const storageFailure = makeApi({ store: { async createIntake() { throw Error("offline"); } } });
+  const storageFailure = makeApi({ store: { async createIntakeOnce() { throw Error("offline"); } } });
   assert.equal((await storageFailure.api(base)).status, 503);
   assert.equal(storageFailure.audited.length, 0);
-  const auditFailure = makeApi({ audit: { async write() { throw Error("offline"); } } });
-  assert.equal((await auditFailure.api(base)).status, 503);
+  const unconfirmed = makeApi({ store: { async createIntakeOnce() { return null; } } });
+  assert.equal((await unconfirmed.api(base)).status, 503);
 });
 
 test("returns generic not-found and method responses", async () => {
