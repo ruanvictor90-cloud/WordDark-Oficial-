@@ -6,6 +6,12 @@ on:
       - "shadoweb/**"
       - "capacitor.config.json"
       - ".github/workflows/shadoweb-apk.yml"
+  pull_request:
+    branches: ["feature/shadoweb-foundation"]
+    paths:
+      - "shadoweb/**"
+      - "capacitor.config.json"
+      - ".github/workflows/shadoweb-apk.yml"
   workflow_dispatch:
 permissions:
   contents: read
