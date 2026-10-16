@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0711">
+  <meta name="description" content="Shadoweb — navegador pessoal e camada contextual darkEye.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./shadoweb.css">
+  <title>Shadoweb · Navegação pessoal</title>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./index.html" aria-label="Shadoweb início">
+        <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 20s5.5-10 15-10 15 10 15 10-5.5 10-15 10S5 20 5 20Z"/><circle cx="20" cy="20" r="5"/><path d="M20 15v10"/></svg></span>
+        <span class="brand-copy"><strong>SHADOWEB</strong><small>Navigate beyond the surface</small></span>
+      </a>
+      <button class="icon-button" id="open-eye" type="button" aria-label="Abrir darkEye" title="darkEye"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg><span class="status-dot"></span></button>
+    </header>
+
+    <section class="hero" id="home-panel">
+      <div class="hero-topline"><span class="eyebrow">SEU ESPAÇO DIGITAL</span><span class="local-chip"><span></span> Perfil local</span></div>
+      <h1>A internet.<br><em>Do seu jeito.</em></h1>
+      <p class="hero-sub">Navegação organizada. Conexões sob controle. Uma camada inteligente quando você precisar.</p>
+      <form class="searchbar" id="search-form">
+        <span class="search-glyph" aria-hidden="true">⌕</span>
+        <input id="address-input" type="text" maxlength="500" placeholder="Pesquisar ou digitar um endereço HTTPS" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Pesquisar ou digitar endereço">
+        <button type="submit">Acessar <span aria-hidden="true">↗</span></button>
+      </form>
+      <div class="search-options">
+        <label for="search-engine">Pesquisar com</label>
+        <select id="search-engine"><option value="duckduckgo">DuckDuckGo</option><option value="google">Google</option><option value="bing">Bing</option></select>
+        <button type="button" class="text-button" id="profile-button"><span id="profile-name">Pessoal</span> <span aria-hidden="true">⌄</span></button>
+      </div>
+    </section>
+
+    <nav class="main-tabs" aria-label="Seções Shadoweb">
+      <button class="tab active" data-view="home" type="button"><span>⌂</span> Início</button>
+      <button class="tab" data-view="favorites" type="button"><span>☆</span> Favoritos <b id="favorite-count">0</b></button>
+      <button class="tab" data-view="history" type="button"><span>◷</span> Recentes</button>
+      <button class="tab" data-view="connections" type="button"><span>⌘</span> Conexões</button>
+    </nav>
+
+    <section class="view" id="view-home">
+      <div class="section-heading"><div><span class="eyebrow">ACESSO RÁPIDO</span><h2>Seus atalhos</h2></div><button class="small-button" id="add-shortcut" type="button">＋ Adicionar</button></div>
+      <div class="shortcut-grid" id="shortcut-grid">
+        <button class="shortcut" data-url="https://duckduckgo.com/" type="button"><span class="shortcut-symbol symbol-search">⌕</span><strong>Pesquisa web</strong><small>Explorar a internet</small></button>
+        <button class="shortcut" data-url="https://www.youtube.com/" type="button"><span class="shortcut-symbol symbol-play">▶</span><strong>YouTube</strong><small>Vídeos e canais</small></button>
+        <button class="shortcut" data-url="https://wikipedia.org/" type="button"><span class="shortcut-symbol symbol-wiki">W</span><strong>Wikipedia</strong><small>Conhecimento aberto</small></button>
+        <button class="shortcut" data-url="https://github.com/" type="button"><span class="shortcut-symbol symbol-code">⌘</span><strong>GitHub</strong><small>Projetos e código</small></button>
+      </div>
+
+      <div class="section-heading second-heading"><div><span class="eyebrow">CAMADA CONTEXTUAL</span><h2>darkEye</h2></div><span class="status-pill"><i></i> Base inicial</span></div>
+      <button class="eye-card" id="eye-card" type="button">
+        <span class="eye-art"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M4 24S11 10 24 10s20 14 20 14-7 14-20 14S4 24 4 24Z"/><circle cx="24" cy="24" r="7"/><circle class="eye-pupil" cx="24" cy="24" r="2.5"/></svg></span>
+        <span class="eye-copy"><strong>Ative sua camada inteligente</strong><small>Veja como o darkEye poderá exibir contexto, traduções, alertas e confirmações.</small></span>
+        <span class="card-arrow">↗</span>
+      </button>
+      <p class="disclaimer">Esta versão é uma base de interface. A navegação abre sites externos; o painel darkEye é demonstrativo e ainda não sobrepõe outros aplicativos.</p>
+    </section>
+
+    <section class="view" id="view-favorites" hidden>
+      <div class="section-heading"><div><span class="eyebrow">GUARDADOS NESTE DISPOSITIVO</span><h2>Favoritos</h2></div><button class="small-button" id="add-favorite" type="button">＋ Salvar endereço</button></div>
+      <div class="list-stack" id="favorites-list"></div>
+      <p class="empty-state" id="favorites-empty">Seus endereços favoritos aparecerão aqui.</p>
+    </section>
+
+    <section class="view" id="view-history" hidden>
+      <div class="section-heading"><div><span class="eyebrow">ATIVIDADE LOCAL</span><h2>Recentes</h2></div><button class="small-button" id="clear-history" type="button">Limpar</button></div>
+      <div class="list-stack" id="history-list"></div>
+      <p class="empty-state" id="history-empty">Os endereços acessados nesta sessão aparecerão aqui.</p>
+    </section>
+
+    <section class="view" id="view-connections" hidden>
+      <div class="section-heading"><div><span class="eyebrow">INTEGRAÇÕES</span><h2>Conexões</h2></div></div>
+      <article class="connection-card"><span class="connection-icon">R</span><div><strong>Ruan / darkHub</strong><p>Possível ponte entre aplicativos, com escopo e permissões definidos por integração.</p><small class="pending">Preparação de arquitetura · não conectado</small></div></article>
+      <article class="connection-card"><span class="connection-icon">W</span><div><strong>WordDark</strong><p>Conexão governada para serviços autorizados, aprovações e auditoria.</p><small class="pending">Aguardando contrato autenticado</small></div></article>
+      <article class="connection-card"><span class="connection-icon">＋</span><div><strong>Conectores externos</strong><p>Novos serviços serão adicionados individualmente, sem compartilhar todos os dados do dispositivo.</p><small class="pending">Desativados por padrão</small></div></article>
+      <p class="disclaimer">Os cartões acima descrevem integrações planejadas; não indicam conexões ativas.</p>
+    </section>
+
+    <footer class="bottom-status"><span><i class="status-dot"></i> Shadoweb local</span><span id="storage-status">Preferências neste dispositivo</span></footer>
+  </main>
+
+  <aside class="eye-panel" id="eye-panel" aria-labelledby="eye-title" hidden>
+    <div class="eye-panel-head"><div class="eye-title-wrap"><span class="mini-eye">◉</span><div><span class="eyebrow">CAMADA CONTEXTUAL</span><h2 id="eye-title">darkEye</h2></div></div><button class="icon-button close-eye" id="close-eye" type="button" aria-label="Fechar darkEye">×</button></div>
+    <div class="eye-panel-body"><span class="demo-badge">MODO DEMONSTRAÇÃO</span><h3>Entenda o contexto.</h3><p>Na evolução do projeto, o darkEye poderá trabalhar com o conteúdo que você autorizar para oferecer assistência contextual.</p>
+      <div class="eye-feature"><span>文</span><div><strong>Tradução e leitura</strong><small>Assistência contextual para conteúdo acessível.</small></div></div>
+      <div class="eye-feature"><span>⌁</span><div><strong>Alertas e informações</strong><small>Notificações relevantes sem misturar os dados de outros apps.</small></div></div>
+      <div class="eye-feature"><span>✓</span><div><strong>Confirmações</strong><small>Você aprova ações sensíveis antes de executá-las.</small></div></div>
+      <p class="panel-note">Ainda não há leitura automática de páginas, IA conectada ou sobreposição nativa. Esses recursos serão construídos e testados separadamente.</p>
+    </div>
+  </aside>
+
+  <dialog id="profile-dialog">
+    <form method="dialog" id="profile-form">
+      <div class="dialog-heading"><div><span class="eyebrow">PERSONALIZAÇÃO</span><h2>Perfil de navegação</h2></div><button class="icon-button dialog-close" value="cancel" aria-label="Fechar">×</button></div>
+      <label for="profile-select">Como você quer navegar?</label>
+      <select class="full-select" id="profile-select"><option value="personal">Pessoal</option><option value="study">Estudos</option><option value="work">Trabalho</option><option value="creator">Criador</option><option value="general">Geral</option></select>
+      <p class="panel-note">Nesta versão, o perfil organiza preferências visuais e locais. Ele ainda não isola sessões, cookies ou dados de sites.</p>
+      <button class="primary-button" id="save-profile" value="save" type="submit">Salvar preferência</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
