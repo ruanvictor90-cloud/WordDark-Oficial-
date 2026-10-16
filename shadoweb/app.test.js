@@ -81,3 +81,16 @@ test("plugin manager imports inactive manifests and never evaluates code",()=>{
   assert.equal(manager.setEnabled("wiki-helper",true).enabled,true);
   assert.ok(audit.list().some(row=>row.event==="plugin.imported"));
 });
+
+test("Bridge restricts connector actions and connects local-knowledge to stored notes",async()=>{
+  const storage=new MemoryStorage(), audit=new AuditLog(storage), gate=new Gate(storage);
+  const notes=new Knowledge({storage,audit}); notes.save({title:"Shadoweb",body:"Mundo conectado"});
+  const connectors=builtInConnectors.map(c=>({...c,enabled:true}));
+  const handlers={...connectorHandlers,"local-knowledge":async input=>connectorHandlers["local-knowledge"]({...input,notes:notes.list()})};
+  const bridge=new Bridge({connectors,handlers,gate,audit});
+  gate.grant("local-knowledge",["knowledge.read"]);
+  const ok=await bridge.request({connectorId:"local-knowledge",action:"search",input:{query:"conectado"}},{scope:"knowledge.read"});
+  assert.equal(ok.ok,true); assert.equal(ok.result[0].title,"Shadoweb");
+  const wrongAction=await bridge.request({connectorId:"local-knowledge",action:"delete",input:{query:"Shadoweb"}},{scope:"knowledge.read"});
+  assert.equal(wrongAction.ok,false); assert.match(wrongAction.error,/Ação não permitida/);
+});
