@@ -40,6 +40,10 @@
       <button class="tab" data-view="favorites" type="button"><span>☆</span> Favoritos <b id="favorite-count">0</b></button>
       <button class="tab" data-view="history" type="button"><span>◷</span> Recentes</button>
       <button class="tab" data-view="connections" type="button"><span>⌘</span> Conexões</button>
+      <button class="tab" data-view="world" type="button"><span>◈</span> Mundo</button>
+      <button class="tab" data-view="knowledge" type="button"><span>▤</span> Biblioteca</button>
+      <button class="tab" data-view="plugins" type="button"><span>⌘</span> Plugins</button>
+      <button class="tab" data-view="audit" type="button"><span>◷</span> Auditoria</button>
     </nav>
 
     <section class="view" id="view-home">
@@ -74,13 +78,42 @@
 
     <section class="view" id="view-connections" hidden>
       <div class="section-heading"><div><span class="eyebrow">INTEGRAÇÕES</span><h2>Conexões</h2></div></div>
-      <article class="connection-card"><span class="connection-icon">R</span><div><strong>Ruan / darkHub</strong><p>Possível ponte entre aplicativos, com escopo e permissões definidos por integração.</p><small class="pending">Preparação de arquitetura · não conectado</small></div></article>
+      <article class="connection-card"><span class="connection-icon">D</span><div><strong>darkHub</strong><p>Possível ponte entre aplicativos, com escopo e permissões definidos por integração.</p><small class="pending">Contrato autenticado ainda não configurado</small></div></article>
       <article class="connection-card"><span class="connection-icon">W</span><div><strong>WordDark</strong><p>Conexão governada para serviços autorizados, aprovações e auditoria.</p><small class="pending">Aguardando contrato autenticado</small></div></article>
       <article class="connection-card"><span class="connection-icon">＋</span><div><strong>Conectores externos</strong><p>Novos serviços serão adicionados individualmente, sem compartilhar todos os dados do dispositivo.</p><small class="pending">Desativados por padrão</small></div></article>
       <p class="disclaimer">Os cartões acima descrevem integrações planejadas; não indicam conexões ativas.</p>
     </section>
 
-    <footer class="bottom-status"><span><i class="status-dot"></i> Shadoweb local</span><span id="storage-status">Preferências neste dispositivo</span></footer>
+    <section class="view" id="view-world" hidden>
+      <div class="section-heading"><div><span class="eyebrow">MUNDO CONECTADO</span><h2>Apps e serviços</h2></div><span class="status-pill"><i></i> Local-first</span></div>
+      <p class="section-intro">Um espaço personalizável para abrir serviços, organizar ferramentas e controlar quais conectores podem acessar recursos.</p>
+      <div class="shortcut-grid world-grid" id="world-apps"></div>
+      <div class="section-heading second-heading"><div><span class="eyebrow">CONTRATO DE API</span><h2>Gateway Shadoweb</h2></div><span class="status-pill"><i></i> v1.0.0</span></div>
+      <div class="connection-card"><span class="connection-icon">API</span><div><strong>Gate → Bridge → Connector → Audit</strong><p>As requisições passam por validação de contrato, permissão por escopo, execução do conector registrado e auditoria local.</p><small class="pending">Sem credenciais de terceiros e sem execução arbitrária de plugins</small></div></div>
+  </section>
+
+  <section class="view" id="view-knowledge" hidden>
+    <div class="section-heading"><div><span class="eyebrow">MEMÓRIA LOCAL</span><h2>Biblioteca</h2></div><div class="inline-actions"><button class="small-button" id="export-knowledge" type="button">Exportar</button><button class="small-button" id="import-knowledge" type="button">Importar</button></div></div>
+    <form id="knowledge-form" class="knowledge-form"><input id="knowledge-title" maxlength="120" placeholder="Título da nota" aria-label="Título da nota" required><textarea id="knowledge-body" maxlength="5000" rows="3" placeholder="Anotações, links e informações que você quer guardar..." aria-label="Conteúdo da nota" required></textarea><button class="primary-button" type="submit">Salvar na biblioteca</button></form>
+    <input id="knowledge-file" type="file" accept="application/json,.json" hidden>
+    <div class="list-stack" id="knowledge-list"></div><p class="empty-state" id="knowledge-empty">Sua biblioteca local está vazia.</p>
+  </section>
+
+  <section class="view" id="view-plugins" hidden>
+    <div class="section-heading"><div><span class="eyebrow">EXTENSÕES</span><h2>Plugins</h2></div><button class="small-button" id="import-plugin" type="button">＋ Importar manifesto</button></div>
+    <p class="section-intro">Nesta fase, plugins são manifestos declarativos ligados apenas a conectores conhecidos. O Shadoweb não executa JavaScript importado.</p>
+    <div class="connection-card"><span class="connection-icon">＋</span><div><strong>Modelo de plugin</strong><p>Use um manifesto JSON com ID, nome, versão, descrição, conector permitido e escopos solicitados.</p><button class="text-button" id="download-plugin-template" type="button">Exportar modelo JSON</button></div></div>
+    <input id="plugin-file" type="file" accept="application/json,.json" hidden>
+    <div class="list-stack" id="plugins-list"></div><p class="empty-state" id="plugins-empty">Nenhum plugin importado.</p>
+  </section>
+
+  <section class="view" id="view-audit" hidden>
+    <div class="section-heading"><div><span class="eyebrow">TRANSPARÊNCIA</span><h2>Auditoria local</h2></div><button class="small-button" id="export-audit" type="button">Exportar registro</button></div>
+    <p class="section-intro">Registra concessões, importações de plugins e chamadas ao gateway. O registro fica neste dispositivo e pode ser apagado pelo usuário.</p>
+    <div class="list-stack" id="audit-list"></div><p class="empty-state" id="audit-empty">Ainda não há eventos registrados.</p>
+  </section>
+
+  <footer class="bottom-status"><span><i class="status-dot"></i> Shadoweb local</span><span id="storage-status">Preferências neste dispositivo</span></footer>
   </main>
 
   <aside class="eye-panel" id="eye-panel" aria-labelledby="eye-title" hidden>
@@ -104,6 +137,6 @@
   </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="./app.js"></script>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
