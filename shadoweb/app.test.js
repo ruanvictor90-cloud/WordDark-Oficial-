@@ -27,6 +27,7 @@ test("plugin manifests are declarative and reject arbitrary connectors",()=>{
   assert.equal(validatePluginManifest(valid).enabled,false);
   assert.throws(()=>validatePluginManifest({...valid,connectorId:"https://attacker.example"}),/conector/);
   assert.throws(()=>validatePluginManifest({...valid,permissions:["filesystem.root"]}),/permissões/);
+  assert.throws(()=>validatePluginManifest({...valid,permissions:["knowledge.write"]}),/incompatíveis/);
 });
 
 test("Gate requires both enabled connector and explicit scoped permission",()=>{
@@ -34,6 +35,7 @@ test("Gate requires both enabled connector and explicit scoped permission",()=>{
   assert.throws(()=>gate.authorize(connector,"connector.read"),/desativado/);
   connector.enabled=true;
   assert.throws(()=>gate.authorize(connector,"connector.read"),/Permissão/);
+  assert.throws(()=>gate.grant("wikipedia",["knowledge.write"]),/escopos/);
   gate.grant("wikipedia",["connector.read"]);
   assert.doesNotThrow(()=>gate.authorize(connector,"connector.read"));
   gate.revoke("wikipedia");
@@ -58,8 +60,9 @@ test("Bridge logs requests, denies missing permissions and executes only registe
 test("audit rejects unknown events and redacts obvious secret-like values",()=>{
   const audit=new AuditLog(new MemoryStorage());
   assert.throws(()=>audit.record("unknown.event",{}),/não permitido/);
-  const row=audit.record("gateway.error",{reason:"api_key=abc123"});
+  const row=audit.record("gateway.error",{reason:"api_key=abc123",api_key:"abc123"});
   assert.match(row.detail.reason,/REDACTED/);
+  assert.equal(row.detail.api_key,"[REDACTED]");
 });
 
 test("knowledge notes are validated, searchable and exportable",()=>{
