@@ -6,7 +6,7 @@ export class AuditLog {
   list() { try { const rows = JSON.parse(this.storage.getItem(KEY) || "[]"); return Array.isArray(rows) ? rows.slice(0, 300) : []; } catch { return []; } }
   record(event, detail = {}) {
     if (!ALLOWED.has(event)) throw new Error("Evento de auditoria não permitido.");
-    const row = { id: crypto.randomUUID(), at: new Date().toISOString(), event, detail: Object.fromEntries(Object.entries(detail).slice(0, 8).map(([k,v]) => [String(k).slice(0,40), redact(typeof v === "object" ? JSON.stringify(v) : v)])) };
+    const row = { id: crypto.randomUUID(), at: new Date().toISOString(), event, detail: Object.fromEntries(Object.entries(detail).slice(0, 8).map(([k,v]) => { const key=String(k).slice(0,40); const sensitive=/(token|secret|password|authorization|api[_-]?key)/i.test(key); return [key, sensitive ? "[REDACTED]" : redact(typeof v === "object" ? JSON.stringify(v) : v)]; })) };
     try { this.storage.setItem(KEY, JSON.stringify([row, ...this.list()].slice(0, 300))); } catch { /* Auditoria local pode falhar por falta de espaço. */ }
     return row;
   }
