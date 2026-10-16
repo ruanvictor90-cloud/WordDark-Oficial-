@@ -10,10 +10,12 @@ function storage(){
 (async()=>{
   const store=storage();
   const registry=new Registry(store);
-  store.setItem("wd.external.connections",JSON.stringify([{
-    providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH"]
-  }]));
+  store.setItem("wd.external.connections",JSON.stringify([
+    {providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH"]},
+    {providerId:"YOUTUBE",accountId:"ACC-ROUTE-ONLY",status:"CONNECTED",capabilities:["CONTENT_ROUTE"]}
+  ]));
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
+  registry.setRuntimeCredential("YOUTUBE","ACC-ROUTE-ONLY","ROUTE-ONLY-CREDENTIAL");
 
   const gateway=new Gateway({registry});
   const waiting=await gateway.execute({
@@ -21,6 +23,12 @@ function storage(){
     capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-001"}
   });
   assert.strictEqual(waiting.status,"WAITING_EXTERNAL_CONNECTION");
+
+  const publishWithoutPublishCapability=await gateway.execute({
+    requestId:"REQ-EXT-ROUTE-ONLY",operationId:"OP-EXT-ROUTE-ONLY",providerId:"YOUTUBE",accountId:"ACC-ROUTE-ONLY",
+    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-ROUTE-ONLY"}
+  });
+  assert.strictEqual(publishWithoutPublishCapability.status,"CAPABILITY_NOT_GRANTED");
 
   gateway.registerAdapter("YOUTUBE",{execute:async(request,context)=>{
     assert.strictEqual(request.providerId,"YOUTUBE");
