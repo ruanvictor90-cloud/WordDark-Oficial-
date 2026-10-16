@@ -31,6 +31,7 @@ jobs:
           test -f shadoweb/index.html
           test -f shadoweb/manifest.webmanifest
           test -f shadoweb/sw.js
+          test -f shadoweb/address.js
           test -f shadoweb/contracts.js
           test -f shadoweb/bridge.js
           test -f shadoweb/gate.js
