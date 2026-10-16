@@ -7,7 +7,7 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./ruan-logo.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.5">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.6">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -18,21 +18,18 @@
         <img src="./ruan-logo.svg" alt="darkHub" width="58" height="58">
       </a>
       <div class="header-actions">
-        <span class="connection-dot" title="Interface ativa" aria-label="Interface ativa"></span>
         <button class="icon-button alert-button" id="alert-toggle" type="button" aria-label="Abrir alertas" aria-expanded="false" aria-controls="alert-panel">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
           <span id="alert-count" class="alert-count" hidden>0</span>
         </button>
+        <span class="connection-dot" title="Online" aria-label="Online"></span>
       </div>
     </header>
 
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="ambient ambient-a" aria-hidden="true"></div>
       <div class="ambient ambient-b" aria-hidden="true"></div>
-      <div class="hero-logo"><img src="./ruan-logo.svg" alt="" width="100" height="100"></div>
-      <p class="eyebrow">SEU ESPAÇO · SEU ECOSSISTEMA</p>
       <h1 id="welcome-title"><span id="greeting">Olá!</span><br><span class="greeting-subtitle">Que bom ter você por aqui.</span></h1>
-      <p class="welcome-copy">O que vamos fazer hoje?</p>
       <form id="hub-search" class="hub-search" role="search">
         <label class="visually-hidden" for="hub-search-input">Buscar aplicativo ou destino</label>
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
@@ -40,7 +37,6 @@
         <button type="submit" aria-label="Buscar">↗</button>
       </form>
       <p id="search-feedback" class="search-feedback" role="status" aria-live="polite" hidden></p>
-      <div class="status-line"><span></span> Seu espaço pessoal</div>
     </section>
 
     <footer class="app-footer">
@@ -80,6 +76,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script src="./ruan-hub.js?v=20261016.4" defer></script>
+  <script src="./ruan-hub.js?v=20261016.5" defer></script>
 </body>
 </html>
