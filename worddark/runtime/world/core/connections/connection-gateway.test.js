@@ -12,10 +12,14 @@ function storage(){
   const registry=new Registry(store);
   store.setItem("wd.external.connections",JSON.stringify([
     {providerId:"YOUTUBE",accountId:"ACC-001",status:"CONNECTED",capabilities:["CONTENT_ROUTE","CONTENT_PUBLISH"]},
-    {providerId:"YOUTUBE",accountId:"ACC-ROUTE-ONLY",status:"CONNECTED",capabilities:["CONTENT_ROUTE"]}
+    {providerId:"YOUTUBE",accountId:"ACC-ROUTE-ONLY",status:"CONNECTED",capabilities:["CONTENT_ROUTE"]},
+    {providerId:"YOUTUBE",accountId:"ACC-PENDING",status:"PENDING",capabilities:["CONTENT_PUBLISH"]},
+    {providerId:"INSTAGRAM",accountId:"ACC-MALFORMED",status:"CONNECTED",capabilities:["CONTENT_PUBLISH"]}
   ]));
   registry.setRuntimeCredential("YOUTUBE","ACC-001","TEST-CREDENTIAL");
   registry.setRuntimeCredential("YOUTUBE","ACC-ROUTE-ONLY","ROUTE-ONLY-CREDENTIAL");
+  registry.setRuntimeCredential("YOUTUBE","ACC-PENDING","PENDING-CREDENTIAL");
+  registry.setRuntimeCredential("INSTAGRAM","ACC-MALFORMED","MALFORMED-RESULT-CREDENTIAL");
 
   const gateway=new Gateway({registry});
   const waiting=await gateway.execute({
@@ -29,6 +33,12 @@ function storage(){
     capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-ROUTE-ONLY"}
   });
   assert.strictEqual(publishWithoutPublishCapability.status,"CAPABILITY_NOT_GRANTED");
+
+  const pendingAccount=await gateway.execute({
+    requestId:"REQ-EXT-PENDING",operationId:"OP-EXT-PENDING",providerId:"YOUTUBE",accountId:"ACC-PENDING",
+    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-PENDING"}
+  });
+  assert.strictEqual(pendingAccount.status,"ACCOUNT_NOT_CONNECTED");
 
   gateway.registerAdapter("YOUTUBE",{execute:async(request,context)=>{
     assert.strictEqual(request.providerId,"YOUTUBE");
@@ -49,5 +59,13 @@ function storage(){
     capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-003"}
   });
   assert.strictEqual(disconnected.status,"ACCOUNT_NOT_CONNECTED");
+
+  gateway.registerAdapter("INSTAGRAM",{execute:async()=>undefined});
+  const malformedAdapterResult=await gateway.execute({
+    requestId:"REQ-EXT-MALFORMED",operationId:"OP-EXT-MALFORMED",providerId:"INSTAGRAM",accountId:"ACC-MALFORMED",
+    capability:"CONTENT_PUBLISH",action:"CONTENT_PUBLISH",payload:{contentId:"CONTENT-MALFORMED"}
+  });
+  assert.strictEqual(malformedAdapterResult.success,false);
+  assert.strictEqual(malformedAdapterResult.status,"EXTERNAL_EXECUTION_FAILED");
   console.log("connection-gateway.test: OK");
 })();
