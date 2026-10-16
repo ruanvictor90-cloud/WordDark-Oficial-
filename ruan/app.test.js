@@ -7,11 +7,13 @@ assert.ok(html.includes('RUAN · CENTRAL'));
 assert.ok(!html.includes('Informações'));
 assert.ok(!html.includes('info-grid'));
 assert.ok(!html.includes('carousel-phrase'));
-assert.ok(!html.includes('finance-widget-value'));
-assert.ok(!html.includes('tasks-widget-value'));
-assert.ok(!html.includes('bills-widget-value'));
+assert.ok(html.includes('id="finance-widget-value"'));
+assert.ok(html.includes('id="tasks-widget-value"'));
+assert.ok(html.includes('class="ruan-info-widgets"'));
 assert.ok(html.includes('class="ruan-home-grid"'));
 assert.ok(read('app.css').includes('min-height:96px;max-height:118px'), 'Ruan apps must be compact and near the top');
+assert.ok(read('app.css').includes('body.ruan-launcher .ruan-info-widgets{display:grid'), 'Central must show two compact personal summary widgets');
+assert.ok(read('app.js').includes('function renderWidgets()'), 'Central widgets must refresh from personal local records');
 assert.ok(!html.includes('apps-drawer'));
 assert.ok(!html.includes('apps-toggle'));
 assert.ok(html.includes('class="home-app-name">Pessoal</span>'));
@@ -26,7 +28,7 @@ assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'
 assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
 assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(read('app.css').includes('body.ruan-launcher .top-actions{display:flex!important'), 'Ruan home must keep its notification bell visible');
-assert.ok(html.includes('app.css?v=20261014-anime-player-4') && html.includes('app.js?v=20261014-anime-player-4'), 'Ruan home must request refreshed assets');
+assert.ok(html.includes('app.css?v=20261015-final-1') && html.includes('app.js?v=20261014-anime-player-4'), 'Ruan home must request refreshed assets');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
@@ -67,7 +69,7 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v23'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v24'"));
 assert.ok(read('apps/pessoal/app.js').includes('const localDateKey='), 'Pessoal dashboard must use local calendar dates for deadlines');
 assert.ok(!read('apps/pessoal/app.js').includes('new Date().toISOString().slice(0,10)'), 'Dashboard must not derive local today from UTC');
 console.log('Ruan app structure tests passed.');
