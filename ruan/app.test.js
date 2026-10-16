@@ -70,6 +70,7 @@ for (const page of appPagesWithoutDuplicateNav) {
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
 assert.ok(serviceWorker.includes("const CACHE='ruan-central-v24'"));
+assert.ok(serviceWorker.includes('caches.match(event.request,{ignoreSearch:true})'), 'Offline cache must serve versioned CSS/JS URLs from the core cache');
 assert.ok(read('apps/pessoal/app.js').includes('const localDateKey='), 'Pessoal dashboard must use local calendar dates for deadlines');
 assert.ok(read('apps/pessoal/financeiro.js').includes('const localDateKey='), 'Finance dates must use the device local calendar');
 assert.ok(read('apps/pessoal/tarefas.js').includes('const localDateKey='), 'Task deadlines must use the device local calendar');
