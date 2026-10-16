@@ -11,7 +11,7 @@
   "theme_color": "#0a0710",
   "icons": [
     {
-      "src": "./ruan-logo.svg",
+      "src": "./ruan-logo.svg?v=20261016.17",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
