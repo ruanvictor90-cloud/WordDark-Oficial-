@@ -1,6 +1,6 @@
 const RUAN_ALERTS_KEY='ruan.important.notifications.v1';
 const RUAN_ROOT=new URL('../',import.meta.url);
-function safeRuanHref(value){
+export function safeRuanHref(value){
   let raw=String(value||'./index.html').trim();
   if(raw==='./tarefas.html'||raw==='tarefas.html')raw='./apps/pessoal/tarefas.html';
   if(raw==='./financeiro.html'||raw==='financeiro.html')raw='./apps/pessoal/financeiro.html';
