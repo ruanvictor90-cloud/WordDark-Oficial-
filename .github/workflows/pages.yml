@@ -66,3 +66,4 @@ jobs:
         uses: actions/deploy-pages@v4
 
 # Republish the latest darkHub branch interface.
+# Refresh darkHub header logo asset styles.
