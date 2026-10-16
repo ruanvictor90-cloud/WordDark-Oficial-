@@ -1,46 +1,98 @@
-# Ruan — plano de finalização técnica
-Data da revisão: 2026-10-15
-Branch de trabalho: `ruan/finalizacao-integral-2026-10-15`
-Base: `main` do repositório oficial `ruanvictor90-cloud/WordDark-Oficial-`.
+# Ruan — relatório de análise e finalização técnica
 
-## Objetivo
-Finalizar o Ruan como central pessoal privada, independente do runtime WordDark, com módulos separados, dados pessoais isolados, navegação previsível e versão móvel testável. Esta branch é de trabalho; não publicar nem mesclar na `main` até a revisão e os testes.
+Revisão: 15/10/2026  
+Branch isolada: `ruan/finalizacao-integral-2026-10-15`  
+Base: `main` do repositório `ruanvictor90-cloud/WordDark-Oficial-`
+
+## Objetivo e limite de integração
+
+Finalizar e revisar o Ruan como central pessoal independente, mantendo as alterações nesta branch. **Não houve merge para `main` e nenhum módulo foi integrado ao runtime do WordDark.** A integração fica para uma conversa separada, conforme solicitado.
 
 ## Escopo confirmado
-- A Área ADM não faz parte do Ruan atual.
-- Ruan é o único lugar da aplicação que pode ter a gaveta global de aplicativos.
-- Pessoal contém os setores Financeiro e Tarefas; os registros são locais e não movimentam dinheiro real.
-- Shadow é um aplicativo separado; DarkEye é protótipo de navegação, não um motor de navegador nativo.
-- WordDark Hub é somente um atalho explícito de integração. Ruan não deve importar código interno do Hub/WordDark nem expor dados pessoais a eles.
-- A identidade desejada para Ruan é preto/roxo, com retorno consistente, marca central e notificações discretas.
-- Manter Shadow/DarkEye como estrutura inicial; não implementar ainda lógica futura de Shadow nem prometer sincronização, autenticação ou notificações em segundo plano.
 
-## Estado encontrado na leitura inicial
-- A página central atual tem quatro atalhos: Entretenimento, Pessoal, Shadow e WordDark Hub.
-- Existem motores de dados pessoais, migração de chaves antigas, exportação/importação JSON, testes unitários e testes de fronteira estrutural.
-- Os testes de estrutura atuais explicitamente exigem que a gaveta global esteja temporariamente removida. Isso precisa ser reconciliado com a decisão de produto antes de alterar os testes ou a interface.
-- A divergência entre documentação e tela central foi parcialmente resolvida: a central agora tem dois widgets compactos (saldo registrado e tarefas em aberto), sem reintroduzir a gaveta global. Os testes de interface foram atualizados para esse comportamento.
-- O CSS contém blocos de estilos históricos e múltiplas declarações de identidade. A revisão visual deve consolidar sem reescrever módulos que já funcionam.
-- A estrutura é local ao dispositivo: não existe sincronização entre aparelhos nem autenticação nesta versão.
-- Nesta branch, a central recebeu os dois widgets, a versão de assets foi atualizada e o cache do service worker passou para v24, com correspondência de cache ignorando parâmetros de versão para que CSS/JS continuem disponíveis offline. Os formulários de Financeiro e Tarefas passaram a usar a data local do dispositivo para evitar divergência de dia por UTC, e os links de notificação foram corrigidos. A documentação e as asserções foram atualizadas.
-- Foi corrigida uma asserção de teste antiga em `vida.test.js` que ainda esperava o cache v23, embora o service worker já estivesse em v24.
-- Foi adicionada uma workflow isolada em `.github/workflows/ruan-validation.yml` para executar os testes de Ruan no GitHub Actions, sem mesclar a branch nem alterar o código principal. O resultado da execução remota ainda precisa ser confirmado.
-- A suíte ainda não tem resultado de execução confirmado. O ambiente local não conseguiu clonar o repositório para rodar Node, então foi adicionada uma workflow isolada de validação no GitHub Actions; a entrega deve registrar o resultado remoto assim que estiver disponível.
+- Ruan é a central privada de uso pessoal; a Área ADM não faz parte da interface atual.
+- A tela central contém atalhos para Entretenimento, Pessoal, Shadow e WordDark Hub, além de resumo de saldo registrado, tarefas em aberto e notificações locais.
+- Pessoal mantém os setores Financeiro, Tarefas e Vida.
+- Shadow continua separado; DarkEye é um protótipo de navegação por interface/iframe, não um navegador nativo.
+- O atalho para o WordDark Hub é explícito. O runtime do Hub/WordDark não é importado pelo Ruan e os dados pessoais não são enviados automaticamente.
+- A identidade visual deve permanecer preto/roxo, adaptada ao celular, com navegação interna própria por aplicativo.
+- O armazenamento é local ao navegador/dispositivo. Não há autenticação, sincronização entre aparelhos, conexão bancária nem garantia de notificações em segundo plano.
 
-## Plano de trabalho
-1. **Congelar a especificação:** resolver divergências entre README, HTML, CSS e testes antes de decidir a forma final da central.
-2. **Auditar navegação:** verificar todos os links relativos, retorno de cada módulo, ausência de navegação global duplicada e funcionamento do Hub como único atalho externo permitido.
-3. **Auditar dados:** validar migração sem perda, cálculos financeiros, prazos locais, validação de entrada, importação/exportação e isolamento entre módulos.
-4. **Auditar notificações e offline:** revisar links internos das notificações, confirmar renovação do cache do service worker e testar comportamento offline em dispositivo.
-5. **Consolidar identidade:** manter preto/roxo, marca e cabeçalho consistentes; evitar mudanças de interface além do escopo confirmado.
-6. **Executar testes:** testes de domínio, armazenamento, motor central, DarkEye, estrutura e fronteiras; corrigir regressões. Esta etapa permanece pendente de execução real.
-7. **Entrega:** registrar alterações, resultados dos testes e limitações; somente então avaliar integração à `main` e publicação.
+## Auditoria e correções aplicadas
 
-## Critérios de conclusão
-- Todos os links locais de HTML, CSS, JavaScript, manifesto e service worker resolvem corretamente.
-- Nenhuma página de aplicativo contém uma segunda gaveta global.
-- Dados antigos de tarefas/finanças são migrados sem descarte e os testes cobrem o comportamento.
-- Ruan não depende do runtime WordDark/Hub; o atalho para o Hub é a única exceção de navegação.
-- A documentação corresponde ao comportamento real.
-- Os testes são executados e os resultados são registrados sem alegar testes não realizados.
-- A branch de finalização é revisada antes de qualquer merge ou publicação.
+### Interface e identidade visual
+
+- Removida uma segunda cópia dos dois widgets da tela central, que duplicava os cartões e os IDs HTML.
+- Acrescentadas asserções para garantir uma única seção de widgets e IDs únicos de saldo e tarefas.
+- Restaurada a paleta preto/roxo no CSS base da central, que ainda tinha variáveis e fundos azuis.
+- Removido um bloco de estilos duplicado dos widgets.
+- Atualizada a versão dos assets e do cache do service worker para `ruan-central-v25`, evitando servir a folha de estilo anterior após as correções.
+- Preservada a navegação sem gaveta global duplicada dentro das telas internas.
+
+### Dados pessoais e financeiro
+
+- Corrigida a validação de datas do núcleo para comparar a data do calendário local, em vez de depender de conversão para UTC.
+- Corrigido o cálculo da próxima data de recorrência para devolver a data local do calendário.
+- Uniformizada a regra de valor financeiro: contas precisam ter valor positivo; zero e valores negativos são rejeitados.
+- Reforçada a validação ao editar contas e limites de orçamento.
+- Acrescentados testes para impedir contas com valor zero na validação de backups, na criação e na edição.
+- Mantida a compatibilidade de armazenamento com as chaves antigas de tarefas e financeiro para não descartar os registros existentes.
+
+### Navegação, notificações e offline
+
+- Corrigidos os links internos usados pelas notificações de Financeiro e Tarefas.
+- Os widgets da central leem os registros locais de compatibilidade e atualizam quando a aplicação emite o evento de mudança de dados, quando há alteração de armazenamento e ao voltar para a página.
+- O service worker mantém os arquivos essenciais do Ruan em cache e ignora parâmetros de versão na busca do cache, permitindo encontrar os assets pré-armazenados.
+- A auditoria estrutural automatizada verifica referências locais de HTML, CSS, JavaScript, manifesto e service worker, além de bloquear referências internas que escapem da pasta Ruan — exceto o atalho explícito para o Hub.
+
+### Documentação
+
+- Atualizado o README para descrever os módulos realmente existentes, os limites do armazenamento local e a bateria de testes.
+- Criada uma workflow dedicada em `.github/workflows/ruan-validation.yml`, limitada à branch de finalização e execução manual.
+
+## Resultado dos testes
+
+**Resultado confirmado: sucesso.** A execução do GitHub Actions terminou com conclusão `success` na revisão `ed0ac5ce97e061e3bd7d2c321ff0244184469229`.
+
+Execução: https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/runs/38834839956
+
+A bateria executou estes dez comandos sem falhas:
+
+1. `node ruan/apps/pessoal/vida.test.js`
+2. `node ruan/engine/personal-core.test.js`
+3. `node ruan/engine/personal-store.test.js`
+4. `node ruan/engine/sovereign-core.test.js`
+5. `node ruan/engine/ruan-central.test.js`
+6. `node ruan/engine/central-engine.test.js`
+7. `node ruan/apps/shadow/darkeye/darkeye-core.test.js`
+8. `node ruan/app.test.js`
+9. `node ruan/structure-boundary.test.js`
+10. `node ruan/engine/darknet-client.test.js`
+
+A aprovação é da bateria automatizada listada acima; ela não substitui a conferência visual no navegador e no celular.
+
+## Limites ainda conhecidos
+
+- Ainda é necessária uma conferência manual em celular para avaliar espaçamento, rolagem, retorno e notificações com dados reais de teste.
+- Offline depende de a aplicação ter sido carregada e o service worker ter concluído a instalação do cache; a experiência offline não foi validada manualmente nesta revisão.
+- DarkEye depende de iframe para pré-visualização; sites que bloqueiam incorporação precisarão ser abertos externamente. O modo Privado só evita salvar novas entradas no histórico local, não torna a navegação anônima.
+- Os dados ficam no dispositivo e podem ser perdidos ao limpar o armazenamento do navegador. A exportação de backup é o mecanismo atual de cópia/migração.
+- Não há conexão bancária, pagamentos reais, autenticação, sincronização entre dispositivos ou notificações de sistema em segundo plano.
+
+## Estado da branch e entrega
+
+- Branch: `ruan/finalizacao-integral-2026-10-15`
+- Comparação com `main`: 32 commits à frente, 0 atrás.
+- Arquivos alterados na branch: documentação, central HTML/CSS/JS, service worker, telas e lógica de Financeiro/Tarefas, núcleo/armazenamento pessoal e testes.
+- Nenhuma alteração foi mesclada à `main`.
+- A branch está pronta para revisão e posterior integração pelo chat principal, com a ressalva de que a validação visual manual deve ocorrer antes de tratar a experiência como totalmente homologada.
+
+## Critérios de finalização
+
+- [x] Duplicação dos widgets removida e coberta por testes.
+- [x] Identidade preto/roxo restaurada na central.
+- [x] Regras de datas e valores financeiros reforçadas.
+- [x] Testes automatizados da branch executados com sucesso.
+- [x] Documentação e rotina de validação atualizadas.
+- [x] Código principal preservado, sem merge.
+- [ ] Conferência visual manual em navegador e celular.
