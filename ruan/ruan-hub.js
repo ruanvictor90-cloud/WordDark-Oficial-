@@ -143,7 +143,7 @@ window.addEventListener("darkhub:projects-changed",()=>{if(currentView==="develo
 $("dashboard-open-projects").addEventListener("click",()=>showView("development"));
 window.DarkHubInbox=Object.freeze({receiveInformation:payload=>{const item=inbox.receiveInformation(payload);if(currentView==="panel")renderDashboard();return item;},listInformation:()=>inbox.list()});
 window.addEventListener("darkhub:inbox-changed",()=>{if(currentView==="panel")renderDashboard();});
-window.addEventListener("storage",event=>{if(event.key===INFORMATION_INBOX_STORAGE_KEY&&currentView==="panel")renderInbox();});
+window.addEventListener("storage",event=>{if(event.key===INFORMATION_INBOX_STORAGE_KEY&&currentView==="panel")renderDashboard();});
 
 $("alert-close").addEventListener("click",()=>setAlerts(false));
 document.addEventListener("keydown",event=>{if(event.key==="Escape"){setDrawer(false);setAlerts(false);setSideMenu(false);}});
