@@ -82,7 +82,7 @@ A aprovação é da bateria automatizada listada acima; ela não substitui a con
 ## Estado da branch e entrega
 
 - Branch: `ruan/finalizacao-integral-2026-10-15`
-- Comparação com `main`: 32 commits à frente, 0 atrás.
+- Comparação com `main`: branch de trabalho à frente da base, sem commits da `main` pendentes de incorporar no momento desta revisão.
 - Arquivos alterados na branch: documentação, central HTML/CSS/JS, service worker, telas e lógica de Financeiro/Tarefas, núcleo/armazenamento pessoal e testes.
 - Nenhuma alteração foi mesclada à `main`.
 - A branch está pronta para revisão e posterior integração pelo chat principal, com a ressalva de que a validação visual manual deve ocorrer antes de tratar a experiência como totalmente homologada.
