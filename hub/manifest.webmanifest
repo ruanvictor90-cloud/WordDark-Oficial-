@@ -1,7 +1,7 @@
 {
   "name": "WordDark Hub",
   "short_name": "WD Hub",
-  "description": "WordDark Hub — Hub central de desenvolvimento do ecossistema WordDark.",
+  "description": "WordDark Hub — espaço independente do ecossistema WordDark.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
@@ -11,7 +11,7 @@
   "theme_color": "#0a0710",
   "icons": [
     {
-      "src": "./app-icon.svg?v=20261016.2",
+      "src": "./app-icon.svg?v=20261016.3",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
