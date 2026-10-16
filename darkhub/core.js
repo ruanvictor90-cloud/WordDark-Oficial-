@@ -61,6 +61,7 @@ export class DarkHubVault {
     this.#state = await this.#open(derived.key);
     this.#cryptoKey = derived.key;
     this.audit("security.vault_unlocked", "Cofre local desbloqueado");
+    await this.#seal(this.#state, this.#cryptoKey);
     return true;
   }
   lock() { this.#cryptoKey = null; this.#state = null; }
