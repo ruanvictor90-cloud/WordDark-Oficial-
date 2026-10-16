@@ -11,7 +11,7 @@
   "theme_color": "#0a0710",
   "icons": [
     {
-      "src": "./ruan-logo.svg",
+      "src": "./darkhub-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
