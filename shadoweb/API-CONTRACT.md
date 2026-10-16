@@ -56,6 +56,10 @@ As ações permitidas são definidas por conector. Um manifesto de plugin não p
 
 Manifestos importados começam inativos. Ativar um manifesto não executa código de plugin nesta fase.
 
+## Rascunho OpenAPI
+
+O contrato HTTP proposto está em [OPENAPI-PUBLIC-DRAFT.yaml](./OPENAPI-PUBLIC-DRAFT.yaml). É apenas especificação: não existe servidor público ativo e `api.example.invalid` é um placeholder reservado.
+
 ## Fronteira futura da API HTTP
 
 Rotas como `POST /api/v1/requests` e `GET /api/v1/connectors` são propostas de desenho, não endpoints disponíveis. Antes de ativá-las, implementar e testar:
