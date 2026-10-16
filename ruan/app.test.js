@@ -38,7 +38,7 @@ assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'
 assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
 assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(read('app.css').includes('body.ruan-launcher .top-actions{display:flex!important'), 'Ruan home must keep its notification bell visible');
-assert.ok(html.includes('app.css?v=20261016-final-2') && html.includes('app.js?v=20261016-final-2'), 'Ruan home must request refreshed assets');
+assert.ok(html.includes('app.css?v=20261016-final-3') && html.includes('app.js?v=20261016-final-3'), 'Ruan home must request refreshed assets');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
@@ -79,7 +79,7 @@ for (const page of appPagesWithoutDuplicateNav) {
 }
 assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back-button"') && browser.includes('class="back-button"'), 'Individual app pages must keep their return arrows');
 const serviceWorker = read('sw.js');
-assert.ok(serviceWorker.includes("const CACHE='ruan-central-v25'"));
+assert.ok(serviceWorker.includes("const CACHE='ruan-central-v26'"));
 assert.ok(serviceWorker.includes('caches.match(event.request,{ignoreSearch:true})'), 'Offline cache must serve versioned CSS/JS URLs from the core cache');
 assert.ok(read('apps/pessoal/app.js').includes('const localDateKey='), 'Pessoal dashboard must use local calendar dates for deadlines');
 assert.ok(read('apps/pessoal/financeiro.js').includes('const localDateKey='), 'Finance dates must use the device local calendar');
