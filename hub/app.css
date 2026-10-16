@@ -232,4 +232,4 @@
 .brand-home .header-logo img{display:block!important;width:28px!important;height:28px!important;min-width:28px!important;max-width:28px!important;min-height:28px!important;max-height:28px!important;object-fit:contain!important;filter:none!important}
 .header-actions{grid-column:3!important;display:flex!important;flex-direction:row-reverse!important;align-items:center!important;justify-self:end!important;gap:12px!important}
 
-.return-darkhub-button{display:grid;place-items:center;text-decoration:none;color:var(--purple-bright)}.return-darkhub-button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.return-darkhub-button:focus-visible{outline:2px solid var(--purple-bright);outline-offset:3px}
+.return-darkhub-button{display:grid;place-items:center;text-decoration:none;color:var(--purple-bright)}.return-darkhub-button svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.return-darkhub-button:focus-visible{outline:2px solid var(--purple-bright);outline-offset:3px}.page-back-row .return-darkhub-button{flex:0 0 38px;}
