@@ -15,7 +15,7 @@ assert.ok(!script.includes('document.querySelector(".world-action")?.addEventLis
 assert.ok(script.includes('./engine/darkhub-engine.js'), 'Hub must use the darkHub development engine');
 assert.ok(engine.includes('Hub central e área de desenvolvimento'), 'WordDark Hub must retain its development registry');
 assert.ok(manifest.includes('"name": "WordDark Hub"'), 'Installable app identity must remain WordDark Hub');
-assert.ok(sw.includes('worddark-hub-v14') && sw.includes('./engine/darkhub-engine.js'), 'Service worker must cache the unified Hub assets');
+assert.ok(sw.includes('worddark-hub-v15') && sw.includes('./engine/darkhub-engine.js'), 'Service worker must cache the unified Hub assets');
 assert.ok(hub.includes('./app.css?v=20261016.2') && hub.includes('./app.js?v=20261016.2'), 'Hub must load the current shared architecture assets');
 assert.ok(css.includes('.bottom-dock') && css.includes('.home-shortcuts'), 'Shared darkHub layout styles must be present');
-console.log('Unified darkHub / WordDark Hub tests passed.');
+console.log('Standalone WordDark Hub tests passed.');
