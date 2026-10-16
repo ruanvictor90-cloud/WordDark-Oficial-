@@ -155,3 +155,21 @@
 .page-back-button.icon-only-action{display:grid;place-items:center;width:38px;height:38px;min-height:38px;padding:0;border:1px solid #49315d;border-radius:13px;background:#171020;color:#d9c5f4}
 .page-back-button.icon-only-action svg{width:20px;height:20px}
 @media(max-width:370px){.home-shortcuts,.creation-options{gap:14px}.home-shortcut.icon-tile{flex-basis:82px;width:82px}.home-shortcut.icon-tile .shortcut-icon,.creation-option.icon-tile .creation-option-icon{width:60px;height:60px;flex-basis:60px;border-radius:18px}}
+
+
+/* Logo inicial: remover a camada clara/duplicada ao redor do símbolo */
+.hero-logo{
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+  overflow:visible;
+}
+.hero-logo img{
+  display:block;
+  width:108px!important;
+  height:108px!important;
+  object-fit:contain;
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal;
+}
