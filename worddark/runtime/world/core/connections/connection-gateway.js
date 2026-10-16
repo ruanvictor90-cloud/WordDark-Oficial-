@@ -7,7 +7,7 @@
  */
 const ExternalRequest=typeof module==="object"&&module.exports?require("./connection-contract"):null;
 
-const CAPABILITY_ALIASES=Object.freeze({CONTENT_PUBLISH:"CONTENT_ROUTE",MEDIA_UPLOAD:"MEDIA_UPLOAD"});
+const CAPABILITY_ALIASES=Object.freeze({});
 
 class ExternalConnectionGateway {
   constructor({registry=null,logger=null}={}) {
@@ -44,7 +44,7 @@ class ExternalConnectionGateway {
     const request=built.request;
     if(!this.registry)return{success:false,status:"CONNECTION_REGISTRY_UNAVAILABLE",operationId:request.operationId};
 
-    const registryCapability=CAPABILITY_ALIASES[request.capability]||request.capability;
+    const registryCapability=request.capability;
     const access=this.registry.authorizeContext(request.providerId,request.accountId,registryCapability);
     if(!access.allowed)return{success:false,status:access.status,stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,capability:registryCapability};
 
