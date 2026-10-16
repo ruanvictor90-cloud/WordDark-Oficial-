@@ -4,35 +4,47 @@ Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um
 
 ## Estrutura atual
 
-- `index.html`: Central de Operação.
-- `app.css` / `app.js`: identidade visual atual, widgets, notificações locais e gaveta de aplicativos.
-- `engine/central-engine.js`: adaptador compartilhado pelos widgets e módulos pessoais.
-- `engine/personal-core.js`: regras de dados, cálculos, busca, resumo diário, recorrência e backup.
-- `engine/personal-store.js`: armazenamento único para tarefas, compras, lembretes, finanças, metas, projetos, calendário, hábitos, notas e documentos; migra os registros legados de tarefas e financeiro sem descartar os dados existentes.
-- `apps/pessoal/`: app Pessoal com os módulos Financeiro e Tarefas.
-- `apps/shadow/`: app Shadow.
-- `apps/shadow/darkeye/`: protótipo de interface para o navegador DarkEye.
+- `index.html`: central do Ruan, com atalhos de aplicativos, widgets de saldo/tarefas e notificações locais.
+- `app.css` / `app.js`: identidade visual, atualização dos widgets, notificações e registro do service worker.
+- `engine/central-engine.js`: adaptador entre as telas e os dados pessoais.
+- `engine/personal-core.js`: regras de dados, cálculos, busca, resumos, recorrência e contrato de backup.
+- `engine/personal-store.js`: armazenamento pessoal local, migração das chaves antigas e validação de registros.
+- `apps/pessoal/`: área pessoal com Financeiro, Tarefas e Vida (organização, registros e backup).
+- `apps/shadow/`: aplicativo Shadow.
+- `apps/shadow/darkeye/`: protótipo de interface de navegação.
+- `apps/entretenimento/`: catálogo experimental de entretenimento.
+- `../hub/`: destino do atalho explícito para o Hub; o runtime do Hub não é importado pelo Ruan.
 
-## Fronteira estrutural\n\n- A Central Ruan é a única tela que possui a gaveta global de aplicativos.\n- Cada aplicativo mantém sua navegação interna própria, sem duplicar a gaveta global.\n- Rotas, scripts, estilos e ícones locais devem permanecer dentro de `ruan/`; o runtime não importa módulos de outros projetos.\n- A estrutura continua local ao dispositivo nesta fase, sem autenticação ou sincronização entre aparelhos.
-- A central resume o saldo registrado e a quantidade de tarefas em aberto a partir das chaves locais de compatibilidade. Os valores são informativos e não representam uma conexão bancária.\n\n## Motor central
+## Fronteira estrutural
+
+- A central do Ruan é o único lugar permitido para atalhos globais de aplicativos; telas internas não devem duplicar essa navegação.
+- Rotas, scripts e estilos internos devem permanecer dentro de `ruan/`, exceto o atalho explícito para `../hub/index.html`.
+- Os dados pessoais permanecem no armazenamento local deste navegador/dispositivo. Não existe sincronização entre aparelhos nesta versão.
+- O widget financeiro soma entradas e saídas registradas localmente. Não representa saldo bancário nem movimenta dinheiro real.
+- As notificações mostradas na central são lembretes locais derivados de registros do app; não são notificações garantidas em segundo plano.
+
+## Motor central
 
 O motor central oferece uma base de dados pessoal única para os módulos existentes e futuros. Os registros são locais no dispositivo, com histórico de alterações, resumos para widgets, busca local e exportação/importação de backup JSON. A migração mantém compatibilidade com as chaves antigas de tarefas e financeiro. Os dados não sincronizam entre aparelhos nesta versão; não há autenticação, conexão bancária nem notificações garantidas em segundo plano.
 
 ## Testes
 
+Execute a partir da raiz do repositório, com Node.js instalado:
+
 ```bash
-node ruan/engine/personal-core.test.js
-node ruan/engine/personal-store.test.js
-node ruan/engine/central-engine.test.js
-node ruan/apps/shadow/darkeye/darkeye-core.test.js
 node ruan/apps/pessoal/vida.test.js
 node ruan/engine/personal-core.test.js
 node ruan/engine/personal-store.test.js
+node ruan/engine/sovereign-core.test.js
+node ruan/engine/ruan-central.test.js
 node ruan/engine/central-engine.test.js
 node ruan/apps/shadow/darkeye/darkeye-core.test.js
 node ruan/app.test.js
 node ruan/structure-boundary.test.js
+node ruan/engine/darknet-client.test.js
 ```
+
+A workflow `.github/workflows/ruan-validation.yml` executa essa mesma bateria para a branch de finalização. O resultado deve ser conferido no GitHub Actions antes de considerar a validação concluída.
 
 ## Limites atuais
 
