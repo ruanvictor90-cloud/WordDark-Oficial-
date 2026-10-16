@@ -28,3 +28,13 @@ test("security boundaries are explicit and user records are rendered as text", (
   assert.match(app, /vault\.lock\(\)/);
   assert.match(html, /Nenhuma conexão externa está ativa/);
 });
+
+test("encrypted backup controls are present and connected to validated vault methods", () => {
+  assert.match(html, /id="export-backup"/);
+  assert.match(html, /id="restore-backup"/);
+  assert.match(html, /id="backup-file"/);
+  assert.match(app, /exportEncryptedBackup/);
+  assert.match(app, /restoreEncryptedBackup/);
+  assert.match(app, /substituirá os dados locais atuais/);
+  assert.match(core, /#openEnvelope/);
+});
