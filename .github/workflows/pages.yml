@@ -1,4 +1,5 @@
 name: Deploy offline root with isolated darkHub preview
+# Refresh preview artifact from the isolated darkHub development branch.
 on:
   push:
     branches: ["main", "feature/ruan-hub-home-20261016"]
