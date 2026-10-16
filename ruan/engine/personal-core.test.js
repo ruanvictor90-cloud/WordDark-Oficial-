@@ -22,6 +22,7 @@ assert.deepEqual(migrated.projects, []);
 assert.equal(validateState(migrated).valid, true);
 assert.equal(validateState({ transactions: [{ type: "expense", amount: -5, title: "x" }] }).valid, false);
 assert.equal(validateState({ bills: [{ title: "Conta", amount: -1, dueDate: "2026-10-01" }] }).valid, false);
+assert.equal(validateState({ bills: [{ title: "Conta", amount: 0, dueDate: "2026-10-01" }] }).valid, false);
 assert.equal(validateState({ bills: [{ title: "Conta", amount: 10, dueDate: "2026-02-30" }] }).valid, false);
 assert.equal(validateState({ schemaVersion: SCHEMA_VERSION + 1 }).valid, false);
 
