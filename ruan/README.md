@@ -1,10 +1,10 @@
 # Ruan — Central de Operação
 
-Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém saudação rotativa, quatro atalhos de aplicativos, dois widgets de resumo (saldo registrado e tarefas em aberto), notificações discretas e uma gaveta global de aplicativos acessível somente pela central. A gaveta global permanece fora desta versão da interface. **A Área ADM foi retirada da estrutura atual.**
+Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém saudação rotativa, quatro atalhos de aplicativos, dois widgets de resumo (saldo registrado e tarefas em aberto), notificações discretas e uma gaveta global de aplicativos acessível somente pela central. A gaveta global aparece somente na central; telas internas mantêm a navegação própria. **A Área ADM foi retirada da estrutura atual.**
 
 ## Estrutura atual
 
-- `index.html`: central do Ruan, com atalhos de aplicativos, widgets de saldo/tarefas e notificações locais.
+- `index.html`: central do Ruan, com saudação rotativa, atalhos, gaveta global, widgets de saldo/tarefas e notificações locais.
 - `app.css` / `app.js`: identidade visual, saudação rotativa, gaveta global da central, atualização dos widgets, notificações e registro do service worker.
 - `engine/central-engine.js`: adaptador entre as telas e os dados pessoais.
 - `engine/personal-core.js`: regras de dados, cálculos, busca, resumos, recorrência e contrato de backup.
