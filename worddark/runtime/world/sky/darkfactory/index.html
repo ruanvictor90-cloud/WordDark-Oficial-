@@ -212,7 +212,9 @@
   $("emergencyButton").addEventListener("click",()=> $("triggerStop").click());
   $("releaseStop").addEventListener("click",()=>{
     if(!activeOperationId){$("emergencyResult").textContent=JSON.stringify({success:false,reason:"NO_ACTIVE_OPERATION"},null,2);return;}
-    $("emergencyResult").textContent=JSON.stringify(emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Liberação manual da operação"}),null,2);
+    const result=emergencyStop.release(activeOperationId,{requesterId:"UI-DF",reason:"Solicitação de liberação manual pela interface"});
+    $("emergencyResult").textContent=JSON.stringify(result,null,2);
+    if(!result.success) $("runStatus").textContent="Parada mantida: liberação exige política de segurança e referência de aprovação verificáveis.";
   });
 })();
 </script>
