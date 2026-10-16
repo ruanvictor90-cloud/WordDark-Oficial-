@@ -125,3 +125,30 @@ O gateway tratava qualquer retorno diferente de `{success:false}`, inclusive `un
 - Testes de conta PENDING e retorno inválido: `8801f89f77949a20b423b2233e7cee2a9f846121`
 
 Essas correções reforçam a autorização local, mas não resolvem a ponte servidor-a-servidor OAuth descrita no WD-AUD-004 e não comprovam que chamadas externas reais estejam habilitadas.
+
+
+### Achado WD-AUD-007 — autoridade raiz padrão ainda apontava para Ruan (corrigido)
+
+Arquivos:
+- `worddark/runtime/world/security/authority-policy.js`
+- `worddark/runtime/world/security/security-core.test.js`
+
+O padrão do núcleo de segurança usava `ADM-RUAN` como autoridade raiz, misturando a identidade do app pessoal com a raiz de autoridade do WordDark. O padrão agora é `WORDDARK-ROOT`; o teste verifica que a autoridade raiz padrão não é a identidade Ruan. Testes que criam explicitamente uma política de autoridade com outra raiz continuam podendo fazê-lo para cenários isolados.
+
+**Status:** correção e teste registrados; execução pendente.
+
+Commit: `5a5d986e57d6818062716d7f63651160837d87bc`; teste: `bf39702caff069aab63987c649b63000343a621f`.
+
+### Achado WD-AUD-008 — liberação da parada de emergência não valida autoridade (bloqueador)
+
+Arquivo: `worddark/runtime/world/core/emergency-stop-manager.js`; chamada de UI identificada em `worddark/runtime/world/sky/darkfactory/index.html`.
+
+O método `release(operationId, {requesterId, reason})` libera uma parada apenas com o identificador da operação e não consulta uma política de autorização. A UI da Dark Factory o chama com `requesterId: "UI-DF"`, o que não demonstra aprovação de uma autoridade responsável. Isso enfraquece a parada global: um controle de interface pode solicitar a liberação sem prova de autorização.
+
+**Correção necessária:** a liberação deve exigir autorização explícita do serviço/política de segurança (fail-closed), registrar a referência da aprovação e não tratar o identificador informado pelo cliente como prova. Atualizar testes e UI para representar um pedido de liberação autorizado; sem serviço de autorização configurado, manter a parada ativa.
+
+**Status:** bloqueador aberto; não foi alterado ainda para evitar quebrar a UI sem antes conectar o contrato de autorização de forma coerente.
+
+### Evidência e limites atualizados
+
+O clone do repositório para executar os testes não foi possível neste ambiente por indisponibilidade de resolução de `github.com`. Portanto, nenhum teste novo da conexão ou da política de autoridade foi executado aqui; todos permanecem como pendentes de execução real. A suíte completa segue pendente.
