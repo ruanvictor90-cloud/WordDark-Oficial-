@@ -95,7 +95,7 @@
 
   <section class="view" id="view-knowledge" hidden>
     <div class="section-heading"><div><span class="eyebrow">MEMÓRIA LOCAL</span><h2>Biblioteca</h2></div><div class="inline-actions"><button class="small-button" id="export-knowledge" type="button">Exportar</button><button class="small-button" id="import-knowledge" type="button">Importar</button></div></div>
-    <form id="knowledge-form" class="knowledge-form"><input id="knowledge-title" maxlength="120" placeholder="Título da nota" aria-label="Título da nota" required><textarea id="knowledge-body" maxlength="5000" rows="3" placeholder="Anotações, links e informações que você quer guardar..." aria-label="Conteúdo da nota" required></textarea><button class="primary-button" type="submit">Salvar na biblioteca</button></form>
+    <input id="knowledge-search" class="knowledge-search" type="search" maxlength="180" placeholder="Pesquisar na sua biblioteca..." aria-label="Pesquisar na biblioteca local"><form id="knowledge-form" class="knowledge-form"><input id="knowledge-title" maxlength="120" placeholder="Título da nota" aria-label="Título da nota" required><textarea id="knowledge-body" maxlength="5000" rows="3" placeholder="Anotações, links e informações que você quer guardar..." aria-label="Conteúdo da nota" required></textarea><button class="primary-button" type="submit">Salvar na biblioteca</button></form>
     <input id="knowledge-file" type="file" accept="application/json,.json" hidden>
     <div class="list-stack" id="knowledge-list"></div><p class="empty-state" id="knowledge-empty">Sua biblioteca local está vazia.</p>
   </section>
