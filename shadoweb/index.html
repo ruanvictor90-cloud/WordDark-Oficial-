@@ -17,7 +17,7 @@
     <header class="topbar">
       <a class="brand" href="./index.html" aria-label="Shadoweb início">
         <span class="brand-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 20s5.5-10 15-10 15 10 15 10-5.5 10-15 10S5 20 5 20Z"/><circle cx="20" cy="20" r="5"/><path d="M20 15v10"/></svg></span>
-        <span class="brand-copy"><strong>SHADOWEB</strong><small>Navigate beyond the surface</small></span>
+        <span class="brand-copy"><strong>SHADOWEB</strong><small>Navegue além da superfície</small></span>
       </a>
       <button class="icon-button" id="open-eye" type="button" aria-label="Abrir darkEye" title="darkEye"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg><span class="status-dot"></span></button>
     </header>
@@ -57,6 +57,20 @@
         <button class="shortcut" data-url="https://wikipedia.org/" type="button"><span class="shortcut-symbol symbol-wiki">W</span><strong>Wikipedia</strong><small>Conhecimento aberto</small></button>
         <button class="shortcut" data-url="https://github.com/" type="button"><span class="shortcut-symbol symbol-code">⌘</span><strong>GitHub</strong><small>Projetos e código</small></button>
       </div>
+
+      <section class="world-summary" aria-labelledby="world-summary-title">
+        <div class="world-summary-copy">
+          <span class="eyebrow">SEU MUNDO CONECTADO</span>
+          <h2 id="world-summary-title">Tudo no seu espaço.</h2>
+          <p>Serviços, conectores e ferramentas organizados em um só lugar — com permissões sob seu controle.</p>
+          <button class="small-button" id="explore-world" type="button">Explorar mundo <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="world-summary-metrics">
+          <div><strong id="home-connector-count">0</strong><span>conectores ativos</span></div>
+          <div><strong id="home-plugin-count">0</strong><span>plugins registrados</span></div>
+          <div><strong id="home-note-count">0</strong><span>notas na biblioteca</span></div>
+        </div>
+      </section>
 
       <div class="section-heading second-heading"><div><span class="eyebrow">CAMADA CONTEXTUAL</span><h2>darkEye</h2></div><span class="status-pill"><i></i> Base inicial</span></div>
       <button class="eye-card" id="eye-card" type="button">
