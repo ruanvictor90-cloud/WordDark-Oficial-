@@ -1,0 +1,30 @@
+name: Ruan Isolated Core Tests
+on:
+  push:
+    branches:
+      - feature/ruan-independent-core-20261015
+  pull_request:
+    branches: [main, staging]
+    paths:
+      - 'ruan/**'
+      - '.github/workflows/ruan-isolated.yml'
+jobs:
+  ruan-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+      - name: Validate notification destinations
+        run: node ruan/engine/notifications.test.js
+      - name: Test personal data engine
+        run: node ruan/engine/central-engine.test.js
+      - name: Test Ruan sovereignty boundary
+        run: node ruan/engine/ruan-central.test.js
+      - name: Test DarkEye core
+        run: node ruan/apps/shadow/darkeye/darkeye-core.test.js
+      - name: Test app structure and references
+        run: node ruan/app.test.js && node ruan/structure-boundary.test.js
+      - name: Syntax-check Ruan JavaScript
+        run: find ruan -name '*.js' -type f -print0 | xargs -0 -n1 node --check
