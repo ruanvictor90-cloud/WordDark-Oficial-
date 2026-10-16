@@ -9,7 +9,7 @@ Este aplicativo é a interface do mundo WordDark. Ele permanece separado do dark
 
 ## Limites
 - O WordDark administra apenas suas próprias operações e os escopos autorizados.
-- darkHub não se torna um setor interno do mundo WordDark.
+- darkHub não é um setor interno do mundo WordDark.
 - Nenhuma transferência financeira entre aplicativos é presumida.
 - Conexões futuras exigem contrato autenticado, autorização por escopo e revogação.
 - Valores fiscais e financeiros exibidos são estimativas quando indicado pela interface; não substituem apuração contábil ou fiscal.
