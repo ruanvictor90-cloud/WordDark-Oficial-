@@ -5,7 +5,12 @@ const menuButton=$("menu-open"),sideDrawer=$("side-drawer"),sideScrim=$("side-sc
 const searchForm=$("hub-search"),searchInput=$("hub-search-input"),searchFeedback=$("search-feedback");
 const greeting=$("greeting"),homeWidgets=$("home-widgets");
 const homeView=$("home-view"),subpageView=$("subpage-view"),backRow=$("page-back-row"),subpageTitle=$("subpage-title"),subpageDescription=$("subpage-description"),creationOptions=$("creation-options"),subpageEmpty=$("subpage-empty"),emptyTitle=$("subpage-empty-title"),emptyText=$("subpage-empty-text");
-function showView(view){
+let currentView="home";const viewHistory=["home"];
+function showView(view,goBack=false){
+ if(view===currentView)return;
+ if(goBack){if(viewHistory.length>1)viewHistory.pop();view=viewHistory[viewHistory.length-1]||"home";}
+ else{viewHistory.push(view);}
+ currentView=view;
  const isHome=view==="home";homeView.hidden=!isHome;subpageView.hidden=isHome;backRow.hidden=isHome;
  if(isHome){subpageTitle.textContent="";setSideMenu(false);window.scrollTo({top:0,behavior:"smooth"});return;}
  creationOptions.hidden=!(view==="creation");subpageEmpty.hidden=view==="creation";
@@ -20,7 +25,7 @@ $("shortcut-creation").addEventListener("click",()=>showView("creation"));
 $("shortcut-panel").addEventListener("click",()=>showView("panel"));
 $("shortcut-development").addEventListener("click",()=>showView("development"));
 $("shortcut-finalization").addEventListener("click",()=>showView("finalization"));
-$("page-back").addEventListener("click",()=>showView("home"));
+$("page-back").addEventListener("click",()=>showView(currentView,true));
 function updateGreeting(){const hour=new Date().getHours();const salutation=hour>=5&&hour<12?"Bom dia":hour>=12&&hour<18?"Boa tarde":"Boa noite";greeting.textContent=`${salutation}, que bom ter vc por aqui`}
 updateGreeting();
 
