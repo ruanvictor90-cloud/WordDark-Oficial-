@@ -7,8 +7,9 @@ import { Knowledge } from "./knowledge.js";
 export function createShadowebRuntime(storage = localStorage) {
   const audit = new AuditLog(storage), gate = new Gate(storage);
   const connectors = builtInConnectors.map(item => ({...item}));
-  const bridge = new Bridge({ connectors, handlers:connectorHandlers, gate, audit });
   const plugins = new PluginManager({ storage, audit });
   const knowledge = new Knowledge({ storage, audit });
+  const handlers = { ...connectorHandlers, "local-knowledge": async input => connectorHandlers["local-knowledge"]({ ...input, notes: knowledge.list() }) };
+  const bridge = new Bridge({ connectors, handlers, gate, audit });
   return { audit, gate, connectors, bridge, plugins, knowledge };
 }
