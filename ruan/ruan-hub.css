@@ -13,3 +13,10 @@
 .welcome h1{margin:0 0 0;font-size:clamp(34px,8vw,46px)}
 .hub-search{margin-top:26px}
 @media(max-height:650px){.welcome{padding-top:38px;min-height:calc(100dvh - 160px)}}
+
+/* Ajuste da saudação: mais alta e em uma frase contínua */
+.welcome{padding-top:clamp(20px,4vh,42px)}
+.welcome h1{max-width:100%;margin:0;font-size:clamp(21px,5.6vw,31px);line-height:1.25;letter-spacing:-.55px}
+.welcome h1 #greeting{color:var(--text)}
+.hub-search{margin-top:20px}
+@media(max-height:650px){.welcome{padding-top:18px}}
