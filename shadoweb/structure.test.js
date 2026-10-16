@@ -14,7 +14,7 @@ test("Shadoweb source is ecosystem-named and has no old personal app labels",()=
   assert.doesNotMatch(app,/\.\.\/ruan\//i);
 });
 test("browser blocks dangerous schemes and source avoids unsafe HTML execution",()=>{
-  assert.match(app,/javascript\|data\|file\|intent\|blob/);
+  assert.match(address,/javascript\|data\|file\|intent\|blob/);
   assert.doesNotMatch(app,/\.innerHTML\s*=|\beval\s*\(|new Function\s*\(/);
   assert.match(html,/Content-Security-Policy/);
   assert.match(sw,/cache\.addAll/);
