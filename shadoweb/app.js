@@ -156,7 +156,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   $("knowledge-search")?.addEventListener("input",e=>renderKnowledge(e.target.value));
   $("export-knowledge").addEventListener("click",()=>download("shadoweb-knowledge.json",JSON.stringify(runtime.knowledge.export(),null,2)));
   $("import-knowledge").addEventListener("click",()=>$("knowledge-file").click());
-  $("knowledge-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const count=runtime.knowledge.import(JSON.parse(await file.text()));renderKnowledge();notify(count+" notas importadas.");}catch(err){notify(err.message);}finally{e.target.value="";}});
+  $("knowledge-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const count=runtime.knowledge.import(JSON.parse(await file.text()));renderKnowledge();renderHomeSummary();notify(count+" notas importadas.");}catch(err){notify(err.message);}finally{e.target.value="";}});
   $("import-plugin").addEventListener("click",()=>$("plugin-file").click());
   $("plugin-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>50000){notify("Manifesto excede 50 KB.");e.target.value="";return;}try{runtime.plugins.importManifest(JSON.parse(await file.text()));renderPlugins();renderAudit();renderHomeSummary();notify("Manifesto importado. Código executável não foi carregado.");}catch(err){notify(err.message);}finally{e.target.value="";}});
   $("download-plugin-template").addEventListener("click",()=>download("shadoweb-plugin-template.json",JSON.stringify(runtime.plugins.exportTemplate(),null,2)));
