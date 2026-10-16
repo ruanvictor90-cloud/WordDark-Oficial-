@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0710">
-  <meta name="description" content="WordDark Hub — estrutura inicial de navegação do ecossistema WordDark.">
-  <link rel="icon" href="./app-icon.svg?v=20261016.1" type="image/svg+xml">
+  <meta name="description" content="darkHub — Hub central de desenvolvimento do ecossistema WordDark.">
+  <link rel="icon" href="./app-icon.svg?v=20261016.2" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./app.css?v=20261016.1">
-  <title>WordDark Hub</title>
+  <link rel="stylesheet" href="./app.css?v=20261016.2">
+  <title>darkHub — Hub central</title>
 </head>
 <body>
   <main class="app-shell">
@@ -16,7 +16,7 @@
       <button id="menu-open" class="icon-button menu-button" type="button" aria-label="Abrir menu lateral" aria-expanded="false" aria-controls="side-drawer">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
-      <a class="brand-home" href="./index.html" aria-label="WordDark Hub, início">
+      <a class="brand-home" href="./index.html" aria-label="darkHub, início">
         <span class="hero-logo header-logo"><img src="./app-icon.svg?v=20261016.1" alt="WordDark Hub" width="52" height="52"></span>
       </a>
       <div class="header-actions">
@@ -34,7 +34,7 @@
     <section class="welcome" aria-labelledby="welcome-title">
       <div class="ambient ambient-a" aria-hidden="true"></div>
       <div class="ambient ambient-b" aria-hidden="true"></div>
-      <h1 id="welcome-title"><span id="greeting">Bem-vindo ao WordDark Hub</span></h1>
+      <h1 id="welcome-title"><span id="greeting">Bom dia, que bom ter vc por aqui</span></h1>
       <form id="hub-search" class="hub-search" role="search">
         <label class="visually-hidden" for="hub-search-input">Buscar aplicativo ou destino</label>
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
@@ -42,29 +42,60 @@
         <button type="submit" aria-label="Buscar">↗</button>
       </form>
       <p id="search-feedback" class="search-feedback" role="status" aria-live="polite" hidden></p>
-      <div class="home-shortcuts" aria-label="Áreas do WordDark Hub">
-        <a class="home-shortcut icon-tile" id="shortcut-central" href="./central.html" aria-label="Abrir Central"><span class="shortcut-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span><strong>Central</strong></a>
-        <a class="home-shortcut icon-tile" id="shortcut-teste" href="../worddark/app/index.html?area=test&fromHub=1" aria-label="Abrir Teste"><span class="shortcut-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6 56 18v28L32 58 8 46V18Z"/><path d="M20 32h24M32 20v24"/><circle cx="32" cy="32" r="13"/></svg></span><strong>Teste</strong></a>
+      <div class="home-shortcuts" aria-label="Áreas do darkHub">
+        <button class="home-shortcut icon-tile" id="shortcut-creation" type="button" aria-label="Criação"><span class="shortcut-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/><rect x="3" y="3" width="18" height="18" rx="5"/></svg></span><strong>Criação</strong></button>
+        <button class="home-shortcut icon-tile" id="shortcut-panel" type="button" aria-label="Painel"><span class="shortcut-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="8" height="7" rx="2"/></svg></span><strong>Painel</strong></button>
       </div>
     </section>
 
     <section id="home-widgets" class="home-widgets" aria-label="Widgets da tela inicial"></section>
 
     <footer class="app-footer">
-      <span>WORDDARK HUB</span>
-      <span>Portão de entrada do mundo.</span>
+      <span>DARKHUB</span>
+      <span>Hub central de desenvolvimento.</span>
     </footer>
     </section>
 
+    <section id="subpage-view" class="subpage-view" hidden aria-live="polite">
+      <div class="subpage-heading"><p class="eyebrow">DARKHUB</p><h1 id="subpage-title">Criação</h1><p id="subpage-description">Escolha por onde deseja continuar.</p></div>
+      <div id="creation-options" class="creation-options">
+        <button class="creation-option icon-tile" id="shortcut-development" type="button" aria-label="Desenvolvimento"><span class="creation-option-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></span><strong>Desenvolvimento</strong></button>
+        <button class="creation-option icon-tile" id="shortcut-finalization" type="button" aria-label="Finalização"><span class="creation-option-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><strong>Finalização</strong></button>
+      </div>
+      <section id="development-workspace" class="development-workspace" hidden aria-labelledby="development-projects-title">
+        <div class="development-toolbar">
+          <div><h2 id="development-projects-title">Projetos</h2><p>Abra cada criação pela logo do próprio projeto.</p></div>
+          <div class="development-tools">
+            <button id="projects-export" class="project-tool-button" type="button">Exportar</button>
+            <button id="projects-import-trigger" class="project-tool-button" type="button">Importar</button>
+            <input id="projects-import-file" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+        <p id="project-feedback" class="project-feedback" role="status" aria-live="polite" hidden></p>
+        <div id="project-grid" class="project-grid" aria-live="polite"></div>
+        <details class="project-create">
+          <summary>Registrar uma criação</summary>
+          <form id="project-create-form" class="project-form">
+            <label>Nome do projeto<input name="name" maxlength="180" required placeholder="Nome do projeto"></label>
+            <label>Endereço para abrir<input name="href" required placeholder="./caminho/ ou https://..." autocomplete="url"></label>
+            <label>Endereço da logo<input name="logo" placeholder="./logo.svg ou https://..." autocomplete="url"></label>
+            <label>Descrição<input name="description" maxlength="500" placeholder="O que é este projeto"></label>
+            <label>Status<select name="status"><option>Planejado</option><option selected>Em desenvolvimento</option><option>Em revisão</option><option>Em finalização</option><option>Integrado</option><option>Pausado</option></select></label>
+            <button type="submit" class="project-submit">Registrar projeto</button>
+          </form>
+        </details>
+      </section>
+      <div id="subpage-empty" class="subpage-empty" hidden><span class="subpage-empty-mark">◈</span><strong id="subpage-empty-title">Área preparada</strong><p id="subpage-empty-text">A estrutura está pronta. O conteúdo será desenvolvido quando iniciarmos esta etapa.</p></div>
+    </section>
   </main>
 
-  <nav class="bottom-dock" aria-label="Navegação do WordDark Hub">
+  <nav class="bottom-dock" aria-label="Navegação do darkHub">
     <button id="apps-open" class="dock-action apps-action" type="button" aria-expanded="false" aria-controls="apps-drawer">
       <span class="dock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span>
       <span>Apps</span>
       <span class="dock-chevron" aria-hidden="true">⌃</span>
     </button>
-    <a class="dock-action world-action" href="../worddark/app/index.html" aria-label="Abrir WordDark">
+    <a class="dock-action world-action is-unlinked" href="#official-worddark" aria-label="WordDark oficial — integração ainda não ativada" aria-disabled="true">
       <span class="world-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
       <span>WordDark</span>
       <span class="dock-arrow" aria-hidden="true">↗</span>
@@ -74,13 +105,13 @@
   <section id="apps-drawer" class="drawer" aria-labelledby="drawer-title" aria-hidden="true" hidden>
     <div class="drawer-grabber" aria-hidden="true"></div>
     <div class="drawer-heading">
-      <div><p class="eyebrow">SEU ESPAÇO</p><h2 id="drawer-title">Aplicativos do Hub</h2></div>
+      <div><p class="eyebrow">SEU ESPAÇO</p><h2 id="drawer-title">Seus aplicativos</h2></div>
       <button id="apps-close" class="icon-button close-button" type="button" aria-label="Fechar gaveta">×</button>
     </div>
     <div class="empty-apps">
       <span class="empty-apps-mark" aria-hidden="true">+</span>
-      <h3>Nenhum aplicativo adicionado</h3>
-      <p>A gaveta está pronta para receber os aplicativos deste Hub.</p>
+      <h3>Nenhum aplicativo ainda</h3>
+      <p>Este espaço está limpo. Os aplicativos serão adicionados aqui quando forem criados.</p>
     </div>
   </section>
   <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="Fechar gaveta de aplicativos" hidden tabindex="-1"></button>
@@ -90,7 +121,7 @@
     <div class="side-drawer-top">
       <div class="side-brand">
         <span class="side-brand-mark">dH</span>
-        <div><p class="eyebrow">WORDDARK HUB</p><h2 id="side-drawer-title">Menu principal</h2></div>
+        <div><p class="eyebrow">DARKHUB</p><h2 id="side-drawer-title">Menu principal</h2></div>
       </div>
       <button id="menu-close" class="icon-button close-button" type="button" aria-label="Fechar menu lateral">×</button>
     </div>
@@ -105,7 +136,7 @@
     </button>
     <section id="widget-category" class="widget-category" aria-labelledby="widget-category-title" hidden>
       <div class="widget-category-heading"><h3 id="widget-category-title">Widgets</h3><p>Os widgets dos aplicativos aparecerão aqui quando os aplicativos existirem.</p></div>
-      <div class="widget-category-empty"><span class="widget-category-empty-icon">▦</span><strong>Nenhum widget disponível</strong><p>Por enquanto, o WordDark Hub ainda não tem aplicativos instalados. Quando criarmos um app com widgets, você poderá escolher o cartão, o tamanho e adicioná-lo à página inicial.</p></div>
+      <div class="widget-category-empty"><span class="widget-category-empty-icon">▦</span><strong>Nenhum widget disponível</strong><p>Por enquanto, o darkHub ainda não tem aplicativos instalados. Quando criarmos um app com widgets, você poderá escolher o cartão, o tamanho e adicioná-lo à página inicial.</p></div>
     </section>
   </aside>
 
@@ -113,6 +144,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script src="./app.js?v=20261016.1" defer></script>
+  <script type="module" src="./app.js?v=20261016.2"></script>
 </body>
 </html>
