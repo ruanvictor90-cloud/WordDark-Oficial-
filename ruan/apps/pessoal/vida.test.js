@@ -17,7 +17,7 @@ assert.ok(launcher.includes('href="./vida.html"'), "O launcher Pessoal deve abri
 assert.ok(sw.includes("'./apps/pessoal/vida.html'"), "Service worker deve armazenar Vida HTML.");
 assert.ok(sw.includes("'./apps/pessoal/vida.js'"), "Service worker deve armazenar Vida JS.");
 assert.ok(sw.includes("'./apps/pessoal/vida.css'"), "Service worker deve armazenar Vida CSS.");
-assert.ok(sw.includes("ruan-central-v23"), "O cache precisa mudar para publicar os novos arquivos.");
+assert.ok(sw.includes("ruan-central-v24"), "O cache precisa mudar para publicar os novos arquivos.");
 assert.ok(html.includes('data-filter="documents"'), "Vida deve permitir filtrar documentos.");
 assert.ok(html.includes('data-filter="wellbeingLogs"'), "Vida deve permitir filtrar registros de bem-estar.");
 assert.ok(script.includes('$("life-search").addEventListener("input",render)'), "A busca deve atualizar a lista enquanto o usuário digita.");
