@@ -23,7 +23,9 @@ Finalizar o Ruan como central pessoal privada, independente do runtime WordDark,
 - O CSS contém blocos de estilos históricos e múltiplas declarações de identidade. A revisão visual deve consolidar sem reescrever módulos que já funcionam.
 - A estrutura é local ao dispositivo: não existe sincronização entre aparelhos nem autenticação nesta versão.
 - Nesta branch, a central recebeu os dois widgets, a versão de assets foi atualizada e o cache do service worker passou para v24, com correspondência de cache ignorando parâmetros de versão para que CSS/JS continuem disponíveis offline. Os formulários de Financeiro e Tarefas passaram a usar a data local do dispositivo para evitar divergência de dia por UTC, e os links de notificação foram corrigidos. A documentação e as asserções foram atualizadas.
-- A suíte completa ainda não foi executada: o ambiente atual não conseguiu clonar o repositório para rodar Node localmente. Os testes continuam pendentes de execução em ambiente com o repositório disponível.
+- Foi corrigida uma asserção de teste antiga em `vida.test.js` que ainda esperava o cache v23, embora o service worker já estivesse em v24.
+- Foi adicionada uma workflow isolada em `.github/workflows/ruan-validation.yml` para executar os testes de Ruan no GitHub Actions, sem mesclar a branch nem alterar o código principal. O resultado da execução remota ainda precisa ser confirmado.
+- A suíte ainda não tem resultado de execução confirmado. O ambiente local não conseguiu clonar o repositório para rodar Node, então foi adicionada uma workflow isolada de validação no GitHub Actions; a entrega deve registrar o resultado remoto assim que estiver disponível.
 
 ## Plano de trabalho
 1. **Congelar a especificação:** resolver divergências entre README, HTML, CSS e testes antes de decidir a forma final da central.
