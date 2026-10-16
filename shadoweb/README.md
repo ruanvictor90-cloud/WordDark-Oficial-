@@ -1,49 +1,61 @@
-# Shadoweb — Mundo Conectado
+# Shadoweb — navegador e mundo conectado
 
-Shadoweb é um aplicativo convencional de navegação e acesso a serviços, personalizável por perfil. A primeira versão é local-first e foi feita para uso pessoal antes de ser preparada para outros usuários.
+Shadoweb é um aplicativo independente e personalizável. Combina uma experiência convencional de navegação com uma camada organizada para descobrir e conectar aplicativos, serviços e ferramentas. A primeira versão prioriza uso local e controle do usuário; a arquitetura prevê crescimento para múltiplos perfis e integrações externas.
 
-## Módulos
+## Vocabulário oficial
 
-- **Browser / Address:** pesquisa web, abertura de endereços HTTPS, favoritos, histórico, atalhos locais e bloqueio de esquemas perigosos e destinos locais/privados.
-- **World:** catálogo inicial de serviços e sistemas do ecossistema, com estados reais de conexão.
-- **Connect:** registro dos conectores disponíveis e controles para ativar/desativar.
-- **Gate:** permissões explícitas por conector e escopo.
-- **Bridge / API Gateway:** contrato versionado, validação de entrada, execução apenas de conectores registrados, timeout e retorno padronizado.
-- **Plugin Manager:** importa manifestos declarativos e valida permissões; não executa JavaScript arbitrário.
-- **Knowledge:** biblioteca pessoal de notas, pesquisa, importação e exportação local.
-- **darkEye:** painel contextual inicial demonstrativo; ainda não lê automaticamente outras páginas nem se sobrepõe a outros apps.
-- **Audit:** trilha local de requisições, permissões e alterações.
+- **Shadoweb:** aplicativo e ambiente de navegação.
+- **Mundo conectado (World):** catálogo de aplicativos e serviços, mostrando estados reais de integração.
+- **Conector (Connect):** adaptador registrado que executa uma capacidade específica.
+- **Gate:** autorização por conector, usuário e escopo.
+- **Bridge:** porta de comunicação que valida pedidos e encaminha apenas ações permitidas.
+- **Plugin Manager:** catálogo e gestão de extensões declarativas.
+- **Knowledge:** biblioteca pessoal local.
+- **darkEye:** camada contextual da Shadoweb, com recursos que serão ampliados conforme as capacidades da plataforma.
+- **Audit:** registro de eventos e decisões de segurança.
 
-## Conectores desta fase
+Os nomes dos módulos são estáveis na arquitetura. A interface voltada ao usuário deve usar português claro, reservando os nomes técnicos para contextos de configuração e desenvolvimento.
 
-- Pesquisa web: abre um mecanismo selecionado pelo usuário.
-- Wikipedia: busca pública sem chave de API; começa desativada e exige ativação e permissão.
-- Biblioteca local: pesquisa notas do dispositivo.
+## Recursos disponíveis nesta versão
 
-Conexões a darkHub e WordDark aparecem como pendentes até existirem endpoints reais com autenticação, autorização e contratos verificados. Não há tokens ou segredos no frontend.
+- Pesquisa web por mecanismo escolhido e abertura de endereços HTTPS.
+- Favoritos, histórico, atalhos e perfis de apresentação guardados localmente.
+- Catálogo inicial de sistemas e conectores.
+- Permissões por escopo, validação de requisições, lista de ações permitidas, timeout e auditoria local.
+- Pesquisa na biblioteca local e importação/exportação de notas.
+- Importação de manifestos de plugins em formato declarativo.
+- Aplicação web instalável (PWA), shell offline e configuração para gerar APK Android de depuração.
 
-## Segurança e limitações
+## Conectores e integração
 
-- Endereços aceitos para navegação são HTTPS; esquemas como `javascript:`, `data:` e `file:` são recusados.
-- A API interna não aceita endpoints arbitrários vindos de plugins. Plugins são metadados, não código executável.
-- Os dados ficam no armazenamento local do navegador/app e não são sincronizados.
-- A auditoria local pode ser apagada ou alterada por quem controla o dispositivo; não é log remoto imutável.
-- Esta aplicação web não substitui o motor de navegador do Android/Chrome, não gerencia cookies de sites externos e não pode sobrepor outros apps por si só.
-- A CSP permite apenas scripts e estilos locais e a chamada à API pública da Wikipedia.
-- O service worker armazena o shell local; pesquisas externas exigem internet.
+- **Pesquisa web:** abre o mecanismo selecionado pelo usuário.
+- **Wikipedia:** pesquisa pública de leitura; começa desativada e exige ativação e permissão.
+- **Biblioteca local:** pesquisa notas guardadas no dispositivo.
+- **darkHub, WordDark, Céu e Terra:** aparecem como integrações planejadas/pendentes até haver endpoints reais, autenticados e testados. A presença no catálogo não significa conexão ativa.
 
-## Contratos de integração
+## Limites importantes
 
-- [Contrato da API](./API-CONTRACT.md) e [manifesto de plugin](./plugin-manifest.schema.json).
-- [Baseline de segurança](./SECURITY-BASELINE.md).
-- A especificação HTTP é uma preparação versionada; não existe endpoint público ativo nesta fase.
+- A navegação desta versão entrega páginas HTTPS ao navegador do sistema; ainda não é um motor de navegador completo embutido.
+- Os dados ficam no dispositivo e não são sincronizados entre aparelhos.
+- O armazenamento local não é um cofre seguro e a auditoria local pode ser alterada por quem controla o dispositivo.
+- darkEye ainda é demonstrativo: não lê automaticamente páginas externas nem se sobrepõe a outros aplicativos.
+- Plugins importados são manifestos, não código executável.
+- A ponte de API funciona dentro do aplicativo; **não existe servidor HTTP público ativo** nesta versão.
+- APK de depuração não é uma versão de produção assinada.
 
-## Executar localmente
+## Contratos e segurança
 
-Como há módulos ES e service worker, abra a pasta por um servidor HTTP local (não `file://`). Para a validação automatizada:
+- [Arquitetura](./ARCHITECTURE.md)
+- [Contrato da API e dos conectores](./API-CONTRACT.md)
+- [Esquema de manifesto de plugin](./plugin-manifest.schema.json)
+- [Base de segurança](./SECURITY-BASELINE.md)
+
+## Validação local
+
+Abra a pasta por um servidor HTTP local (não diretamente por `file://`). Para executar os testes:
 
 ```sh
 node --test shadoweb/app.test.js shadoweb/structure.test.js
 ```
 
-O workflow de validação é independente e não publica a aplicação. A criação de APK de teste será validada separadamente.
+Os workflows desta branch validam o código e produzem um APK de depuração; não publicam nem integram automaticamente a Shadoweb ao aplicativo principal.
