@@ -1,11 +1,20 @@
-# WordDark — fronteiras de acesso da versão atual
+# WordDark — fronteiras de acesso e responsabilidade
 
-Ruan é um aplicativo pessoal privado e independente. Ele fica fora do mundo WordDark e não aparece como setor, página administrativa ou carteira dentro do WordDark.
+## Camadas
+- **darkHub:** análise, governança de projetos e criação de bases independentes de aplicativos.
+- **WordDark Hub:** interface de entrada própria do mundo operacional.
+- **WordDark:** coordenação das operações do mundo.
+- **Céu:** execução e produção.
+- **Terra:** entidades, solicitações e necessidades que alimentam operações.
 
-O WordDark coordena suas próprias operações e não administra a raiz pessoal de Ruan. Nenhuma integração ou transferência para Ruan faz parte da versão atual.
+## Fronteiras
+- Cada aplicativo mantém código, dados, permissões e versões próprios.
+- darkHub pode registrar uma especificação e exportar arquivos iniciais; não assume que o app foi testado, publicado ou conectado.
+- WordDark Hub não importa o motor interno do darkHub.
+- Nenhum app pode conceder autoridade a si próprio ou aprovar a própria operação sensível.
+- Integrações exigem contratos explícitos, autenticação, autorização por escopo, revogação e validação no servidor.
+- GitHub Pages é uma camada pública de interface, nunca um cofre de credenciais.
+- TEST não aciona conectores reais; produção exige autorização e controles externos.
 
-Áreas conceituais do mundo: **WordDark → Céu / Terra → setores e operações**.
-
-Reservado para etapas futuras: perfis DEV e Público e seus controles de acesso. A interface não concede autoridade.
-
-Regras: o Core ativo é `worddark/runtime/world/core/`; o legado `worddark/core-central/` permanece arquivado e fora da suíte padrão; novos módulos devem ser independentes; testes não executam conectores reais; secrets não ficam no GitHub Pages.
+## Runtime canônico
+O Core ativo do WordDark é `worddark/runtime/world/core/`. O legado permanece fora do fluxo ativo até ser revisado e autorizado.
