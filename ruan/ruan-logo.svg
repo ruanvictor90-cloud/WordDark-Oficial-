@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6b8ff"/><stop offset="1" stop-color="#8c55d9"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="darkHub">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2ccff"/><stop offset="1" stop-color="#9255df"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
 <rect x="5" y="5" width="118" height="118" rx="34" fill="#100b18" stroke="#583a76" stroke-width="2"/>
-<path d="M34 96V31h36c20 0 31 9 31 26 0 12-7 20-18 24l20 15H77L58 81h-3v15Zm21-30h13c8 0 12-3 12-9s-4-9-12-9H55Z" fill="url(#g)" filter="url(#glow)"/>
-<circle cx="100" cy="24" r="4" fill="#d8b8ff"/>
+<path d="M18 64a46 46 0 1 0 92 0a46 46 0 1 0-92 0" fill="none" stroke="#583a76" stroke-width="1.5"/>
+<text x="64" y="79" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="45" font-weight="700" letter-spacing="-4" fill="url(#g)" filter="url(#glow)">dH</text>
+<circle cx="101" cy="25" r="4" fill="#d8b8ff"/>
 </svg>
