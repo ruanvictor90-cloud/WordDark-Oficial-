@@ -5,9 +5,11 @@ export const RUAN_STORAGE_KEYS = Object.freeze({
 
 const safeArray = (value) => Array.isArray(value) ? value : [];
 const validDateOnly = (value) => {
-  if (typeof value !== 'string' || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
-  const parsed = new Date(value + 'T00:00:00.000Z');
-  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+  if (typeof value !== 'string' || value.length !== 10 || value[4] !== '-' || value[7] !== '-') return false;
+  const [year, month, day] = value.split('-').map(Number);
+  if (![year, month, day].every(Number.isInteger) || year < 1 || month < 1 || month > 12 || day < 1) return false;
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  return parsed.getUTCFullYear() === year && parsed.getUTCMonth() === month - 1 && parsed.getUTCDate() === day;
 };
 const cents = (value) => Math.round(Number(value || 0) * 100);
 const positiveAmount = (value) => {
@@ -50,7 +52,7 @@ export function createRuanEngine({
       dueDate: input?.dueDate || '',
       done: false, createdAt: now(), updatedAt: now()
     };
-    if (task.dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(task.dueDate)) throw new TypeError('Data da tarefa inválida.');
+    if (task.dueDate && !validDateOnly(task.dueDate)) throw new TypeError('Data da tarefa inválida.');
     write(RUAN_STORAGE_KEYS.tasks, [task, ...allTasks()]);
     return task;
   }
@@ -64,8 +66,9 @@ export function createRuanEngine({
       if (patch.title !== undefined) next.title = cleanText(patch.title, 'Título da tarefa');
       if (patch.details !== undefined) next.details = String(patch.details).trim();
       if (patch.dueDate !== undefined) {
-        if (patch.dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(patch.dueDate)) throw new TypeError('Data da tarefa inválida.');
-        next.dueDate = patch.dueDate;
+        const dueDate = patch.dueDate || '';
+        if (dueDate && !validDateOnly(dueDate)) throw new TypeError('Data da tarefa inválida.');
+        next.dueDate = dueDate;
       }
       return next;
     });
@@ -92,8 +95,8 @@ export function createRuanEngine({
       notes: typeof input?.notes === 'string' ? input.notes.trim() : '',
       createdAt: now(), updatedAt: now()
     };
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date)) throw new TypeError('Data do lançamento inválida.');
-    if (entry.dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(entry.dueDate)) throw new TypeError('Vencimento inválido.');
+    if (!validDateOnly(entry.date)) throw new TypeError('Data do lançamento inválida.');
+    if (entry.dueDate && !validDateOnly(entry.dueDate)) throw new TypeError('Vencimento inválido.');
     if (type === 'bill' && !entry.dueDate) throw new TypeError('Conta a pagar precisa de vencimento.');
     write(RUAN_STORAGE_KEYS.finance, [entry, ...allFinance()]);
     return entry;
