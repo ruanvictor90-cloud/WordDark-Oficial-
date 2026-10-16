@@ -80,7 +80,7 @@ test("plugin manager imports inactive manifests and never evaluates code",()=>{
   const storage=new MemoryStorage(), audit=new AuditLog(storage), manager=new PluginManager({storage,audit});
   const plugin=manager.importManifest({schemaVersion:"1.0.0",id:"wiki-helper",name:"Wiki Helper",version:"1.0",description:"Somente metadados.",connectorId:"wikipedia",permissions:["connector.read"]});
   assert.equal(plugin.enabled,false);
-  assert.throws(()=>manager.importManifest({id:"wiki-helper",name:"Duplicado",version:"1",description:"Duplicado",connectorId:"wikipedia",permissions:[]}),/Já existe/);
+  assert.throws(()=>manager.importManifest({schemaVersion:"1.0.0",id:"wiki-helper",name:"Duplicado",version:"1",description:"Duplicado",connectorId:"wikipedia",permissions:[]}),/Já existe/);
   assert.equal(manager.setEnabled("wiki-helper",true).enabled,true);
   assert.ok(audit.list().some(row=>row.event==="plugin.imported"));
 });
