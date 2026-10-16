@@ -1,67 +1,88 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#09070f">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="stylesheet" href="./app.css?v=20261016-ruan-hub">
-<link rel="stylesheet" href="./home-hub.css?v=20261016-ruan-hub">
-<title>Ruan — Hub pessoal</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0710">
+  <meta name="description" content="Ruan — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
+  <link rel="icon" href="./ruan-logo.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.2">
+  <title>Ruan — Hub pessoal</title>
 </head>
-<body class="ruan-launcher ruan-hub-home">
-<main class="shell">
-  <header class="topbar">
-    <a class="brand brand-centered" href="./index.html" aria-label="Ruan — início">
-      <img class="ruan-logo-image" src="./ruan-logo.svg" alt="Logo Ruan">
-    </a>
-    <div class="top-actions">
-      <span class="online-dot" title="Online" aria-label="Online"></span>
-      <div class="notification-wrap">
-        <button id="notification-toggle" class="bell" type="button" aria-label="Alertas" aria-expanded="false">
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <span class="header-spacer" aria-hidden="true"></span>
+      <a class="brand-home" href="./index.html" aria-label="Ruan, início">
+        <img src="./ruan-logo.svg" alt="Ruan" width="58" height="58">
+      </a>
+      <div class="header-actions">
+        <span class="connection-dot" title="Interface ativa" aria-label="Interface ativa"></span>
+        <button class="icon-button alert-button" id="alert-toggle" type="button" aria-label="Abrir alertas" aria-expanded="false" aria-controls="alert-panel">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
-          <span id="notification-badge" class="notification-badge" hidden>0</span>
+          <span id="alert-count" class="alert-count" hidden>0</span>
         </button>
-        <section id="notification-panel" class="notification-panel" hidden>
-          <div class="notification-head"><strong>Alertas</strong><button id="notification-close" type="button" aria-label="Fechar">×</button></div>
-          <div id="notification-list"></div>
-        </section>
       </div>
+    </header>
+
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div class="ambient ambient-a" aria-hidden="true"></div>
+      <div class="ambient ambient-b" aria-hidden="true"></div>
+      <div class="hero-logo"><img src="./ruan-logo.svg" alt="" width="100" height="100"></div>
+      <p class="eyebrow">SEU ESPAÇO · SEU ECOSSISTEMA</p>
+      <h1 id="welcome-title">Tudo começa<br><span>por aqui.</span></h1>
+      <p class="welcome-copy">Seu hub pessoal para criar, organizar e conectar aplicativos.</p>
+      <div class="status-line"><span></span> Seu espaço pessoal</div>
+    </section>
+
+    <footer class="app-footer">
+      <span>RUAN</span>
+      <span>Um hub. Seu ecossistema.</span>
+    </footer>
+  </main>
+
+  <nav class="bottom-dock" aria-label="Navegação do Ruan">
+    <button id="apps-open" class="dock-action apps-action" type="button" aria-expanded="false" aria-controls="apps-drawer">
+      <span class="dock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span>
+      <span>Apps</span>
+      <span class="dock-chevron" aria-hidden="true">⌃</span>
+    </button>
+    <a class="dock-action world-action" href="../hub/index.html" aria-label="Abrir WordDark Hub">
+      <span class="world-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
+      <span>WordDark Hub</span>
+      <span class="dock-arrow" aria-hidden="true">↗</span>
+    </a>
+  </nav>
+
+  <section id="apps-drawer" class="drawer" aria-labelledby="drawer-title" aria-hidden="true" hidden>
+    <div class="drawer-grabber" aria-hidden="true"></div>
+    <div class="drawer-heading">
+      <div><p class="eyebrow">SEU ESPAÇO</p><h2 id="drawer-title">Seus aplicativos</h2></div>
+      <button id="apps-close" class="icon-button close-button" type="button" aria-label="Fechar gaveta">×</button>
     </div>
-  </header>
-
-  <section class="hub-welcome" aria-label="Boas-vindas">
-    <span class="hub-orbit orbit-one"></span><span class="hub-orbit orbit-two"></span>
-    <div class="hub-center-mark"><img src="./ruan-logo.svg" alt=""></div>
-    <p class="hub-eyebrow">SEU ESPAÇO · SEU ECOSSISTEMA</p>
-    <h1>O próximo passo<br><span>começa aqui.</span></h1>
-    <p class="hub-subtitle">Seus aplicativos e o mundo WordDark, no mesmo lugar.</p>
-    <div class="hub-status"><span></span> Hub pessoal pronto para operar</div>
+    <div class="app-grid">
+      <a class="app-tile" href="./apps/pessoal/index.html">
+        <span class="app-tile-icon personal-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="22" r="9"/><path d="M10 53c2-10 8-15 17-15s15 5 17 15"/><path d="m40 43 5 5 10-12"/></svg></span>
+        <span>Pessoal</span><small>Vida e organização</small>
+      </a>
+      <a class="app-tile" href="./apps/shadow/index.html">
+        <span class="app-tile-icon shadow-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M5 32s10-17 27-17 27 17 27 17-10 17-27 17S5 32 5 32Z"/><circle cx="32" cy="32" r="11"/><circle cx="32" cy="32" r="5"/></svg></span>
+        <span>Shadow</span><small>Espaço de inteligência</small>
+      </a>
+      <a class="app-tile" href="./apps/entretenimento/index.html">
+        <span class="app-tile-icon media-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="13" width="48" height="38" rx="8"/><path d="M22 13 14 25m24-12L26 25m24-12L38 25"/><path d="m28 27 13 8-13 8Z"/></svg></span>
+        <span>Entretenimento</span><small>Conteúdo e mídia</small>
+      </a>
+    </div>
+    <p class="drawer-note">Cada aplicativo tem sua própria tela e função. Esta gaveta pertence somente ao Ruan.</p>
   </section>
+  <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="Fechar gaveta de aplicativos" hidden tabindex="-1"></button>
 
-  <footer class="hub-footer"><span>RUAN</span><span>Central pessoal independente</span></footer>
-</main>
-
-<nav class="ruan-dock" aria-label="Navegação principal">
-  <button id="apps-toggle" class="dock-button apps-button" type="button" aria-expanded="false" aria-controls="apps-drawer">
-    <span class="dock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span>
-    <span>Apps</span><span class="dock-chevron">⌃</span>
-  </button>
-  <a class="dock-button world-button" href="../hub/index.html" aria-label="Abrir WordDark Hub">
-    <span class="world-logo"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
-    <span>WordDark Hub</span><span class="dock-arrow">↗</span>
-  </a>
-</nav>
-
-<section id="apps-drawer" class="apps-drawer ruan-app-drawer" aria-label="Gaveta de aplicativos" hidden>
-  <div class="drawer-head"><div><p class="hub-eyebrow">SEU ESPAÇO</p><strong>Aplicativos</strong></div><button id="apps-close" type="button" aria-label="Fechar gaveta">×</button></div>
-  <div class="drawer-grid">
-    <a class="drawer-app" href="./apps/pessoal/index.html"><span class="drawer-app-icon personal-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="22" r="9"/><path d="M10 53c2-10 8-15 17-15s15 5 17 15"/><path d="m40 43 5 5 10-12"/></svg></span><span>Pessoal</span></a>
-    <a class="drawer-app" href="./apps/shadow/index.html"><span class="drawer-app-icon shadow-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M5 32s10-17 27-17 27 17 27 17-10 17-27 17S5 32 5 32Z"/><circle cx="32" cy="32" r="11"/><circle cx="32" cy="32" r="5"/></svg></span><span>Shadow</span></a>
-    <a class="drawer-app" href="./apps/entretenimento/index.html"><span class="drawer-app-icon media-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="13" width="48" height="38" rx="8"/><path d="M22 13 14 25m24-12L26 25m24-12L38 25"/><path d="m28 27 13 8-13 8Z"/></svg></span><span>Entretenimento</span></a>
-  </div>
-</section>
-<script src="./app.js?v=20261016-ruan-hub" defer></script>
-<script src="./home-hub.js?v=20261016-ruan-hub" defer></script>
+  <section id="alert-panel" class="alert-panel" aria-labelledby="alert-title" hidden>
+    <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
+    <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
+  </section>
+  <script src="./ruan-hub.js?v=20261016.2" defer></script>
 </body>
 </html>
