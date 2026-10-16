@@ -6,7 +6,8 @@ export const SCOPES = Object.freeze({
   CONNECTOR_READ: "connector.read",
   PLUGIN_MANAGE: "plugin.manage"
 });
-export const CONNECTOR_IDS = Object.freeze(["web-search", "wikipedia", "local-knowledge"]);
+export const CONNECTOR_SCOPES = Object.freeze({ "web-search":["web.search"], "wikipedia":["connector.read"], "local-knowledge":["knowledge.read"] });
+export const CONNECTOR_IDS = Object.freeze(Object.keys(CONNECTOR_SCOPES));
 const ID = /^[a-z][a-z0-9-]{1,47}$/;
 const SAFE_TEXT = (value, max=180) => typeof value === "string" && value.trim().length > 0 && value.length <= max;
 export function validateRequest(input) {
@@ -26,5 +27,6 @@ export function validatePluginManifest(input) {
   if (!CONNECTOR_IDS.includes(input.connectorId)) throw new Error("O plugin aponta para um conector que não é permitido nesta versão.");
   const permissions = Array.isArray(input.permissions) ? input.permissions : [];
   if (permissions.length > 4 || permissions.some(scope => !Object.values(SCOPES).includes(scope))) throw new Error("O plugin solicita permissões não reconhecidas.");
+  if (permissions.some(scope => !CONNECTOR_SCOPES[input.connectorId].includes(scope))) throw new Error("O plugin solicita escopos incompatíveis com o conector.");
   return Object.freeze({ id, name: input.name.trim(), version: input.version.trim(), description: input.description.trim(), connectorId: input.connectorId, permissions: [...new Set(permissions)], enabled: false, trusted: false });
 }
