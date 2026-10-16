@@ -7,7 +7,7 @@
   <meta name="description" content="WordDark Hub — espaço independente do ecossistema WordDark.">
   <link rel="icon" href="./app-icon.svg?v=20261016.3" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./app.css?v=20261016.4">
+  <link rel="stylesheet" href="./app.css?v=20261016.5">
   <title>WordDark Hub</title>
 </head>
 <body>
@@ -20,7 +20,6 @@
         <span class="hero-logo header-logo"><img src="./app-icon.svg?v=20261016.3" alt="Logo oficial do WordDark Hub" width="52" height="52"></span>
       </a>
       <div class="header-actions">
-        <a class="icon-button return-darkhub-button" href="../darkhub/" aria-label="Voltar para o darkHub" title="Voltar para o darkHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
         <button class="icon-button alert-button" id="alert-toggle" type="button" aria-label="Abrir alertas" aria-expanded="false" aria-controls="alert-panel">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
           <span id="alert-count" class="alert-count" hidden>0</span>
@@ -29,7 +28,7 @@
       </div>
     </header>
 
-    <div class="page-back-row" id="page-back-row" hidden><button id="page-back" class="page-back-button icon-only-action" type="button" aria-label="Voltar à página anterior" title="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11"/></svg></button></div>
+    <div class="page-back-row" id="page-back-row"><a class="page-back-button icon-only-action return-darkhub-button" href="../darkhub/" aria-label="Voltar para o darkHub" title="Voltar para o darkHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11"/></svg></a><button id="page-back" class="page-back-button icon-only-action" type="button" aria-label="Voltar à página anterior" title="Voltar" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h11"/></svg></button></div>
 
     <section id="home-view">
     <section class="welcome" aria-labelledby="welcome-title">
@@ -145,6 +144,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script type="module" src="./app.js?v=20261016.4"></script>
+  <script type="module" src="./app.js?v=20261016.5"></script>
 </body>
 </html>
