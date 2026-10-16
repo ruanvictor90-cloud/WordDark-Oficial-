@@ -27,7 +27,7 @@ jobs:
       - name: Run Shadoweb tests
         run: node --test shadoweb/app.test.js shadoweb/structure.test.js
       - name: Validate Capacitor configuration
-        run: node -e "JSON.parse(require('fs').readFileSync('capacitor.ci.config.json', 'utf8'))"
+        run: node -e "JSON.parse(require('fs').readFileSync('capacitor.config.json', 'utf8'))"
       - name: Check app shell files
         run: |
           test -f shadoweb/index.html
