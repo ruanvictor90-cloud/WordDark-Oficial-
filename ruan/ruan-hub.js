@@ -1,13 +1,13 @@
 (()=>{"use strict";
 const $=id=>document.getElementById(id);
-const readArray=key=>{try{const value=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(value)?value:[]}catch{return[]}};
-const dateKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
-const safeText=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
 const appsButton=$("apps-open"),drawer=$("apps-drawer"),scrim=$("drawer-scrim"),alertButton=$("alert-toggle"),alertPanel=$("alert-panel");
 function setDrawer(open){drawer.hidden=!open;scrim.hidden=!open;drawer.setAttribute("aria-hidden",String(!open));appsButton.setAttribute("aria-expanded",String(open));if(open){alertPanel.hidden=true;alertButton.setAttribute("aria-expanded","false")}}
-function setAlerts(open){alertPanel.hidden=!open;alertButton.setAttribute("aria-expanded",String(open));if(open){setDrawer(false);renderAlerts()}}
-function collectAlerts(){const today=dateKey(),items=[];readArray("darkhub.pessoal.tasks.v1").filter(t=>t&&!t.done&&t.dueDate&&t.dueDate<=today).forEach(t=>items.push({title:t.title||"Tarefa",detail:t.dueDate<today?"Tarefa atrasada":"Tarefa para hoje",urgent:t.dueDate<today,href:"./apps/pessoal/tarefas.html",date:t.dueDate}));readArray("darkhub.pessoal.finance.v1").filter(t=>t&&t.type==="bill"&&t.status!=="paid"&&t.dueDate&&t.dueDate<=today).forEach(t=>items.push({title:t.title||"Conta a pagar",detail:"Pagamento pendente",urgent:true,href:"./apps/pessoal/financeiro.html",date:t.dueDate}));readArray("darkhub.important.notifications.v1").filter(n=>n&&typeof n.title==="string").slice(0,20).forEach(n=>items.push({title:n.title,detail:n.detail||"Aviso importante de um aplicativo",urgent:n.urgent!==false,href:n.href||"./index.html",date:n.createdAt||today}));return items.sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,30)}
-function renderAlerts(){const items=collectAlerts();$("alert-count").textContent=items.length;$("alert-count").hidden=items.length===0;$("alert-list").innerHTML=items.length?items.map(n=>'<a class="alert-item" href="'+safeText(n.href)+'"><span class="alert-dot '+(n.urgent?"urgent":"")+'"></span><span><strong>'+safeText(n.title)+'</strong><small>'+safeText(n.detail)+'</small></span></a>').join(""):'<p class="empty-state">Nenhum alerta por enquanto.</p>'}
-appsButton.addEventListener("click",()=>setDrawer(drawer.hidden));$("apps-close").addEventListener("click",()=>setDrawer(false));scrim.addEventListener("click",()=>setDrawer(false));alertButton.addEventListener("click",()=>setAlerts(alertPanel.hidden));$("alert-close").addEventListener("click",()=>setAlerts(false));document.addEventListener("keydown",event=>{if(event.key==="Escape"){setDrawer(false);setAlerts(false)}});window.addEventListener("storage",renderAlerts);window.addEventListener("darkhub:data-changed",renderAlerts);document.addEventListener("visibilitychange",()=>{if(!document.hidden)renderAlerts()});renderAlerts();
+function setAlerts(open){alertPanel.hidden=!open;alertButton.setAttribute("aria-expanded",String(open));if(open){setDrawer(false)}}
+appsButton.addEventListener("click",()=>setDrawer(drawer.hidden));
+$("apps-close").addEventListener("click",()=>setDrawer(false));
+scrim.addEventListener("click",()=>setDrawer(false));
+alertButton.addEventListener("click",()=>setAlerts(alertPanel.hidden));
+$("alert-close").addEventListener("click",()=>setAlerts(false));
+document.addEventListener("keydown",event=>{if(event.key==="Escape"){setDrawer(false);setAlerts(false)}});
 if("serviceWorker"in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 })();
