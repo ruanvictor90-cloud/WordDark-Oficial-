@@ -7,7 +7,7 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./ruan-logo.svg?v=20261016.17" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.18">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.19">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -62,6 +62,29 @@
         <button class="creation-option icon-tile" id="shortcut-development" type="button" aria-label="Desenvolvimento"><span class="creation-option-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></span><strong>Desenvolvimento</strong></button>
         <button class="creation-option icon-tile" id="shortcut-finalization" type="button" aria-label="Finalização"><span class="creation-option-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><strong>Finalização</strong></button>
       </div>
+      <section id="development-workspace" class="development-workspace" hidden aria-labelledby="development-projects-title">
+        <div class="development-toolbar">
+          <div><h2 id="development-projects-title">Projetos</h2><p>Abra cada criação pela logo do próprio projeto.</p></div>
+          <div class="development-tools">
+            <button id="projects-export" class="project-tool-button" type="button">Exportar</button>
+            <button id="projects-import-trigger" class="project-tool-button" type="button">Importar</button>
+            <input id="projects-import-file" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+        <p id="project-feedback" class="project-feedback" role="status" aria-live="polite" hidden></p>
+        <div id="project-grid" class="project-grid" aria-live="polite"></div>
+        <details class="project-create">
+          <summary>Registrar uma criação</summary>
+          <form id="project-create-form" class="project-form">
+            <label>Nome do projeto<input name="name" maxlength="180" required placeholder="Nome do projeto"></label>
+            <label>Endereço para abrir<input name="href" required placeholder="./caminho/ ou https://..." autocomplete="url"></label>
+            <label>Endereço da logo<input name="logo" placeholder="./logo.svg ou https://..." autocomplete="url"></label>
+            <label>Descrição<input name="description" maxlength="500" placeholder="O que é este projeto"></label>
+            <label>Status<select name="status"><option>Planejado</option><option selected>Em desenvolvimento</option><option>Em revisão</option><option>Em finalização</option><option>Integrado</option><option>Pausado</option></select></label>
+            <button type="submit" class="project-submit">Registrar projeto</button>
+          </form>
+        </details>
+      </section>
       <div id="subpage-empty" class="subpage-empty" hidden><span class="subpage-empty-mark">◈</span><strong id="subpage-empty-title">Área preparada</strong><p id="subpage-empty-text">A estrutura está pronta. O conteúdo será desenvolvido quando iniciarmos esta etapa.</p></div>
     </section>
   </main>
@@ -121,6 +144,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script src="./ruan-hub.js?v=20261016.14" defer></script>
+  <script type="module" src="./ruan-hub.js?v=20261016.15"></script>
 </body>
 </html>
