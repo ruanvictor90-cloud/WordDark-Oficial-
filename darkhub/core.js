@@ -29,15 +29,22 @@ export class DarkHubVault {
     const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoder.encode(JSON.stringify(state)));
     this.#storage.setItem(STORAGE.vault, JSON.stringify({ version: 2, iv: toBase64(iv), data: toBase64(encrypted) }));
   }
+  async #openEnvelope(key, raw) {
+    if (typeof raw !== "string") throw new Error("O cofre criptografado não foi encontrado.");
+    let record;
+    try { record = JSON.parse(raw); } catch { throw new Error("O cofre local está corrompido."); }
+    if (record.version !== 2 || typeof record.iv !== "string" || typeof record.data !== "string") throw new Error("O cofre local está corrompido ou usa uma versão incompatível.");
+    let state;
+    try {
+      const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromBase64(record.iv) }, key, fromBase64(record.data));
+      state = JSON.parse(decoder.decode(plaintext));
+    } catch { throw new Error("Não foi possível autenticar ou descriptografar o cofre."); }
+    if (!state || state.schema !== 2 || !["projects","ecosystemAnalyses","technicalAnalyses","apps","audit"].every(name => Array.isArray(state[name]))) throw new Error("A estrutura do cofre não passou na validação.");
+    return state;
+  }
   async #open(key) {
     const raw = this.#storage.getItem(STORAGE.vault);
-    if (!raw) return initialState();
-    const record = JSON.parse(raw);
-    if (record.version !== 2 || typeof record.iv !== "string" || typeof record.data !== "string") throw new Error("O cofre local está corrompido ou usa uma versão incompatível.");
-    const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromBase64(record.iv) }, key, fromBase64(record.data));
-    const state = JSON.parse(decoder.decode(plaintext));
-    if (!state || state.schema !== 2 || !Array.isArray(state.projects) || !Array.isArray(state.audit)) throw new Error("A estrutura do cofre não passou na validação.");
-    return state;
+    return raw ? this.#openEnvelope(key, raw) : initialState();
   }
   async setup(passphrase) {
     if (this.isConfigured) throw new Error("O cofre já foi configurado.");
@@ -46,7 +53,6 @@ export class DarkHubVault {
     this.#storage.setItem(STORAGE.security, JSON.stringify({ version: 2, salt: toBase64(salt), verifier: toBase64(derived.verifier), iterations: ITERATIONS, kdf: "PBKDF2-SHA-256", cipher: "AES-256-GCM" }));
     this.#cryptoKey = derived.key;
     this.#state = initialState();
-    await this.#seal(this.#state, this.#cryptoKey);
     this.audit("security.vault_created", "Cofre local criado");
     await this.#seal(this.#state, this.#cryptoKey);
     return true;
@@ -145,6 +151,32 @@ export class DarkHubVault {
 <body><main><p>APLICATIVO INDEPENDENTE</p><h1>${escapeHtml(app.name)}</h1><p>${escapeHtml(app.description)}</p><p>Base inicial gerada pelo darkHub. Revise permissões, dados e segurança antes de usar em produção.</p></main></body></html>`;
     await this.#commit("app.scaffold_exported", app.name);
     return { manifest, html, css };
+  }
+  async exportEncryptedBackup() {
+    this.#assertUnlocked();
+    const security = this.#storage.getItem(STORAGE.security);
+    const vault = this.#storage.getItem(STORAGE.vault);
+    if (!security || !vault) throw new Error("Não foi possível localizar os dados completos do cofre.");
+    const backup = { format: "darkhub-encrypted-backup", version: 1, exportedAt: new Date().toISOString(), security: JSON.parse(security), vault: JSON.parse(vault) };
+    await this.#commit("security.backup_exported", "Backup criptografado exportado");
+    backup.vault = JSON.parse(this.#storage.getItem(STORAGE.vault));
+    return backup;
+  }
+  async restoreEncryptedBackup(backup, passphrase) {
+    if (!backup || backup.format !== "darkhub-encrypted-backup" || backup.version !== 1 || !backup.security || !backup.vault) throw new Error("Arquivo de backup inválido ou incompatível.");
+    if (typeof passphrase !== "string" || passphrase.length < 8 || passphrase.length > 128) throw new Error("Informe a frase secreta usada neste backup.");
+    const config = backup.security;
+    if (config.version !== 2 || config.kdf !== "PBKDF2-SHA-256" || typeof config.salt !== "string" || typeof config.verifier !== "string") throw new Error("Configuração de segurança do backup inválida.");
+    const derived = await this.#derive(passphrase, fromBase64(config.salt));
+    const supplied = derived.verifier, expected = fromBase64(config.verifier);
+    if (supplied.length !== expected.length || !supplied.every((value, index) => value === expected[index])) throw new Error("A frase secreta não corresponde a este backup.");
+    const state = await this.#openEnvelope(derived.key, JSON.stringify(backup.vault));
+    this.#storage.setItem(STORAGE.security, JSON.stringify(config));
+    this.#storage.setItem(STORAGE.vault, JSON.stringify(backup.vault));
+    this.#cryptoKey = derived.key;
+    this.#state = state;
+    await this.#commit("security.backup_restored", "Backup criptografado restaurado");
+    return true;
   }
   async exportAudit() {
     this.#assertUnlocked();
