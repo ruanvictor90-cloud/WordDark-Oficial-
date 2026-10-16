@@ -231,3 +231,30 @@
 .brand-home .header-logo{display:grid!important;place-items:center!important;width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}
 .brand-home .header-logo img{display:block!important;width:28px!important;height:28px!important;min-width:28px!important;max-width:28px!important;min-height:28px!important;max-height:28px!important;object-fit:contain!important;filter:none!important}
 .header-actions{grid-column:3!important;display:flex!important;flex-direction:row-reverse!important;align-items:center!important;justify-self:end!important;gap:12px!important}
+
+.panel-workspace,.package-workspace{width:100%;padding:4px 0 30px}
+.information-form{margin:12px 0 18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#100b18,#0b0710)}
+.information-form textarea{width:100%;min-width:0;resize:vertical;padding:10px 11px;border:1px solid var(--line);border-radius:10px;outline:none;background:#0b0710;color:var(--text);font:inherit;font-size:12px}
+.information-form textarea:focus{border-color:var(--purple)}
+.inbox-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:18px 0 10px}
+.inbox-heading h3{margin:0;font-size:14px}
+.inbox-count{color:var(--muted);font-size:10px}
+.information-list{display:grid;gap:10px}
+.information-card{padding:13px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#171020,#0d0913)}
+.information-card.is-unread{border-color:#7955a0;box-shadow:inset 3px 0 0 #b58aff}
+.information-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.information-category{padding:4px 7px;border:1px solid #49315d;border-radius:99px;color:var(--purple-bright);font-size:9px}
+.information-card time,.information-meta{color:var(--muted);font-size:9px}
+.information-card h3{margin:10px 0 5px;font-size:13px}
+.information-message{margin:0;color:#d9cde5;font-size:11px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
+.information-meta{margin-top:9px;overflow-wrap:anywhere}
+.information-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.information-actions button{padding:7px 9px;border:1px solid var(--line);border-radius:9px;background:#120c1b;color:var(--text);font-size:10px}
+.package-panel{display:flex;align-items:center;gap:13px;padding:16px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#1c1328,#0b0710)}
+.package-mark{display:grid;place-items:center;flex:0 0 54px;height:54px;border:1px solid #765098;border-radius:15px;background:#241632;color:var(--purple-bright);font-size:14px;font-weight:900}
+.package-panel h2{margin:0 0 6px;font-size:15px}
+.package-panel p,.package-note{margin:0;color:var(--muted);font-size:11px;line-height:1.65}
+.package-steps{display:grid;gap:9px;margin:17px 0;padding-left:23px;color:#d9cde5;font-size:11px;line-height:1.6}
+.package-launch{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.package-note{margin-top:12px}
+@media(min-width:560px){.information-form{grid-template-columns:repeat(2,minmax(0,1fr))}.information-form label:nth-child(4){grid-column:span 2}.information-form .project-submit{grid-column:span 2}}
