@@ -49,6 +49,7 @@ Os nomes dos módulos são estáveis na arquitetura. A interface voltada ao usu�
 - [Contrato da API e dos conectores](./API-CONTRACT.md)
 - [Esquema de manifesto de plugin](./plugin-manifest.schema.json)
 - [Base de segurança](./SECURITY-BASELINE.md)
+- [Contrato preliminar da API pública (rascunho, não operacional)](./OPENAPI-PUBLIC-DRAFT.yaml)
 
 ## Validação local
 
