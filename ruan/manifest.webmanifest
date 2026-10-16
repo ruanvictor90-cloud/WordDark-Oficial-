@@ -1,7 +1,7 @@
 {
-  "name": "darkHub — Hub pessoal",
+  "name": "darkHub",
   "short_name": "darkHub",
-  "description": "Hub pessoal darkHub para desenvolver, organizar e conectar aplicativos.",
+  "description": "darkHub — central privada para criar, abrir e administrar aplicativos.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
@@ -11,7 +11,7 @@
   "theme_color": "#0a0710",
   "icons": [
     {
-      "src": "./darkhub-logo.svg",
+      "src": "./ruan-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
