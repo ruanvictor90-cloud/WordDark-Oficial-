@@ -20,7 +20,7 @@ export class Bridge {
         return { version: "1.0.0", requestId: request.requestId, ok: true, result };
       } finally { clearTimeout(timer); }
     } catch (error) {
-      const denied = /permissão|desativado|não registrado|não permitido/i.test(error?.message || "");
+      const denied = /permissão|desativado|não registrado|não permitid[oa]|escopo incompatível/i.test(error?.message || "");
       this.audit.record(denied ? "gateway.denied" : "gateway.error", { requestId: request.requestId, connectorId: request.connectorId, reason: error?.message || "Erro desconhecido" });
       return { version: "1.0.0", requestId: request.requestId, ok: false, error: error?.message || "Falha no conector." };
     }
