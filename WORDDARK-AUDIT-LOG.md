@@ -98,3 +98,30 @@ O backend OAuth persiste metadados e o pacote de tokens criptografado via KMS/Fi
 - O teste de regressão do gateway foi atualizado, mas não foi executado nesta rodada.
 - `npm test` ainda não foi executado integralmente.
 - Nenhuma alteração foi feita em `main`; nenhuma integração ou publicação foi realizada.
+
+
+### Achado WD-AUD-005 — registro aceita status pendente como se estivesse conectado (corrigido)
+
+Arquivos:
+- `worddark/runtime/world/core/connections/connection-registry.js`
+- `worddark/runtime/world/core/connections/connection-gateway.test.js`
+
+O registry verificava se a conta existia e possuía a capacidade/credencial de runtime, mas não exigia que o registro tivesse `status === "CONNECTED"`. Uma conta `PENDING` com uma credencial residual poderia passar pela autorização local. Agora o registry recusa ausência de registro ou status diferente de CONNECTED como `ACCOUNT_NOT_CONNECTED`. Foi acrescentado teste para uma conta PENDING com credencial presente.
+
+**Status:** correção e teste registrados; execução do teste pendente.
+
+### Achado WD-AUD-006 — adapter sem confirmação explícita podia ser reportado como sucesso (corrigido)
+
+Arquivo: `worddark/runtime/world/core/connections/connection-gateway.js`
+
+O gateway tratava qualquer retorno diferente de `{success:false}`, inclusive `undefined`, como sucesso. Agora exige que o adapter retorne explicitamente `success: true`; retorno ausente ou ambíguo vira `EXTERNAL_EXECUTION_FAILED`. Foi adicionado teste de regressão com adapter que retorna `undefined`.
+
+**Status:** correção e teste registrados; execução do teste pendente.
+
+### Commits complementares
+
+- Registry exige status CONNECTED: `198f5985d888a1c5c76db76c19fcfc8f3589b42f`
+- Gateway exige sucesso explícito do adapter: `41c75c3f6117f2b45cae1379c77f2938a100564f`
+- Testes de conta PENDING e retorno inválido: `8801f89f77949a20b423b2233e7cee2a9f846121`
+
+Essas correções reforçam a autorização local, mas não resolvem a ponte servidor-a-servidor OAuth descrita no WD-AUD-004 e não comprovam que chamadas externas reais estejam habilitadas.
