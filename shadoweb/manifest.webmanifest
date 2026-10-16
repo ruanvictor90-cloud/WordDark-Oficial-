@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Shadoweb",
   "short_name": "Shadoweb",
-  "description": "Navegador pessoal e camada contextual darkEye.",
+  "description": "Navegador independente e mundo conectado de aplicativos e serviços.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
