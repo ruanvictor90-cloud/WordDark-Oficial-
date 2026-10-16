@@ -97,6 +97,11 @@
       <div class="section-heading"><div><span class="eyebrow">INTEGRAÇÕES</span><h2>Conexões</h2></div></div>
       <p class="section-intro">Ative cada conector e conceda apenas os escopos necessários. Conexões de sistemas internos permanecem pendentes até existir um contrato autenticado real.</p>
       <div class="list-stack" id="connector-list"></div>
+      <div class="section-heading second-heading"><div><span class="eyebrow">APLICATIVOS CONSUMIDORES</span><h2>Seus apps conectados</h2></div><span class="status-pill"><i></i> Permissões por app</span></div>
+      <p class="section-intro">Registre um app pelo manifesto JSON. Ele começa desativado e só pode usar capacidades declaradas e concedidas individualmente.</p>
+      <div class="inline-actions consumer-actions"><button class="small-button" id="import-consumer" type="button">＋ Registrar app</button><button class="small-button" id="download-consumer-template" type="button">Baixar modelo</button><input id="consumer-file" type="file" accept="application/json,.json" hidden></div>
+      <div class="list-stack" id="consumer-app-list"></div>
+      <p class="empty-state" id="consumer-apps-empty">Nenhum app consumidor registrado. Você pode começar com o modelo JSON.</p>
       <div class="connection-card"><span class="connection-icon">D</span><div><strong>darkHub / WordDark</strong><p>Integrações internas aguardam endpoints, autenticação, autorização e contratos de API versionados.</p><small class="pending">Desconectados — sem endpoints fictícios</small></div></div>
     </section>
 
