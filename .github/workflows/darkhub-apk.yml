@@ -1,0 +1,84 @@
+name: Build darkHub APK
+on:
+  workflow_dispatch:
+    inputs:
+      source_path:
+        description: "Pasta do aplicativo no repositório (deve conter index.html)"
+        required: true
+        default: "ruan"
+        type: string
+      app_name:
+        description: "Nome exibido no Android"
+        required: true
+        default: "darkHub"
+        type: string
+      app_id:
+        description: "Identificador Android, por exemplo com.worddark.darkhub"
+        required: true
+        default: "com.worddark.darkhub"
+        type: string
+  push:
+    branches: ["darkhub"]
+    paths:
+      - "ruan/**"
+      - ".github/workflows/darkhub-apk.yml"
+permissions:
+  contents: read
+concurrency:
+  group: darkhub-apk-\${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout darkHub source
+        uses: actions/checkout@v4
+      - name: Validate app inputs
+        env:
+          SOURCE_PATH: \${{ github.event.inputs.source_path || 'ruan' }}
+          APP_ID: \${{ github.event.inputs.app_id || 'com.worddark.darkhub' }}
+        run: |
+          set -euo pipefail
+          case "$SOURCE_PATH" in ""|/*|*..*) echo "Caminho de origem inválido"; exit 1;; esac
+          test -f "$SOURCE_PATH/index.html" || { echo "A pasta selecionada precisa conter index.html"; exit 1; }
+          printf '%s' "$APP_ID" | grep -Eq '^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$' || { echo "Identificador Android inválido"; exit 1; }
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Prepare web app and Capacitor
+        env:
+          SOURCE_PATH: \${{ github.event.inputs.source_path || 'ruan' }}
+          APP_NAME: \${{ github.event.inputs.app_name || 'darkHub' }}
+          APP_ID: \${{ github.event.inputs.app_id || 'com.worddark.darkhub' }}
+        run: |
+          set -euo pipefail
+          mkdir web
+          cp -R "$SOURCE_PATH"/. web/
+          npm init -y
+          npm install --save-exact @capacitor/core @capacitor/android
+          npm install --save-dev --save-exact @capacitor/cli
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const config = { appId: process.env.APP_ID, appName: process.env.APP_NAME, webDir: 'web', bundledWebRuntime: false, android: { allowMixedContent: false } };
+          fs.writeFileSync('capacitor.config.json', JSON.stringify(config, null, 2));
+          NODE
+          npx cap add android
+          npx cap sync android
+      - name: Build installable debug APK
+        run: |
+          set -euo pipefail
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Publish APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: darkhub-apk-\${{ github.run_number }}
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
