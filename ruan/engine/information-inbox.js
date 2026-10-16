@@ -13,7 +13,7 @@ function normalize(item, { now, idFactory }) {
     sender: cleanText(item.sender || item.source || "Aplicativo", "Origem", 120),
     category: cleanText(typeof item.category === "string" ? item.category : "Geral", "Categoria", 60, true) || "Geral",
     title: cleanText(item.title, "Título", 180),
-    message: cleanText(item.message || item.detail || "", "Mensagem", 5000),
+    message: cleanText(item.message || item.detail || "", "Mensagem", 5000, true),
     sourceId: cleanText(typeof item.sourceId === "string" ? item.sourceId : "", "Identificador de origem", 180, true),
     receivedAt: typeof item.receivedAt === "string" && !Number.isNaN(Date.parse(item.receivedAt)) ? item.receivedAt : now(),
     read: item.read === true
