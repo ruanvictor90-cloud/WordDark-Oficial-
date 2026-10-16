@@ -14,7 +14,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   function notify(message) { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("show"),2800); }
   function download(name, data, type="application/json") { const blob=new Blob([data],{type}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
   function openAddress(raw) {
-    let url; try { url=normalizeHttps(raw); } catch(error) { notify(error.message); return; }
+    let url; try { url=normalizeHttps(raw,state.prefs.engine); } catch(error) { notify(error.message); return; }
     if(!url.startsWith("https://")) { notify("Apenas endereços HTTPS podem ser abertos."); return; }
     state.history=[{url,title:safeLabel(url),at:new Date().toISOString()},...state.history.filter(x=>x.url!==url)].slice(0,50);
     write(KEYS.history,state.history); renderHistory();
@@ -33,6 +33,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
     renderFavorites(); renderHistory();
     if(state.view==="connections") renderConnections();
     if(state.view==="world") renderWorldApps();
+    if(state.view==="home") renderHomeSummary();
     if(state.view==="knowledge") renderKnowledge();
     if(state.view==="plugins") renderPlugins();
     if(state.view==="audit") renderAudit();
@@ -51,7 +52,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
     const action=document.createElement("button"); action.type="button"; action.className="row-action";
     if(kind==="favorite") { action.textContent="Remover"; action.addEventListener("click",()=>{state.favorites=state.favorites.filter(x=>x.url!==item.url);write(KEYS.favorites,state.favorites);renderFavorites();}); row.append(action); }
     if(kind==="history") { action.textContent="Abrir"; action.addEventListener("click",()=>openAddress(item.url)); row.append(action); }
-    if(kind==="knowledge") { action.textContent="Excluir"; action.addEventListener("click",()=>{runtime.knowledge.remove(item.id);renderKnowledge();notify("Nota excluída.");}); row.append(action); }
+    if(kind==="knowledge") { action.textContent="Excluir"; action.addEventListener("click",()=>{runtime.knowledge.remove(item.id);renderKnowledge();renderHomeSummary();notify("Nota excluída.");}); row.append(action); }
     return row;
   }
   function renderFavorites() { const list=$("favorites-list"); list.replaceChildren(...state.favorites.map(x=>savedRow(x,"favorite"))); $("favorites-empty").hidden=state.favorites.length>0; $("favorite-count").textContent=String(state.favorites.length); }
@@ -66,6 +67,14 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
     b.append(icon,strong,small);
     if(detail){const foot=document.createElement("small");foot.className="world-card-status";foot.textContent=detail;b.append(foot);}
     b.addEventListener("click",action); return b;
+  }
+  function renderHomeSummary() {
+    const active=runtime.connectors.filter(connector=>connector.enabled).length;
+    const pluginCount=runtime.plugins.list().length;
+    const noteCount=runtime.knowledge.list().length;
+    $("home-connector-count").textContent=String(active);
+    $("home-plugin-count").textContent=String(pluginCount);
+    $("home-note-count").textContent=String(noteCount);
   }
   function renderWorldApps() {
     const grid=$("world-apps"); grid.replaceChildren(
@@ -82,7 +91,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   function saveConnectorSetting(id, enabled) {
     const settings=connectorSettings(); settings[id]=Boolean(enabled); write(KEYS.connectorSettings,settings);
     const connector=runtime.connectors.find(x=>x.id===id); if(connector) connector.enabled=Boolean(enabled);
-    runtime.audit.record(enabled?"connector.enabled":"connector.disabled",{connectorId:id}); renderConnections(); renderWorldApps();
+    runtime.audit.record(enabled?"connector.enabled":"connector.disabled",{connectorId:id}); renderConnections(); renderWorldApps(); renderHomeSummary();
   }
   function renderConnections() {
     const list=$("connector-list"); list.replaceChildren();
@@ -136,19 +145,20 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   $("search-engine").addEventListener("change",e=>{state.prefs.engine=SEARCH_ENGINES[e.target.value]?e.target.value:"duckduckgo";write(KEYS.prefs,state.prefs);runtime.audit.record("settings.changed",{setting:"searchEngine",value:state.prefs.engine});notify("Mecanismo de pesquisa atualizado.");});
   document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
   document.querySelectorAll(".shortcut[data-url]").forEach(b=>b.addEventListener("click",()=>openAddress(b.dataset.url)));
+  $("explore-world").addEventListener("click",()=>setView("world"));
   $("open-eye").addEventListener("click",()=>setEye(true)); $("eye-card").addEventListener("click",()=>setEye(true)); $("close-eye").addEventListener("click",()=>setEye(false));
   $("profile-button").addEventListener("click",()=>{if(typeof $("profile-dialog").showModal==="function")$("profile-dialog").showModal();else notify("Configuração de perfil não suportada.");});
   $("profile-form").addEventListener("submit",e=>{e.preventDefault();state.prefs.profile=PROFILES[$("profile-select").value]?$("profile-select").value:"personal";write(KEYS.prefs,state.prefs);applyPrefs();$("profile-dialog").close();runtime.audit.record("settings.changed",{setting:"profile",value:state.prefs.profile});notify("Perfil salvo neste dispositivo.");});
   $("add-favorite").addEventListener("click",()=>{const value=$("address-input").value.trim();const raw=value||window.prompt("Cole o endereço HTTPS que deseja salvar:");if(raw)addFavorite(raw);});
   $("clear-history").addEventListener("click",()=>{state.history=[];write(KEYS.history,state.history);renderHistory();notify("Histórico local limpo.");});
   $("connector-search-form").addEventListener("submit",e=>{e.preventDefault();searchWikipedia($("connector-query").value).catch(err=>notify(err.message));});
-  $("knowledge-form").addEventListener("submit",e=>{e.preventDefault();try{runtime.knowledge.save({id:e.currentTarget.dataset.editId,title:$("knowledge-title").value,body:$("knowledge-body").value});e.currentTarget.dataset.editId="";e.currentTarget.reset();renderKnowledge();notify("Nota salva na biblioteca local.");}catch(err){notify(err.message);}});
+  $("knowledge-form").addEventListener("submit",e=>{e.preventDefault();try{runtime.knowledge.save({id:e.currentTarget.dataset.editId,title:$("knowledge-title").value,body:$("knowledge-body").value});e.currentTarget.dataset.editId="";e.currentTarget.reset();renderKnowledge();renderHomeSummary();notify("Nota salva na biblioteca local.");}catch(err){notify(err.message);}});
   $("knowledge-search")?.addEventListener("input",e=>renderKnowledge(e.target.value));
   $("export-knowledge").addEventListener("click",()=>download("shadoweb-knowledge.json",JSON.stringify(runtime.knowledge.export(),null,2)));
   $("import-knowledge").addEventListener("click",()=>$("knowledge-file").click());
   $("knowledge-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const count=runtime.knowledge.import(JSON.parse(await file.text()));renderKnowledge();notify(count+" notas importadas.");}catch(err){notify(err.message);}finally{e.target.value="";}});
   $("import-plugin").addEventListener("click",()=>$("plugin-file").click());
-  $("plugin-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>50000){notify("Manifesto excede 50 KB.");e.target.value="";return;}try{runtime.plugins.importManifest(JSON.parse(await file.text()));renderPlugins();renderAudit();notify("Manifesto importado. Código executável não foi carregado.");}catch(err){notify(err.message);}finally{e.target.value="";}});
+  $("plugin-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>50000){notify("Manifesto excede 50 KB.");e.target.value="";return;}try{runtime.plugins.importManifest(JSON.parse(await file.text()));renderPlugins();renderAudit();renderHomeSummary();notify("Manifesto importado. Código executável não foi carregado.");}catch(err){notify(err.message);}finally{e.target.value="";}});
   $("download-plugin-template").addEventListener("click",()=>download("shadoweb-plugin-template.json",JSON.stringify(runtime.plugins.exportTemplate(),null,2)));
   $("export-audit").addEventListener("click",()=>download("shadoweb-audit.json",JSON.stringify({format:"shadoweb-audit",version:1,events:runtime.audit.list()},null,2)));
   $("profile-dialog").addEventListener("click",e=>{if(e.target===$("profile-dialog"))$("profile-dialog").close();});
@@ -159,6 +169,6 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   state.history=read(KEYS.history,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")).slice(0,50);
   state.shortcuts=read(KEYS.shortcuts,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&typeof x.title==="string").slice(0,20);
   const settings=connectorSettings(); runtime.connectors.forEach(c=>{if(Object.hasOwn(settings,c.id))c.enabled=settings[c.id];});
-  applyPrefs(); setupShortcuts(); renderFavorites(); renderHistory(); renderWorldApps(); renderConnections(); renderKnowledge(); renderPlugins(); renderAudit();
+  applyPrefs(); setupShortcuts(); renderFavorites(); renderHistory(); renderHomeSummary(); renderWorldApps(); renderConnections(); renderKnowledge(); renderPlugins(); renderAudit();
   if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register("./sw.js").catch(() => {});
 })();
