@@ -5,9 +5,9 @@ function assertQuery(value) {
   return query;
 }
 export const builtInConnectors = [
-  { id: "web-search", name: "Pesquisa web", description: "Abre pesquisas no mecanismo escolhido.", scopes: ["web.search"], enabled: true, mode: "navigate" },
-  { id: "wikipedia", name: "Wikipedia", description: "Pesquisa artigos públicos da Wikipedia.", scopes: ["connector.read"], enabled: false, mode: "api" },
-  { id: "local-knowledge", name: "Biblioteca local", description: "Pesquisa notas armazenadas neste dispositivo.", scopes: ["knowledge.read"], enabled: true, mode: "local" }
+  { id: "web-search", actions:["search"], name: "Pesquisa web", description: "Abre pesquisas no mecanismo escolhido.", scopes: ["web.search"], enabled: true, mode: "navigate" },
+  { id: "wikipedia", actions:["search"], name: "Wikipedia", description: "Pesquisa artigos públicos da Wikipedia.", scopes: ["connector.read"], enabled: false, mode: "api" },
+  { id: "local-knowledge", actions:["search"], name: "Biblioteca local", description: "Pesquisa notas armazenadas neste dispositivo.", scopes: ["knowledge.read"], enabled: true, mode: "local" }
 ];
 export const connectorHandlers = {
   "web-search": async ({ query, engine = "duckduckgo" }) => {
