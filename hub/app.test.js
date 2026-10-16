@@ -7,6 +7,7 @@ const hub=read('index.html'),css=read('app.css'),script=read('app.js'),sw=read('
 assert.ok(hub.includes('href="./index.html"'), 'WordDark Hub must remain an independent app entry');
 assert.ok(hub.includes('class="home-shortcuts"') && hub.includes('aria-label="Áreas do WordDark Hub" hidden'), 'WordDark Hub must reserve its own app-creation area for later');
 assert.ok(hub.includes('href="../darkhub/"') && hub.includes('aria-label="Voltar para o darkHub"'), 'Bottom dock must return to darkHub');
+assert.ok(hub.includes('class="icon-button return-darkhub-button"') && hub.includes('title="Voltar para o darkHub"'), 'Header must provide a persistent return button to darkHub');
 assert.ok(!hub.includes('id="shortcut-central"') && !hub.includes('id="shortcut-teste"'), 'Old WordDark Hub shortcuts must be removed');
 assert.ok(hub.includes('id="apps-drawer"') && hub.includes('class="bottom-dock"'), 'Hub must preserve the shared darkHub drawer and dock');
 assert.ok(hub.includes('alt="Logo oficial do WordDark Hub"') && hub.includes('./app-icon.svg?v=20261016.3'), 'Hub must use its own updated logo');
