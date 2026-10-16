@@ -8,6 +8,8 @@ import { builtInConnectors, connectorHandlers } from "./connectors.js";
 import { PluginManager } from "./plugin-manager.js";
 import { Knowledge } from "./knowledge.js";
 import { normalizeHttps } from "./address.js";
+import { ConsumerRegistry, validateConsumerManifest } from "./consumer-registry.js";
+import { createShadowebClient } from "./consumer-sdk.js";
 
 class MemoryStorage {
   constructor(){this.data=new Map();}
@@ -123,4 +125,29 @@ test("address handling uses the selected search engine and blocks unsafe schemes
   assert.equal(normalizeHttps("https://example.com").startsWith("https://example.com"),true);
   assert.throws(()=>normalizeHttps("javascript:alert(1)"),/não é permitido/);
   assert.throws(()=>normalizeHttps("http://example.com"),/Use HTTPS/);
+});
+
+test("consumer manifests request only known connector scopes and start disabled",()=>{
+  const manifest={schemaVersion:"1.0.0",appId:"reader-app",name:"Reader App",version:"1.0.0",description:"Leitor conectado.",capabilities:[{connectorId:"wikipedia",scopes:["connector.read"]}]};
+  assert.equal(validateConsumerManifest(manifest).enabled,false);
+  assert.throws(()=>validateConsumerManifest({...manifest,capabilities:[{connectorId:"wikipedia",scopes:["knowledge.write"]}]}),/Escopo não permitido/);
+  assert.throws(()=>validateConsumerManifest({...manifest,capabilities:[{connectorId:"https://example.com",scopes:["connector.read"]}]}),/não registrado/);
+});
+
+test("consumer SDK enforces app-specific grants and revocation",async()=>{
+  const storage=new MemoryStorage(), audit=new AuditLog(storage), registry=new ConsumerRegistry({storage,audit}), gate=new Gate(storage);
+  const manifest=registry.register({schemaVersion:"1.0.0",appId:"reader-app",name:"Reader App",version:"1.0.0",description:"Leitor conectado.",capabilities:[{connectorId:"wikipedia",scopes:["connector.read"]}]});
+  assert.equal(manifest.enabled,false);
+  registry.setEnabled("reader-app",true);
+  assert.throws(()=>registry.authorize("reader-app","wikipedia","connector.read"),/não concedida/);
+  registry.grant("reader-app","wikipedia",["connector.read"]);
+  const connectors=builtInConnectors.map(c=>({...c,enabled:true}));
+  const bridge=new Bridge({connectors,handlers:{...connectorHandlers,wikipedia:async()=>[{title:"Resultado"}]},gate,audit});
+  gate.grant("wikipedia",["connector.read"]);
+  const client=createShadowebClient({appId:"reader-app",bridge,registry});
+  const result=await client.request({connectorId:"wikipedia",action:"search",input:{query:"hello"},scope:"connector.read"});
+  assert.equal(result.ok,true);
+  registry.revoke("reader-app","wikipedia","connector.read");
+  await assert.rejects(()=>client.request({connectorId:"wikipedia",action:"search",input:{query:"hello"},scope:"connector.read"}),/não concedida/);
+  assert.throws(()=>createShadowebClient({appId:"bad/id",bridge,registry}),/inválido/);
 });
