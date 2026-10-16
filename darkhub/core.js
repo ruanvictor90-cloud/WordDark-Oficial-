@@ -48,6 +48,7 @@ export class DarkHubVault {
     this.#state = initialState();
     await this.#seal(this.#state, this.#cryptoKey);
     this.audit("security.vault_created", "Cofre local criado");
+    await this.#seal(this.#state, this.#cryptoKey);
     return true;
   }
   async unlock(passphrase) {
@@ -102,7 +103,7 @@ export class DarkHubVault {
   async createApp(input) {
     this.#assertUnlocked();
     const name = validText(input.name, 50), slug = validText(input.slug, 40), description = validText(input.description, 1200);
-    if (!name || !description || !/^[a-z][a-z0-9-]{1,39}$/.test(slug)) throw new Error("Confira nome, descrição e identificador interno.");
+    if (!name || !description || !/^[a-z][a-z0-9-]{0,39}$/.test(slug)) throw new Error("Confira nome, descrição e identificador interno.");
     if (this.#state.apps.some(app => app.slug === slug)) throw new Error("Esse identificador já existe no catálogo.");
     const app = { id: createId("app"), name, slug, description, type: validText(input.type, 40), platform: validText(input.platform, 80), security: validText(input.security, 100), status: "Especificado", createdAt: new Date().toISOString() };
     this.#state.apps.unshift(app);
@@ -131,11 +132,12 @@ export class DarkHubVault {
     const app = this.#state.apps.find(entry => entry.id === id);
     if (!app) throw new Error("Aplicativo não encontrado.");
     const manifest = { schemaVersion: 1, id: app.slug, name: app.name, description: app.description, type: app.type, platform: app.platform, securityBaseline: app.security, independent: true, generatedBy: "darkHub App Factory", generatedAt: new Date().toISOString() };
+    const css = `:root{color-scheme:dark;--bg:#0a0711;--panel:#15101d;--text:#f7f0ff;--muted:#ad9cbe;--purple:#c8a2ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;padding:28px;background:radial-gradient(ellipse at 50% -15%,#3a2050 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 system-ui,sans-serif}main{max-width:760px;margin:10vh auto;padding:28px;border:1px solid #60407b;border-radius:22px;background:var(--panel)}h1{font-size:clamp(28px,7vw,46px);margin:8px 0}p{color:var(--muted);line-height:1.7}main>p:first-child{font-size:10px;letter-spacing:.18em;color:var(--purple);font-weight:800}`;
     const html = `<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0711"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'"><title>${escapeHtml(app.name)}</title><link rel="stylesheet" href="./app.css"></head>
 <body><main><p>APLICATIVO INDEPENDENTE</p><h1>${escapeHtml(app.name)}</h1><p>${escapeHtml(app.description)}</p><p>Base inicial gerada pelo darkHub. Revise permissões, dados e segurança antes de usar em produção.</p></main></body></html>`;
     await this.#commit("app.scaffold_exported", app.name);
-    return { manifest, html };
+    return { manifest, html, css };
   }
   async exportAudit() {
     this.#assertUnlocked();
