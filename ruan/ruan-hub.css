@@ -138,3 +138,20 @@
 .creation-options{display:grid;gap:11px}.creation-option{min-height:90px}.creation-option>span:nth-child(2){min-width:0;flex:1}.creation-option strong{font-size:13px}
 .subpage-empty{display:flex;min-height:190px;flex-direction:column;align-items:center;justify-content:center;padding:25px;border:1px dashed #49315d;border-radius:18px;background:#100b18;text-align:center}.subpage-empty-mark{display:grid;place-items:center;width:45px;height:45px;margin-bottom:12px;border:1px solid #60427b;border-radius:14px;background:#241632;color:var(--purple-bright);font-size:22px}.subpage-empty strong{font-size:13px}.subpage-empty p{max-width:280px;margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.65}
 @media(min-width:560px){.home-shortcuts{grid-template-columns:1fr 1fr}.home-shortcut{min-height:90px}.subpage-view{padding-top:34px}}
+
+
+/* Navegação compacta por ícones — padrão para telas do darkHub */
+.home-shortcuts{display:flex;justify-content:center;align-items:flex-start;gap:20px;width:100%;margin:24px auto 0;text-align:center}
+.home-shortcut.icon-tile,.creation-option.icon-tile{display:flex;flex:0 1 94px;align-items:center;justify-content:flex-start;flex-direction:column;gap:9px;width:94px;min-width:0;min-height:0;padding:0;border:0;background:transparent;box-shadow:none;text-align:center;transform:none}
+.home-shortcut.icon-tile:hover,.creation-option.icon-tile:hover{border-color:transparent;background:transparent;transform:translateY(-2px)}
+.home-shortcut.icon-tile .shortcut-icon,.creation-option.icon-tile .creation-option-icon{display:grid;place-items:center;width:66px;height:66px;flex:0 0 66px;border:1px solid #60427b;border-radius:21px;background:linear-gradient(145deg,#2b1a3d,#130d1d);color:var(--purple-bright);box-shadow:0 7px 22px #0003,inset 0 1px #ffffff0a;transition:border-color .18s,box-shadow .18s}
+.home-shortcut.icon-tile:hover .shortcut-icon,.creation-option.icon-tile:hover .creation-option-icon{border-color:#b58aff;box-shadow:0 0 24px #9d5cff22}
+.home-shortcut.icon-tile .shortcut-icon svg,.creation-option.icon-tile .creation-option-icon svg{width:28px;height:28px}
+.home-shortcut.icon-tile>strong,.creation-option.icon-tile>strong{display:block;color:var(--text);font-size:11px;font-weight:750;line-height:1.35;overflow-wrap:anywhere}
+.creation-options{display:flex;align-items:flex-start;justify-content:flex-start;gap:20px;flex-wrap:wrap;padding:6px 2px}
+.creation-option.icon-tile{flex-basis:100px;width:100px}
+.creation-option.icon-tile .creation-option-icon{width:66px;height:66px;flex-basis:66px}
+.page-back-row{padding:10px 0 0}
+.page-back-button.icon-only-action{display:grid;place-items:center;width:38px;height:38px;min-height:38px;padding:0;border:1px solid #49315d;border-radius:13px;background:#171020;color:#d9c5f4}
+.page-back-button.icon-only-action svg{width:20px;height:20px}
+@media(max-width:370px){.home-shortcuts,.creation-options{gap:14px}.home-shortcut.icon-tile{flex-basis:82px;width:82px}.home-shortcut.icon-tile .shortcut-icon,.creation-option.icon-tile .creation-option-icon{width:60px;height:60px;flex-basis:60px;border-radius:18px}}
