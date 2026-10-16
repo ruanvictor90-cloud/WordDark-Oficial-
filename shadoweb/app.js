@@ -152,7 +152,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   $("profile-dialog").addEventListener("click",e=>{if(e.target===$("profile-dialog"))$("profile-dialog").close();});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("eye-panel").hidden)setEye(false);});
   const prefs=read(KEYS.prefs,{});
-  state.prefs.engine=ENGINES[prefs.engine]?prefs.engine:"duckduckgo"; state.prefs.profile=PROFILES[prefs.profile]?prefs.profile:"personal";
+  state.prefs.engine=SEARCH_ENGINES[prefs.engine]?prefs.engine:"duckduckgo"; state.prefs.profile=PROFILES[prefs.profile]?prefs.profile:"personal";
   state.favorites=read(KEYS.favorites,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")).slice(0,100);
   state.history=read(KEYS.history,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")).slice(0,50);
   state.shortcuts=read(KEYS.shortcuts,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&typeof x.title==="string").slice(0,20);
