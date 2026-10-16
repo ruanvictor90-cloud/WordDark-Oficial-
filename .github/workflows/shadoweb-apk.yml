@@ -5,7 +5,6 @@ on:
     paths:
       - "shadoweb/**"
       - "capacitor.config.json"
-      - "capacitor.ci.config.json"
       - ".github/workflows/shadoweb-apk.yml"
   pull_request:
     branches: ["feature/shadoweb-foundation"]
@@ -47,8 +46,9 @@ jobs:
           npx esbuild shadoweb/app.js --bundle --format=esm --outfile=shadoweb-build/app.js
       - name: Add Android shell and sync web app
         run: |
-          npx cap add android --config capacitor.ci.config.json
-          npx cap sync android --config capacitor.ci.config.json
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('capacitor.config.json','utf8'));p.webDir='shadoweb-build';fs.writeFileSync('capacitor.config.json',JSON.stringify(p,null,2))"
+          npx cap add android
+          npx cap sync android
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
