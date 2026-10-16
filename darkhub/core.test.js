@@ -33,7 +33,8 @@ test("analysis records and app specifications validate inputs", async () => {
   const storage = new MemoryStorage();
   const vault = new DarkHubVault(storage);
   await vault.setup("frase-de-teste-mais-forte");
-  await vault.createAnalysis("technical", { title: "Revisão", target: "core.js", findings: "Teste executado", status: "Aprovada", severity: "Baixo" });
+  const review = await vault.createAnalysis("technical", { title: "Revisão", target: "core.js", findings: "Teste executado", status: "Aprovada", severity: "Baixo" });
+  await assert.rejects(vault.updateStatus("technicalAnalyses", review.id, "Acesso total"), /Estado não permitido/);
   await assert.rejects(vault.createApp({ name: "Inválido", slug: "../bad", description: "Não deve ser aceito" }), /identificador interno/);
   await vault.createApp({ name: "Base independente", slug: "base-independente", description: "Descrição inicial", type: "standalone", platform: "Web responsiva", security: "Isolamento local" });
   await assert.rejects(vault.createApp({ name: "Duplicado", slug: "base-independente", description: "Outro registro" }), /já existe/);
