@@ -25,7 +25,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: darkhub-apk-\${{ github.ref }}
+  group: darkhub-apk-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build-apk:
@@ -36,13 +36,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Validate app inputs
         env:
-          SOURCE_PATH: \${{ github.event.inputs.source_path || 'ruan' }}
-          APP_ID: \${{ github.event.inputs.app_id || 'com.worddark.darkhub' }}
+          SOURCE_PATH: ${{ github.event.inputs.source_path || 'ruan' }}
+          APP_ID: ${{ github.event.inputs.app_id || 'com.worddark.darkhub' }}
         run: |
           set -euo pipefail
           case "$SOURCE_PATH" in ""|/*|*..*) echo "Caminho de origem inválido"; exit 1;; esac
           test -f "$SOURCE_PATH/index.html" || { echo "A pasta selecionada precisa conter index.html"; exit 1; }
           printf '%s' "$APP_ID" | grep -Eq '^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)+$' || { echo "Identificador Android inválido"; exit 1; }
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -52,9 +56,9 @@ jobs:
         uses: android-actions/setup-android@v3
       - name: Prepare web app and Capacitor
         env:
-          SOURCE_PATH: \${{ github.event.inputs.source_path || 'ruan' }}
-          APP_NAME: \${{ github.event.inputs.app_name || 'darkHub' }}
-          APP_ID: \${{ github.event.inputs.app_id || 'com.worddark.darkhub' }}
+          SOURCE_PATH: ${{ github.event.inputs.source_path || 'ruan' }}
+          APP_NAME: ${{ github.event.inputs.app_name || 'darkHub' }}
+          APP_ID: ${{ github.event.inputs.app_id || 'com.worddark.darkhub' }}
         run: |
           set -euo pipefail
           mkdir web
@@ -78,7 +82,7 @@ jobs:
       - name: Publish APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: darkhub-apk-\${{ github.run_number }}
+          name: darkhub-apk-${{ github.run_number }}
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
