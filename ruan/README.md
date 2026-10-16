@@ -1,6 +1,6 @@
 # Ruan — Central de Operação
 
-Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém somente widgets informativos e a gaveta de aplicativos. **A Área ADM foi retirada da estrutura atual.**
+Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém quatro atalhos de aplicativos, dois widgets de resumo (saldo registrado e tarefas em aberto) e notificações discretas. A gaveta global permanece fora desta versão da interface. **A Área ADM foi retirada da estrutura atual.**
 
 ## Estrutura atual
 
@@ -13,7 +13,8 @@ Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um
 - `apps/shadow/`: app Shadow.
 - `apps/shadow/darkeye/`: protótipo de interface para o navegador DarkEye.
 
-## Fronteira estrutural\n\n- A Central Ruan é a única tela que possui a gaveta global de aplicativos.\n- Cada aplicativo mantém sua navegação interna própria, sem duplicar a gaveta global.\n- Rotas, scripts, estilos e ícones locais devem permanecer dentro de `ruan/`; o runtime não importa módulos de outros projetos.\n- A estrutura continua local ao dispositivo nesta fase, sem autenticação ou sincronização entre aparelhos.\n\n## Motor central
+## Fronteira estrutural\n\n- A Central Ruan é a única tela que possui a gaveta global de aplicativos.\n- Cada aplicativo mantém sua navegação interna própria, sem duplicar a gaveta global.\n- Rotas, scripts, estilos e ícones locais devem permanecer dentro de `ruan/`; o runtime não importa módulos de outros projetos.\n- A estrutura continua local ao dispositivo nesta fase, sem autenticação ou sincronização entre aparelhos.
+- A central resume o saldo registrado e a quantidade de tarefas em aberto a partir das chaves locais de compatibilidade. Os valores são informativos e não representam uma conexão bancária.\n\n## Motor central
 
 O motor central oferece uma base de dados pessoal única para os módulos existentes e futuros. Os registros são locais no dispositivo, com histórico de alterações, resumos para widgets, busca local e exportação/importação de backup JSON. A migração mantém compatibilidade com as chaves antigas de tarefas e financeiro. Os dados não sincronizam entre aparelhos nesta versão; não há autenticação, conexão bancária nem notificações garantidas em segundo plano.
 
@@ -24,7 +25,13 @@ node ruan/engine/personal-core.test.js
 node ruan/engine/personal-store.test.js
 node ruan/engine/central-engine.test.js
 node ruan/apps/shadow/darkeye/darkeye-core.test.js
+node ruan/apps/pessoal/vida.test.js
+node ruan/engine/personal-core.test.js
+node ruan/engine/personal-store.test.js
+node ruan/engine/central-engine.test.js
+node ruan/apps/shadow/darkeye/darkeye-core.test.js
 node ruan/app.test.js
+node ruan/structure-boundary.test.js
 ```
 
 ## Limites atuais
