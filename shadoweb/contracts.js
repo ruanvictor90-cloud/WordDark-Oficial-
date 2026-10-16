@@ -21,6 +21,7 @@ export function validateRequest(input) {
 }
 export function validatePluginManifest(input) {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("Manifesto de plugin inválido.");
+  if (input.schemaVersion !== "1.0.0") throw new Error("Versão do manifesto incompatível.");
   const id = String(input.id || "");
   if (!ID.test(id)) throw new Error("O ID deve usar letras minúsculas, números e hífens.");
   if (!SAFE_TEXT(input.name, 70) || !SAFE_TEXT(input.version, 24) || !SAFE_TEXT(input.description, 240)) throw new Error("Nome, versão ou descrição inválidos.");
