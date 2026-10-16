@@ -23,7 +23,7 @@ test("API contract validates IDs and rejects oversized or malformed requests",()
 });
 
 test("plugin manifests are declarative and reject arbitrary connectors",()=>{
-  const valid={id:"wiki-helper",name:"Wiki Helper",version:"1.0.0",description:"Busca conteúdo público.",connectorId:"wikipedia",permissions:["connector.read"]};
+  const valid={schemaVersion:"1.0.0",id:"wiki-helper",name:"Wiki Helper",version:"1.0.0",description:"Busca conteúdo público.",connectorId:"wikipedia",permissions:["connector.read"]};
   assert.equal(validatePluginManifest(valid).enabled,false);
   assert.throws(()=>validatePluginManifest({...valid,connectorId:"https://attacker.example"}),/conector/);
   assert.throws(()=>validatePluginManifest({...valid,permissions:["filesystem.root"]}),/permissões/);
@@ -78,7 +78,7 @@ test("knowledge notes are validated, searchable and exportable",()=>{
 
 test("plugin manager imports inactive manifests and never evaluates code",()=>{
   const storage=new MemoryStorage(), audit=new AuditLog(storage), manager=new PluginManager({storage,audit});
-  const plugin=manager.importManifest({id:"wiki-helper",name:"Wiki Helper",version:"1.0",description:"Somente metadados.",connectorId:"wikipedia",permissions:["connector.read"]});
+  const plugin=manager.importManifest({schemaVersion:"1.0.0",id:"wiki-helper",name:"Wiki Helper",version:"1.0",description:"Somente metadados.",connectorId:"wikipedia",permissions:["connector.read"]});
   assert.equal(plugin.enabled,false);
   assert.throws(()=>manager.importManifest({id:"wiki-helper",name:"Duplicado",version:"1",description:"Duplicado",connectorId:"wikipedia",permissions:[]}),/Já existe/);
   assert.equal(manager.setEnabled("wiki-helper",true).enabled,true);
