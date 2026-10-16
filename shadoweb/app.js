@@ -28,6 +28,8 @@ import { createShadowebRuntime } from "./runtime.js";
     if(!url.startsWith("https://")) { notify("Apenas endereços HTTPS podem ser abertos."); return; }
     state.history=[{url,title:safeLabel(url),at:new Date().toISOString()},...state.history.filter(x=>x.url!==url)].slice(0,50);
     write(KEYS.history,state.history); renderHistory();
+    const nativeBrowser=window.Capacitor?.Plugins?.Browser;
+    if(nativeBrowser?.open){nativeBrowser.open({url}).catch(()=>notify("Não foi possível abrir o endereço externo."));return;}
     const opened=window.open(url,"_blank","noopener,noreferrer");
     if(!opened) notify("O navegador bloqueou a nova aba. Permita a abertura do link e tente novamente.");
   }
@@ -166,4 +168,5 @@ import { createShadowebRuntime } from "./runtime.js";
   state.shortcuts=read(KEYS.shortcuts,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&typeof x.title==="string").slice(0,20);
   const settings=connectorSettings(); runtime.connectors.forEach(c=>{if(Object.hasOwn(settings,c.id))c.enabled=settings[c.id];});
   applyPrefs(); setupShortcuts(); renderFavorites(); renderHistory(); renderWorldApps(); renderConnections(); renderKnowledge(); renderPlugins(); renderAudit();
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register("./sw.js").catch(() => {});
 })();
