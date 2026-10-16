@@ -20,8 +20,9 @@
 - `WORDDARK-AUDIT-LOG.md`: trilha de correções, evidências e achados abertos.
 - `worddark/runtime/world/core/environment-guard.js`: validação fail-closed de ambiente; PROD requer aprovação separada.
 - `worddark/runtime/world/core/environment-guard.test.js`: casos adicionais para ambientes inválidos, ausentes, bloqueados e aprovação PROD.
-- `worddark/runtime/world/core/connections/connection-gateway.js`: capacidade exata exigida, sem alias que permita tratar roteamento como publicação.
-- `worddark/runtime/world/core/connections/connection-gateway.test.js`: regressão para conta com `CONTENT_ROUTE` tentando `CONTENT_PUBLISH`.
+- `worddark/runtime/world/core/connections/connection-gateway.js`: capacidade exata exigida e sucesso do adapter confirmado explicitamente.
+- `worddark/runtime/world/core/connections/connection-registry.js`: recusa conta ausente ou com status diferente de `CONNECTED`.
+- `worddark/runtime/world/core/connections/connection-gateway.test.js`: regressões para capacidade insuficiente, conta `PENDING` com credencial residual e adapter sem retorno válido.
 
 ## Achados que bloqueiam o aceite final
 
@@ -36,7 +37,7 @@ O backend persiste tokens cifrados por KMS/Firestore, mas o gateway consultado u
 ## Limites de validação
 
 - O teste isolado do Environment Guard passou em harness local reconstruído; não é evidência de aprovação da suíte completa.
-- O teste de regressão do gateway foi alterado, mas sua execução ainda está pendente.
+- Os testes de regressão do gateway/registry foram ampliados, mas sua execução ainda está pendente.
 - `npm test` completo ainda não foi executado.
 - Não declarar APIs externas ativas, fluxo de publicação real validado ou sistema pronto para produção.
 - Ruan permanece separado do WordDark.
