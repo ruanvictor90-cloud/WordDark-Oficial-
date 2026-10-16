@@ -1,7 +1,7 @@
 name: Deploy offline root with isolated darkHub preview
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feature/ruan-hub-home-20261016"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,9 +31,11 @@ jobs:
         run: |
           mkdir -p site
           cp -R repo/offline/. site/
+          cp -R repo/hub site/hub
+          cp -R repo/worddark site/worddark
           mkdir -p site/preview/darkhub
           cp -R preview-src/ruan/. site/preview/darkhub/
-          sed -i 's|href="../hub/index.html"|href="../../index.html"|' site/preview/darkhub/index.html
+          sed -i 's|href="../hub/index.html"|href="../../hub/index.html"|' site/preview/darkhub/index.html
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload offline root and preview
