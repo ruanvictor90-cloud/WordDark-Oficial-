@@ -147,6 +147,7 @@ test("consumer SDK enforces app-specific grants and revocation",async()=>{
   const client=createShadowebClient({appId:"reader-app",bridge,registry});
   const result=await client.request({connectorId:"wikipedia",action:"search",input:{query:"hello"},scope:"connector.read"});
   assert.equal(result.ok,true);
+  assert.ok(audit.list().some(row => row.event === "gateway.request" && row.detail.appId === "reader-app"));
   registry.revoke("reader-app","wikipedia","connector.read");
   await assert.rejects(()=>client.request({connectorId:"wikipedia",action:"search",input:{query:"hello"},scope:"connector.read"}),/não concedida/);
   assert.throws(()=>createShadowebClient({appId:"bad/id",bridge,registry}),/inválido/);
