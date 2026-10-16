@@ -13,7 +13,7 @@ on:
         default: "com.worddark.darkhub"
         type: string
   push:
-    branches: ["rewrite/darkhub-ecosystem-core"]
+    branches: ["darkhub", "rewrite/darkhub-ecosystem-core"]
     paths:
       - "darkhub/**"
       - ".github/workflows/darkhub-apk.yml"
