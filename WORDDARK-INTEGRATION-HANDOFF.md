@@ -19,6 +19,8 @@
 - `WORDDARK-FINALIZATION-PLAN.md`: escopo, arquitetura canônica, regras de segurança e critérios de aceite.
 - `WORDDARK-AUDIT-LOG.md`: trilha de correções, evidências e achados abertos.
 - `worddark/runtime/world/core/environment-guard.js`: validação fail-closed de ambiente; PROD requer aprovação separada.
+- `worddark/runtime/world/security/authority-policy.js`: raiz padrão alterada de `ADM-RUAN` para `WORDDARK-ROOT`, mantendo o app pessoal fora da raiz do WordDark.
+- `worddark/runtime/world/security/security-core.test.js`: regressão para o limite entre a raiz WordDark e a identidade Ruan.
 - `worddark/runtime/world/core/environment-guard.test.js`: casos adicionais para ambientes inválidos, ausentes, bloqueados e aprovação PROD.
 - `worddark/runtime/world/core/connections/connection-gateway.js`: capacidade exata exigida e sucesso do adapter confirmado explicitamente.
 - `worddark/runtime/world/core/connections/connection-registry.js`: recusa conta ausente ou com status diferente de `CONNECTED`.
@@ -30,6 +32,10 @@
 
 O Engine e o Coordinator chamam rotas/executores sem `await`, enquanto a Dark Factory expõe caminhos assíncronos e os testes de integração usam módulos async. Não converter apenas um elo da cadeia: definir o contrato de execução e propagar corretamente até o Operation Center; adicionar testes com Promise resolvida/rejeitada.
 
+### WD-AUD-008 — liberação da parada de emergência sem autorização
+
+O método de liberação não consulta uma política de autoridade; a UI usa um requester fixo (`UI-DF`). A liberação deve ser fail-closed, com autorização verificável e referência auditada. Esse bloqueador precisa ser resolvido antes do aceite final.
+
 ### WD-AUD-004 — OAuth persistido não é conexão operacional
 
 O backend persiste tokens cifrados por KMS/Firestore, mas o gateway consultado usa um registry local e credenciais de runtime em memória. A ponte de ativação servidor-a-servidor ainda não foi demonstrada. A interface já informa que persistência é diferente de ativação. Não habilitar publicação real até integrar e testar essa ponte, incluindo revogação, escopo e capacidade exata.
@@ -40,6 +46,7 @@ O backend persiste tokens cifrados por KMS/Firestore, mas o gateway consultado u
 - Os testes de regressão do gateway/registry foram ampliados, mas sua execução ainda está pendente.
 - `npm test` completo ainda não foi executado.
 - Não declarar APIs externas ativas, fluxo de publicação real validado ou sistema pronto para produção.
+- Não considerar a parada de emergência pronta até que a liberação exija autorização verificável.
 - Ruan permanece separado do WordDark.
 - Nenhum merge, pull request ou alteração em `main` foi feito por esta frente.
 
