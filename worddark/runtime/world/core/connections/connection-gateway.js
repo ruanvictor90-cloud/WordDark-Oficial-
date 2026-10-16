@@ -59,7 +59,10 @@ class ExternalConnectionGateway {
       this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_STARTED",request.toJSON());
       const result=await adapter.execute(request.toJSON(),{account:access.account,credential:this.registry.getRuntimeCredential(request.providerId,request.accountId)});
       this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FINISHED",{request:request.toJSON(),result});
-      return{success:result?.success!==false,status:result?.status||"EXTERNAL_EXECUTED",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,result};
+      if(!result||result.success!==true){
+        return{success:false,status:"EXTERNAL_EXECUTION_FAILED",stage:"ADAPTER_RESULT",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,reason:"O adapter não confirmou explicitamente o sucesso da operação."};
+      }
+      return{success:true,status:result.status||"EXTERNAL_EXECUTED",operationId:request.operationId,providerId:request.providerId,accountId:request.accountId,result};
     }catch(error){
       this.logger?.log?.("EXTERNAL_CONNECTION_EXECUTION_FAILED",{request:request.toJSON(),error:String(error?.message||error)});
       return{success:false,status:"EXTERNAL_EXECUTION_FAILED",stage:"CENTRAL_DE_CONEXOES",operationId:request.operationId,providerId:request.providerId,reason:error?.message||"Falha na conexão externa."};
