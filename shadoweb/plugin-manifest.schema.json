@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Shadoweb Plugin Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "version",
+    "description",
+    "connectorId",
+    "permissions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "1.0.0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,47}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 70
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 24
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "connectorId": {
+      "enum": [
+        "web-search",
+        "wikipedia",
+        "local-knowledge"
+      ]
+    },
+    "permissions": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 1,
+      "items": {
+        "enum": [
+          "web.search",
+          "connector.read",
+          "knowledge.read"
+        ]
+      }
+    }
+  }
+}
