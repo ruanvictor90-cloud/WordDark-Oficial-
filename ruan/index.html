@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0710">
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
-  <link rel="icon" href="./ruan-logo.svg" type="image/svg+xml">
+  <link rel="icon" href="./darkhub-logo.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.2">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.3">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <header class="topbar">
       <span class="header-spacer" aria-hidden="true"></span>
       <a class="brand-home" href="./index.html" aria-label="darkHub, início">
-        <img src="./ruan-logo.svg" alt="darkHub" width="58" height="58">
+        <img src="./darkhub-logo.svg" alt="darkHub" width="58" height="58">
       </a>
       <div class="header-actions">
         <span class="connection-dot" title="Interface ativa" aria-label="Interface ativa"></span>
@@ -61,21 +61,11 @@
       <div><p class="eyebrow">SEU ESPAÇO</p><h2 id="drawer-title">Seus aplicativos</h2></div>
       <button id="apps-close" class="icon-button close-button" type="button" aria-label="Fechar gaveta">×</button>
     </div>
-    <div class="app-grid">
-      <a class="app-tile" href="./apps/pessoal/index.html">
-        <span class="app-tile-icon personal-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="27" cy="22" r="9"/><path d="M10 53c2-10 8-15 17-15s15 5 17 15"/><path d="m40 43 5 5 10-12"/></svg></span>
-        <span>Pessoal</span><small>Vida e organização</small>
-      </a>
-      <a class="app-tile" href="./apps/shadow/index.html">
-        <span class="app-tile-icon shadow-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M5 32s10-17 27-17 27 17 27 17-10 17-27 17S5 32 5 32Z"/><circle cx="32" cy="32" r="11"/><circle cx="32" cy="32" r="5"/></svg></span>
-        <span>Shadow</span><small>Espaço de inteligência</small>
-      </a>
-      <a class="app-tile" href="./apps/entretenimento/index.html">
-        <span class="app-tile-icon media-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="13" width="48" height="38" rx="8"/><path d="M22 13 14 25m24-12L26 25m24-12L38 25"/><path d="m28 27 13 8-13 8Z"/></svg></span>
-        <span>Entretenimento</span><small>Conteúdo e mídia</small>
-      </a>
+    <div class="empty-apps">
+      <span class="empty-apps-mark" aria-hidden="true">+</span>
+      <h3>Nenhum aplicativo ainda</h3>
+      <p>Este espaço está limpo. Os aplicativos serão adicionados aqui quando forem criados.</p>
     </div>
-    <p class="drawer-note">Cada aplicativo tem sua própria tela e função. Esta gaveta pertence somente ao Ruan.</p>
   </section>
   <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="Fechar gaveta de aplicativos" hidden tabindex="-1"></button>
 
