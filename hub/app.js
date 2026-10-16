@@ -21,4 +21,5 @@ search?.addEventListener("submit",event=>{event.preventDefault();const q=(input?
 document.addEventListener("keydown",event=>{if(event.key==="Escape"){closeSide();closeApps();closeAlerts()}});
 const greeting=$("greeting");if(greeting){const hour=new Date().getHours();greeting.textContent=hour<12?"Bom dia, bem-vindo ao WordDark Hub":hour<18?"Boa tarde, bem-vindo ao WordDark Hub":"Boa noite, bem-vindo ao WordDark Hub"}
 const list=$("alert-list");if(list)list.innerHTML='<p class="empty-state">Nenhum alerta por enquanto.</p>';
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}))}
 })();
