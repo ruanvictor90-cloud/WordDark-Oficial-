@@ -7,7 +7,7 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./ruan-logo.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.10">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.11">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -40,6 +40,8 @@
       </form>
       <p id="search-feedback" class="search-feedback" role="status" aria-live="polite" hidden></p>
     </section>
+
+    <section id="home-widgets" class="home-widgets" aria-label="Widgets da tela inicial"></section>
 
     <footer class="app-footer">
       <span>DARKHUB</span>
@@ -87,12 +89,15 @@
     <nav class="side-menu" aria-label="Navegação principal">
       <button id="side-home" class="side-menu-item is-current" type="button"><span class="side-menu-icon">⌂</span><span><strong>Início</strong><small>Voltar à tela principal</small></span><span class="side-menu-arrow">›</span></button>
     </nav>
+    <div class="side-widget-heading"><div><p class="eyebrow">PERSONALIZAÇÃO</p><h3>Widgets da tela inicial</h3></div><span class="widget-count" id="widget-count">0 ativos</span></div>
+    <p class="side-widget-hint">Escolha o que aparece na página inicial e ajuste o tamanho de cada cartão.</p>
+    <div id="widget-settings" class="widget-settings" aria-label="Configurar widgets"></div>
   </aside>
 
   <section id="alert-panel" class="alert-panel" aria-labelledby="alert-title" hidden>
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script src="./ruan-hub.js?v=20261016.8" defer></script>
+  <script src="./ruan-hub.js?v=20261016.9" defer></script>
 </body>
 </html>
