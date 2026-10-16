@@ -17,6 +17,7 @@
 - Registros criptografados antes de persistir no armazenamento local.
 - Bloqueio por inatividade após cinco minutos e ao sair da aba.
 - Limitação simples de tentativas repetidas de desbloqueio.
+- Exportação e restauração de backup criptografado, com validação da frase secreta e da integridade antes de substituir o cofre.
 - Content Security Policy; sem execução de scripts arbitrários ou HTML inserido de registros.
 - Nenhuma conexão externa ou credencial de serviço ativa.
 
@@ -24,4 +25,4 @@
 O cofre criptográfico protege dados locais em repouso, mas o navegador e o dispositivo ainda são parte do ambiente de confiança. Um aplicativo web público não consegue garantir que o código não seja alterado por alguém com controle do dispositivo, nem oferece autenticação de servidor, sincronização entre aparelhos, armazenamento Android Keystore ou logs remotos invioláveis. Esses controles precisam de backend autenticado e, no APK, integração nativa segura. Perder a frase secreta significa perder o acesso aos dados criptografados; mantenha exportações de backup em local seguro.
 
 ## Desenvolvimento e publicação
-A pasta `darkhub/` é a origem canônica desta versão. O aplicativo é publicado por workflow separado e empacotado em APK de teste via Capacitor. Builds debug não são releases assinadas para distribuição pública. A integração com WordDark e outros aplicativos permanece desativada até haver contratos de API, autenticação, autorização, revogação e testes específicos.
+O contrato de passagem para o Shadoweb está documentado em `DARKHUB-SHADOWEB-HANDOFF.md`. A pasta `darkhub/` é a origem canônica desta versão. O aplicativo é publicado por workflow separado e empacotado em APK de teste via Capacitor. Builds debug não são releases assinadas para distribuição pública. A integração com WordDark e outros aplicativos permanece desativada até haver contratos de API, autenticação, autorização, revogação e testes específicos.
