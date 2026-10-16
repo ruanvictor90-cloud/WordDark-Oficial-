@@ -35,6 +35,9 @@ assert.ok(htmlFiles.includes(path.join(root, 'index.html')), 'Ruan central page 
 const centralHtml = readFileSync(path.join(root, 'index.html'), 'utf8');
 assert.equal((centralHtml.match(/class="ruan-home-grid"/g) || []).length, 1, 'Ruan central must expose one app grid');
 assert.equal((centralHtml.match(/class="ruan-home-app/g) || []).length, 4, 'Ruan central must expose four named app shortcuts');
+assert.equal((centralHtml.match(/class="ruan-info-widgets"/g) || []).length, 1, 'Ruan central must contain one summary widget section');
+assert.equal((centralHtml.match(/id="finance-widget-value"/g) || []).length, 1, 'Finance widget ID must be unique');
+assert.equal((centralHtml.match(/id="tasks-widget-value"/g) || []).length, 1, 'Task widget ID must be unique');
 assert.ok(!centralHtml.includes('apps-drawer') && !centralHtml.includes('apps-toggle'), 'The Ruan app drawer is temporarily removed');
 
 for (const file of htmlFiles) {
