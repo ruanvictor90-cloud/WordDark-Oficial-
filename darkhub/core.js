@@ -116,7 +116,14 @@ export class DarkHubVault {
     if (!allowedCollections.includes(collection)) throw new Error("Coleção inválida.");
     const item = this.#state[collection].find(entry => entry.id === id);
     if (!item) throw new Error("Registro não encontrado.");
-    item.status = validText(status, 60);
+    const allowedStatuses = {
+      projects: ["Planejado", "Em desenvolvimento", "Em revisão", "Em finalização", "Concluído", "Bloqueado"],
+      ecosystemAnalyses: ["Rascunho", "Em análise", "Validada", "Bloqueada"],
+      technicalAnalyses: ["Rascunho", "Em análise", "Aprovada", "Reprovada", "Bloqueada"],
+      apps: ["Especificado", "Em desenvolvimento", "Em revisão", "Pronto para empacotar", "Bloqueado"]
+    };
+    if (!allowedStatuses[collection].includes(status)) throw new Error("Estado não permitido para este tipo de registro.");
+    item.status = status;
     await this.#commit("record.status_updated", item.id + " → " + item.status);
   }
   async deleteRecord(collection, id) {
