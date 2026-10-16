@@ -7,7 +7,7 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./ruan-logo.svg?v=20261016.17" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.22">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.23">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -85,6 +85,31 @@
           </form>
         </details>
       </section>
+            <section id="panel-workspace" class="panel-workspace" hidden aria-labelledby="information-title">
+        <div class="development-toolbar">
+          <div><h2 id="information-title">Recebimento de informações</h2><p>Mensagens e avisos enviados pelos aplicativos conectados ao darkHub.</p></div>
+          <div class="development-tools"><button id="information-export" class="project-tool-button" type="button">Exportar</button><button id="information-import-trigger" class="project-tool-button" type="button">Importar</button><input id="information-import-file" type="file" accept="application/json,.json" hidden></div>
+        </div>
+        <p id="information-feedback" class="project-feedback" role="status" aria-live="polite" hidden></p>
+        <form id="information-form" class="project-form information-form">
+          <label>Origem<input name="sender" maxlength="120" required placeholder="Ex.: Pessoal, Shadow, outro app"></label>
+          <label>Categoria<select name="category"><option>Geral</option><option>Alerta</option><option>Resultado</option><option>Pedido</option><option>Erro</option><option>Status</option></select></label>
+          <label>Título<input name="title" maxlength="180" required placeholder="Resumo da informação"></label>
+          <label>Mensagem<textarea name="message" maxlength="5000" rows="3" placeholder="Detalhes ou retorno enviado pelo aplicativo"></textarea></label>
+          <button type="submit" class="project-submit">Receber informação</button>
+        </form>
+        <div class="inbox-heading"><h3>Caixa de entrada</h3><span id="information-count" class="inbox-count">0 recebimentos</span></div>
+        <div id="information-list" class="information-list" aria-live="polite"><p class="project-empty">Nenhuma informação recebida ainda.</p></div>
+      </section>
+      <section id="package-workspace" class="package-workspace" hidden aria-labelledby="package-title">
+        <div class="package-panel">
+          <span class="package-mark" aria-hidden="true">APK</span>
+          <div><h2 id="package-title">Empacotamento Android</h2><p>O darkHub pode compilar um aplicativo web em APK de teste usando Capacitor e GitHub Actions.</p></div>
+        </div>
+        <ol class="package-steps"><li>Escolha a pasta do aplicativo que contém o index.html.</li><li>Informe o nome e o identificador Android do pacote.</li><li>Execute a compilação e baixe o APK nos artefatos da execução.</li></ol>
+        <a class="project-submit package-launch" href="https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/workflows/darkhub-apk.yml" target="_blank" rel="noopener noreferrer">Abrir empacotador APK ↗</a>
+        <p class="package-note">A primeira versão gera um APK debug instalável para testes. Uma versão assinada para distribuição exige configurar a assinatura segura separadamente.</p>
+      </section>
       <div id="subpage-empty" class="subpage-empty" hidden><span class="subpage-empty-mark">◈</span><strong id="subpage-empty-title">Área preparada</strong><p id="subpage-empty-text">A estrutura está pronta. O conteúdo será desenvolvido quando iniciarmos esta etapa.</p></div>
     </section>
   </main>
@@ -144,6 +169,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script type="module" src="./ruan-hub.js?v=20261016.16"></script>
+  <script type="module" src="./ruan-hub.js?v=20261016.23"></script>
 </body>
 </html>
