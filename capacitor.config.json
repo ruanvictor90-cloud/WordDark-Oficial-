@@ -1,0 +1,13 @@
+{
+  "appId": "org.worddark.shadoweb",
+  "appName": "Shadoweb",
+  "webDir": "shadoweb",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Browser": {
+      "presentationStyle": "popover"
+    }
+  }
+}
