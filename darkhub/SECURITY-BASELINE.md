@@ -26,6 +26,8 @@
 - The passphrase-derived key is held in memory only while unlocked and dropped on lock.
 - Idle timeout is five minutes; hiding the tab locks the UI.
 - Local failed-attempt throttling is only a deterrent: clearing browser storage resets it.
+- Encrypted backup export and restore are available. Restore validates the passphrase and authenticated ciphertext before writing the imported vault; replacing an existing local vault requires explicit confirmation in the UI.
+- Keep the backup file and its passphrase in separate secure locations.
 
 ## Honest security status
 This is a local security baseline, not a complete production security system. It does not defend against malware, developer tools, a compromised OS, modified client code, browser extensions with broad access, or offline guessing against weak passphrases. Backend auth, secure native storage and remote audit are future gates, not claims of current capability.
