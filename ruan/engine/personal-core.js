@@ -62,7 +62,7 @@ export function validateState(input) {
   }
   for (const item of (Array.isArray(input.bills) ? input.bills : [])) {
     if (!item || typeof item.title !== "string" || !item.title.trim() ||
-        !Number.isFinite(item.amount) || item.amount < 0 ||
+        !Number.isFinite(item.amount) || item.amount <= 0 ||
         (item.dueDate != null && item.dueDate !== "" && !isDateKey(item.dueDate)) ||
         (item.status && !["open", "paid", "cancelled"].includes(item.status))) {
       errors.push("Há uma conta futura inválida.");
@@ -89,7 +89,7 @@ function localDateKey(date) { return date.getFullYear() + "-" + String(date.getM
 function isDateKey(value) {
   if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const parsed = new Date(value + "T12:00:00");
-  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+  return !Number.isNaN(parsed.getTime()) && localDateKey(parsed) === value;
 }
 
 export function calculateFinance(state, options = {}) {
@@ -192,8 +192,8 @@ export function nextRecurrenceDate(task, after = new Date()) {
     } else return null;
     guard++;
   }
-  if (task.recurrenceEnd && candidate.toISOString().slice(0, 10) > task.recurrenceEnd) return null;
-  return candidate.toISOString().slice(0, 10);
+  if (task.recurrenceEnd && localDateKey(candidate) > task.recurrenceEnd) return null;
+  return localDateKey(candidate);
 }
 
 export function createExportPayload(state, now = new Date().toISOString()) {
