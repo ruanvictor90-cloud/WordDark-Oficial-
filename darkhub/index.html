@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0711">
+<meta name="description" content="darkHub — central de análise, governança e criação de aplicativos do ecossistema.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./brand.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./app.css">
+<title>darkHub — Central do Ecossistema</title>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<div class="shell" id="app-shell">
+<header class="topbar">
+<button class="icon-btn" id="menu-toggle" type="button" aria-label="Abrir navegação" aria-expanded="false">☰</button>
+<a class="brand" href="#dashboard" aria-label="darkHub início"><img src="./brand.svg" alt="" width="42" height="42"><span><strong>darkHub</strong><small>ECOSYSTEM CONTROL</small></span></a>
+<div class="top-actions"><span class="secure-indicator" id="security-state"><i></i> Protegido</span><button class="icon-btn" id="lock-now" type="button" aria-label="Bloquear darkHub" title="Bloquear">⌑</button></div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-label">CENTRAL</div>
+<button class="nav-item active" data-view="dashboard" type="button"><span>▦</span> Painel central</button>
+<div class="sidebar-label">ANÁLISE</div>
+<button class="nav-item" data-view="ecosystem" type="button"><span>◎</span> Análise do ecossistema</button>
+<button class="nav-item" data-view="technical" type="button"><span>⌘</span> Análise técnica</button>
+<div class="sidebar-label">CONSTRUÇÃO</div>
+<button class="nav-item" data-view="creator" type="button"><span>＋</span> Criador de apps</button>
+<button class="nav-item" data-view="registry" type="button"><span>▤</span> Registro de projetos</button>
+<div class="sidebar-label">GOVERNANÇA</div>
+<button class="nav-item" data-view="security" type="button"><span>◇</span> Segurança e acesso</button>
+<button class="nav-item" data-view="activity" type="button"><span>◷</span> Registro de atividade</button>
+<div class="sidebar-bottom"><span class="live-dot"></span><span>Modo local seguro</span></div>
+</aside>
+<div class="sidebar-scrim" id="sidebar-scrim"></div>
+<main class="main" id="main-content">
+<section class="view active" id="view-dashboard" data-view-panel="dashboard">
+<div class="page-kicker">VISÃO GERAL / ECOSSISTEMA</div>
+<div class="page-title-row"><div><h1>Centro de comando</h1><p>Analise, organize e construa — com cada etapa sob controle.</p></div><span class="status-chip"><i></i> Núcleo local</span></div>
+<div class="hero-card"><div class="hero-copy"><span class="hero-kicker">DARKHUB · CENTRAL</span><h2>Um ecossistema.<br><em>Visão integrada.</em></h2><p>O darkHub acompanha projetos, organiza análises e cria bases independentes para novos aplicativos.</p><button class="primary-btn" data-go="creator" type="button">Criar aplicativo <span>↗</span></button></div><div class="hero-orbit" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit-core">DH</div><span class="orbit-node node-a">A</span><span class="orbit-node node-b">T</span><span class="orbit-node node-c">+</span></div></div>
+<div class="metrics-grid">
+<article class="metric-card"><span class="metric-label">Projetos registrados</span><strong id="metric-projects">0</strong><small>Registro local criptografado</small></article>
+<article class="metric-card"><span class="metric-label">Análises concluídas</span><strong id="metric-analyses">0</strong><small>Ecossistema + técnica</small></article>
+<article class="metric-card"><span class="metric-label">Apps em construção</span><strong id="metric-apps">0</strong><small>Especificações criadas</small></article>
+<article class="metric-card"><span class="metric-label">Conexões ativas</span><strong>0</strong><small>Nenhuma integração externa</small></article>
+</div>
+<div class="section-heading"><div><span class="page-kicker">ÁREAS DE TRABALHO</span><h2>Escolha um hub</h2></div></div>
+<div class="workspace-grid">
+<button class="workspace-card" data-go="ecosystem" type="button"><span class="workspace-icon">◎</span><span class="workspace-title">Análise do ecossistema</span><span class="workspace-desc">Mapeie módulos, responsabilidades, dependências e conexões.</span><span class="workspace-link">Abrir análise <b>↗</b></span></button>
+<button class="workspace-card" data-go="technical" type="button"><span class="workspace-icon">⌘</span><span class="workspace-title">Análise técnica</span><span class="workspace-desc">Registre revisões, testes, riscos, arquitetura e pendências.</span><span class="workspace-link">Abrir análise <b>↗</b></span></button>
+<button class="workspace-card" data-go="creator" type="button"><span class="workspace-icon">＋</span><span class="workspace-title">Criador de aplicativos</span><span class="workspace-desc">Defina identidade, escopo e estrutura inicial de um app independente.</span><span class="workspace-link">Criar app <b>↗</b></span></button>
+</div>
+<div class="section-heading section-spaced"><div><span class="page-kicker">ÚLTIMAS MOVIMENTAÇÕES</span><h2>Atividade recente</h2></div><button class="subtle-btn" data-go="activity" type="button">Ver registro</button></div>
+<div class="activity-list" id="dashboard-activity"></div>
+</section>
+
+<section class="view" id="view-ecosystem" data-view-panel="ecosystem" hidden>
+<div class="page-kicker">HUB 01 / ANÁLISE</div><div class="page-title-row"><div><h1>Análise do ecossistema</h1><p>Mapeie os sistemas, suas funções e as conexões que devem existir.</p></div></div>
+<div class="notice-card"><strong>Objetivo deste hub</strong><p>Descrever a arquitetura funcional do ecossistema. Ele não se conecta automaticamente a outros apps e não afirma ter inspecionado código que ainda não foi fornecido.</p></div>
+<form class="form-card" id="ecosystem-form"><div class="form-heading"><span class="form-icon">◎</span><div><h2>Registrar análise</h2><p>Uma análise por módulo, conexão ou decisão arquitetural.</p></div></div>
+<label for="eco-title">Título da análise</label><input id="eco-title" name="title" maxlength="100" required placeholder="Ex.: Limites entre darkHub e WordDark">
+<label for="eco-target">Sistema ou módulo</label><input id="eco-target" name="target" maxlength="100" required placeholder="Ex.: Central de conexões">
+<label for="eco-kind">Tipo de análise</label><select id="eco-kind" name="kind"><option>Arquitetura</option><option>Responsabilidades</option><option>Conexões</option><option>Fluxo operacional</option><option>Governança</option></select>
+<label for="eco-findings">Conclusões e evidências</label><textarea id="eco-findings" name="findings" maxlength="4000" required rows="5" placeholder="O que foi verificado? O que falta? Quais evidências sustentam a conclusão?"></textarea>
+<label for="eco-status">Estado</label><select id="eco-status" name="status"><option>Rascunho</option><option>Em análise</option><option>Validada</option><option>Bloqueada</option></select>
+<div class="form-actions"><button class="primary-btn" type="submit">Guardar análise</button></div><p class="form-feedback" id="eco-feedback" role="status"></p></form>
+<div class="section-heading"><div><span class="page-kicker">HISTÓRICO</span><h2>Análises registradas</h2></div></div><div class="record-list" id="eco-records"></div>
+</section>
+
+<section class="view" id="view-technical" data-view-panel="technical" hidden>
+<div class="page-kicker">HUB 02 / ANÁLISE TÉCNICA</div><div class="page-title-row"><div><h1>Análise técnica</h1><p>Revisões de código, testes, riscos e critérios de liberação.</p></div></div>
+<div class="notice-card"><strong>Revisão baseada em evidências</strong><p>Use este hub para registrar arquivos examinados, resultados de testes e riscos confirmados. Um registro manual não substitui uma execução de testes automatizada.</p></div>
+<form class="form-card" id="technical-form"><div class="form-heading"><span class="form-icon">⌘</span><div><h2>Registrar revisão técnica</h2><p>Organize verificações e decisões de engenharia.</p></div></div>
+<label for="tech-title">Título da revisão</label><input id="tech-title" name="title" maxlength="100" required placeholder="Ex.: Revisão do contrato de comunicação">
+<label for="tech-scope">Escopo / arquivos</label><input id="tech-scope" name="target" maxlength="180" required placeholder="Arquivos, módulos ou fluxo revisado">
+<label for="tech-checks">Verificações realizadas</label><textarea id="tech-checks" name="findings" maxlength="4000" required rows="5" placeholder="Testes executados, resultados observados, riscos e pendências"></textarea>
+<label for="tech-severity">Risco identificado</label><select id="tech-severity" name="severity"><option>Sem risco identificado</option><option>Baixo</option><option>Moderado</option><option>Alto — bloquear liberação</option></select>
+<label for="tech-status">Estado da revisão</label><select id="tech-status" name="status"><option>Rascunho</option><option>Em análise</option><option>Aprovada</option><option>Reprovada</option><option>Bloqueada</option></select>
+<div class="form-actions"><button class="primary-btn" type="submit">Guardar revisão</button></div><p class="form-feedback" id="tech-feedback" role="status"></p></form>
+<div class="section-heading"><div><span class="page-kicker">HISTÓRICO</span><h2>Revisões registradas</h2></div></div><div class="record-list" id="tech-records"></div>
+</section>
+
+<section class="view" id="view-creator" data-view-panel="creator" hidden>
+<div class="page-kicker">CONSTRUÇÃO / APP FACTORY</div><div class="page-title-row"><div><h1>Criador de aplicativos</h1><p>Transforme uma ideia em uma especificação independente e exportável.</p></div></div>
+<div class="notice-card"><strong>Apps independentes por padrão</strong><p>Cada app criado recebe identidade, escopo e arquivos iniciais próprios. O criador não importa código de outros apps, não executa código fornecido pelo usuário e não publica automaticamente.</p></div>
+<div class="creator-layout"><form class="form-card" id="creator-form"><div class="form-heading"><span class="form-icon">＋</span><div><h2>Novo aplicativo</h2><p>Preencha a ficha de origem do projeto.</p></div></div>
+<label for="app-name">Nome do aplicativo</label><input id="app-name" name="name" maxlength="50" required placeholder="Ex.: Shadoweb">
+<label for="app-slug">Identificador interno</label><input id="app-slug" name="slug" maxlength="40" required pattern="[a-z][a-z0-9-]*" placeholder="ex.: shadoweb"><small class="field-hint">Letras minúsculas, números e hífen; começa por letra.</small>
+<label for="app-description">Objetivo do aplicativo</label><textarea id="app-description" name="description" maxlength="1200" rows="4" required placeholder="O que ele faz, para quem e o que não deve fazer?"></textarea>
+<label for="app-type">Modelo inicial</label><select id="app-type" name="type"><option value="standalone">Aplicativo independente</option><option value="dashboard">Painel de informações</option><option value="workflow">Fluxo operacional</option><option value="catalog">Catálogo / biblioteca</option></select>
+<label for="app-platform">Plataforma inicial</label><select id="app-platform" name="platform"><option>Web responsiva + futura APK</option><option>Android APK</option><option>Web responsiva</option></select>
+<label for="app-security">Requisito de segurança</label><select id="app-security" name="security"><option>Isolamento local por padrão</option><option>Autenticação antes de dados sensíveis</option><option>Integração autenticada futura</option><option>Revisão de segurança obrigatória</option></select>
+<div class="form-actions"><button class="primary-btn" type="submit">Criar especificação</button></div><p class="form-feedback" id="creator-feedback" role="status"></p></form>
+<aside class="preview-card"><span class="page-kicker">SAÍDA DA FÁBRICA</span><h2>Pacote inicial</h2><p>Depois de criar a ficha, você poderá exportar um manifesto e uma página inicial mínima para continuar o desenvolvimento fora do darkHub.</p><div class="preview-file"><span>▧</span><div><strong>app-manifest.json</strong><small>Identidade, plataforma e escopo</small></div></div><div class="preview-file"><span>⌘</span><div><strong>index.html</strong><small>Base visual independente</small></div></div><p class="field-hint">A exportação é um ponto de partida, não um APK pronto nem uma revisão de segurança concluída.</p></aside></div>
+<div class="section-heading"><div><span class="page-kicker">CATÁLOGO</span><h2>Apps especificados</h2></div></div><div class="record-list" id="created-apps"></div>
+</section>
+
+<section class="view" id="view-registry" data-view-panel="registry" hidden>
+<div class="page-kicker">REGISTRO / GOVERNANÇA</div><div class="page-title-row"><div><h1>Registro de projetos</h1><p>Uma lista única dos projetos acompanhados pelo darkHub.</p></div></div>
+<form class="inline-form" id="project-form"><label for="project-name">Nome do projeto</label><input id="project-name" name="name" maxlength="100" required placeholder="Nome do projeto"><label for="project-owner">Área responsável</label><select id="project-owner" name="owner"><option>darkHub</option><option>WordDark</option><option>Céu</option><option>Terra</option><option>Shadoweb</option><option>Outro</option></select><label for="project-state">Estado</label><select id="project-state" name="status"><option>Planejado</option><option>Em desenvolvimento</option><option>Em revisão</option><option>Em finalização</option><option>Concluído</option><option>Bloqueado</option></select><button class="primary-btn" type="submit">Registrar projeto</button><p class="form-feedback" id="project-feedback" role="status"></p></form>
+<div class="record-list" id="project-records"></div>
+</section>
+
+<section class="view" id="view-security" data-view-panel="security" hidden>
+<div class="page-kicker">GOVERNANÇA / PROTEÇÃO</div><div class="page-title-row"><div><h1>Segurança e acesso</h1><p>Controle local, proteção de dados e limites explícitos.</p></div></div>
+<div class="security-grid"><article class="security-card"><span class="security-icon">◇</span><h2>Bloqueio local</h2><p>O cofre local usa uma frase secreta para derivar uma chave criptográfica. Os registros do darkHub são criptografados antes de serem gravados no armazenamento local.</p><button class="subtle-btn" id="change-passphrase" type="button">Alterar frase secreta</button></article><article class="security-card"><span class="security-icon">⌁</span><h2>Conexões externas</h2><p>Nenhuma conexão externa está ativa. Integrações futuras precisarão de identidade autenticada, escopo mínimo, revogação e validação do lado servidor.</p><span class="status-chip">Desativadas por padrão</span></article><article class="security-card"><span class="security-icon">▤</span><h2>Trilha de auditoria</h2><p>Eventos relevantes são registrados dentro do cofre criptografado. A trilha local não substitui logs remotos resistentes a adulteração.</p><button class="subtle-btn" data-go="activity" type="button">Consultar atividade</button></article><article class="security-card"><span class="security-icon">⬡</span><h2>Limites de confiança</h2><p>O código web pode ser inspecionado e alterado por quem controla o dispositivo. O bloqueio local protege contra acesso casual, mas não substitui autenticação de servidor nem armazenamento seguro nativo.</p><span class="status-chip warning-chip">Proteção local, não servidor</span></article></div>
+<div class="section-heading"><div><span class="page-kicker">POLÍTICA</span><h2>Regras aplicadas</h2></div></div><ul class="policy-list"><li>Não guardar senhas de serviços, tokens ou chaves de API no app.</li><li>Não executar scripts, plugins ou código arbitrário de projetos criados.</li><li>Não publicar, empacotar ou integrar sem ação explícita do operador.</li><li>Separar análise registrada de análise realmente executada e comprovada.</li><li>Bloquear automaticamente após inatividade e ao sair da aba.</li><li>Dados locais criptografados; nenhuma sincronização entre dispositivos.</li></ul>
+</section>
+
+<section class="view" id="view-activity" data-view-panel="activity" hidden>
+<div class="page-kicker">GOVERNANÇA / AUDITORIA LOCAL</div><div class="page-title-row"><div><h1>Registro de atividade</h1><p>Eventos locais relevantes, guardados no cofre criptografado.</p></div><button class="subtle-btn" id="export-audit" type="button">Exportar registro</button></div>
+<div class="notice-card"><strong>Escopo do registro</strong><p>Este histórico documenta ações realizadas neste navegador enquanto o cofre está desbloqueado. Ele não é inviolável nem sincronizado com um servidor.</p></div><div class="record-list" id="audit-records"></div>
+</section>
+</main>
+</div>
+<footer class="footer"><span>darkHub · Ecosystem Control</span><span id="last-saved">Dados criptografados neste dispositivo</span></footer>
+</div>
+
+<section class="lock-screen" id="lock-screen" aria-labelledby="lock-title">
+<div class="lock-card"><img src="./brand.svg" alt="" width="58" height="58"><p class="page-kicker">DARKHUB / ACESSO PROTEGIDO</p><h1 id="lock-title">Cofre local</h1><p id="lock-description">Crie uma frase secreta para proteger os dados deste dispositivo.</p>
+<form id="unlock-form"><label for="passphrase" id="passphrase-label">Frase secreta (mínimo 8 caracteres)</label><input id="passphrase" type="password" minlength="8" maxlength="128" required autocomplete="current-password" placeholder="Digite sua frase secreta"><label for="passphrase-confirm" id="confirm-label" hidden>Confirme a frase secreta</label><input id="passphrase-confirm" type="password" minlength="8" maxlength="128" autocomplete="new-password" placeholder="Repita a frase secreta" hidden><button class="primary-btn lock-submit" id="unlock-submit" type="submit">Criar cofre protegido</button><p class="lock-feedback" id="lock-feedback" role="alert"></p></form>
+<p class="lock-footnote">A frase secreta não pode ser recuperada pelo darkHub. Se você perdê-la, os dados criptografados locais não poderão ser abertos. Exporte backups seguros regularmente.</p></div></section>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
