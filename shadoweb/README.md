@@ -20,7 +20,7 @@ Os nomes dos módulos são estáveis na arquitetura. A interface voltada ao usu�
 
 - Pesquisa web por mecanismo escolhido e abertura de endereços HTTPS.
 - Favoritos, histórico, atalhos e perfis de apresentação guardados localmente.
-- Catálogo inicial de sistemas e conectores.
+- Catálogo inicial de sistemas e conectores.\n- SDK local para apps consumidores, com manifesto de capacidades, permissões por app e revogação.
 - Permissões por escopo, validação de requisições, lista de ações permitidas, timeout e auditoria local.
 - Pesquisa na biblioteca local e importação/exportação de notas.
 - Importação de manifestos de plugins em formato declarativo.
