@@ -15,7 +15,8 @@ export class Bridge {
     this.audit.record("gateway.request", {
       requestId: request.requestId,
       connectorId: request.connectorId,
-      action: request.action
+      action: request.action,
+      appId: typeof context.appId === "string" ? context.appId : "shadoweb-core"
     });
 
     try {
@@ -48,7 +49,8 @@ export class Bridge {
         const result = await Promise.race([execution, timeout]);
         this.audit.record("gateway.success", {
           requestId: request.requestId,
-          connectorId: connector.id
+          connectorId: connector.id,
+          appId: typeof context.appId === "string" ? context.appId : "shadoweb-core"
         });
         return { version: "1.0.0", requestId: request.requestId, ok: true, result };
       } finally {
@@ -60,7 +62,8 @@ export class Bridge {
       this.audit.record(denied ? "gateway.denied" : "gateway.error", {
         requestId: request.requestId,
         connectorId: request.connectorId,
-        reason: message
+        reason: message,
+        appId: typeof context.appId === "string" ? context.appId : "shadoweb-core"
       });
       return { version: "1.0.0", requestId: request.requestId, ok: false, error: message };
     }
