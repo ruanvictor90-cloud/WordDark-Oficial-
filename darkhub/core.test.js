@@ -52,6 +52,8 @@ test("generated app files escape user text and include restrictive policy", asyn
   assert.doesNotMatch(output.html, /<script\b/i);
   assert.match(output.html, /Content-Security-Policy/);
   assert.equal(output.manifest.id, "teste-seguro");
+  assert.match(output.css, /:root/);
+  assert.match(output.html, /app.css/);
 });
 
 test("lock clears the in-memory decrypted state", async () => {
