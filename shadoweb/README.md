@@ -4,7 +4,7 @@ Shadoweb é um aplicativo convencional de navegação e acesso a serviços, pers
 
 ## Módulos
 
-- **Browser:** pesquisa web, abertura de endereços HTTPS, favoritos, histórico e atalhos locais.
+- **Browser / Address:** pesquisa web, abertura de endereços HTTPS, favoritos, histórico, atalhos locais e bloqueio de esquemas perigosos e destinos locais/privados.
 - **World:** catálogo inicial de serviços e sistemas do ecossistema, com estados reais de conexão.
 - **Connect:** registro dos conectores disponíveis e controles para ativar/desativar.
 - **Gate:** permissões explícitas por conector e escopo.
@@ -31,6 +31,12 @@ Conexões a darkHub e WordDark aparecem como pendentes até existirem endpoints 
 - Esta aplicação web não substitui o motor de navegador do Android/Chrome, não gerencia cookies de sites externos e não pode sobrepor outros apps por si só.
 - A CSP permite apenas scripts e estilos locais e a chamada à API pública da Wikipedia.
 - O service worker armazena o shell local; pesquisas externas exigem internet.
+
+## Contratos de integração
+
+- [Contrato da API](./API-CONTRACT.md) e [manifesto de plugin](./plugin-manifest.schema.json).
+- [Baseline de segurança](./SECURITY-BASELINE.md).
+- A especificação HTTP é uma preparação versionada; não existe endpoint público ativo nesta fase.
 
 ## Executar localmente
 
