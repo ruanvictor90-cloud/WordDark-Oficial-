@@ -19,3 +19,10 @@
 .saved-row .saved-main{min-width:0}
 .saved-row .saved-main small{white-space:normal;overflow-wrap:anywhere}
 @media(max-width:520px){.main-tabs{margin-inline:-12px;padding-inline:12px}.compact-form{grid-template-columns:1fr}.connection-card{align-items:flex-start}.inline-actions .small-button{flex:1}}
+
+
+/* User-selected profile accents */
+html[data-profile="study"]{--purple:#a9d8ff;--purple-2:#68a8d9;--line-bright:#38678a}
+html[data-profile="work"]{--purple:#9ce6c2;--purple-2:#58b98e;--line-bright:#356c57}
+html[data-profile="creator"]{--purple:#ffb9dc;--purple-2:#db80b0;--line-bright:#874e71}
+html[data-profile="general"]{--purple:#f1d18a;--purple-2:#d1a64f;--line-bright:#81683a}
