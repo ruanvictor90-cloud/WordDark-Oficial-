@@ -1,1 +1,0 @@
-(()=>{'use strict';const card=document.querySelector('.shadow-card');if(card)card.addEventListener('focus',()=>card.classList.add('focused'));})();

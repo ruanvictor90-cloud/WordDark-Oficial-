@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="darkHub">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2ccff"/><stop offset="1" stop-color="#9255df"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-<rect x="5" y="5" width="118" height="118" rx="34" fill="#100b18" stroke="#583a76" stroke-width="2"/>
-<path d="M18 64a46 46 0 1 0 92 0a46 46 0 1 0-92 0" fill="none" stroke="#583a76" stroke-width="1.5"/>
-<text x="64" y="79" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="45" font-weight="700" letter-spacing="-4" fill="url(#g)" filter="url(#glow)">dH</text>
-<circle cx="101" cy="25" r="4" fill="#d8b8ff"/>
-</svg>

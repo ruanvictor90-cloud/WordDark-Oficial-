@@ -1,0 +1,14 @@
+{
+  "id": "./",
+  "name": "darkHub — Central do Ecossistema",
+  "short_name": "darkHub",
+  "description": "Central de análise, governança e criação de aplicativos do ecossistema.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0a0711",
+  "theme_color": "#0a0711",
+  "categories": ["productivity", "utilities"]
+}
