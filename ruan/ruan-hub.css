@@ -7,3 +7,9 @@
 .drawer-scrim{position:fixed;z-index:30;inset:0;border:0;background:#05030899;backdrop-filter:blur(2px)}
 .alert-panel{position:fixed;z-index:40;top:74px;right:max(15px,calc((100vw - 780px)/2));width:min(340px,calc(100vw - 30px));max-height:min(65vh,480px);overflow:auto;padding:14px;border:1px solid #49315d;border-radius:17px;background:#130e1cf7;box-shadow:0 18px 50px #000a;backdrop-filter:blur(20px)}.panel-heading{display:flex;align-items:center;justify-content:space-between;padding:1px 2px 10px}.panel-heading h2{margin:0;font-size:15px}.alert-item{display:flex;gap:10px;padding:12px 3px;border-top:1px solid var(--line-soft)}.alert-dot{width:7px;height:7px;flex:0 0 7px;margin-top:6px;border-radius:50%;background:var(--purple)}.alert-dot.urgent{background:#ff8ca7}.alert-item strong,.alert-item small{display:block}.alert-item strong{font-size:12px}.alert-item small,.empty-state{color:var(--muted);font-size:11px}.empty-state{padding:8px 3px}
 @keyframes drawer-in{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}@media(min-width:600px){.welcome{min-height:580px}.topbar{height:90px}}@media(max-width:370px){.dock-action{gap:6px;padding:9px 7px;font-size:11px}.world-mark{width:25px;height:25px;flex-basis:25px}.app-grid{gap:6px}.app-tile{font-size:10px}.app-tile-icon{width:46px;height:46px}.drawer{padding:14px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* darkHub clean start */
+.connection-dot{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--green);box-shadow:0 0 9px #a9e6c377;margin-left:-3px}
+.welcome{justify-content:flex-start;min-height:calc(100dvh - 190px);padding-top:clamp(64px,12vh,118px);padding-bottom:30px}
+.welcome h1{margin:0 0 0;font-size:clamp(34px,8vw,46px)}
+.hub-search{margin-top:26px}
+@media(max-height:650px){.welcome{padding-top:38px;min-height:calc(100dvh - 160px)}}
