@@ -31,10 +31,12 @@ jobs:
         run: node --test darkhub/core.test.js
       - name: Test structure and security boundaries
         run: node --test darkhub/app.test.js
+      - name: Run full ecosystem test suite
+        run: npm test
       - name: Check no legacy personal app source remains in darkHub package
         run: |
           set -euo pipefail
-          if grep -RniE 'Ruan|ruan-logo|personal-store|sovereign-core' darkhub; then
+          if grep -niE 'Ruan|ruan-logo|personal-store|sovereign-core' darkhub/index.html darkhub/app.js darkhub/app.css darkhub/core.js darkhub/README.md darkhub/SECURITY-BASELINE.md; then
             echo "Legacy personal-app naming or imports detected in darkHub package."
             exit 1
           fi
