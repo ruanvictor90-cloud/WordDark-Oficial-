@@ -1,4 +1,4 @@
-name: Publish darkHub on its own line
+name: Publish darkHub independent line
 on:
   workflow_dispatch:
 permissions:
@@ -15,20 +15,21 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}darkhub/
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout site repository
+      - name: Checkout ecosystem site
         uses: actions/checkout@v4
         with:
           ref: main
           path: repo
-      - name: Checkout standalone darkHub line
+      - name: Checkout rewritten darkHub
         uses: actions/checkout@v4
         with:
-          ref: darkhub
+          ref: rewrite/darkhub-ecosystem-core
           path: darkhub-src
-      - name: Publish current apps and redirect old entry points
+      - name: Assemble independent applications
         run: |
-          mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/ruan
-          cp -R darkhub-src/ruan/. site/darkhub/
+          set -euo pipefail
+          mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub
+          cp -R darkhub-src/darkhub/. site/darkhub/
           cp -R repo/hub/. site/hub/
           cp -R repo/worddark/. site/worddark/
           cat > site/index.html <<'EOF'
@@ -37,16 +38,12 @@ jobs:
           EOF
           cat > site/preview/darkhub/index.html <<'EOF'
           <!doctype html>
-          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../../darkhub/"><title>darkHub atualizado</title><script>location.replace('../../darkhub/');</script></head><body><p>O darkHub mudou de endereço. <a href="../../darkhub/">Abrir darkHub</a></p></body></html>
-          EOF
-          cat > site/ruan/index.html <<'EOF'
-          <!doctype html>
-          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../darkhub/"><title>darkHub atualizado</title><script>location.replace('../darkhub/');</script></head><body><p>O darkHub mudou de endereço. <a href="../darkhub/">Abrir darkHub</a></p></body></html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../../darkhub/"><title>darkHub atualizado</title><script>location.replace('../../darkhub/');</script></head><body><p>Acesse a versão atual em <a href="../../darkhub/">darkHub</a>.</p></body></html>
           EOF
           cat > site/preview/darkhub/sw.js <<'EOF'
           self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
           self.addEventListener('activate', event => event.waitUntil((async () => {
-            await caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('ruan-') || key.startsWith('darkhub-')).map(key => caches.delete(key))));
+            await caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('darkhub-')).map(key => caches.delete(key))));
             await self.registration.unregister();
             const target = new URL('../../darkhub/', self.registration.scope).href;
             const clients = await self.clients.matchAll({type:'window', includeUncontrolled:true});
@@ -55,7 +52,7 @@ jobs:
           EOF
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Upload current site
+      - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
