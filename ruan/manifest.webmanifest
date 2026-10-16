@@ -1,17 +1,17 @@
 {
-  "name": "Ruan — Central de Operação",
+  "name": "Ruan — Hub pessoal",
   "short_name": "Ruan",
-  "description": "Central privada de operação com widgets informativos e gaveta de aplicativos.",
+  "description": "Hub pessoal para desenvolver, organizar e conectar aplicativos.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#09070f",
-  "theme_color": "#09070f",
+  "background_color": "#0a0710",
+  "theme_color": "#0a0710",
   "icons": [
     {
-      "src": "./app-icon.svg",
+      "src": "./ruan-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
