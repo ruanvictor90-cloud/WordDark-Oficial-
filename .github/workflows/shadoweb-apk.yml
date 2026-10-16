@@ -38,11 +38,16 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
       - name: Install Capacitor build tools
-        run: npm install --no-save --package-lock=false @capacitor/core@7 @capacitor/android@7 @capacitor/cli@7 @capacitor/browser@7
+        run: npm install --no-save --package-lock=false @capacitor/core@7 @capacitor/android@7 @capacitor/cli@7 @capacitor/browser@7 esbuild
+      - name: Bundle native browser bridge and prepare web assets
+        run: |
+          mkdir -p shadoweb-build
+          cp -R shadoweb/. shadoweb-build/
+          npx esbuild shadoweb/app.js --bundle --format=esm --outfile=shadoweb-build/app.js
       - name: Add Android shell and sync web app
         run: |
-          npx cap add android
-          npx cap sync android
+          npx cap add android --config capacitor.ci.config.json
+          npx cap sync android --config capacitor.ci.config.json
       - name: Build debug APK
         run: cd android && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
