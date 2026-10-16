@@ -32,9 +32,9 @@
 
 O Engine e o Coordinator chamam rotas/executores sem `await`, enquanto a Dark Factory expõe caminhos assíncronos e os testes de integração usam módulos async. Não converter apenas um elo da cadeia: definir o contrato de execução e propagar corretamente até o Operation Center; adicionar testes com Promise resolvida/rejeitada.
 
-### WD-AUD-008 — liberação da parada de emergência sem autorização
+### WD-AUD-008 — liberação da parada de emergência (guard fail-closed aplicado; integração de política pendente)
 
-O método de liberação não consulta uma política de autoridade; a UI usa um requester fixo (`UI-DF`). A liberação deve ser fail-closed, com autorização verificável e referência auditada. Esse bloqueador precisa ser resolvido antes do aceite final.
+O manager agora exige callback de autorização, retorno `allowed: true` e `approvalReference` não vazia. Ausência/exceção/negação mantém a parada ativa e gera evento de auditoria. A UI continua usando `UI-DF` apenas como identidade solicitante; isso não concede autoridade. O serviço real de política ainda precisa ser injetado no runtime e os testes precisam ser executados.
 
 ### WD-AUD-004 — OAuth persistido não é conexão operacional
 
@@ -46,7 +46,7 @@ O backend persiste tokens cifrados por KMS/Firestore, mas o gateway consultado u
 - Os testes de regressão do gateway/registry foram ampliados, mas sua execução ainda está pendente.
 - `npm test` completo ainda não foi executado.
 - Não declarar APIs externas ativas, fluxo de publicação real validado ou sistema pronto para produção.
-- Não considerar a parada de emergência pronta até que a liberação exija autorização verificável.
+- Não considerar a parada de emergência pronta até que a política real seja conectada ao runtime e os testes sejam executados; sem isso, a liberação fica bloqueada por desenho.
 - Ruan permanece separado do WordDark.
 - Nenhum merge, pull request ou alteração em `main` foi feito por esta frente.
 
