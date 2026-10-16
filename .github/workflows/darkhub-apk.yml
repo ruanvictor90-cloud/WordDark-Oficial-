@@ -17,6 +17,11 @@ on:
     paths:
       - "darkhub/**"
       - ".github/workflows/darkhub-apk.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "darkhub/**"
+      - ".github/workflows/darkhub-apk.yml"
 permissions:
   contents: read
 concurrency:
