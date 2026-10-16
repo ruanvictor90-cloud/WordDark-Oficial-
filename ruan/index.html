@@ -7,13 +7,15 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./ruan-logo.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.8">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.9">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
   <main class="app-shell">
     <header class="topbar">
-      <span class="header-spacer" aria-hidden="true"></span>
+      <button id="menu-open" class="icon-button menu-button" type="button" aria-label="Abrir menu lateral" aria-expanded="false" aria-controls="side-drawer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
       <a class="brand-home" href="./index.html" aria-label="darkHub, início">
         <span class="hero-logo header-logo"><img src="./ruan-logo.svg" alt="darkHub" width="52" height="52"></span>
       </a>
@@ -72,10 +74,31 @@
   </section>
   <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="Fechar gaveta de aplicativos" hidden tabindex="-1"></button>
 
+  <button id="side-scrim" class="side-drawer-scrim" type="button" aria-label="Fechar menu lateral" hidden tabindex="-1"></button>
+  <aside id="side-drawer" class="side-drawer" aria-labelledby="side-drawer-title" aria-hidden="true" hidden>
+    <div class="side-drawer-top">
+      <div class="side-brand">
+        <span class="side-brand-mark">dH</span>
+        <div><p class="eyebrow">DARKHUB</p><h2 id="side-drawer-title">Menu principal</h2></div>
+      </div>
+      <button id="menu-close" class="icon-button close-button" type="button" aria-label="Fechar menu lateral">×</button>
+    </div>
+    <p class="side-section-label">NAVEGAÇÃO</p>
+    <nav class="side-menu" aria-label="Funções do darkHub">
+      <button id="side-home" class="side-menu-item is-current" type="button"><span class="side-menu-icon">⌂</span><span><strong>Início</strong><small>Voltar à tela principal</small></span><span class="side-menu-arrow">›</span></button>
+      <button id="side-apps" class="side-menu-item" type="button"><span class="side-menu-icon">▦</span><span><strong>Aplicativos</strong><small>Acessar sua gaveta de apps</small></span><span class="side-menu-arrow">›</span></button>
+      <button id="side-alerts" class="side-menu-item" type="button"><span class="side-menu-icon">♧</span><span><strong>Alertas</strong><small>Ver avisos e notificações</small></span><span class="side-menu-arrow">›</span></button>
+    </nav>
+    <div class="side-drawer-bottom">
+      <span class="side-bottom-orb" aria-hidden="true">✦</span>
+      <div><strong>Seu espaço, suas regras.</strong><p>Novas funções serão adicionadas aqui aos poucos.</p></div>
+    </div>
+  </aside>
+
   <section id="alert-panel" class="alert-panel" aria-labelledby="alert-title" hidden>
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script src="./ruan-hub.js?v=20261016.6" defer></script>
+  <script src="./ruan-hub.js?v=20261016.7" defer></script>
 </body>
 </html>
