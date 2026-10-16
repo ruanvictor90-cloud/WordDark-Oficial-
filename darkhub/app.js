@@ -42,7 +42,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
       saveThrottle({count:0,until:0});
       lockScreen.hidden = true; setSecurityIndicator("Protegido");
       notify(setupMode ? "Cofre criado e criptografia ativada." : "darkHub desbloqueado.");
-      renderAll(); resetIdleTimer();
+      if (currentView !== "dashboard") go(currentView); else renderAll(); resetIdleTimer();
     } catch (error) {
       lockFeedback.textContent = error?.message || "Não foi possível abrir o cofre.";
       if (!setupMode && error?.message === "Frase secreta incorreta.") {
@@ -56,8 +56,8 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
     vault.lock(); clearTimeout(idleTimer);
     setSecurityIndicator("Bloqueado");
     lockScreen.hidden = false; passphrase.value = ""; confirmPass.value = "";
-    lockFeedback.textContent = reason === "idle" ? "Sessão bloqueada por inatividade." : "";
     updateLockScreen();
+    lockFeedback.textContent = reason === "idle" ? "Sessão bloqueada por inatividade." : "";
   }
   function resetIdleTimer() { clearTimeout(idleTimer); if (vault.isUnlocked) idleTimer = setTimeout(() => lockApp("idle"), 5 * 60 * 1000); }
   ["pointerdown","keydown","touchstart","scroll"].forEach(eventName => document.addEventListener(eventName, resetIdleTimer, {passive:true}));
@@ -137,6 +137,4 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   if (!globalThis.crypto?.subtle) { lockDescription.textContent="Este navegador não oferece criptografia segura. Abra o darkHub em HTTPS ou use uma versão nativa compatível."; submitButton.disabled=true; }
   if (vault.isConfigured) updateLockScreen(); else updateLockScreen();
   const initial=location.hash.slice(1); if(viewIds.includes(initial)) currentView=initial;
-  const originalSubmit=unlockForm.onsubmit;
-  unlockForm.addEventListener("submit", () => { setTimeout(() => { if(vault.isUnlocked){go(currentView);}},0); });
 })();
