@@ -1,9 +1,18 @@
-name: darkHub engine checks
+name: darkHub rewritten app checks
 on:
   push:
-    branches: ["darkhub"]
+    branches: ["rewrite/darkhub-ecosystem-core"]
+    paths:
+      - "darkhub/**"
+      - ".github/workflows/darkhub-test.yml"
   pull_request:
-    branches: ["darkhub"]
+    branches: ["darkhub", "main"]
+    paths:
+      - "darkhub/**"
+      - ".github/workflows/darkhub-test.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -11,13 +20,21 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
-      - run: node --check ruan/ruan-hub.js
-      - run: node --check ruan/engine/darkhub-engine.js
-      - run: node ruan/engine/darkhub-engine.test.js
-      - run: node --check ruan/engine/information-inbox.js
-      - run: node ruan/engine/information-inbox.test.js
-      - run: node ruan/darkhub-central.test.js
-      - run: node --check ruan/ruan-hub.js
-      - name: Check hub keeps the apps drawer empty
-        run: node --input-type=module -e "import {readFileSync} from 'node:fs'; const html=readFileSync('ruan/index.html','utf8'); if(!html.includes('Nenhum aplicativo ainda') || !html.includes('development-workspace') || !html.includes('projects-import-file')) process.exit(1); console.log('darkHub structure checks passed.');"
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: |
+          node --check darkhub/app.js
+          node --check darkhub/core.js
+          node --check darkhub/core.test.js
+          node --check darkhub/app.test.js
+      - name: Test encrypted vault and app factory
+        run: node --test darkhub/core.test.js
+      - name: Test structure and security boundaries
+        run: node --test darkhub/app.test.js
+      - name: Check no legacy personal app source remains in darkHub package
+        run: |
+          set -euo pipefail
+          if grep -RniE 'Ruan|ruan-logo|personal-store|sovereign-core' darkhub; then
+            echo "Legacy personal-app naming or imports detected in darkHub package."
+            exit 1
+          fi
