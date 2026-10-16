@@ -45,7 +45,7 @@ function showView(view,goBack=false){
  if(goBack){if(viewHistory.length>1)viewHistory.pop();view=viewHistory[viewHistory.length-1]||"home";}
  else{viewHistory.push(view);}
  currentView=view;
- const isHome=view==="home";homeView.hidden=!isHome;subpageView.hidden=isHome;backRow.hidden=isHome;
+ const isHome=view==="home";homeView.hidden=!isHome;subpageView.hidden=isHome;backRow.hidden=false;$("page-back").hidden=isHome;
  if(isHome){subpageTitle.textContent="";setSideMenu(false);window.scrollTo({top:0,behavior:"smooth"});return;}
  creationOptions.hidden=view!=="creation";
  developmentWorkspace.hidden=view!=="development";
