@@ -7,6 +7,7 @@ export class Bridge {
     this.audit.record("gateway.request", { requestId: request.requestId, connectorId: request.connectorId, action: request.action });
     try {
       if (!connector) throw new Error("Conector não registrado.");
+      if (!Array.isArray(connector.actions) || !connector.actions.includes(request.action)) throw new Error("Ação não permitida para este conector.");
       const scope = context.scope || connector.scopes[0];
       this.gate.authorize(connector, scope);
       const handler = this.handlers[connector.id];
