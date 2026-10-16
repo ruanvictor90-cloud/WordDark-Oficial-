@@ -15,6 +15,11 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char])); }
   function formatDate(value) { try { return new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short"}).format(new Date(value)); } catch { return ""; } }
   function setFeedback(id, message, error = false) { const el = $(id); el.textContent = message; el.dataset.state = error ? "error" : "success"; }
+  function clearSensitiveViews() {
+    ["dashboard-activity","eco-records","tech-records","created-apps","project-records","audit-records"].forEach(id => $(id).replaceChildren());
+    ["metric-projects","metric-analyses","metric-apps"].forEach(id => $(id).textContent = "—");
+    document.querySelectorAll("form:not(#unlock-form)").forEach(form => form.reset());
+  }
   function updateLockScreen() {
     setupMode = !vault.isConfigured;
     lockTitle.textContent = setupMode ? "Crie seu cofre" : "Acesso protegido";
@@ -56,6 +61,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   function lockApp(reason = "manual") {
     if (!vault.isUnlocked) { updateLockScreen(); return; }
     vault.lock(); clearTimeout(idleTimer);
+    clearSensitiveViews();
     setSecurityIndicator("Bloqueado");
     lockScreen.hidden = false; passphrase.value = ""; confirmPass.value = "";
     updateLockScreen();
