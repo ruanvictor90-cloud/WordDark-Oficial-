@@ -22,7 +22,7 @@ Finalizar o Ruan como central pessoal privada, independente do runtime WordDark,
 - A divergência entre documentação e tela central foi parcialmente resolvida: a central agora tem dois widgets compactos (saldo registrado e tarefas em aberto), sem reintroduzir a gaveta global. Os testes de interface foram atualizados para esse comportamento.
 - O CSS contém blocos de estilos históricos e múltiplas declarações de identidade. A revisão visual deve consolidar sem reescrever módulos que já funcionam.
 - A estrutura é local ao dispositivo: não existe sincronização entre aparelhos nem autenticação nesta versão.
-- Nesta branch, a central recebeu os dois widgets, a versão de assets foi atualizada e o cache do service worker passou para v24. Os formulários de Financeiro e Tarefas passaram a usar a data local do dispositivo para evitar divergência de dia por UTC, e os links de notificação foram corrigidos. A documentação e as asserções foram atualizadas.
+- Nesta branch, a central recebeu os dois widgets, a versão de assets foi atualizada e o cache do service worker passou para v24, com correspondência de cache ignorando parâmetros de versão para que CSS/JS continuem disponíveis offline. Os formulários de Financeiro e Tarefas passaram a usar a data local do dispositivo para evitar divergência de dia por UTC, e os links de notificação foram corrigidos. A documentação e as asserções foram atualizadas.
 - A suíte completa ainda não foi executada: o ambiente atual não conseguiu clonar o repositório para rodar Node localmente. Os testes continuam pendentes de execução em ambiente com o repositório disponível.
 
 ## Plano de trabalho
