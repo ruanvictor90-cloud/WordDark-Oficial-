@@ -83,7 +83,7 @@ alertButton.addEventListener("click",()=>setAlerts(alertPanel.hidden));
 searchForm.addEventListener("submit",event=>{
  event.preventDefault();const query=searchInput.value.trim().toLocaleLowerCase("pt-BR");
  if(!query){searchFeedback.hidden=false;searchFeedback.textContent="Digite o que você procura.";searchInput.focus();return;}
- if(query.includes("worddark")){searchFeedback.textContent="O acesso oficial ao WordDark será conectado na próxima linha de criação.";searchFeedback.hidden=false;return;}
+ if(query.includes("worddark")){window.location.href=document.querySelector(".world-action").href;return;}
  if(/^(cria[cç][aã]o|criar)$/.test(query)){searchFeedback.hidden=true;showView("creation");return;}
  if(/^(painel)$/.test(query)){searchFeedback.hidden=true;showView("panel");return;}
  if(/^(desenvolvimento|projetos?)$/.test(query)){searchFeedback.hidden=true;showView("development");return;}
