@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { normalizeHttps, isLocalHost } from "./address.js";
 import { readFileSync } from "node:fs";
 const read = name => readFileSync(new URL("./"+name, import.meta.url), "utf8");
-const html=read("index.html"), app=read("app.js"), css=read("shadoweb.css"), sw=read("sw.js");
+const html=read("index.html"), app=read("app.js"), css=read("shadoweb.css"), sw=read("sw.js"), address=read("address.js");
 const apiContract=JSON.parse(read("api-contract.json")), pluginSchema=JSON.parse(read("plugin-manifest.schema.json"));
 test("Shadoweb exposes the conventional browser and connected-world modules",()=>{
   for(const id of ["home","favorites","history","connections","world","knowledge","plugins","audit"]) assert.match(html,new RegExp('id="view-'+id+'"'));
