@@ -1,4 +1,4 @@
-name: Deploy WordDark interface to GitHub Pages
+name: Deploy temporary offline page
 on:
   push:
     branches: ["main"]
@@ -21,6 +21,6 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: offline
       - id: deployment
         uses: actions/deploy-pages@v4
