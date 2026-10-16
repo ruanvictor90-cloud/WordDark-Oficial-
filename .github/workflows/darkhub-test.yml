@@ -15,5 +15,8 @@ jobs:
       - run: node --check ruan/ruan-hub.js
       - run: node --check ruan/engine/darkhub-engine.js
       - run: node ruan/engine/darkhub-engine.test.js
+      - run: node --check ruan/engine/information-inbox.js
+      - run: node ruan/engine/information-inbox.test.js
+      - run: node --check ruan/ruan-hub.js
       - name: Check hub keeps the apps drawer empty
         run: node --input-type=module -e "import {readFileSync} from 'node:fs'; const html=readFileSync('ruan/index.html','utf8'); if(!html.includes('Nenhum aplicativo ainda') || !html.includes('development-workspace') || !html.includes('projects-import-file')) process.exit(1); console.log('darkHub structure checks passed.');"
