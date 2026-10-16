@@ -11,6 +11,8 @@ class WordDarkEmergencyStopManager {
     this.stops=new Map();
     this.audit=[];
     this.idPrefix=options.idPrefix||"STOP";
+    // Fail-closed: sem política de autorização, uma parada nunca pode ser liberada.
+    this.authorizeRelease=typeof options.authorizeRelease==="function"?options.authorizeRelease:null;
   }
 
   generateId(){
@@ -52,15 +54,40 @@ class WordDarkEmergencyStopManager {
     return {allowed:true};
   }
 
-  release(operationId,{requesterId,reason}={}) {
+  release(operationId,{requesterId,reason,approvalContext}={}) {
     const stop=this.stops.get(operationId);
     if(!stop) return {success:false,status:"NOT_FOUND"};
+    if(stop.status==="RELEASED") return {success:false,status:"NOT_ACTIVE",stopId:stop.stopId};
+
+    const denied=(status)=>{
+      this.audit.push({
+        event:"EMERGENCY_STOP_RELEASE_DENIED",timestamp:new Date().toISOString(),
+        operationId,requesterId:requesterId||null,reason:reason||null,
+        stopId:stop.stopId,status
+      });
+      return {success:false,status,stopId:stop.stopId};
+    };
+    if(typeof requesterId!=="string"||!requesterId.trim()) return denied("REQUESTER_REQUIRED");
+    if(!this.authorizeRelease) return denied("RELEASE_AUTHORIZATION_UNAVAILABLE");
+
+    let authorization;
+    try {
+      authorization=this.authorizeRelease({operationId,stop:stop.toJSON(),requesterId,reason:reason||"",approvalContext});
+    } catch (_) {
+      return denied("RELEASE_AUTHORIZATION_FAILED");
+    }
+    if(!authorization||authorization.allowed!==true) return denied("RELEASE_NOT_AUTHORIZED");
+    if(typeof authorization.approvalReference!=="string"||!authorization.approvalReference.trim()) {
+      return denied("APPROVAL_REFERENCE_REQUIRED");
+    }
+
     stop.status="RELEASED";
     this.audit.push({
       event:"EMERGENCY_STOP_RELEASED",timestamp:new Date().toISOString(),
-      operationId,requesterId:requesterId||null,reason:reason||null,stopId:stop.stopId
+      operationId,requesterId,reason:reason||null,stopId:stop.stopId,
+      approvalReference:authorization.approvalReference
     });
-    return {success:true,status:"RELEASED",stop};
+    return {success:true,status:"RELEASED",stop,approvalReference:authorization.approvalReference};
   }
 
   getAudit(){return [...this.audit];}
