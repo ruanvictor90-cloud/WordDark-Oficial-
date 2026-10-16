@@ -12,7 +12,7 @@ Shadoweb é um aplicativo convencional de navegação que evolui para um mundo c
 - **Connect:** registro e estado dos conectores aprovados.
 - **Gate:** verifica permissões explícitas e escopos antes de executar ações.
 - **Bridge / API Gateway:** valida o contrato, verifica a ação permitida, encaminha para um executor registrado, aplica timeout e padroniza o retorno.
-- **Plugin Manager:** importa e valida manifestos declarativos; não executa código de terceiros.
+- **Plugin Manager:** importa e valida manifestos declarativos; não executa código de terceiros.\n- **Consumer Registry / SDK:** registra aplicativos consumidores, declara capacidades e concede/revoga permissões por app, conector e escopo; a SDK local solicita somente ações já declaradas e autorizadas.
 - **Knowledge:** notas e biblioteca local, com pesquisa e importação/exportação.
 - **darkEye:** camada contextual independente, atualmente demonstrativa. Leitura de páginas e sobreposição nativa são capacidades futuras sujeitas a implementação e permissão próprias.
 - **Audit:** trilha local de requisições, permissões, resultados e alterações relevantes.
@@ -33,7 +33,7 @@ Shadoweb é um aplicativo convencional de navegação que evolui para um mundo c
 
 - Interface responsiva e navegação por seções.
 - Pesquisa e abertura HTTPS, favoritos, histórico, atalhos e preferências locais.
-- Catálogo inicial de mundo conectado e conectores.
+- Catálogo inicial de mundo conectado e conectores.\n- Registro local de apps consumidores, SDK de integração e permissões por aplicativo, além das permissões por conector.
 - Bridge local com validação, lista de ações, permissões por escopo, timeout e auditoria.
 - Biblioteca local e importação de manifestos declarativos.
 - PWA e workflows independentes de teste e APK Android de depuração.
@@ -42,7 +42,7 @@ Shadoweb é um aplicativo convencional de navegação que evolui para um mundo c
 
 - Motor de navegador completo embutido e isolamento real de sessões.
 - Login de servidor, sincronização entre dispositivos e auditoria remota.
-- API HTTP pública, credenciais de desenvolvedor, quotas e gestão remota de aplicações.
+- API HTTP pública, credenciais de desenvolvedor, quotas e gestão remota de aplicações.\n- Registro/autorizações de apps consumidores em servidor: o registro atual é local e não constitui fronteira de segurança contra código executado na mesma origem.
 - Integrações reais autenticadas com darkHub/WordDark/Céu/Terra.
 - Execução segura de plugins de terceiros.
 - Leitura contextual automática de páginas e sobreposição nativa darkEye.
