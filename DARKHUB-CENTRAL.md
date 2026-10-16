@@ -1,40 +1,26 @@
-# darkHub — central independente
+# darkHub — central de análise e criação
 
-O darkHub é a central de criação e distribuição de aplicativos. Ele permanece independente do WordDark Hub.
+O darkHub é um aplicativo independente que atua como painel central do ecossistema. Ele reúne **dois hubs de análise** e uma **fábrica de aplicativos**, além de governança, registro de projetos e segurança local.
 
-## Responsabilidades
-- Registrar e acompanhar projetos e seus estados.
-- Exibir um painel de acompanhamento com contagem de projetos, status e últimas informações recebidas dos apps.
-- Atualizar o painel automaticamente quando um aplicativo conectado envia uma informação.
-- Preparar builds Android e disponibilizar APKs como artefatos do GitHub Actions.
-- Manter o Painel como ponto de acompanhamento, sem inventar aplicativos ou widgets que ainda não existem.
+## Módulos
+1. **Painel central:** indicadores derivados dos registros existentes e últimas ações locais.
+2. **Análise do ecossistema:** funções, módulos, dependências, conexões e fluxos.
+3. **Análise técnica:** código revisado, testes executados, riscos e critérios de liberação.
+4. **Criador de aplicativos:** ficha de escopo, identidade e plataforma; exporta um manifesto JSON e uma página inicial independente.
+5. **Registro de projetos:** estados e área responsável.
+6. **Segurança e acesso:** cofre criptografado local, políticas e limites de confiança.
+7. **Registro de atividade:** eventos relevantes guardados dentro do cofre.
 
-## Painel de acompanhamento
-O Painel é uma visão geral automática, não um formulário para inserir mensagens. Ele resume projetos registrados, projetos em andamento, itens em revisão/finalização e avisos ainda não lidos. Também mostra projetos recentes e as últimas informações enviadas pelos aplicativos conectados.
+## Segurança
+- Frase secreta local de 8 a 128 caracteres.
+- Derivação PBKDF2-SHA-256 e criptografia AES-256-GCM.
+- Dados do cofre criptografados antes de serem gravados no armazenamento local.
+- Bloqueio após cinco minutos de inatividade e ao ocultar a aba.
+- Política CSP e validação de entradas; registros do usuário são renderizados como texto.
+- Conexões externas desligadas por padrão.
 
-## Comunicação entre apps
-O contrato de dados é darkhub-information-v1. Os campos aceitos são sender, category, title, message, sourceId e, opcionalmente, id, receivedAt e read.
+## Limites
+O cofre é uma proteção local e não uma autenticação de servidor. Os dados não sincronizam entre aparelhos. A frase secreta perdida não pode ser recuperada pelo aplicativo. Uma especificação exportada não é um APK pronto, e uma análise registrada não prova que testes foram executados. Builds de teste não são releases assinadas.
 
-Apps hospedados no mesmo domínio podem importar o módulo publicado em /WordDark-Oficial-/darkhub/engine/information-inbox.js e chamar:
-
-```js
-import { createInformationInbox } from "/WordDark-Oficial-/darkhub/engine/information-inbox.js";
-const inbox = createInformationInbox();
-inbox.receiveInformation({
-  sender: "Pessoal",
-  category: "Alerta",
-  title: "Conta vence hoje",
-  message: "Conferir pagamento",
-  sourceId: "bill-123"
-});
-```
-
-A caixa de entrada usa localStorage, compartilhado entre caminhos da mesma origem no mesmo navegador/perfil. Isso é comunicação local entre apps, não um servidor: não sincroniza entre aparelhos, navegadores ou usuários. Para sincronização remota será necessária uma API/backend autenticado. Não coloque segredos ou dados sensíveis nesse armazenamento local.
-
-## Gerar APK
-A workflow .github/workflows/darkhub-apk.yml pode ser iniciada manualmente em GitHub Actions. Informe:
-- source_path: pasta do app que contém index.html (padrão ruan).
-- app_name: nome no Android.
-- app_id: identificador Android único.
-
-A build inicial gera um APK debug instalável como artefato por 14 dias. Ele não é uma release assinada para distribuição pública. Assinatura de release e publicação na Play Store são etapas posteriores que exigem configuração segura de assinatura.
+## Contratos futuros
+Antes de conectar outro app, será necessário estabelecer identidade autenticada, escopos mínimos, validação do lado servidor, revogação, logs remotos e testes negativos. Nenhum token ou segredo de serviço deve ser incluído no frontend.
