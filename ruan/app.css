@@ -143,3 +143,16 @@ body.ruan-launcher .ruan-widget-copy small{font-size:9px;line-height:1.35;color:
 body.ruan-launcher .ruan-widget-value{grid-column:1/-1;align-self:end;font-size:clamp(17px,4.5vw,22px);font-weight:800;letter-spacing:-.04em;overflow-wrap:anywhere}
 body.ruan-launcher .ruan-info-widgets+.footer{margin-top:auto}
 @media(max-width:360px){body.ruan-launcher .ruan-info-widgets{gap:7px}body.ruan-launcher .ruan-info-widget{min-height:100px;padding:10px;gap:7px}body.ruan-launcher .ruan-widget-icon{width:30px;height:30px}body.ruan-launcher .ruan-widget-copy strong{font-size:10px}body.ruan-launcher .ruan-widget-copy small{font-size:8px}body.ruan-launcher .ruan-widget-value{font-size:17px}}
+
+
+/* Resumo pessoal da central: dois cartões horizontais, responsivos e sem gaveta duplicada. */
+body.ruan-launcher .ruan-info-widgets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;margin:4px auto 0}
+body.ruan-launcher .ruan-info-widget{min-width:0;min-height:108px;display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-rows:auto 1fr;align-items:start;gap:8px 10px;padding:13px;border:1px solid #382647;border-radius:16px;background:linear-gradient(145deg,#1c1527,#120e19);color:var(--text);transition:border-color .18s,transform .18s;text-decoration:none}
+body.ruan-launcher .ruan-info-widget:hover,body.ruan-launcher .ruan-info-widget:focus-visible{border-color:#9667c7;transform:translateY(-1px);outline:none}
+body.ruan-launcher .ruan-widget-icon{width:34px;height:34px;display:grid;place-items:center;border:1px solid #49315d;border-radius:11px;background:#2b1b3d;color:#d8b5ff;font-size:12px;font-weight:850}
+body.ruan-launcher .finance-widget-icon{color:#a4f0cf;border-color:#3b7965;background:#153329}
+body.ruan-launcher .ruan-widget-copy{min-width:0;display:grid;gap:3px}
+body.ruan-launcher .ruan-widget-copy strong{font-size:11px;line-height:1.3}
+body.ruan-launcher .ruan-widget-copy small{font-size:9px;line-height:1.35;color:var(--muted)}
+body.ruan-launcher .ruan-widget-value{grid-column:1/-1;align-self:end;font-size:clamp(17px,4.5vw,22px);font-weight:800;letter-spacing:-.04em;overflow-wrap:anywhere}
+@media(max-width:360px){body.ruan-launcher .ruan-info-widgets{gap:7px}body.ruan-launcher .ruan-info-widget{min-height:100px;padding:10px;gap:7px}body.ruan-launcher .ruan-widget-icon{width:30px;height:30px}body.ruan-launcher .ruan-widget-copy strong{font-size:10px}body.ruan-launcher .ruan-widget-copy small{font-size:8px}body.ruan-launcher .ruan-widget-value{font-size:17px}}
