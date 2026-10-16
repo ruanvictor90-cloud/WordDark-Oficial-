@@ -55,7 +55,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 /* Clean sovereign Ruan launcher: one brand mark and app logos only. */
 body.ruan-launcher .shell{width:min(100% - 28px,620px);min-height:100svh;padding-bottom:max(18px,env(safe-area-inset-bottom))}
 body.ruan-launcher .topbar{height:76px;flex:0 0 76px;justify-content:center;border-bottom-color:#49315d88}
-body.ruan-launcher .back-button,body.ruan-launcher .top-actions,body.ruan-launcher .brand-copy,body.ruan-launcher footer,body.ruan-launcher .drawer-head,body.ruan-launcher .bottom-apps{display:none!important}
+body.ruan-launcher .back-button{display:none!important}
 body.ruan-launcher .brand-centered{position:static;transform:none;max-width:none;gap:0}
 body.ruan-launcher .brand-mark{width:43px;height:43px;flex-basis:43px}
 body.ruan-launcher .apps-drawer{position:static;left:auto;bottom:auto;transform:none;width:100%;margin:auto;padding:18px 0;background:transparent;border:0;box-shadow:none;backdrop-filter:none;animation:none}
@@ -100,7 +100,7 @@ body.ruan-launcher .ruan-home-app .pessoal-logo{color:#a4f0cf;border-color:#3b79
 body.ruan-launcher .ruan-home-app .shadow-logo{color:#c9b3ff;border-color:#7659b3}
 body.ruan-launcher .ruan-home-app .hub-logo{color:#d7baff;border-color:#7950ad}
 body.ruan-launcher .ruan-home-app.hub-launch{background:linear-gradient(145deg,#302044,#130d1d);border-color:#7650a0}
-body.ruan-launcher .apps-drawer,body.ruan-launcher .bottom-apps{display:none!important}
+
 @media(max-width:360px){body.ruan-launcher .ruan-home-grid{gap:8px;padding:16px 0}body.ruan-launcher .ruan-home-app{border-radius:15px;gap:8px;padding:6px}}
 
 /* Keep Ruan's own alert bell visible on the sovereign home screen. */
@@ -143,3 +143,22 @@ body.ruan-launcher .ruan-widget-copy small{font-size:9px;line-height:1.35;color:
 body.ruan-launcher .ruan-widget-value{grid-column:1/-1;align-self:end;font-size:clamp(17px,4.5vw,22px);font-weight:800;letter-spacing:-.04em;overflow-wrap:anywhere}
 body.ruan-launcher .ruan-info-widgets+.footer{margin-top:auto}
 @media(max-width:360px){body.ruan-launcher .ruan-info-widgets{gap:7px}body.ruan-launcher .ruan-info-widget{min-height:100px;padding:10px;gap:7px}body.ruan-launcher .ruan-widget-icon{width:30px;height:30px}body.ruan-launcher .ruan-widget-copy strong{font-size:10px}body.ruan-launcher .ruan-widget-copy small{font-size:8px}body.ruan-launcher .ruan-widget-value{font-size:17px}}
+
+/* Final Ruan home: welcome carousel and the only global app drawer. */
+body.ruan-launcher .brand-copy{display:block!important}
+body.ruan-launcher .brand-copy strong{font-size:11px;letter-spacing:.16em;color:#f4efff}
+body.ruan-launcher .welcome{padding:24px 0 16px}
+body.ruan-launcher .welcome h1{font-size:clamp(27px,6vw,36px);margin:0 0 6px}
+body.ruan-launcher .welcome .phrase{font-size:12px;color:#a69bb8}
+body.ruan-launcher footer{display:flex!important;margin-top:auto;padding:18px 0 8px}
+body.ruan-launcher .drawer-head{display:flex!important}
+body.ruan-launcher .apps-drawer{display:block;max-height: min(68vh, 620px);overflow-y:auto;overscroll-behavior:contain;bottom:calc(78px + env(safe-area-inset-bottom));background:#130e1cf5;border-color:#5b3c75;color:var(--text)}
+body.ruan-launcher .drawer-grid{grid-template-columns:1fr;gap:8px}
+body.ruan-launcher .app-launch{border-color:#382647;background:linear-gradient(110deg,#21172d,#120e19)}
+body.ruan-launcher .app-launch:hover,body.ruan-launcher .app-launch:focus-visible{border-color:#b58aff;outline:none}
+body.ruan-launcher .app-launch .brand-mark{background:linear-gradient(145deg,#302044,#130d1d);border-color:#76539b}
+body.ruan-launcher .app-launch .finance-widget-icon{color:#a4f0cf;border-color:#3b7965;background:#153329}
+body.ruan-launcher .app-launch .tasks-widget-icon{color:#d8b5ff;border-color:#49315d;background:#2b1b3d}
+body.ruan-launcher .bottom-apps{display:flex!important;bottom:max(14px,env(safe-area-inset-bottom));}
+@media(min-width:560px){body.ruan-launcher .drawer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:360px){body.ruan-launcher .welcome{padding:19px 0 13px}body.ruan-launcher footer{font-size:7px}}
