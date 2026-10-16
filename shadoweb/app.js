@@ -1,10 +1,10 @@
 import { createShadowebRuntime } from "./runtime.js";
+import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
 
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
   const KEYS = { prefs:"shadoweb.preferences.v1", favorites:"shadoweb.favorites.v1", history:"shadoweb.history.v1", shortcuts:"shadoweb.shortcuts.v1", connectorSettings:"shadoweb.connectors.v1" };
-  const ENGINES = { duckduckgo:"https://duckduckgo.com/?q=", google:"https://www.google.com/search?q=", bing:"https://www.bing.com/search?q=" };
   const PROFILES = { personal:"Pessoal", study:"Estudos", work:"Trabalho", creator:"Criador", general:"Geral" };
   const runtime = createShadowebRuntime();
   const state = { view:"home", prefs:{engine:"duckduckgo",profile:"personal"}, favorites:[], history:[], shortcuts:[] };
@@ -13,16 +13,6 @@ import { createShadowebRuntime } from "./runtime.js";
   const write = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch { notify("O armazenamento local não está disponível."); return false; } };
   function notify(message) { const el=$("toast"); el.textContent=message; el.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("show"),2800); }
   function download(name, data, type="application/json") { const blob=new Blob([data],{type}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000); }
-  function safeLabel(url) { try { return new URL(url).hostname.replace(/^www\./,""); } catch { return url; } }
-  function normalizeHttps(value) {
-    const raw=String(value||"").trim();
-    if(!raw) throw new Error("Digite uma pesquisa ou endereço.");
-    if(/^(javascript|data|file|intent|blob):/i.test(raw)) throw new Error("Esse tipo de endereço não é permitido.");
-    if(/^https?:\/\//i.test(raw)) { const u=new URL(raw); if(u.protocol!=="https:"||!u.hostname||u.username||u.password) throw new Error("Use HTTPS sem credenciais no endereço."); return u.href; }
-    if(/^(localhost|127\.0\.0\.1|10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+|\[::1\])(?::\d+)?(?:\/|$)/i.test(raw)) throw new Error("Endereços locais não são aceitos nesta versão.");
-    if(/^[\w-]+(?:\.[\w-]+)+(?:[/:?#].*)?$/.test(raw)) return new URL("https://"+raw).href;
-    return (ENGINES[state.prefs.engine]||ENGINES.duckduckgo)+encodeURIComponent(raw);
-  }
   function openAddress(raw) {
     let url; try { url=normalizeHttps(raw); } catch(error) { notify(error.message); return; }
     if(!url.startsWith("https://")) { notify("Apenas endereços HTTPS podem ser abertos."); return; }
@@ -141,7 +131,7 @@ import { createShadowebRuntime } from "./runtime.js";
   }
   function setupShortcutCardsOnly(){const grid=$("shortcut-grid");state.shortcuts.forEach(item=>{const b=card({title:item.title,description:item.url,mark:"↗",action:()=>openAddress(item.url)});b.dataset.customShortcut=item.url;grid.append(b);});}
   $("search-form").addEventListener("submit",e=>{e.preventDefault();openAddress($("address-input").value);});
-  $("search-engine").addEventListener("change",e=>{state.prefs.engine=ENGINES[e.target.value]?e.target.value:"duckduckgo";write(KEYS.prefs,state.prefs);runtime.audit.record("settings.changed",{setting:"searchEngine",value:state.prefs.engine});notify("Mecanismo de pesquisa atualizado.");});
+  $("search-engine").addEventListener("change",e=>{state.prefs.engine=SEARCH_ENGINES[e.target.value]?e.target.value:"duckduckgo";write(KEYS.prefs,state.prefs);runtime.audit.record("settings.changed",{setting:"searchEngine",value:state.prefs.engine});notify("Mecanismo de pesquisa atualizado.");});
   document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
   document.querySelectorAll(".shortcut[data-url]").forEach(b=>b.addEventListener("click",()=>openAddress(b.dataset.url)));
   $("open-eye").addEventListener("click",()=>setEye(true)); $("eye-card").addEventListener("click",()=>setEye(true)); $("close-eye").addEventListener("click",()=>setEye(false));
