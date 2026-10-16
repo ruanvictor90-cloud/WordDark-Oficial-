@@ -1,5 +1,5 @@
 class WordDarkAuthorityPolicy {
-  constructor({levels=null,rootAuthorityId="ADM-RUAN"}={}) {
+  constructor({levels=null,rootAuthorityId="WORDDARK-ROOT"}={}) {
     this.rootAuthorityId=rootAuthorityId;
     this.levels=levels||{PUBLIC:10,OPERATION:20,WORLD:30,ADM:100};
   }
