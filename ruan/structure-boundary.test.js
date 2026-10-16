@@ -38,7 +38,9 @@ assert.equal((centralHtml.match(/class="ruan-home-app/g) || []).length, 4, 'Ruan
 assert.equal((centralHtml.match(/class="ruan-info-widgets"/g) || []).length, 1, 'Ruan central must contain one summary widget section');
 assert.equal((centralHtml.match(/id="finance-widget-value"/g) || []).length, 1, 'Finance widget ID must be unique');
 assert.equal((centralHtml.match(/id="tasks-widget-value"/g) || []).length, 1, 'Task widget ID must be unique');
-assert.ok(!centralHtml.includes('apps-drawer') && !centralHtml.includes('apps-toggle'), 'The Ruan app drawer is temporarily removed');
+assert.equal((centralHtml.match(/id="apps-drawer"/g) || []).length, 1, 'Ruan central must contain exactly one global app drawer');
+assert.equal((centralHtml.match(/id="apps-toggle"/g) || []).length, 1, 'Ruan central must contain exactly one drawer toggle');
+assert.ok(centralHtml.includes('id="greeting"') && centralHtml.includes('id="greeting-phrase"'), 'Ruan central must contain the greeting carousel');
 
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
