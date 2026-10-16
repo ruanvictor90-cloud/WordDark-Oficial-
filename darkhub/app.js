@@ -11,6 +11,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   const viewIds = ["dashboard","ecosystem","technical","creator","registry","security","activity"];
   const names = { dashboard:"Painel central", ecosystem:"Análise do ecossistema", technical:"Análise técnica", creator:"Criador de apps", registry:"Registro de projetos", security:"Segurança e acesso", activity:"Registro de atividade" };
   function notify(message) { toast.textContent = message; toast.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("show"), 2500); }
+  function setSecurityIndicator(label) { const state = $("security-state"); state.replaceChildren(); const dot = document.createElement("i"); state.append(dot, document.createTextNode(" " + label)); }
   function escapeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char])); }
   function formatDate(value) { try { return new Intl.DateTimeFormat("pt-BR",{dateStyle:"short",timeStyle:"short"}).format(new Date(value)); } catch { return ""; } }
   function setFeedback(id, message, error = false) { const el = $(id); el.textContent = message; el.dataset.state = error ? "error" : "success"; }
@@ -39,7 +40,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
     try {
       if (setupMode) await vault.setup(phrase); else await vault.unlock(phrase);
       saveThrottle({count:0,until:0});
-      lockScreen.hidden = true; $("security-state").innerHTML = "<i></i> Protegido";
+      lockScreen.hidden = true; setSecurityIndicator("Protegido");
       notify(setupMode ? "Cofre criado e criptografia ativada." : "darkHub desbloqueado.");
       renderAll(); resetIdleTimer();
     } catch (error) {
@@ -53,7 +54,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   function lockApp(reason = "manual") {
     if (!vault.isUnlocked) { updateLockScreen(); return; }
     vault.lock(); clearTimeout(idleTimer);
-    $("security-state").innerHTML = "<i></i> Bloqueado";
+    setSecurityIndicator("Bloqueado");
     lockScreen.hidden = false; passphrase.value = ""; confirmPass.value = "";
     lockFeedback.textContent = reason === "idle" ? "Sessão bloqueada por inatividade." : "";
     updateLockScreen();
@@ -132,7 +133,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   }
   function downloadText(filename,text,mime) { const blob=new Blob([text],{type:mime+";charset=utf-8"}); const url=URL.createObjectURL(blob); const link=document.createElement("a");link.href=url;link.download=filename;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000); }
   $("export-audit").addEventListener("click", async () => { try { const data=await vault.exportAudit(); downloadText("darkhub-audit.json",JSON.stringify(data,null,2),"application/json"); renderAll(); notify("Registro exportado."); } catch(error) { notify(error.message); } });
-  $("change-passphrase").addEventListener("click", () => { if(confirm("Para alterar a frase secreta com segurança, será necessário migrar o cofre. Essa função será habilitada após testes específicos. Bloquear agora?")) lockApp("manual"); });
+  $("change-passphrase").addEventListener("click", () => lockApp("manual"));
   if (!globalThis.crypto?.subtle) { lockDescription.textContent="Este navegador não oferece criptografia segura. Abra o darkHub em HTTPS ou use uma versão nativa compatível."; submitButton.disabled=true; }
   if (vault.isConfigured) updateLockScreen(); else updateLockScreen();
   const initial=location.hash.slice(1); if(viewIds.includes(initial)) currentView=initial;
