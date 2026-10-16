@@ -40,10 +40,12 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
     try {
       if (setupMode) await vault.setup(phrase); else await vault.unlock(phrase);
       saveThrottle({count:0,until:0});
+      passphrase.value = ""; confirmPass.value = "";
       lockScreen.hidden = true; setSecurityIndicator("Protegido");
       notify(setupMode ? "Cofre criado e criptografia ativada." : "darkHub desbloqueado.");
       if (currentView !== "dashboard") go(currentView); else renderAll(); resetIdleTimer();
     } catch (error) {
+      passphrase.value = ""; confirmPass.value = "";
       lockFeedback.textContent = error?.message || "Não foi possível abrir o cofre.";
       if (!setupMode && error?.message === "Frase secreta incorreta.") {
         const count = (Number(throttle.count)||0) + 1;
