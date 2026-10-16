@@ -23,7 +23,7 @@ jobs:
       - name: Checkout rewritten darkHub
         uses: actions/checkout@v4
         with:
-          ref: rewrite/darkhub-ecosystem-core
+          ref: ${{ github.ref_name }}
           path: darkhub-src
       - name: Assemble independent applications
         run: |
