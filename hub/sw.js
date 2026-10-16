@@ -1,4 +1,4 @@
-const CACHE="worddark-hub-v15";
+const CACHE="worddark-hub-v16";
 const CORE=["./","./index.html","./central.html","./app.css?v=20261016.2","./app.js?v=20261016.2","./manifest.webmanifest","./engine/darkhub-engine.js","./app-icon.svg?v=20261016.2"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("worddark-hub-")&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
