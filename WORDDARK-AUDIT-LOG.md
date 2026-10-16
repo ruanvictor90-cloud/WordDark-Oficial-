@@ -152,3 +152,17 @@ O método `release(operationId, {requesterId, reason})` libera uma parada apenas
 ### Evidência e limites atualizados
 
 O clone do repositório para executar os testes não foi possível neste ambiente por indisponibilidade de resolução de `github.com`. Portanto, nenhum teste novo da conexão ou da política de autoridade foi executado aqui; todos permanecem como pendentes de execução real. A suíte completa segue pendente.
+
+
+### Achado WD-AUD-008 — liberação da parada de emergência protegida (correção aplicada; validação pendente)
+
+Arquivos:
+- `worddark/runtime/world/core/emergency-stop-manager.js`
+- `worddark/runtime/world/core/emergency-stop.test.js`
+- `worddark/runtime/world/sky/darkfactory/index.html`
+
+A liberação agora falha de forma fechada se não houver callback de autorização, se o callback negar/lançar exceção, ou se a aprovação não trouxer uma referência auditável. Tentativas negadas são registradas no log de auditoria; uma parada já liberada não é liberada novamente. A UI não é tratada como autoridade: sua tentativa com `UI-DF` será negada enquanto não existir política conectada.
+
+Os testes agora cobrem ausência de política, negação, autorização com referência de aprovação e exceção da política. **Ainda não executados na suíte real**, pois o clone local segue indisponível; a alteração precisa ser validada com os testes do repositório e com o serviço real de autorização antes de aceite.
+
+**Nota operacional:** esta correção prioriza segurança e mantém o stop ativo por padrão. A interface não consegue liberar uma parada legitimamente até que a política de autoridade seja injetada na composição do runtime; isso é intencional, não uma falha a contornar por requester fixo.
