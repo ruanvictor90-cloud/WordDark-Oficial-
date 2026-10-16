@@ -1,11 +1,11 @@
 # Ruan — Central de Operação
 
-Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém quatro atalhos de aplicativos, dois widgets de resumo (saldo registrado e tarefas em aberto) e notificações discretas. A gaveta global permanece fora desta versão da interface. **A Área ADM foi retirada da estrutura atual.**
+Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um único usuário. A tela principal contém saudação rotativa, quatro atalhos de aplicativos, dois widgets de resumo (saldo registrado e tarefas em aberto), notificações discretas e uma gaveta global de aplicativos acessível somente pela central. A gaveta global permanece fora desta versão da interface. **A Área ADM foi retirada da estrutura atual.**
 
 ## Estrutura atual
 
 - `index.html`: central do Ruan, com atalhos de aplicativos, widgets de saldo/tarefas e notificações locais.
-- `app.css` / `app.js`: identidade visual, atualização dos widgets, notificações e registro do service worker.
+- `app.css` / `app.js`: identidade visual, saudação rotativa, gaveta global da central, atualização dos widgets, notificações e registro do service worker.
 - `engine/central-engine.js`: adaptador entre as telas e os dados pessoais.
 - `engine/personal-core.js`: regras de dados, cálculos, busca, resumos, recorrência e contrato de backup.
 - `engine/personal-store.js`: armazenamento pessoal local, migração das chaves antigas e validação de registros.
@@ -17,7 +17,7 @@ Ruan é o aplicativo privado de operação pessoal, inicialmente pensado para um
 
 ## Fronteira estrutural
 
-- A central do Ruan é o único lugar permitido para atalhos globais de aplicativos; telas internas não devem duplicar essa navegação.
+- A central do Ruan é o único lugar permitido para a gaveta global de aplicativos; telas internas não devem duplicar essa navegação.
 - Rotas, scripts e estilos internos devem permanecer dentro de `ruan/`, exceto o atalho explícito para `../hub/index.html`.
 - Os dados pessoais permanecem no armazenamento local deste navegador/dispositivo. Não existe sincronização entre aparelhos nesta versão.
 - O widget financeiro soma entradas e saídas registradas localmente. Não representa saldo bancário nem movimenta dinheiro real.
