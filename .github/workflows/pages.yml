@@ -1,4 +1,4 @@
-name: Deploy temporary offline page
+name: Deploy offline root with isolated darkHub preview
 on:
   push:
     branches: ["main"]
@@ -14,13 +14,32 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}preview/darkhub/
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Checkout main repository
+        uses: actions/checkout@v4
         with:
-          path: offline
-      - id: deployment
+          ref: main
+          path: repo
+      - name: Checkout darkHub app from isolated feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/ruan-hub-home-20261016
+          path: preview-src
+      - name: Assemble offline root and darkHub preview
+        run: |
+          mkdir -p site
+          cp -R repo/offline/. site/
+          mkdir -p site/preview/darkhub
+          cp -R preview-src/ruan/. site/preview/darkhub/
+          sed -i 's|href="../hub/index.html"|href="../../index.html"|' site/preview/darkhub/index.html
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload offline root and preview
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy Pages
+        id: deployment
         uses: actions/deploy-pages@v4
