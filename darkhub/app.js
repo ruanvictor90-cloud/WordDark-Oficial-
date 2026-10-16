@@ -142,6 +142,35 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
   }
   function downloadText(filename,text,mime) { const blob=new Blob([text],{type:mime+";charset=utf-8"}); const url=URL.createObjectURL(blob); const link=document.createElement("a");link.href=url;link.download=filename;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000); }
   $("export-audit").addEventListener("click", async () => { try { const data=await vault.exportAudit(); downloadText("darkhub-audit.json",JSON.stringify(data,null,2),"application/json"); renderAll(); notify("Registro exportado."); } catch(error) { notify(error.message); } });
+  $("export-backup").addEventListener("click", async () => {
+    try {
+      const backup = await vault.exportEncryptedBackup();
+      downloadText("darkhub-encrypted-backup.json", JSON.stringify(backup, null, 2), "application/json");
+      renderAll();
+      notify("Backup criptografado exportado. Guarde-o fora deste dispositivo.");
+    } catch (error) { notify(error.message); }
+  });
+  $("restore-backup").addEventListener("click", async () => {
+    const file = $("backup-file").files?.[0];
+    if (!file) { lockFeedback.textContent = "Selecione um arquivo de backup."; return; }
+    if (file.size > 5 * 1024 * 1024) { lockFeedback.textContent = "O arquivo excede 5 MB."; return; }
+    if (vault.isConfigured && !confirm("A restauração substituirá os dados locais atuais. Deseja continuar?")) return;
+    const phrase = passphrase.value;
+    if (phrase.length < 8 || phrase.length > 128) { lockFeedback.textContent = "Digite a frase secreta original do backup."; return; }
+    setBusy(true);
+    try {
+      const backup = JSON.parse(await file.text());
+      await vault.restoreEncryptedBackup(backup, phrase);
+      saveThrottle({count:0,until:0});
+      passphrase.value = ""; confirmPass.value = "";
+      lockScreen.hidden = true; setupMode = false; setSecurityIndicator("Protegido");
+      currentView = viewIds.includes(location.hash.slice(1)) ? location.hash.slice(1) : "dashboard";
+      go(currentView); resetIdleTimer(); notify("Backup restaurado e validado.");
+    } catch (error) {
+      passphrase.value = "";
+      lockFeedback.textContent = error?.message || "Não foi possível restaurar o backup.";
+    } finally { setBusy(false); }
+  });
   $("change-passphrase").addEventListener("click", () => lockApp("manual"));
   if (!globalThis.crypto?.subtle) { lockDescription.textContent="Este navegador não oferece criptografia segura. Abra o darkHub em HTTPS ou use uma versão nativa compatível."; submitButton.disabled=true; }
   if (vault.isConfigured) updateLockScreen(); else updateLockScreen();
