@@ -7,7 +7,7 @@ const greeting=$("greeting"),homeWidgets=$("home-widgets");
 const homeView=$("home-view"),subpageView=$("subpage-view"),backRow=$("page-back-row"),subpageTitle=$("subpage-title"),subpageDescription=$("subpage-description"),creationOptions=$("creation-options"),subpageEmpty=$("subpage-empty"),emptyTitle=$("subpage-empty-title"),emptyText=$("subpage-empty-text");
 let currentView="home";const viewHistory=["home"];
 function showView(view,goBack=false){
- if(view===currentView)return;
+ if(!goBack&&view===currentView)return;
  if(goBack){if(viewHistory.length>1)viewHistory.pop();view=viewHistory[viewHistory.length-1]||"home";}
  else{viewHistory.push(view);}
  currentView=view;
