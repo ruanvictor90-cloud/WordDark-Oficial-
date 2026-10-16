@@ -25,11 +25,38 @@ const WordDarkOperation=require("../contracts/operation");
   assert.strictEqual(check.reason,"EMERGENCY_STOP_ACTIVE");
 })();
 
-(function testReleaseIsExplicit(){
+(function testReleaseFailsClosedWithoutAuthorization(){
   const manager=new WordDarkEmergencyStopManager();
   manager.trigger({sectorId:"sector-content",operationId:"OP-004",requesterId:"SECTOR-CONTENT",reason:"Parada para inspeção."});
-  manager.release("OP-004",{requesterId:"ADMIN-001",reason:"Inspeção concluída."});
-  assert.strictEqual(manager.isStopped("OP-004"),false);
+  const result=manager.release("OP-004",{requesterId:"ADMIN-001",reason:"Inspeção concluída."});
+  assert.strictEqual(result.success,false);
+  assert.strictEqual(result.status,"RELEASE_AUTHORIZATION_UNAVAILABLE");
+  assert.strictEqual(manager.isStopped("OP-004"),true);
+})();
+
+(function testReleaseRequiresExplicitAuthorizationAndAuditReference(){
+  const manager=new WordDarkEmergencyStopManager({
+    authorizeRelease:({requesterId})=>requesterId==="SAFETY-ADMIN"
+      ? {allowed:true,approvalReference:"APPROVAL-004"}
+      : {allowed:false}
+  });
+  manager.trigger({sectorId:"sector-content",operationId:"OP-004B",requesterId:"SECTOR-CONTENT",reason:"Parada para inspeção."});
+  const denied=manager.release("OP-004B",{requesterId:"UI-DF",reason:"Tentativa pela interface"});
+  assert.strictEqual(denied.success,false);
+  assert.strictEqual(manager.isStopped("OP-004B"),true);
+  const released=manager.release("OP-004B",{requesterId:"SAFETY-ADMIN",reason:"Inspeção concluída."});
+  assert.strictEqual(released.success,true);
+  assert.strictEqual(released.approvalReference,"APPROVAL-004");
+  assert.strictEqual(manager.isStopped("OP-004B"),false);
+  assert.strictEqual(manager.getAudit().some(e=>e.event==="EMERGENCY_STOP_RELEASED"&&e.approvalReference==="APPROVAL-004"),true);
+})();
+
+(function testReleaseAuthorizationExceptionKeepsStopActive(){
+  const manager=new WordDarkEmergencyStopManager({authorizeRelease:()=>{throw new Error("policy offline")}});
+  manager.trigger({sectorId:"sector-content",operationId:"OP-004C",requesterId:"SECTOR-CONTENT",reason:"Parada para inspeção."});
+  const result=manager.release("OP-004C",{requesterId:"ADMIN-001",reason:"Inspeção concluída."});
+  assert.strictEqual(result.status,"RELEASE_AUTHORIZATION_FAILED");
+  assert.strictEqual(manager.isStopped("OP-004C"),true);
 })();
 
 (function testOperationCanCancelDuringValidation(){
