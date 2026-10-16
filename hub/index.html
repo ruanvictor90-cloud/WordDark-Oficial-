@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0a0710">
-  <meta name="description" content="darkHub — Hub central de desenvolvimento do ecossistema WordDark.">
-  <link rel="icon" href="./app-icon.svg?v=20261016.2" type="image/svg+xml">
+  <meta name="description" content="WordDark Hub — espaço independente do ecossistema WordDark.">
+  <link rel="icon" href="./app-icon.svg?v=20261016.3" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./app.css?v=20261016.2">
-  <title>darkHub — Hub central</title>
+  <link rel="stylesheet" href="./app.css?v=20261016.3">
+  <title>WordDark Hub</title>
 </head>
 <body>
   <main class="app-shell">
@@ -17,7 +17,7 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       <a class="brand-home" href="./index.html" aria-label="WordDark Hub, início">
-        <span class="hero-logo header-logo"><img src="./app-icon.svg?v=20261016.1" alt="WordDark Hub" width="52" height="52"></span>
+        <span class="hero-logo header-logo"><img src="./app-icon.svg?v=20261016.3" alt="Logo oficial do WordDark Hub" width="52" height="52"></span>
       </a>
       <div class="header-actions">
         <button class="icon-button alert-button" id="alert-toggle" type="button" aria-label="Abrir alertas" aria-expanded="false" aria-controls="alert-panel">
@@ -42,7 +42,7 @@
         <button type="submit" aria-label="Buscar">↗</button>
       </form>
       <p id="search-feedback" class="search-feedback" role="status" aria-live="polite" hidden></p>
-      <div class="home-shortcuts" aria-label="Áreas do darkHub">
+      <div class="home-shortcuts" aria-label="Áreas do WordDark Hub" hidden>
         <button class="home-shortcut icon-tile" id="shortcut-creation" type="button" aria-label="Criação"><span class="shortcut-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16"/><rect x="3" y="3" width="18" height="18" rx="5"/></svg></span><strong>Criação</strong></button>
         <button class="home-shortcut icon-tile" id="shortcut-panel" type="button" aria-label="Painel"><span class="shortcut-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="8" height="7" rx="2"/></svg></span><strong>Painel</strong></button>
       </div>
@@ -51,13 +51,13 @@
     <section id="home-widgets" class="home-widgets" aria-label="Widgets da tela inicial"></section>
 
     <footer class="app-footer">
-      <span>DARKHUB</span>
-      <span>Hub central de desenvolvimento.</span>
+      <span>WORDDARK HUB</span>
+      <span>Espaço independente. As áreas próprias serão estruturadas depois.</span>
     </footer>
     </section>
 
     <section id="subpage-view" class="subpage-view" hidden aria-live="polite">
-      <div class="subpage-heading"><p class="eyebrow">DARKHUB</p><h1 id="subpage-title">Criação</h1><p id="subpage-description">Escolha por onde deseja continuar.</p></div>
+      <div class="subpage-heading"><p class="eyebrow">WORDDARK HUB</p><h1 id="subpage-title">Área</h1><p id="subpage-description">Escolha por onde deseja continuar.</p></div>
       <div id="creation-options" class="creation-options">
         <button class="creation-option icon-tile" id="shortcut-development" type="button" aria-label="Desenvolvimento"><span class="creation-option-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 8-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></span><strong>Desenvolvimento</strong></button>
         <button class="creation-option icon-tile" id="shortcut-finalization" type="button" aria-label="Finalização"><span class="creation-option-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/><circle cx="12" cy="12" r="9"/></svg></span><strong>Finalização</strong></button>
@@ -89,16 +89,16 @@
     </section>
   </main>
 
-  <nav class="bottom-dock" aria-label="Navegação do darkHub">
+  <nav class="bottom-dock" aria-label="Navegação do WordDark Hub">
     <button id="apps-open" class="dock-action apps-action" type="button" aria-expanded="false" aria-controls="apps-drawer">
       <span class="dock-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg></span>
       <span>Apps</span>
       <span class="dock-chevron" aria-hidden="true">⌃</span>
     </button>
-    <a class="dock-action world-action" href="../worddark/app/index.html" aria-label="Abrir aplicativo WordDark">
+    <a class="dock-action world-action" href="../darkhub/" aria-label="Voltar para o darkHub">
       <span class="world-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5 55 18v28L32 59 9 46V18Z"/><path d="M20 21v22l12-12 12 12V21"/><circle cx="32" cy="31" r="4"/></svg></span>
-      <span>WordDark</span>
-      <span class="dock-arrow" aria-hidden="true">↗</span>
+      <span>darkHub</span>
+      <span class="dock-arrow" aria-hidden="true">↩</span>
     </a>
   </nav>
 
@@ -121,7 +121,7 @@
     <div class="side-drawer-top">
       <div class="side-brand">
         <span class="side-brand-mark">dH</span>
-        <div><p class="eyebrow">DARKHUB</p><h2 id="side-drawer-title">Menu principal</h2></div>
+        <div><p class="eyebrow">WORDDARK HUB</p><h2 id="side-drawer-title">Menu principal</h2></div>
       </div>
       <button id="menu-close" class="icon-button close-button" type="button" aria-label="Fechar menu lateral">×</button>
     </div>
@@ -144,6 +144,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script type="module" src="./app.js?v=20261016.2"></script>
+  <script type="module" src="./app.js?v=20261016.3"></script>
 </body>
 </html>
