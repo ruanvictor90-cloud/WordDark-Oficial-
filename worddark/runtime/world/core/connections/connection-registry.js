@@ -9,7 +9,7 @@ class ExternalConnectionRegistry{
   connected(providerId,accountId){const c=this.get(providerId,accountId);return !!c&&c.status==="CONNECTED";}
   authorizeContext(providerId,accountId,capability){
     const c=this.get(providerId,accountId);
-    if(!c)return{allowed:false,status:"ACCOUNT_NOT_CONNECTED"};
+    if(!c||c.status!=="CONNECTED")return{allowed:false,status:"ACCOUNT_NOT_CONNECTED"};
     if(capability&&!(c.capabilities||[]).includes(capability))return{allowed:false,status:"CAPABILITY_NOT_GRANTED",account:c};
     if(!RUNTIME_CREDENTIALS.has(String(providerId).toUpperCase()+":"+accountId))return{allowed:false,status:"RUNTIME_CREDENTIAL_REQUIRED",account:c};
     return{allowed:true,status:"CONNECTED",account:c};
