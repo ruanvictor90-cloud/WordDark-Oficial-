@@ -97,3 +97,21 @@ test("Bridge restricts connector actions and connects local-knowledge to stored 
   const wrongAction=await bridge.request({connectorId:"local-knowledge",action:"delete",input:{query:"Shadoweb"}},{scope:"knowledge.read"});
   assert.equal(wrongAction.ok,false); assert.match(wrongAction.error,/Ação não permitida/);
 });
+
+test("Bridge enforces its timeout even when a connector ignores AbortSignal", async () => {
+  const storage = new MemoryStorage(), audit = new AuditLog(storage), gate = new Gate(storage);
+  const connectors = builtInConnectors.map(c => ({ ...c, enabled: true }));
+  gate.grant("wikipedia", ["connector.read"]);
+  const handlers = {
+    ...connectorHandlers,
+    wikipedia: () => new Promise(() => {})
+  };
+  const bridge = new Bridge({ connectors, handlers, gate, audit, timeoutMs: 10 });
+  const result = await bridge.request(
+    { connectorId: "wikipedia", action: "search", input: { query: "Shadoweb" } },
+    { scope: "connector.read" }
+  );
+  assert.equal(result.ok, false);
+  assert.match(result.error, /Tempo limite/);
+  assert.ok(audit.list().some(row => row.event === "gateway.error" && /Tempo limite/.test(row.detail.reason)));
+});
