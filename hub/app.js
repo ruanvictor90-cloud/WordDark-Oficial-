@@ -128,4 +128,4 @@ setWidgetCategory(false);
 if("serviceWorker"in navigator&&(location.protocol==="https:"||location.hostname==="localhost"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 })();
 // O botão oficial fica preparado visualmente, sem conexão nesta etapa.
-document.querySelector(".world-action")?.addEventListener("click",event=>{event.preventDefault();});
+
