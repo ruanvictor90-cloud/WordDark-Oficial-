@@ -1,0 +1,38 @@
+name: Ruan validation
+
+on:
+  push:
+    branches:
+      - ruan/finalizacao-integral-2026-10-15
+    paths:
+      - "ruan/**"
+      - ".github/workflows/ruan-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-ruan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate Ruan tests
+        run: |
+          node ruan/apps/pessoal/vida.test.js
+          node ruan/engine/personal-core.test.js
+          node ruan/engine/personal-store.test.js
+          node ruan/engine/sovereign-core.test.js
+          node ruan/engine/ruan-central.test.js
+          node ruan/engine/central-engine.test.js
+          node ruan/apps/shadow/darkeye/darkeye-core.test.js
+          node ruan/app.test.js
+          node ruan/structure-boundary.test.js
+          node ruan/engine/darknet-client.test.js
