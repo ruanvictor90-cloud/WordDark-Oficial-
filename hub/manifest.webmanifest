@@ -1,17 +1,17 @@
 {
-  "name": "WordDark Hub",
-  "short_name": "WD Hub",
-  "description": "Portão de entrada do mundo com informações e avisos.",
+  "name": "darkHub",
+  "short_name": "darkHub",
+  "description": "darkHub — Hub central de desenvolvimento do ecossistema WordDark.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#09070f",
-  "theme_color": "#09070f",
+  "background_color": "#0a0710",
+  "theme_color": "#0a0710",
   "icons": [
     {
-      "src": "./app-icon.svg",
+      "src": "./app-icon.svg?v=20261016.2",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
