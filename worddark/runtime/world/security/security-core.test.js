@@ -7,6 +7,9 @@ const WordDarkSecretPolicy=require("./secret-policy");
 const WordDarkSecurityCore=require("./security-core");
 
 (function authority(){
+  const defaults=new WordDarkAuthorityPolicy();
+  assert.equal(defaults.rootAuthorityId,"WORDDARK-ROOT");
+  assert.equal(defaults.authorize({actorId:"ADM-RUAN",actorAuthority:"ADM",action:"ACCESS_SCOPE",targetId:"WORDDARK-ROOT",targetAuthority:"ADM"}).allowed,false);
   const p=new WordDarkAuthorityPolicy({rootAuthorityId:"RUAN"});
   assert.equal(p.authorize({actorId:"WORLD",actorAuthority:"WORLD",action:"ACCESS_SCOPE",targetId:"RUAN",targetAuthority:"ADM"}).allowed,false);
   assert.equal(p.authorize({actorId:"WORLD",actorAuthority:"WORLD",action:"ELEVATE_AUTHORITY",targetAuthority:"WORLD"}).allowed,false);
