@@ -7,7 +7,7 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./darkhub-logo.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.3">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.4">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -15,7 +15,7 @@
     <header class="topbar">
       <span class="header-spacer" aria-hidden="true"></span>
       <a class="brand-home" href="./index.html" aria-label="darkHub, início">
-        <img src="./darkhub-logo.svg" alt="darkHub" width="58" height="58">
+        <img src="./ruan-logo.svg" alt="darkHub" width="58" height="58">
       </a>
       <div class="header-actions">
         <span class="connection-dot" title="Interface ativa" aria-label="Interface ativa"></span>
@@ -31,8 +31,15 @@
       <div class="ambient ambient-b" aria-hidden="true"></div>
       <div class="hero-logo"><img src="./ruan-logo.svg" alt="" width="100" height="100"></div>
       <p class="eyebrow">SEU ESPAÇO · SEU ECOSSISTEMA</p>
-      <h1 id="welcome-title">Tudo começa<br><span>por aqui.</span></h1>
-      <p class="welcome-copy">Seu hub pessoal para criar, organizar e conectar aplicativos.</p>
+      <h1 id="welcome-title"><span id="greeting">Olá!</span><br><span class="greeting-subtitle">Que bom ter você por aqui.</span></h1>
+      <p class="welcome-copy">O que vamos fazer hoje?</p>
+      <form id="hub-search" class="hub-search" role="search">
+        <label class="visually-hidden" for="hub-search-input">Buscar aplicativo ou destino</label>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+        <input id="hub-search-input" type="search" placeholder="Buscar ou ir para..." autocomplete="off" aria-label="Buscar aplicativo ou destino">
+        <button type="submit" aria-label="Buscar">↗</button>
+      </form>
+      <p id="search-feedback" class="search-feedback" role="status" aria-live="polite" hidden></p>
       <div class="status-line"><span></span> Seu espaço pessoal</div>
     </section>
 
@@ -73,6 +80,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script src="./ruan-hub.js?v=20261016.2" defer></script>
+  <script src="./ruan-hub.js?v=20261016.3" defer></script>
 </body>
 </html>
