@@ -4,12 +4,15 @@ O darkHub é a central de criação e distribuição de aplicativos. Ele permane
 
 ## Responsabilidades
 - Registrar e acompanhar projetos e seus estados.
-- Receber informações de outros apps na caixa de entrada local.
-- Exportar/importar os recebimentos em JSON.
+- Exibir um painel de acompanhamento com contagem de projetos, status e últimas informações recebidas dos apps.
+- Atualizar o painel automaticamente quando um aplicativo conectado envia uma informação.
 - Preparar builds Android e disponibilizar APKs como artefatos do GitHub Actions.
 - Manter o Painel como ponto de acompanhamento, sem inventar aplicativos ou widgets que ainda não existem.
 
-## Recebimento entre apps
+## Painel de acompanhamento
+O Painel é uma visão geral automática, não um formulário para inserir mensagens. Ele resume projetos registrados, projetos em andamento, itens em revisão/finalização e avisos ainda não lidos. Também mostra projetos recentes e as últimas informações enviadas pelos aplicativos conectados.
+
+## Comunicação entre apps
 O contrato de dados é darkhub-information-v1. Os campos aceitos são sender, category, title, message, sourceId e, opcionalmente, id, receivedAt e read.
 
 Apps hospedados no mesmo domínio podem importar o módulo publicado em /WordDark-Oficial-/darkhub/engine/information-inbox.js e chamar:
