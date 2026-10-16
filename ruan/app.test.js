@@ -28,7 +28,7 @@ assert.ok(read('apps/pessoal/tarefas.js').includes('Tarefa com prazo registrada'
 assert.ok(read('apps/pessoal/financeiro.js').includes('Conta a pagar registrada'));
 assert.ok(read('app.js').includes('ruan.important.notifications.v1'), 'Ruan central must aggregate important app alerts');
 assert.ok(read('app.css').includes('body.ruan-launcher .top-actions{display:flex!important'), 'Ruan home must keep its notification bell visible');
-assert.ok(html.includes('app.css?v=20261015-final-1') && html.includes('app.js?v=20261014-anime-player-4'), 'Ruan home must request refreshed assets');
+assert.ok(html.includes('app.css?v=20261015-final-1') && html.includes('app.js?v=20261015-final-1'), 'Ruan home must request refreshed assets');
 assert.ok(!html.includes('Área ADM'));
 assert.ok(existsSync(new URL('engine/central-engine.js', root)));
 assert.ok(existsSync(new URL('apps/pessoal/financeiro.html', root)));
@@ -71,5 +71,9 @@ assert.ok(finance.includes('class="back-button"') && tasks.includes('class="back
 const serviceWorker = read('sw.js');
 assert.ok(serviceWorker.includes("const CACHE='ruan-central-v24'"));
 assert.ok(read('apps/pessoal/app.js').includes('const localDateKey='), 'Pessoal dashboard must use local calendar dates for deadlines');
+assert.ok(read('apps/pessoal/financeiro.js').includes('const localDateKey='), 'Finance dates must use the device local calendar');
+assert.ok(read('apps/pessoal/tarefas.js').includes('const localDateKey='), 'Task deadlines must use the device local calendar');
+assert.ok(!read('apps/pessoal/financeiro.js').includes('new Date().toISOString().slice(0,10)'), 'Finance form must not derive local today from UTC');
+assert.ok(!read('apps/pessoal/tarefas.js').includes('new Date().toISOString().slice(0,10)'), 'Task deadline summary must not derive local today from UTC');
 assert.ok(!read('apps/pessoal/app.js').includes('new Date().toISOString().slice(0,10)'), 'Dashboard must not derive local today from UTC');
 console.log('Ruan app structure tests passed.');
