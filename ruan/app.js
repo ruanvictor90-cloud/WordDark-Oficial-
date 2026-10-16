@@ -1,6 +1,6 @@
 (()=>{"use strict";
 const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;',"'":"&#39;"}[c]));
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>{switch(c){case "&":return "&amp;";case "<":return "&lt;";case ">":return "&gt;";case '"':return "&quot;";default:return "&#39;"}});
 function safeHref(value){
   const fallback="./index.html";
   try{
