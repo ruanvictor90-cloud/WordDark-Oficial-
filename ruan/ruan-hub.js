@@ -11,7 +11,7 @@ const searchForm=$("hub-search"),searchInput=$("hub-search-input"),searchFeedbac
 const greeting=$("greeting");
 const homeView=$("home-view"),subpageView=$("subpage-view"),backRow=$("page-back-row"),subpageTitle=$("subpage-title"),subpageDescription=$("subpage-description"),creationOptions=$("creation-options"),subpageEmpty=$("subpage-empty"),emptyTitle=$("subpage-empty-title"),emptyText=$("subpage-empty-text");
 const developmentWorkspace=$("development-workspace"),projectGrid=$("project-grid"),projectForm=$("project-create-form"),projectFeedback=$("project-feedback");
-const panelWorkspace=$("panel-workspace"),packageWorkspace=$("package-workspace"),informationForm=$("information-form"),informationList=$("information-list"),informationFeedback=$("information-feedback"),informationCount=$("information-count");
+const panelWorkspace=$("panel-workspace"),packageWorkspace=$("package-workspace");
 let currentView="home";const viewHistory=["home"];
 
 function escapeHtml(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -43,18 +43,18 @@ function renderProjects(){
   catch(error){showProjectFeedback(error.message||"Não foi possível remover o projeto.",true);}
  }));
 }
-function showInformationFeedback(message,isError=false){informationFeedback.hidden=false;informationFeedback.textContent=message;informationFeedback.dataset.state=isError?"error":"success";}
-function renderInbox(){
- const items=inbox.list();
- informationCount.textContent=items.length+" recebimento"+(items.length===1?"":"s");
- if(!items.length){informationList.innerHTML='<p class="project-empty">Nenhuma informação recebida ainda.</p>';return;}
- informationList.innerHTML=items.map(item=>'<article class="information-card '+(item.read?'is-read':'is-unread')+'" data-information-id="'+escapeHtml(item.id)+'">'+
- '<div class="information-card-top"><span class="information-category">'+escapeHtml(item.category)+'</span><time>'+escapeHtml(new Date(item.receivedAt).toLocaleString("pt-BR"))+'</time></div>'+
- '<h3>'+escapeHtml(item.title)+'</h3><p class="information-message">'+escapeHtml(item.message||"Sem detalhes adicionais.")+'</p>'+
- '<div class="information-meta">Origem: '+escapeHtml(item.sender)+(item.sourceId?' · Ref. '+escapeHtml(item.sourceId):'')+'</div>'+
- '<div class="information-actions">'+(item.read?'':'<button type="button" data-information-read="'+escapeHtml(item.id)+'">Marcar como lida</button>')+'<button type="button" data-information-delete="'+escapeHtml(item.id)+'">Excluir</button></div></article>').join("");
- informationList.querySelectorAll("[data-information-read]").forEach(button=>button.addEventListener("click",()=>{inbox.markRead(button.dataset.informationRead);renderInbox();}));
- informationList.querySelectorAll("[data-information-delete]").forEach(button=>button.addEventListener("click",()=>{inbox.deleteInformation(button.dataset.informationDelete);renderInbox();}));
+function renderDashboard(){
+ const projects=engine.listProjects(),items=inbox.list();
+ const countStatus=status=>projects.filter(project=>project.status===status).length;
+ $("metric-projects").textContent=String(projects.length);
+ $("metric-active").textContent=String(countStatus("Em desenvolvimento"));
+ $("metric-review").textContent=String(countStatus("Em revisão")+countStatus("Em finalização"));
+ $("metric-unread").textContent=String(items.filter(item=>!item.read).length);
+ const recentProjects=[...projects].sort((a,b)=>String(b.updatedAt||b.createdAt||"").localeCompare(String(a.updatedAt||a.createdAt||""))).slice(0,4);
+ $("dashboard-projects").innerHTML=recentProjects.length?recentProjects.map(project=>'<article class="dashboard-project"><span class="dashboard-project-mark">'+escapeHtml(initials(project.name))+'</span><span class="dashboard-project-copy"><strong>'+escapeHtml(project.name)+'</strong><small>'+escapeHtml(project.status||"Sem status")+'</small></span><span class="dashboard-status-dot" aria-hidden="true"></span></article>').join(""):'<p class="project-empty">Nenhum projeto registrado.</p>';
+ $("dashboard-updates-count").textContent=items.length+" aviso"+(items.length===1?"":"s");
+ const recentItems=items.slice(0,4);
+ $("dashboard-updates").innerHTML=recentItems.length?recentItems.map(item=>'<article class="dashboard-update '+(item.read?'':'is-unread')+'"><span class="dashboard-update-mark">'+(item.read?'•':'!')+'</span><div><strong>'+escapeHtml(item.title)+'</strong><p>'+escapeHtml(item.message||"Sem detalhes adicionais.")+'</p><small>'+escapeHtml(item.sender)+' · '+escapeHtml(item.category)+' · '+escapeHtml(new Date(item.receivedAt).toLocaleString("pt-BR"))+'</small></div></article>').join(""):'<p class="project-empty">Nenhuma informação nova dos aplicativos.</p>';
 }
 function showView(view,goBack=false){
  if(!goBack&&view===currentView)return;
@@ -71,7 +71,7 @@ function showView(view,goBack=false){
  const details={creation:["Criação","Escolha uma etapa para continuar."],panel:["Painel","Área central do darkHub."],development:["Desenvolvimento","Projetos e ferramentas de desenvolvimento."],finalization:["Finalização","Revisar e preparar uma criação para o pacote final."]};
  const info=details[view]||details.panel;subpageTitle.textContent=info[0];subpageDescription.textContent=info[1];
  if(view==="development")renderProjects();
- if(view==="panel")renderInbox();
+ if(view==="panel")renderDashboard();
  setSideMenu(false);window.scrollTo({top:0,behavior:"smooth"});
 }
 $("shortcut-creation").addEventListener("click",()=>showView("creation"));
@@ -102,7 +102,7 @@ searchForm.addEventListener("submit",event=>{
  if(!query){searchFeedback.hidden=false;searchFeedback.textContent="Digite o que você procura.";searchInput.focus();return;}
  if(query.includes("worddark")){window.location.href=document.querySelector(".world-action").href;return;}
  if(/^(cria[cç][aã]o|criar)$/.test(query)){searchFeedback.hidden=true;showView("creation");return;}
- if(/^(painel|recebimento|recebimentos|inbox|informações|informacoes)$/.test(query)){searchFeedback.hidden=true;showView("panel");return;}
+ if(/^(painel|visão geral|visao geral|dashboard)$/.test(query)){searchFeedback.hidden=true;showView("panel");return;}
  if(/^(desenvolvimento|projetos?)$/.test(query)){searchFeedback.hidden=true;showView("development");return;}
  if(/^(finaliza[cç][aã]o|finalizar|apk|empacotamento|empacotar)$/.test(query)){searchFeedback.hidden=true;showView("finalization");return;}
  if(/^(widgets?|widget|personalizar)$/.test(query)){searchFeedback.hidden=true;setSideMenu(true);setWidgetCategory(true);return;}
@@ -140,26 +140,9 @@ importFile.addEventListener("change",()=>{
 });
 window.addEventListener("darkhub:projects-changed",()=>{if(currentView==="development")renderProjects();});
 
-informationForm.addEventListener("submit",event=>{
- event.preventDefault();const data=new FormData(informationForm);
- try{inbox.receiveInformation({sender:data.get("sender"),category:data.get("category"),title:data.get("title"),message:data.get("message"),sourceId:"manual-"+Date.now()});informationForm.reset();showInformationFeedback("Informação recebida e registrada.");renderInbox();}
- catch(error){showInformationFeedback(error.message||"Não foi possível receber a informação.",true);}
-});
-$("information-export").addEventListener("click",()=>{
- try{const blob=new Blob([JSON.stringify(inbox.exportData(),null,2)],{type:"application/json"});const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="darkhub-recebimentos.json";link.click();URL.revokeObjectURL(url);showInformationFeedback("Caixa de entrada exportada.");}
- catch(error){showInformationFeedback(error.message||"Falha ao exportar recebimentos.",true);}
-});
-const informationImportTrigger=$("information-import-trigger"),informationImportFile=$("information-import-file");
-informationImportTrigger.addEventListener("click",()=>informationImportFile.click());
-informationImportFile.addEventListener("change",()=>{
- const file=informationImportFile.files&&informationImportFile.files[0];if(!file)return;
- const reader=new FileReader();
- reader.onload=()=>{try{inbox.importData(JSON.parse(String(reader.result||"")));renderInbox();showInformationFeedback("Recebimentos importados.");}catch(error){showInformationFeedback(error.message||"Arquivo de recebimentos inválido.",true);}informationImportFile.value="";};
- reader.onerror=()=>{showInformationFeedback("Não foi possível ler o arquivo.",true);informationImportFile.value="";};
- reader.readAsText(file);
-});
-window.DarkHubInbox=Object.freeze({receiveInformation:payload=>{const item=inbox.receiveInformation(payload);if(currentView==="panel")renderInbox();return item;},listInformation:()=>inbox.list()});
-window.addEventListener("darkhub:inbox-changed",()=>{if(currentView==="panel")renderInbox();});
+$("dashboard-open-projects").addEventListener("click",()=>showView("development"));
+window.DarkHubInbox=Object.freeze({receiveInformation:payload=>{const item=inbox.receiveInformation(payload);if(currentView==="panel")renderDashboard();return item;},listInformation:()=>inbox.list()});
+window.addEventListener("darkhub:inbox-changed",()=>{if(currentView==="panel")renderDashboard();});
 window.addEventListener("storage",event=>{if(event.key===INFORMATION_INBOX_STORAGE_KEY&&currentView==="panel")renderInbox();});
 
 $("alert-close").addEventListener("click",()=>setAlerts(false));
