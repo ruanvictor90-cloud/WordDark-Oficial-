@@ -11,7 +11,7 @@ Finalizar e revisar o Ruan como central pessoal independente, mantendo as altera
 ## Escopo confirmado
 
 - Ruan é a central privada de uso pessoal; a Área ADM não faz parte da interface atual.
-- A tela central contém atalhos para Entretenimento, Pessoal, Shadow e WordDark Hub, além de resumo de saldo registrado, tarefas em aberto e notificações locais.
+- A tela central contém saudação rotativa por horário, quatro atalhos principais, resumo de saldo registrado e tarefas em aberto, notificações locais e uma gaveta global com acesso rápido aos módulos. A gaveta existe somente na central.
 - Pessoal mantém os setores Financeiro, Tarefas e Vida.
 - Shadow continua separado; DarkEye é um protótipo de navegação por interface/iframe, não um navegador nativo.
 - O atalho para o WordDark Hub é explícito. O runtime do Hub/WordDark não é importado pelo Ruan e os dados pessoais não são enviados automaticamente.
@@ -26,6 +26,9 @@ Finalizar e revisar o Ruan como central pessoal independente, mantendo as altera
 - Acrescentadas asserções para garantir uma única seção de widgets e IDs únicos de saldo e tarefas.
 - Restaurada a paleta preto/roxo no CSS base da central, que ainda tinha variáveis e fundos azuis.
 - Removido um bloco de estilos duplicado dos widgets.
+- Restauradas a saudação rotativa (com respeito à preferência de movimento reduzido) e a gaveta global de aplicativos, exclusiva da central; a gaveta reúne os atalhos principais e os módulos Financeiro, Tarefas, Vida e DarkEye.
+- Implementado fechamento da gaveta por botão, clique fora e tecla Escape; a abertura da gaveta fecha o painel de notificações e vice-versa.
+- Reforçada a validação dos links de notificações para que não naveguem para fora da área Ruan.
 - Atualizada a versão dos assets e do cache do service worker para `ruan-central-v25`, evitando servir a folha de estilo anterior após as correções.
 - Preservada a navegação sem gaveta global duplicada dentro das telas internas.
 
@@ -54,9 +57,9 @@ Finalizar e revisar o Ruan como central pessoal independente, mantendo as altera
 
 **Resultado confirmado: sucesso.** A execução do GitHub Actions terminou com conclusão `success` na revisão `ed0ac5ce97e061e3bd7d2c321ff0244184469229`.
 
-Execução: https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/runs/38834839956
+Execução final da bateria de código/interface: https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/runs/38835187389
 
-A bateria executou estes dez comandos sem falhas:
+A bateria executou estes dez comandos sem falhas na revisão `6f98eb2e04b5b260e65f715b1489b0ef0facd9a9`. A revisão contém as correções da central, da gaveta, da saudação e dos testes:
 
 1. `node ruan/apps/pessoal/vida.test.js`
 2. `node ruan/engine/personal-core.test.js`
