@@ -27,25 +27,33 @@ jobs:
         with:
           ref: darkhub
           path: darkhub-src
-      - name: Publish only current apps
+      - name: Publish current apps and redirect old entry points
         run: |
-          mkdir -p site/darkhub site/hub site/worddark
+          mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/ruan
           cp -R darkhub-src/ruan/. site/darkhub/
           cp -R repo/hub/. site/hub/
           cp -R repo/worddark/. site/worddark/
           cat > site/index.html <<'EOF'
           <!doctype html>
-          <html lang="pt-BR">
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta name="robots" content="noindex">
-            <meta http-equiv="refresh" content="0; url=./darkhub/">
-            <title>darkHub</title>
-            <script>location.replace('./darkhub/');</script>
-          </head>
-          <body><p>Abrindo o <a href="./darkhub/">darkHub</a>…</p></body>
-          </html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=./darkhub/"><title>darkHub</title><script>location.replace('./darkhub/');</script></head><body><p>Abrindo o <a href="./darkhub/">darkHub</a>…</p></body></html>
+          EOF
+          cat > site/preview/darkhub/index.html <<'EOF'
+          <!doctype html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../../darkhub/"><title>darkHub atualizado</title><script>location.replace('../../darkhub/');</script></head><body><p>O darkHub mudou de endereço. <a href="../../darkhub/">Abrir darkHub</a></p></body></html>
+          EOF
+          cat > site/ruan/index.html <<'EOF'
+          <!doctype html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../darkhub/"><title>darkHub atualizado</title><script>location.replace('../darkhub/');</script></head><body><p>O darkHub mudou de endereço. <a href="../darkhub/">Abrir darkHub</a></p></body></html>
+          EOF
+          cat > site/preview/darkhub/sw.js <<'EOF'
+          self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
+          self.addEventListener('activate', event => event.waitUntil((async () => {
+            await caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('ruan-') || key.startsWith('darkhub-')).map(key => caches.delete(key))));
+            await self.registration.unregister();
+            const target = new URL('../../darkhub/', self.registration.scope).href;
+            const clients = await self.clients.matchAll({type:'window', includeUncontrolled:true});
+            await Promise.all(clients.map(client => client.navigate(target)));
+          })()));
           EOF
       - name: Configure Pages
         uses: actions/configure-pages@v5
