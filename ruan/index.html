@@ -7,7 +7,7 @@
   <meta name="description" content="darkHub — hub pessoal para organizar e desenvolver seu ecossistema de aplicativos.">
   <link rel="icon" href="./ruan-logo.svg?v=20261016.17" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.23">
+  <link rel="stylesheet" href="./ruan-hub.css?v=20261016.24">
   <title>darkHub — Hub pessoal</title>
 </head>
 <body>
@@ -85,21 +85,19 @@
           </form>
         </details>
       </section>
-            <section id="panel-workspace" class="panel-workspace" hidden aria-labelledby="information-title">
-        <div class="development-toolbar">
-          <div><h2 id="information-title">Recebimento de informações</h2><p>Mensagens e avisos enviados pelos aplicativos conectados ao darkHub.</p></div>
-          <div class="development-tools"><button id="information-export" class="project-tool-button" type="button">Exportar</button><button id="information-import-trigger" class="project-tool-button" type="button">Importar</button><input id="information-import-file" type="file" accept="application/json,.json" hidden></div>
+            <section id="panel-workspace" class="panel-workspace" hidden aria-labelledby="dashboard-title">
+        <div class="dashboard-intro"><div><h2 id="dashboard-title">Visão geral</h2><p>Acompanhamento do que está acontecendo no darkHub.</p></div><span class="dashboard-live"><span></span> Atualizado agora</span></div>
+        <div class="dashboard-metrics" aria-label="Resumo dos projetos">
+          <article class="dashboard-metric"><span class="dashboard-metric-label">Projetos</span><strong id="metric-projects">0</strong><small>Total registrado</small></article>
+          <article class="dashboard-metric"><span class="dashboard-metric-label">Em andamento</span><strong id="metric-active">0</strong><small>Em desenvolvimento</small></article>
+          <article class="dashboard-metric"><span class="dashboard-metric-label">Em revisão</span><strong id="metric-review">0</strong><small>Revisão ou finalização</small></article>
+          <article class="dashboard-metric"><span class="dashboard-metric-label">Avisos novos</span><strong id="metric-unread">0</strong><small>Informações não lidas</small></article>
         </div>
-        <p id="information-feedback" class="project-feedback" role="status" aria-live="polite" hidden></p>
-        <form id="information-form" class="project-form information-form">
-          <label>Origem<input name="sender" maxlength="120" required placeholder="Ex.: Pessoal, Shadow, outro app"></label>
-          <label>Categoria<select name="category"><option>Geral</option><option>Alerta</option><option>Resultado</option><option>Pedido</option><option>Erro</option><option>Status</option></select></label>
-          <label>Título<input name="title" maxlength="180" required placeholder="Resumo da informação"></label>
-          <label>Mensagem<textarea name="message" maxlength="5000" rows="3" placeholder="Detalhes ou retorno enviado pelo aplicativo"></textarea></label>
-          <button type="submit" class="project-submit">Receber informação</button>
-        </form>
-        <div class="inbox-heading"><h3>Caixa de entrada</h3><span id="information-count" class="inbox-count">0 recebimentos</span></div>
-        <div id="information-list" class="information-list" aria-live="polite"><p class="project-empty">Nenhuma informação recebida ainda.</p></div>
+        <div class="dashboard-columns">
+          <section class="dashboard-section" aria-labelledby="dashboard-projects-title"><div class="dashboard-section-heading"><h3 id="dashboard-projects-title">Projetos recentes</h3><button id="dashboard-open-projects" type="button">Ver projetos ↗</button></div><div id="dashboard-projects" class="dashboard-projects"><p class="project-empty">Nenhum projeto registrado.</p></div></section>
+          <section class="dashboard-section" aria-labelledby="dashboard-updates-title"><div class="dashboard-section-heading"><h3 id="dashboard-updates-title">Últimas informações</h3><span id="dashboard-updates-count">0 avisos</span></div><div id="dashboard-updates" class="dashboard-updates"><p class="project-empty">Nenhuma informação nova dos aplicativos.</p></div></section>
+        </div>
+        <p class="dashboard-note">Os dados exibidos dependem dos projetos registrados e dos aplicativos que já estiverem conectados ao darkHub.</p>
       </section>
       <section id="package-workspace" class="package-workspace" hidden aria-labelledby="package-title">
         <div class="package-panel">
@@ -169,6 +167,6 @@
     <div class="panel-heading"><h2 id="alert-title">Alertas</h2><button id="alert-close" class="icon-button close-button" type="button" aria-label="Fechar alertas">×</button></div>
     <div id="alert-list" class="alert-list"><p class="empty-state">Nenhum alerta por enquanto.</p></div>
   </section>
-  <script type="module" src="./ruan-hub.js?v=20261016.23"></script>
+  <script type="module" src="./ruan-hub.js?v=20261016.24"></script>
 </body>
 </html>
