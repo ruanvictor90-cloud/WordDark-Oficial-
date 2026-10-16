@@ -1,7 +1,7 @@
 {
-  "name": "darkHub",
-  "short_name": "darkHub",
-  "description": "darkHub — Hub central de desenvolvimento do ecossistema WordDark.",
+  "name": "WordDark Hub",
+  "short_name": "WD Hub",
+  "description": "WordDark Hub — Hub central de desenvolvimento do ecossistema WordDark.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
