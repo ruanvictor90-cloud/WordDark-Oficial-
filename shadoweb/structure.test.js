@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { normalizeHttps, isLocalHost } from "./address.js";
 import { readFileSync } from "node:fs";
 const read = name => readFileSync(new URL("./"+name, import.meta.url), "utf8");
 const html=read("index.html"), app=read("app.js"), css=read("shadoweb.css"), sw=read("sw.js");
@@ -28,4 +29,12 @@ test("machine-readable API and plugin contracts are versioned and not falsely pu
   assert.equal(apiContract.httpServerActive,false);
   assert.equal(pluginSchema.properties.schemaVersion.const,"1.0.0");
   assert.equal(pluginSchema.additionalProperties,false);
+});
+
+test("navigation accepts HTTPS and blocks local/private targets even with explicit schemes",()=>{
+  assert.equal(normalizeHttps("https://example.com"),"https://example.com/");
+  assert.equal(normalizeHttps("words to search","google"),"https://www.google.com/search?q=words%20to%20search");
+  for(const url of ["https://localhost","https://127.0.0.1/admin","https://192.168.1.1","https://10.0.0.4","https://[::1]","javascript:alert(1)"]) assert.throws(()=>normalizeHttps(url));
+  assert.equal(isLocalHost("172.20.0.1"),true);
+  assert.equal(isLocalHost("example.com"),false);
 });
