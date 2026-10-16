@@ -1,7 +1,7 @@
 {
-  "name": "Ruan — Hub pessoal",
-  "short_name": "Ruan",
-  "description": "Hub pessoal para desenvolver, organizar e conectar aplicativos.",
+  "name": "darkHub — Hub pessoal",
+  "short_name": "darkHub",
+  "description": "Hub pessoal darkHub para desenvolver, organizar e conectar aplicativos.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
