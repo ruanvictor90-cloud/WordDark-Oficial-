@@ -7,6 +7,7 @@ import { Bridge } from "./bridge.js";
 import { builtInConnectors, connectorHandlers } from "./connectors.js";
 import { PluginManager } from "./plugin-manager.js";
 import { Knowledge } from "./knowledge.js";
+import { normalizeHttps } from "./address.js";
 
 class MemoryStorage {
   constructor(){this.data=new Map();}
@@ -114,4 +115,12 @@ test("Bridge enforces its timeout even when a connector ignores AbortSignal", as
   assert.equal(result.ok, false);
   assert.match(result.error, /Tempo limite/);
   assert.ok(audit.list().some(row => row.event === "gateway.error" && /Tempo limite/.test(row.detail.reason)));
+});
+
+test("address handling uses the selected search engine and blocks unsafe schemes",()=>{
+  assert.equal(normalizeHttps("Shadoweb connected world","google"),"https://www.google.com/search?q=Shadoweb%20connected%20world");
+  assert.equal(normalizeHttps("Shadoweb connected world","bing"),"https://www.bing.com/search?q=Shadoweb%20connected%20world");
+  assert.equal(normalizeHttps("https://example.com").startsWith("https://example.com"),true);
+  assert.throws(()=>normalizeHttps("javascript:alert(1)"),/não é permitido/);
+  assert.throws(()=>normalizeHttps("http://example.com"),/Use HTTPS/);
 });
