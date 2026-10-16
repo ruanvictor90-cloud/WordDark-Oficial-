@@ -43,13 +43,14 @@ test("Gate requires both enabled connector and explicit scoped permission",()=>{
 test("Bridge logs requests, denies missing permissions and executes only registered handlers",async()=>{
   const storage=new MemoryStorage(), audit=new AuditLog(storage), gate=new Gate(storage);
   const connectors=builtInConnectors.map(c=>({...c,enabled:true}));
-  const bridge=new Bridge({connectors,handlers:connectorHandlers,gate,audit});
+  const handlers={...connectorHandlers,wikipedia:async()=>[{title:"Test result"}]};
+  const bridge=new Bridge({connectors,handlers,gate,audit});
   const denied=await bridge.request({connectorId:"wikipedia",action:"search",input:{query:"hello"}},{scope:"connector.read"});
   assert.equal(denied.ok,false); assert.match(denied.error,/Permissão/);
   gate.grant("wikipedia",["connector.read"]);
   const success=await bridge.request({connectorId:"wikipedia",action:"search",input:{query:"hello"}},{scope:"connector.read"});
-  // A mocked fetch keeps this test deterministic and offline.
-  assert.equal(success.ok,false); // No network dependency is assumed in unit tests.
+  assert.equal(success.ok,true);
+  assert.equal(success.result[0].title,"Test result");
   assert.ok(audit.list().some(row=>row.event==="gateway.request"));
   assert.ok(audit.list().some(row=>row.event==="gateway.denied"));
 });
