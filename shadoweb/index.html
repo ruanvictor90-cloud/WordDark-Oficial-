@@ -78,16 +78,17 @@
 
     <section class="view" id="view-connections" hidden>
       <div class="section-heading"><div><span class="eyebrow">INTEGRAÇÕES</span><h2>Conexões</h2></div></div>
-      <article class="connection-card"><span class="connection-icon">D</span><div><strong>darkHub</strong><p>Possível ponte entre aplicativos, com escopo e permissões definidos por integração.</p><small class="pending">Contrato autenticado ainda não configurado</small></div></article>
-      <article class="connection-card"><span class="connection-icon">W</span><div><strong>WordDark</strong><p>Conexão governada para serviços autorizados, aprovações e auditoria.</p><small class="pending">Aguardando contrato autenticado</small></div></article>
-      <article class="connection-card"><span class="connection-icon">＋</span><div><strong>Conectores externos</strong><p>Novos serviços serão adicionados individualmente, sem compartilhar todos os dados do dispositivo.</p><small class="pending">Desativados por padrão</small></div></article>
-      <p class="disclaimer">Os cartões acima descrevem integrações planejadas; não indicam conexões ativas.</p>
+      <p class="section-intro">Ative cada conector e conceda apenas os escopos necessários. Conexões de sistemas internos permanecem pendentes até existir um contrato autenticado real.</p>
+      <div class="list-stack" id="connector-list"></div>
+      <div class="connection-card"><span class="connection-icon">D</span><div><strong>darkHub / WordDark</strong><p>Integrações internas aguardam endpoints, autenticação, autorização e contratos de API versionados.</p><small class="pending">Desconectados — sem endpoints fictícios</small></div></div>
     </section>
 
     <section class="view" id="view-world" hidden>
       <div class="section-heading"><div><span class="eyebrow">MUNDO CONECTADO</span><h2>Apps e serviços</h2></div><span class="status-pill"><i></i> Local-first</span></div>
       <p class="section-intro">Um espaço personalizável para abrir serviços, organizar ferramentas e controlar quais conectores podem acessar recursos.</p>
       <div class="shortcut-grid world-grid" id="world-apps"></div>
+      <form id="connector-search-form" class="knowledge-form compact-form"><input id="connector-query" maxlength="180" placeholder="Pesquisar conhecimento na Wikipedia..." aria-label="Pesquisar conhecimento na Wikipedia" required><button class="primary-button" type="submit">Pesquisar</button></form>
+      <div class="list-stack" id="connector-results"></div><p class="empty-state" id="connector-results-empty">Ative o conector Wikipedia e conceda a permissão para pesquisar.</p>
       <div class="section-heading second-heading"><div><span class="eyebrow">CONTRATO DE API</span><h2>Gateway Shadoweb</h2></div><span class="status-pill"><i></i> v1.0.0</span></div>
       <div class="connection-card"><span class="connection-icon">API</span><div><strong>Gate → Bridge → Connector → Audit</strong><p>As requisições passam por validação de contrato, permissão por escopo, execução do conector registrado e auditoria local.</p><small class="pending">Sem credenciais de terceiros e sem execução arbitrária de plugins</small></div></div>
   </section>
