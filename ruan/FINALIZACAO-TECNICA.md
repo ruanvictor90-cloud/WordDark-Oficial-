@@ -57,9 +57,9 @@ Finalizar e revisar o Ruan como central pessoal independente, mantendo as altera
 
 **Resultado confirmado: sucesso.** A execução do GitHub Actions terminou com conclusão `success` na revisão `ed0ac5ce97e061e3bd7d2c321ff0244184469229`.
 
-Execução final da bateria de código/interface: https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/runs/38835187389
+Execução final da bateria de código/interface: https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/runs/38835233211
 
-A bateria executou estes dez comandos sem falhas na revisão `6f98eb2e04b5b260e65f715b1489b0ef0facd9a9`. A revisão contém as correções da central, da gaveta, da saudação e dos testes:
+A bateria executou estes dez comandos sem falhas na revisão `55129ab17c38485a303c48a5daba9faf60623d59`. A revisão contém as correções da central, da gaveta, da saudação e dos testes:
 
 1. `node ruan/apps/pessoal/vida.test.js`
 2. `node ruan/engine/personal-core.test.js`
@@ -93,6 +93,9 @@ A aprovação é da bateria automatizada listada acima; ela não substitui a con
 ## Critérios de finalização
 
 - [x] Duplicação dos widgets removida e coberta por testes.
+- [x] Saudação rotativa e gaveta global restauradas exclusivamente na central.
+- [x] Gaveta fecha por botão, clique fora e Escape; painel de notificações e gaveta não ficam abertos simultaneamente.
+- [x] Links de notificações limitados à área interna do Ruan.
 - [x] Identidade preto/roxo restaurada na central.
 - [x] Regras de datas e valores financeiros reforçadas.
 - [x] Testes automatizados da branch executados com sucesso.
