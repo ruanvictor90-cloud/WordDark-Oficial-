@@ -207,3 +207,9 @@
 .project-form input:focus,.project-form select:focus{border-color:var(--purple)}
 .project-submit{padding:11px 13px;border:1px solid #765098;border-radius:11px;background:linear-gradient(135deg,#3a2452,#1b1028);color:var(--text);font-size:12px;font-weight:750}
 @media(min-width:560px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.development-toolbar{align-items:center}.project-form{grid-template-columns:repeat(2,minmax(0,1fr))}.project-form label:nth-child(4){grid-column:span 2}.project-submit{align-self:end}}
+
+
+/* Acabamento: a logo do cabeçalho não deve herdar o tamanho da logo de destaque */
+.brand-home{width:48px;height:48px;}
+.brand-home .header-logo{width:48px;height:48px;min-width:48px;margin:0;padding:0;border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important;}
+.brand-home .header-logo img{width:42px!important;height:42px!important;max-width:42px;max-height:42px;object-fit:contain;}
