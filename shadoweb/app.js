@@ -18,8 +18,10 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
     if(!url.startsWith("https://")) { notify("Apenas endereços HTTPS podem ser abertos."); return; }
     state.history=[{url,title:safeLabel(url),at:new Date().toISOString()},...state.history.filter(x=>x.url!==url)].slice(0,50);
     write(KEYS.history,state.history); renderHistory();
-    const nativeBrowser=window.Capacitor?.Plugins?.Browser;
-    if(nativeBrowser?.open){nativeBrowser.open({url}).catch(()=>notify("Não foi possível abrir o endereço externo."));return;}
+    if(window.Capacitor?.isNativePlatform?.()){
+      import("@capacitor/browser").then(({Browser})=>Browser.open({url})).catch(()=>notify("Não foi possível abrir o endereço externo."));
+      return;
+    }
     const opened=window.open(url,"_blank","noopener,noreferrer");
     if(!opened) notify("O navegador bloqueou a nova aba. Permita a abertura do link e tente novamente.");
   }
