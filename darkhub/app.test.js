@@ -24,5 +24,7 @@ test("security boundaries are explicit and user records are rendered as text", (
   assert.match(core, /PBKDF2-SHA-256/);
   assert.match(core, /AES-GCM/);
   assert.match(app, /textContent/);
+  assert.match(app, /clearSensitiveViews/);
+  assert.match(app, /vault\.lock\(\)/);
   assert.match(html, /Nenhuma conexão externa está ativa/);
 });
