@@ -5,6 +5,7 @@ on:
     paths:
       - "shadoweb/**"
       - "capacitor.config.json"
+      - "capacitor.ci.config.json"
       - ".github/workflows/shadoweb-apk.yml"
   pull_request:
     branches: ["feature/shadoweb-foundation"]
