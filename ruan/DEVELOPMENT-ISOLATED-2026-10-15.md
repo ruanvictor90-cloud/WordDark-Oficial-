@@ -33,7 +33,6 @@ Executar no ambiente do repositório:
 node ruan/engine/notifications.test.js
 node ruan/engine/central-engine.test.js
 node ruan/engine/ruan-central.test.js
-node ruan/engine/central-engine.test.js
 node ruan/apps/shadow/darkeye/darkeye-core.test.js
 node ruan/app.test.js
 node ruan/structure-boundary.test.js
