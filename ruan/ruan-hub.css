@@ -20,3 +20,9 @@
 .welcome h1 #greeting{color:var(--text)}
 .hub-search{margin-top:20px}
 @media(max-height:650px){.welcome{padding-top:18px}}
+
+
+/* Identidade da logo central aplicada ao cabeçalho */
+.brand-home{width:58px;height:58px;}
+.brand-home .header-logo{width:58px;height:58px;min-width:58px;margin:0;border-radius:19px;background:linear-gradient(145deg,#241632,#100b18);border-color:#754c9a;box-shadow:0 0 24px #9d5cff20,inset 0 0 14px #c19aff0c;}
+.brand-home .header-logo img{display:block;width:52px;height:52px;object-fit:contain;filter:none;}
