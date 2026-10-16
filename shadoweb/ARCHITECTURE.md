@@ -48,6 +48,10 @@ Shadoweb é um aplicativo convencional de navegação que evolui para um mundo c
 - Leitura contextual automática de páginas e sobreposição nativa darkEye.
 - Assinatura e distribuição de APK de produção.
 
+## Contrato público preparado
+
+O rascunho OpenAPI em [OPENAPI-PUBLIC-DRAFT.yaml](./OPENAPI-PUBLIC-DRAFT.yaml) define uma futura superfície HTTP versionada para saúde, catálogo de conectores, execução de ações e registro de apps consumidores. Ele documenta autenticação Bearer, autorização, limites e timeout. O host é um placeholder; nenhuma rota pública está ativa.
+
 ## Etapas para a versão pública
 
 1. Revisar comportamento no Android e nos navegadores móveis.
