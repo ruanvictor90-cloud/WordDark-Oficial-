@@ -6,7 +6,7 @@
 - **Painel central:** métricas derivadas dos registros existentes e atividade local.
 - **Análise do ecossistema:** responsabilidades, arquitetura, conexões e governança.
 - **Análise técnica:** revisões de código, verificações, riscos e critérios de liberação.
-- **Criador de aplicativos:** cria especificações e exporta um manifesto JSON e uma página inicial independente.
+- **Criador de aplicativos:** cria especificações e exporta um manifesto JSON, uma página inicial e uma folha de estilos independentes.
 - **Registro de projetos:** acompanha projetos e estados.
 - **Segurança e acesso:** estado do cofre, limites de confiança e políticas.
 - **Registro de atividade:** trilha local de ações relevantes.
