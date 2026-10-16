@@ -1,34 +1,15 @@
-# WordDark — aplicativo do mundo
+# WordDark — interface do mundo operacional
 
-Este aplicativo é a interface do mundo WordDark e permanece separado do aplicativo pessoal Ruan.
+Este aplicativo é a interface do mundo WordDark. Ele permanece separado do darkHub, que é a central de análise e criação de aplicativos do ecossistema.
 
-## Áreas e aplicativos desta versão
+## Responsabilidades
+- **WordDark:** coordenação, operações, governança e infraestrutura do mundo.
+- **Céu:** execução e produção, incluindo Dark Factory.
+- **Terra:** entidades, solicitações e necessidades que alimentam as operações.
 
-- Visão geral e Gerenciamento.
-- Céu: Dark Factory e Central Social.
-- Terra: Empresa social e Empresa comercial.
-- Aplicativos centrais: Central, Darkbank, Central de conexão, Automação, Biblioteca, Escola do Mundo, Governança, Segurança e Teste.
-- Dark Factory: Em criação e Biblioteca, com Áudio, Vídeos, Voz, Imagens e Outros arquivos.
-- Central Social: Gestor de redes sociais, Gestor de marketing digital e Gestor de projetos.
-- Darkbank: Financeiro, Cofre e Investimentos, com fundos restritos às operações do WordDark.
-
-## O que funciona nesta fase
-
-- Navegação local entre as áreas expostas.
-- Registro local de solicitações, notas, pedidos, produtos e dados financeiros.
-- Estimativa configurável de impostos.
-- Exportação e restauração de backup local.
-- Interfaces iniciais para setores que serão detalhados depois.
-
-## O que não deve ser presumido
-
-- Não há autenticação de produção nem sincronização central garantida.
-- Marcar uma solicitação ou pedido local não comprova execução externa.
-- Conectores e publicação não são considerados ativos sem autorização e confirmação do serviço.
-- Registros financeiros não movimentam dinheiro nem conectam bancos.
-- Impostos são estimativas, não apuração contábil ou fiscal.
-- Ruan não faz parte do WordDark. Não existe reserva ou fluxo de transferência para Ruan dentro do aplicativo.
-
-## Fonte de código
-
-A interface fica em `worddark/app/`. O Core canônico fica em `worddark/runtime/world/core/`. A implementação anterior em `worddark/core-central/` está arquivada e fora do caminho ativo.
+## Limites
+- O WordDark administra apenas suas próprias operações e os escopos autorizados.
+- darkHub não se torna um setor interno do mundo WordDark.
+- Nenhuma transferência financeira entre aplicativos é presumida.
+- Conexões futuras exigem contrato autenticado, autorização por escopo e revogação.
+- Valores fiscais e financeiros exibidos são estimativas quando indicado pela interface; não substituem apuração contábil ou fiscal.
