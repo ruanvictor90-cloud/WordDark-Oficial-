@@ -1,6 +1,7 @@
 /* WordDark — Environment Guard
  * Barreira explícita entre TEST e PROD.
- * PROD exige uma aprovação separada da autorização normal da operação.
+ * Fail-closed: ambiente ausente, desconhecido ou sem estado verificável é bloqueado.
+ * PROD exige aprovação separada da autorização normal da operação.
  */
 class WordDarkEnvironmentGuard {
   constructor({ environments = {}, productionApproval = null } = {}) {
@@ -9,23 +10,47 @@ class WordDarkEnvironmentGuard {
   }
 
   canRun(operation) {
-    const environment = this.environments[operation.environment];
-    if (environment && typeof environment.isActive === "function" && !environment.isActive()) {
-      return {allowed:false,reason:"AMBIENTE_BLOQUEADO"};
+    if (!operation || typeof operation !== "object") {
+      return { allowed: false, reason: "OPERACAO_INVALIDA" };
     }
 
-    if (operation.environment === "PROD") {
+    const name = operation.environment;
+    if (name !== "TEST" && name !== "PROD") {
+      return { allowed: false, reason: "AMBIENTE_INVALIDO" };
+    }
+
+    const environment = this.environments[name];
+    if (!environment || typeof environment.isActive !== "function") {
+      return { allowed: false, reason: "AMBIENTE_NAO_CONFIGURADO" };
+    }
+
+    if (!environment.isActive()) {
+      return { allowed: false, reason: "AMBIENTE_BLOQUEADO" };
+    }
+
+    if (name === "PROD") {
       if (typeof this.productionApproval !== "function") {
-        return {allowed:false,reason:"PROD_SEM_APROVACAO_CONFIGURADA"};
+        return { allowed: false, reason: "PROD_SEM_APROVACAO_CONFIGURADA" };
       }
-      const approval = this.productionApproval(operation);
+
+      let approval;
+      try {
+        approval = this.productionApproval(operation);
+      } catch {
+        return { allowed: false, reason: "PROD_APROVACAO_FALHOU" };
+      }
+
       if (!approval || approval.allowed !== true) {
-        return {allowed:false,reason:(approval && approval.reason) || "PROD_NAO_AUTORIZADO"};
+        return {
+          allowed: false,
+          reason: (approval && approval.reason) || "PROD_NAO_AUTORIZADO"
+        };
       }
     }
 
-    return {allowed:true,reason:"ENVIRONMENT_ALLOWED"};
+    return { allowed: true, reason: "ENVIRONMENT_ALLOWED" };
   }
 }
+
 if (typeof module !== "undefined") module.exports = WordDarkEnvironmentGuard;
 if (typeof window !== "undefined") window.WordDarkEnvironmentGuard = WordDarkEnvironmentGuard;
