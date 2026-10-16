@@ -44,6 +44,9 @@ assert.equal(store.list("shoppingLists")[0].items[0].done, true);
 
 store.create("transactions", { title: "Freelance", type: "income", amount: 300, date: "2026-10-14" });
 store.create("bills", { title: "Internet", amount: 100, dueDate: "2026-10-20", date: "2026-10-14" });
+assert.throws(() => store.create("bills", { title: "Conta sem valor", amount: 0, dueDate: "2026-10-20" }), /maior que zero/i);
+const internetBill = store.list("bills").find(item => item.title === "Internet");
+assert.throws(() => store.update("bills", internetBill.id, { amount: 0 }), /maior que zero/i);
 assert.equal(store.calculateFinance({ now: clock }).monthIncome, 2300);
 assert.equal(store.calculateFinance({ now: clock }).monthExpenses, 150);
 assert.equal(store.calculateFinance({ now: clock }).billsDueThisMonth.length, 2);
