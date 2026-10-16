@@ -127,6 +127,7 @@ import { DarkHubVault, DARKHUB_STORAGE_KEYS } from "./core.js";
       const files=await vault.exportAppFiles(id);
       downloadText(files.manifest.id+"-app-manifest.json",JSON.stringify(files.manifest,null,2),"application/json");
       downloadText(files.manifest.id+"-index.html",files.html,"text/html");
+      downloadText(files.manifest.id+"-app.css",files.css,"text/css");
       notify("Manifesto e página inicial exportados separadamente.");
       renderAll();
     } catch(error) { notify(error.message); }
