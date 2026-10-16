@@ -1,4 +1,4 @@
-const CACHE='darkhub-v5-engine-20261016';
+const CACHE='darkhub-v6-engine-20261016';
 const CORE=['./','./index.html','./ruan-hub.css','./ruan-hub.js','./engine/darkhub-engine.js','./ruan-logo.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('ruan-')||key.startsWith('darkhub-'))&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
