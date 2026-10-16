@@ -110,3 +110,13 @@
 .side-drawer-scrim{position:fixed;z-index:50;inset:0;border:0;background:#050308b8;backdrop-filter:blur(3px)}
 @keyframes side-in{from{transform:translateX(-12px);opacity:.7}to{transform:translateX(0);opacity:1}}
 @media(max-width:430px){.home-widgets{gap:8px}.home-widget{padding:12px;border-radius:16px}.widget-small{min-height:180px}.home-widget h2{font-size:14px}.home-widget-value{font-size:16px}.home-widget-detail{font-size:9px}.side-drawer{padding-left:15px;padding-right:15px}}
+
+/* Minimal category shell for future app-provided widgets */
+.side-menu-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.widget-category{margin:10px 0 0;padding:14px;border:1px solid #382647;border-radius:16px;background:#120d1a}
+.widget-category-heading h3{margin:0;font-size:14px}
+.widget-category-heading p{margin:6px 0 0;color:#aa9ab9;font-size:11px;line-height:1.55}
+.widget-category-empty{display:flex;flex-direction:column;align-items:center;padding:25px 5px 12px;text-align:center}
+.widget-category-empty-icon{display:grid;place-items:center;width:44px;height:44px;margin-bottom:12px;border:1px solid #49315d;border-radius:14px;background:#241632;color:#c8a5ff;font-size:22px}
+.widget-category-empty strong{font-size:12px}
+.widget-category-empty p{max-width:280px;margin:6px 0 0;color:#8f7da0;font-size:10px;line-height:1.65}
