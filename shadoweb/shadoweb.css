@@ -38,3 +38,9 @@ html[data-profile="general"]{--purple:#f1d18a;--purple-2:#d1a64f;--line-bright:#
 .world-summary-metrics strong{color:var(--purple);font-size:19px;line-height:1}
 .world-summary-metrics span{color:var(--muted);font-size:9px;text-align:right}
 @media(max-width:460px){.world-summary{grid-template-columns:1fr;gap:13px}.world-summary-copy h2{font-size:18px}.world-summary-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.world-summary-metrics div{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:66px;padding:8px}.world-summary-metrics span{text-align:left;font-size:9px}}
+
+.consumer-actions{margin:12px 0 16px;flex-wrap:wrap}
+#consumer-app-list .connection-card{align-items:flex-start}
+#consumer-app-list .connection-body{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
+#consumer-app-list .connection-body p{margin:0}
+#consumer-app-list .pending,#consumer-app-list .active-status{overflow-wrap:anywhere}
