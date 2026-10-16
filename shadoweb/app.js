@@ -31,7 +31,7 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
     document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.view===state.view));
     views.forEach(name=>{ const section=$("view-"+name); if(section) section.hidden=name!==state.view; });
     renderFavorites(); renderHistory();
-    if(state.view==="connections") renderConnections();
+    if(state.view==="connections") { renderConnections(); renderConsumerApps(); }
     if(state.view==="world") renderWorldApps();
     if(state.view==="home") renderHomeSummary();
     if(state.view==="knowledge") renderKnowledge();
@@ -92,6 +92,40 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
     const settings=connectorSettings(); settings[id]=Boolean(enabled); write(KEYS.connectorSettings,settings);
     const connector=runtime.connectors.find(x=>x.id===id); if(connector) connector.enabled=Boolean(enabled);
     runtime.audit.record(enabled?"connector.enabled":"connector.disabled",{connectorId:id}); renderConnections(); renderWorldApps(); renderHomeSummary();
+  }
+  function renderConsumerApps() {
+    const list=$("consumer-app-list"), empty=$("consumer-apps-empty");
+    list.replaceChildren();
+    const apps=runtime.consumers.list();
+    empty.hidden=apps.length>0;
+    apps.forEach(app=>{
+      const row=document.createElement("article"); row.className="connection-card";
+      const icon=document.createElement("span"); icon.className="connection-icon"; icon.textContent="APP";
+      const body=document.createElement("div"); body.className="connection-body";
+      const title=document.createElement("strong"); title.textContent=app.name+" · "+app.version;
+      const desc=document.createElement("p"); desc.textContent=app.description;
+      const status=document.createElement("small"); status.className=app.enabled?"active-status":"pending"; status.textContent=app.enabled?"App ativado":"App desativado";
+      const actions=document.createElement("div"); actions.className="inline-actions";
+      const toggle=document.createElement("button"); toggle.type="button"; toggle.className="small-button"; toggle.textContent=app.enabled?"Desativar app":"Ativar app";
+      toggle.addEventListener("click",()=>{runtime.consumers.setEnabled(app.appId,!app.enabled);renderConsumerApps();renderAudit();notify("Estado do app atualizado.");});
+      actions.append(toggle);
+      body.append(title,desc,status);
+      app.capabilities.forEach(cap=>{
+        const capLine=document.createElement("small"); capLine.className="pending";
+        capLine.textContent=cap.connectorId+" · "+cap.scopes.join(", ");
+        const granted=cap.scopes.filter(scope=>(app.grants||[]).some(item=>item.connectorId===cap.connectorId&&item.scope===scope));
+        const permission=document.createElement("button"); permission.type="button"; permission.className="small-button";
+        permission.textContent=granted.length===cap.scopes.length?"Revogar capacidade":"Conceder capacidade";
+        permission.addEventListener("click",()=>{
+          if(granted.length===cap.scopes.length) runtime.consumers.revoke(app.appId,cap.connectorId);
+          else runtime.consumers.grant(app.appId,cap.connectorId,cap.scopes);
+          renderConsumerApps();renderAudit();notify("Permissões específicas do app atualizadas.");
+        });
+        body.append(capLine,permission);
+      });
+      const note=document.createElement("small"); note.className="pending"; note.textContent="O conector correspondente também precisa estar ativo e autorizado.";
+      body.append(actions,note); row.append(icon,body); list.append(row);
+    });
   }
   function renderConnections() {
     const list=$("connector-list"); list.replaceChildren();
@@ -157,6 +191,9 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   $("export-knowledge").addEventListener("click",()=>download("shadoweb-knowledge.json",JSON.stringify(runtime.knowledge.export(),null,2)));
   $("import-knowledge").addEventListener("click",()=>$("knowledge-file").click());
   $("knowledge-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;try{const count=runtime.knowledge.import(JSON.parse(await file.text()));renderKnowledge();renderHomeSummary();notify(count+" notas importadas.");}catch(err){notify(err.message);}finally{e.target.value="";}});
+  $("import-consumer").addEventListener("click",()=>$("consumer-file").click());
+  $("download-consumer-template").addEventListener("click",()=>download("shadoweb-consumer-app-template.json",JSON.stringify({schemaVersion:"1.0.0",appId:"meu-app",name:"Meu App",version:"1.0.0",description:"Descreva o que este aplicativo faz.",capabilities:[{connectorId:"wikipedia",scopes:["connector.read"]}]},null,2)));
+  $("consumer-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>50000){notify("Manifesto excede 50 KB.");e.target.value="";return;}try{runtime.consumers.register(JSON.parse(await file.text()));renderConsumerApps();renderAudit();renderHomeSummary();notify("App registrado e desativado. Revise as permissões antes de ativar.");}catch(err){notify(err.message);}finally{e.target.value="";}});
   $("import-plugin").addEventListener("click",()=>$("plugin-file").click());
   $("plugin-file").addEventListener("change",async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>50000){notify("Manifesto excede 50 KB.");e.target.value="";return;}try{runtime.plugins.importManifest(JSON.parse(await file.text()));renderPlugins();renderAudit();renderHomeSummary();notify("Manifesto importado. Código executável não foi carregado.");}catch(err){notify(err.message);}finally{e.target.value="";}});
   $("download-plugin-template").addEventListener("click",()=>download("shadoweb-plugin-template.json",JSON.stringify(runtime.plugins.exportTemplate(),null,2)));
@@ -169,6 +206,6 @@ import { SEARCH_ENGINES, normalizeHttps, safeLabel } from "./address.js";
   state.history=read(KEYS.history,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")).slice(0,50);
   state.shortcuts=read(KEYS.shortcuts,[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&typeof x.title==="string").slice(0,20);
   const settings=connectorSettings(); runtime.connectors.forEach(c=>{if(Object.hasOwn(settings,c.id))c.enabled=settings[c.id];});
-  applyPrefs(); setupShortcuts(); renderFavorites(); renderHistory(); renderHomeSummary(); renderWorldApps(); renderConnections(); renderKnowledge(); renderPlugins(); renderAudit();
+  applyPrefs(); setupShortcuts(); renderFavorites(); renderHistory(); renderHomeSummary(); renderWorldApps(); renderConnections(); renderConsumerApps(); renderKnowledge(); renderPlugins(); renderAudit();
   if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register("./sw.js").catch(() => {});
 })();
