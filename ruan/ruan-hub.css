@@ -53,3 +53,7 @@
 .side-drawer-bottom p{margin:4px 0 0;color:var(--muted);font-size:10px;line-height:1.55}
 @keyframes side-drawer-in{from{opacity:.7;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){.side-drawer{animation:none}}
+
+/* Menu simplificado: manter apenas o atalho Início */
+.side-drawer{gap:0}
+.side-menu-item{cursor:pointer}
