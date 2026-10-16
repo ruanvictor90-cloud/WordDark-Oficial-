@@ -1,8 +1,7 @@
-name: Deploy offline root with isolated darkHub preview
-# Refresh preview artifact from the isolated darkHub development branch.
+name: Publish darkHub on its own line
 on:
   push:
-    branches: ["main", "feature/ruan-hub-home-20261016"]
+    branches: ["main", "darkhub"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -15,31 +14,42 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}preview/darkhub/
+      url: ${{ steps.deployment.outputs.page_url }}darkhub/
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main repository
+      - name: Checkout site repository
         uses: actions/checkout@v4
         with:
           ref: main
           path: repo
-      - name: Checkout darkHub app from isolated feature branch
+      - name: Checkout standalone darkHub line
         uses: actions/checkout@v4
         with:
-          ref: feature/ruan-hub-home-20261016
-          path: preview-src
-      - name: Assemble offline root and darkHub preview
+          ref: darkhub
+          path: darkhub-src
+      - name: Publish only current apps
         run: |
-          mkdir -p site
-          cp -R repo/offline/. site/
-          cp -R repo/hub site/hub
-          cp -R repo/worddark site/worddark
-          mkdir -p site/preview/darkhub
-          cp -R preview-src/ruan/. site/preview/darkhub/
-          sed -i 's|href="../hub/index.html"|href="../../hub/index.html"|' site/preview/darkhub/index.html
+          mkdir -p site/darkhub site/hub site/worddark
+          cp -R darkhub-src/ruan/. site/darkhub/
+          cp -R repo/hub/. site/hub/
+          cp -R repo/worddark/. site/worddark/
+          cat > site/index.html <<'EOF'
+          <!doctype html>
+          <html lang="pt-BR">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="robots" content="noindex">
+            <meta http-equiv="refresh" content="0; url=./darkhub/">
+            <title>darkHub</title>
+            <script>location.replace('./darkhub/');</script>
+          </head>
+          <body><p>Abrindo o <a href="./darkhub/">darkHub</a>…</p></body>
+          </html>
+          EOF
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Upload offline root and preview
+      - name: Upload current site
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
