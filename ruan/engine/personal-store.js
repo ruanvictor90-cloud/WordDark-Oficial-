@@ -136,7 +136,7 @@ export function createPersonalStore({
     }
     if (collection === "bills") {
       item.amount = Number(item.amount);
-      if (!Number.isFinite(item.amount) || item.amount < 0) throw new TypeError("Valor da conta inválido.");
+      if (!Number.isFinite(item.amount) || item.amount <= 0) throw new TypeError("O valor da conta precisa ser maior que zero.");
       item.dueDate = item.dueDate || "";
       if (item.dueDate && !dateKey(item.dueDate)) throw new TypeError("Data de vencimento inválida.");
       item.status = ["open", "paid", "cancelled"].includes(item.status) ? item.status : "open";
@@ -168,6 +168,15 @@ export function createPersonalStore({
         if (!["income", "expense"].includes(updated.type)) throw new TypeError("Tipo financeiro inválido.");
         updated.amount = amount(updated.amount);
         if (!dateKey(updated.date)) throw new TypeError("Data do lançamento inválida.");
+      }
+      if (collection === "bills") {
+        updated.amount = amount(updated.amount);
+        if (updated.dueDate && !dateKey(updated.dueDate)) throw new TypeError("Data de vencimento inválida.");
+        if (updated.status && !["open", "paid", "cancelled"].includes(updated.status)) throw new TypeError("Status da conta inválido.");
+      }
+      if (collection === "budgets") {
+        updated.limit = Number(updated.limit);
+        if (!Number.isFinite(updated.limit) || updated.limit < 0) throw new TypeError("Limite de orçamento inválido.");
       }
       state[collection][index] = updated;
       return state;
