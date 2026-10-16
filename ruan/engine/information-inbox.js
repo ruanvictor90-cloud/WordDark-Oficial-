@@ -23,9 +23,13 @@ export function createInformationInbox({ storage = globalThis.localStorage, now 
   let memory = [];
   function list() {
     try {
-      const raw = storage?.getItem(INFORMATION_INBOX_STORAGE_KEY);
-      const parsed = raw ? JSON.parse(raw) : [];
-      if (Array.isArray(parsed)) memory = parsed.filter(item => item && typeof item.id === "string");
+      if (storage) {
+        const raw = storage.getItem(INFORMATION_INBOX_STORAGE_KEY);
+        if (raw != null) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) memory = parsed.filter(item => item && typeof item.id === "string");
+        }
+      }
     } catch {}
     return clone(memory).sort((a, b) => String(b.receivedAt).localeCompare(String(a.receivedAt)));
   }
