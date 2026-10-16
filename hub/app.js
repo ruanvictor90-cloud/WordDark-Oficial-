@@ -83,11 +83,11 @@ alertButton.addEventListener("click",()=>setAlerts(alertPanel.hidden));
 searchForm.addEventListener("submit",event=>{
  event.preventDefault();const query=searchInput.value.trim().toLocaleLowerCase("pt-BR");
  if(!query){searchFeedback.hidden=false;searchFeedback.textContent="Digite o que você procura.";searchInput.focus();return;}
- if(query.includes("worddark")){window.location.href=document.querySelector(".world-action").href;return;}
- if(/^(cria[cç][aã]o|criar)$/.test(query)){searchFeedback.hidden=true;showView("creation");return;}
- if(/^(painel)$/.test(query)){searchFeedback.hidden=true;showView("panel");return;}
- if(/^(desenvolvimento|projetos?)$/.test(query)){searchFeedback.hidden=true;showView("development");return;}
- if(/^(finaliza[cç][aã]o|finalizar)$/.test(query)){searchFeedback.hidden=true;showView("finalization");return;}
+ if(query.includes("darkhub")){window.location.href=document.querySelector(".world-action").href;return;}
+ if(/^(cria[cç][aã]o|criar|painel|desenvolvimento|projetos?|finaliza[cç][aã]o|finalizar)$/.test(query)){searchFeedback.hidden=false;searchFeedback.textContent="As áreas próprias do WordDark Hub serão estruturadas em uma etapa futura.";return;}
+ 
+ 
+ 
  if(/^(widgets?|widget|personalizar)$/.test(query)){searchFeedback.hidden=true;setSideMenu(true);setWidgetCategory(true);return;}
  if(/^(apps?|aplicativos?|meus aplicativos|abrir apps)$/.test(query)){searchFeedback.hidden=true;setDrawer(true);return;}
  const project=engine.listProjects().find(item=>item.name.toLocaleLowerCase("pt-BR")===query||item.id===query);
