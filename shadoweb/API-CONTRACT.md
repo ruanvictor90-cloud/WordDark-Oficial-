@@ -1,11 +1,11 @@
-# Shadoweb API and connector contract
+# Contrato da API e dos conectores da Shadoweb
 
-**Contract version:** 1.0.0  
-**Current status:** the in-app Bridge/API Gateway is functional locally. No public HTTP API server is deployed or listening yet.
+**Versão do contrato:** 1.0.0  
+**Estado:** Bridge funcional localmente. Servidor HTTP público não implementado nem publicado.
 
-## Local request shape
+## Pedido local
 
-The app sends all connector calls through `Bridge.request`:
+Todas as chamadas de conectores passam por `Bridge.request`:
 
 ```json
 {
@@ -15,9 +15,9 @@ The app sends all connector calls through `Bridge.request`:
 }
 ```
 
-The gateway validates the request, checks that the connector is registered and enabled, checks the explicit permission scope, applies a timeout, executes only the registered handler and records the result in local audit.
+O Bridge valida o formato, localiza o conector registrado, confere se a ação é permitida, verifica ativação e permissão, impõe um limite de tempo, executa somente um manipulador registrado e registra o resultado na auditoria local.
 
-## Response shape
+## Resposta
 
 ```json
 {
@@ -28,19 +28,19 @@ The gateway validates the request, checks that the connector is registered and e
 }
 ```
 
-Failures return `ok: false` and a concise `error` message. The gateway does not return raw credentials or stack traces.
+Falhas retornam `ok: false` e uma mensagem curta em `error`. Respostas não devem expor credenciais nem rastros internos de execução.
 
-## Current connector IDs
+## Conectores da versão atual
 
-| ID | Scope | Status | Purpose |
+| Identificador | Escopo | Estado | Responsabilidade |
 |---|---|---|---|
-| `web-search` | `web.search` | Built in | Opens user-selected web search |
-| `wikipedia` | `connector.read` | Disabled by default | Public read-only search |
-| `local-knowledge` | `knowledge.read` | Local | Searches the user's local library |
+| `web-search` | `web.search` | Integrado | Abre pesquisa no mecanismo escolhido pelo usuário |
+| `wikipedia` | `connector.read` | Desativado por padrão | Pesquisa pública somente leitura |
+| `local-knowledge` | `knowledge.read` | Local | Pesquisa a biblioteca local |
 
-Allowed actions are explicit per connector. An imported plugin cannot register a new handler or provide a URL to fetch.
+As ações permitidas são definidas por conector. Um manifesto de plugin não pode registrar um executor novo nem fornecer uma URL arbitrária para ser acessada.
 
-## Plugin manifest
+## Manifesto de plugin
 
 ```json
 {
@@ -54,19 +54,19 @@ Allowed actions are explicit per connector. An imported plugin cannot register a
 }
 ```
 
-Imported manifests remain inactive until the user enables their record. Enabling a manifest does not execute plugin code in this phase.
+Manifestos importados começam inativos. Ativar um manifesto não executa código de plugin nesta fase.
 
-## Future HTTP API boundary
+## Fronteira futura da API HTTP
 
-When Shadoweb is prepared for external developers, the server adapter should expose versioned routes such as `POST /api/v1/requests` and `GET /api/v1/connectors`. These routes are **design targets, not live endpoints**. Before activation, implement and test:
+Rotas como `POST /api/v1/requests` e `GET /api/v1/connectors` são propostas de desenho, não endpoints disponíveis. Antes de ativá-las, implementar e testar:
 
-1. server-side authentication and short-lived credentials;
-2. per-user and per-app authorization, scopes and quotas;
-3. connector allowlists and request schema validation;
-4. rate limiting, idempotency and request size limits;
-5. secret storage on the server, never in browser/APK source;
-6. audit retention and access controls;
-7. revocation, abuse reporting, timeout and failure policy;
-8. separate development, staging and production deployments.
+1. autenticação no servidor e credenciais de curta duração;
+2. autorização por usuário e aplicativo, escopos e quotas;
+3. lista permitida de conectores e validação estrita do pedido;
+4. limitação de taxa, idempotência e limite de tamanho;
+5. armazenamento seguro de segredos no servidor;
+6. retenção, controle de acesso e proteção dos registros de auditoria;
+7. revogação, tratamento de abuso, timeout e política de falhas;
+8. ambientes separados de desenvolvimento, homologação e produção.
 
-Never make a frontend-supplied URL into a server-side fetch target. That would create an SSRF risk. External connector implementations must be reviewed and registered server-side.
+Nunca transforme uma URL fornecida pelo frontend em destino de busca do servidor: isso cria risco de SSRF. Executores externos precisam ser revisados e registrados no servidor. Os identificadores de campos do contrato permanecem estáveis em inglês para compatibilidade; documentação e mensagens ao usuário devem ser em português claro.
