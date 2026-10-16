@@ -1,0 +1,33 @@
+name: Shadoweb foundation checks
+
+on:
+  push:
+    branches:
+      - feature/shadoweb-foundation
+  pull_request:
+    paths:
+      - "shadoweb/**"
+      - ".github/workflows/shadoweb-check.yml"
+  workflow_dispatch:
+
+jobs:
+  validate-shadoweb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: node --check shadoweb/app.js
+      - name: Verify independent app files
+        run: |
+          test -s shadoweb/index.html
+          test -s shadoweb/shadoweb.css
+          test -s shadoweb/app.js
+          test -s shadoweb/manifest.webmanifest
+          test -s shadoweb/ARCHITECTURE.md
+      - name: Validate manifest JSON
+        run: node -e "JSON.parse(require('node:fs').readFileSync('shadoweb/manifest.webmanifest', 'utf8')); console.log('Shadoweb manifest valid')"
