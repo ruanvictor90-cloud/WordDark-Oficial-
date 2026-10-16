@@ -1,7 +1,5 @@
 name: Publish darkHub on its own line
 on:
-  push:
-    branches: ["main", "darkhub"]
   workflow_dispatch:
 permissions:
   contents: read
