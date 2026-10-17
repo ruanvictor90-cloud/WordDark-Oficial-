@@ -46,5 +46,8 @@ test("Shadoweb visual identity stays consistent across header, PWA and Android a
   assert.match(icon,/#080611/i); assert.match(icon,/#8b5cf6|#7c3aed/i); assert.match(icon,/#34d399/i);
   assert.match(splash,/SHADO<tspan fill="#8b5cf6">WEB<\/tspan>/); assert.match(splash,/#080611/i);
   assert.equal(manifest.name,"Shadoweb");
-  assert.equal(manifest.icons[0].src,"./icon.svg");\n  assert.match(css,/--purple:#8b5cf6/); assert.match(css,/--green:#34d399/);
+  assert.equal(manifest.icons[0].src,"./icon.svg");
+  assert.match(html,/theme-color" content="#080611"/);
+  assert.match(css,/--bg:#080611/); assert.match(css,/--purple:#8b5cf6/); assert.match(css,/--green:#34d399/);
+  assert.match(css,/--purple:#8b5cf6/); assert.match(css,/--green:#34d399/);
 });
