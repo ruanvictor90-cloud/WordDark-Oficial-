@@ -37,13 +37,15 @@ jobs:
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
-      - name: Install Capacitor build tools
-        run: npm install --no-save --package-lock=false @capacitor/core@7 @capacitor/android@7 @capacitor/cli@7 @capacitor/browser@7 esbuild
-      - name: Bundle native browser bridge and prepare web assets
+      - name: Install Capacitor build tools and image tools
+        run: npm install --no-save --package-lock=false @capacitor/core@7 @capacitor/android@7 @capacitor/cli@7 @capacitor/browser@7 @capacitor/splash-screen@7 @capacitor/assets@3 sharp esbuild
+      - name: Bundle web app and generate unified brand assets
         run: |
-          mkdir -p shadoweb-build
+          mkdir -p shadoweb-build assets
           cp -R shadoweb/. shadoweb-build/
           npx esbuild shadoweb/app.js --bundle --format=esm --outfile=shadoweb-build/app.js
+          node --input-type=module -e "import sharp from 'sharp'; await sharp('shadoweb/icon.svg').resize(1024,1024).png().toFile('assets/icon.png'); await sharp('shadoweb/splash.svg').resize(2732,2732,{fit:'contain',background:'#0b0711'}).png().toFile('assets/splash.png');"
+          npx capacitor-assets generate --android
       - name: Add Android shell and sync web app
         run: |
           node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('capacitor.config.json','utf8'));p.webDir='shadoweb-build';fs.writeFileSync('capacitor.config.json',JSON.stringify(p,null,2))"
