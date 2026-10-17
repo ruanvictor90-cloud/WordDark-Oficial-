@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><rect width="128" height="128" rx="28" fill="#0b0711"/><path d="M14 64s18-31 50-31 50 31 50 31-18 31-50 31S14 64 14 64Z" fill="none" stroke="#d0a8ff" stroke-width="7"/><circle cx="64" cy="64" r="17" fill="none" stroke="#d0a8ff" stroke-width="7"/><circle cx="64" cy="64" r="6" fill="#87e2b8"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs><linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b18cff"/><stop offset="1" stop-color="#7c3aed"/></linearGradient><radialGradient id="glow"><stop offset="0" stop-color="#2b1745"/><stop offset="1" stop-color="#080611"/></radialGradient></defs>
+  <rect width="128" height="128" rx="30" fill="url(#glow)"/>
+  <path d="M13 48C28 27 45 18 64 18c13 0 25 5 36 15" fill="none" stroke="url(#violet)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M14 80c16 20 33 30 51 30 14 0 27-6 39-17" fill="none" stroke="url(#violet)" stroke-width="7" stroke-linecap="round"/>
+  <path d="M13 64C28 45 45 35 64 35s36 10 51 29C100 83 83 93 64 93S28 83 13 64Z" fill="#120b20" stroke="url(#violet)" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M25 64c11-11 24-17 39-17s28 6 39 17c-11 11-24 17-39 17S36 75 25 64Z" fill="#25133b"/>
+  <circle cx="64" cy="64" r="15" fill="#34d399"/><circle cx="64" cy="64" r="6" fill="#080611"/><circle cx="70" cy="58" r="3" fill="#d7fff0"/>
+</svg>
