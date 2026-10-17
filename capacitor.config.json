@@ -1,0 +1,20 @@
+{
+  "appId": "org.worddark.shadoweb",
+  "appName": "Shadoweb",
+  "webDir": "shadoweb",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "Browser": {
+      "presentationStyle": "popover"
+    },
+    "SplashScreen": {
+      "launchShowDuration": 1100,
+      "launchAutoHide": true,
+      "backgroundColor": "#080611",
+      "androidScaleType": "CENTER_INSIDE",
+      "showSpinner": false
+    }
+  }
+}

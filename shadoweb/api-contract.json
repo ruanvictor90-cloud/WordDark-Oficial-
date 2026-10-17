@@ -1,0 +1,70 @@
+{
+  "contractVersion": "1.0.0",
+  "status": "local-bridge-only",
+  "httpServerActive": false,
+  "request": {
+    "type": "object",
+    "required": [
+      "connectorId",
+      "action",
+      "input"
+    ],
+    "properties": {
+      "connectorId": {
+        "enum": [
+          "web-search",
+          "wikipedia",
+          "local-knowledge"
+        ]
+      },
+      "action": {
+        "enum": [
+          "search"
+        ]
+      },
+      "input": {
+        "type": "object",
+        "maxSerializedBytes": 12000
+      }
+    }
+  },
+  "response": {
+    "type": "object",
+    "required": [
+      "version",
+      "requestId",
+      "ok"
+    ],
+    "properties": {
+      "version": {
+        "const": "1.0.0"
+      },
+      "requestId": {
+        "type": "string"
+      },
+      "ok": {
+        "type": "boolean"
+      },
+      "result": {},
+      "error": {
+        "type": "string",
+        "maxLength": 240
+      }
+    }
+  },
+  "scopes": {
+    "web-search": [
+      "web.search"
+    ],
+    "wikipedia": [
+      "connector.read"
+    ],
+    "local-knowledge": [
+      "knowledge.read"
+    ]
+  },
+  "futureRoutes": {
+    "POST /api/v1/requests": "design-only; not deployed",
+    "GET /api/v1/connectors": "design-only; not deployed"
+  }
+}

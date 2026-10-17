@@ -1,0 +1,180 @@
+openapi: 3.1.0
+info:
+  title: Shadoweb Public API
+  version: 1.0.0-draft
+  summary: Draft contract for the future public Shadoweb gateway.
+  description: |
+    DESIGN DRAFT ONLY. No HTTP server or public endpoint is implemented by this document.
+    Local browser calls must continue using the local Bridge. Before deployment, implement
+    server-side authentication, per-user and per-app grants, rate limits, abuse controls,
+    secret storage, audit retention, and security review.
+servers:
+  - url: https://api.example.invalid
+    description: Placeholder only; not a live endpoint.
+security:
+  - bearerAuth: []
+tags:
+  - name: System
+  - name: Connectors
+  - name: Requests
+  - name: ConsumerApps
+paths:
+  /v1/health:
+    get:
+      tags: [System]
+      summary: Service liveness
+      security: []
+      responses:
+        '200':
+          description: Service is running. Must not reveal secrets or internal topology.
+  /v1/connectors:
+    get:
+      tags: [Connectors]
+      summary: List connectors available to the authenticated principal
+      responses:
+        '200':
+          description: Available connector capabilities, filtered by caller access.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [version, connectors]
+                properties:
+                  version: { type: string, const: '1.0.0' }
+                  connectors:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, actions, scopes]
+                      properties:
+                        id: { type: string, pattern: '^[a-z][a-z0-9-]{1,47}$' }
+                        actions: { type: array, items: { type: string } }
+                        scopes: { type: array, items: { type: string } }
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/requests:
+    post:
+      tags: [Requests]
+      summary: Execute one registered connector action
+      description: |
+        The server must resolve the caller identity from the token, never trust appId
+        supplied by the request body, reject arbitrary URLs and unknown actions, enforce
+        grants on the server, apply a strict body limit and timeout, and audit the decision.
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: false
+          schema: { type: string, minLength: 8, maxLength: 128 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorRequest'
+      responses:
+        '200':
+          description: Connector action completed or returned a structured connector error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorResponse'
+        '400':
+          description: Invalid request contract.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Connector, action, or scope not authorized.
+        '413':
+          description: Request body exceeds the configured limit.
+        '429':
+          description: Rate limit exceeded.
+        '504':
+          description: Connector timed out.
+  /v1/apps/me:
+    get:
+      tags: [ConsumerApps]
+      summary: List consumer apps registered to the authenticated user
+      responses:
+        '200':
+          description: The caller's app registrations and effective grants.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /v1/apps:
+    post:
+      tags: [ConsumerApps]
+      summary: Register a declarative consumer app
+      description: Registration must default to disabled with no grants. Registration does not execute uploaded code.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsumerManifest'
+      responses:
+        '201':
+          description: App registered disabled and without grants.
+        '400':
+          description: Invalid manifest or unsupported capability.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: App ID already registered for this owner.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque access token
+  responses:
+    Unauthorized:
+      description: Missing, invalid, expired, or revoked credentials.
+  schemas:
+    ConnectorRequest:
+      type: object
+      additionalProperties: false
+      required: [version, connectorId, action, scope, input]
+      properties:
+        version: { type: string, const: '1.0.0' }
+        connectorId: { type: string, pattern: '^[a-z][a-z0-9-]{1,47}$' }
+        action: { type: string, pattern: '^[a-z][a-z0-9-]{1,47}$' }
+        scope: { type: string, minLength: 1, maxLength: 80 }
+        input:
+          type: object
+          maxProperties: 40
+          description: Connector-specific object; apply per-connector schema and strict byte limit server-side.
+    ConnectorResponse:
+      type: object
+      required: [version, requestId, ok]
+      properties:
+        version: { type: string, const: '1.0.0' }
+        requestId: { type: string }
+        ok: { type: boolean }
+        result: {}
+        error:
+          type: string
+          maxLength: 240
+    ConsumerManifest:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, appId, name, version, description, capabilities]
+      properties:
+        schemaVersion: { type: string, const: '1.0.0' }
+        appId: { type: string, pattern: '^[a-z][a-z0-9-]{1,47}$' }
+        name: { type: string, minLength: 1, maxLength: 70 }
+        version: { type: string, minLength: 1, maxLength: 24 }
+        description: { type: string, minLength: 1, maxLength: 240 }
+        capabilities:
+          type: array
+          minItems: 1
+          maxItems: 12
+          items:
+            type: object
+            additionalProperties: false
+            required: [connectorId, scopes]
+            properties:
+              connectorId: { type: string, pattern: '^[a-z][a-z0-9-]{1,47}$' }
+              scopes:
+                type: array
+                minItems: 1
+                uniqueItems: true
+                items: { type: string, minLength: 1, maxLength: 80 }

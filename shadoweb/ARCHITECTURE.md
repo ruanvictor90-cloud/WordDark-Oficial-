@@ -1,49 +1,66 @@
-# Shadoweb — arquitetura independente 0.1
+# Shadoweb — arquitetura independente
 
-## Objetivo
+## Objetivo do produto
 
-Shadoweb é um aplicativo próprio, inicialmente para uso pessoal, que combina uma interface de navegação com uma camada contextual chamada **darkEye**. O código fica isolado em `shadoweb/` e esta branch não altera os aplicativos existentes nem integra o projeto ao código principal.
+Shadoweb é um aplicativo convencional de navegação que evolui para um mundo conectado de aplicativos e serviços. Deve ser personalizável por perfil, permitir integrações por contratos claros e manter cada conector limitado às permissões necessárias. O desenvolvimento permanece isolado em `shadoweb/` e na branch própria até haver uma decisão explícita de integração.
 
-## Princípios
+## Linguagem e responsabilidades
 
-- Aplicativo e futuro APK independentes.
-- Mobile-first, visual escuro roxo/preto e interface enxuta.
-- Recursos desligados por padrão quando exigirem serviços, permissões ou credenciais.
-- Conectores com escopo mínimo, identidade verificada, autorização e auditoria.
-- Preferências e favoritos locais nesta primeira versão.
-- Nenhuma conexão é considerada ativa apenas por aparecer na interface.
-- Ações sensíveis devem solicitar confirmação explícita.
+- **Shadoweb:** produto principal, experiência de navegação e ponto de entrada do usuário.
+- **Browser / Address:** pesquisa, endereços HTTPS, favoritos, histórico e atalhos. Nesta versão, a abertura de páginas é delegada ao navegador do sistema.
+- **World:** catálogo de aplicativos e serviços; o estado “conectado” só pode ser exibido quando houver uma verificação real.
+- **Connect:** registro e estado dos conectores aprovados.
+- **Gate:** verifica permissões explícitas e escopos antes de executar ações.
+- **Bridge / API Gateway:** valida o contrato, verifica a ação permitida, encaminha para um executor registrado, aplica timeout e padroniza o retorno.
+- **Plugin Manager:** importa e valida manifestos declarativos; não executa código de terceiros.\n- **Consumer Registry / SDK:** registra aplicativos consumidores, declara capacidades e concede/revoga permissões por app, conector e escopo; a SDK local solicita somente ações já declaradas e autorizadas.
+- **Knowledge:** notas e biblioteca local, com pesquisa e importação/exportação.
+- **darkEye:** camada contextual independente, atualmente demonstrativa. Leitura de páginas e sobreposição nativa são capacidades futuras sujeitas a implementação e permissão próprias.
+- **Audit:** trilha local de requisições, permissões, resultados e alterações relevantes.
+- **Native / APK:** empacotamento Android independente, com capacidades nativas avaliadas separadamente.
 
-## Camadas
+## Regras de integração
 
-1. **Shell / Browser** — interface, pesquisa, atalhos, favoritos e histórico. Nesta fundação web, a navegação entrega links HTTPS ao navegador do sistema; ainda não é um motor de navegador embutido.
-2. **darkEye** — painel contextual de demonstração. A sobreposição sobre outros aplicativos requer implementação nativa Android e permissão explícita; não é fornecida por uma página web comum.
-3. **Gate** — futura camada de identidade, permissões, escopos e confirmações.
-4. **Connect** — catálogo de conectores e seus estados.
-5. **Bridge** — contratos de comunicação entre Shadoweb e apps externos; sem confiar em mensagens não autenticadas.
-6. **Knowledge** — futura aquisição/organização de conteúdo de fontes permitidas, com proveniência, direitos e revisão.
-7. **Audit** — eventos de segurança e ações importantes. Registro persistente remoto depende de serviço autenticado.
-8. **Native / APK** — empacotamento Android independente, com navegação, armazenamento e permissões nativas avaliadas separadamente.
+1. Nenhum aplicativo é considerado conectado apenas por estar listado no World.
+2. Todo pedido passa pelo Bridge e usa um identificador de conector e uma ação declarada.
+3. Um conector deve estar registrado e habilitado e possuir a permissão correspondente.
+4. Plugins importados não podem definir endpoints arbitrários nem registrar executores por conta própria.
+5. Credenciais e segredos não devem ser incluídos no frontend, no APK ou no armazenamento local comum.
+6. Integrações futuras devem usar contratos versionados, autenticação no servidor, autorização por usuário/aplicativo, quotas, limites de requisição e revogação.
+7. Shadoweb não acessa dados privados do darkHub, WordDark, Céu ou Terra sem uma integração explícita, autenticada e autorizada.
+8. A evolução do darkEye não deve ser confundida com uma capacidade já disponível: páginas web comuns não conseguem sobrepor outros aplicativos nem inspecionar seu conteúdo.
 
-## Estado desta fundação
+## Estado implementado
 
-- Implementado: interface responsiva, navegação por seções, escolha do mecanismo de pesquisa, abertura de HTTPS, favoritos e histórico locais, seletor de perfil e painel demonstrativo darkEye.
-- Apenas planejado: motor de navegação interno completo, isolamento real de sessões, overlay nativo, leitura de páginas, IA contextual, autenticação, conectores operacionais, sincronização, auditoria remota e distribuição de APK.
-- O cartão de Ruan/darkHub e WordDark é informativo; não há conexão de rede ativa entre esses sistemas nesta versão.
+- Interface responsiva e navegação por seções.
+- Pesquisa e abertura HTTPS, favoritos, histórico, atalhos e preferências locais.
+- Catálogo inicial de mundo conectado e conectores.\n- Registro local de apps consumidores, SDK de integração e permissões por aplicativo, além das permissões por conector.
+- Bridge local com validação, lista de ações, permissões por escopo, timeout e auditoria.
+- Biblioteca local e importação de manifestos declarativos.
+- PWA e workflows independentes de teste e APK Android de depuração.
 
-## Próximas etapas
+## Não implementado ainda
 
-1. Revisar a arquitetura e o fluxo de interface com o usuário.
-2. Criar testes automatizados para validação de endereços, armazenamento e permissões.
-3. Decidir o modelo de navegação Android (WebView nativa ou componente equivalente) e a política de sessões/downloads.
-4. Definir o contrato de darkEye e os limites de acesso ao conteúdo.
-5. Implementar Gate, Connect, Bridge e Audit antes de habilitar conectores reais.
-6. Gerar um APK de teste independente; assinatura de produção será uma etapa separada.
+- Motor de navegador completo embutido e isolamento real de sessões.
+- Login de servidor, sincronização entre dispositivos e auditoria remota.
+- API HTTP pública, credenciais de desenvolvedor, quotas e gestão remota de aplicações.\n- Registro/autorizações de apps consumidores em servidor: o registro atual é local e não constitui fronteira de segurança contra código executado na mesma origem.
+- Integrações reais autenticadas com darkHub/WordDark/Céu/Terra.
+- Execução segura de plugins de terceiros.
+- Leitura contextual automática de páginas e sobreposição nativa darkEye.
+- Assinatura e distribuição de APK de produção.
 
-## Segurança da fundação
+## Contrato público preparado
 
-- Bloqueia esquemas `javascript:`, `data:`, `file:` e `intent:` no campo de navegação.
-- Endereços digitados devem usar HTTPS; texto livre vira pesquisa pelo mecanismo escolhido.
-- Favoritos e histórico são guardados localmente no navegador, sem sincronização ou servidor.
-- Não inserir tokens, senhas ou segredos no armazenamento local.
-- O modo de perfil é apenas uma preferência de interface; não oferece isolamento de cookies ou sessões.
+O rascunho OpenAPI em [OPENAPI-PUBLIC-DRAFT.yaml](./OPENAPI-PUBLIC-DRAFT.yaml) define uma futura superfície HTTP versionada para saúde, catálogo de conectores, execução de ações e registro de apps consumidores. Ele documenta autenticação Bearer, autorização, limites e timeout. O host é um placeholder; nenhuma rota pública está ativa.
+
+## Etapas para a versão pública
+
+1. Revisar comportamento no Android e nos navegadores móveis.
+2. Fechar testes de navegação, armazenamento, permissões, timeout, importação/exportação e modo offline.
+3. Definir e implementar a arquitetura de servidor antes de ativar endpoints HTTP públicos.
+4. Realizar revisão de segurança e privacidade, inclusive retenção e exclusão de dados.
+5. Implementar autenticação, autorização, limites de uso, revogação e monitoramento.
+6. Validar o APK em dispositivos reais; assinar a versão de produção somente após os critérios de lançamento.
+
+## Segurança da versão atual
+
+A navegação aceita HTTPS e recusa esquemas perigosos e destinos locais/privados conhecidos. A CSP limita recursos externos; o service worker guarda somente recursos GET do próprio aplicativo. Favoritos, histórico, permissões e auditoria locais não constituem armazenamento inviolável. O perfil visual altera preferências de apresentação, não isola cookies nem sessões.

@@ -1,0 +1,43 @@
+name: Shadoweb connected-world checks
+on:
+  push:
+    branches: ["feature/shadoweb-connected-world"]
+    paths:
+      - "shadoweb/**"
+      - ".github/workflows/shadoweb-test.yml"
+  pull_request:
+    branches: ["feature/shadoweb-foundation"]
+    paths:
+      - "shadoweb/**"
+      - ".github/workflows/shadoweb-test.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          for file in shadoweb/*.js; do node --check "$file"; done
+      - name: Run Shadoweb tests
+        run: node --test shadoweb/app.test.js shadoweb/structure.test.js
+      - name: Validate Capacitor configuration
+        run: node -e "JSON.parse(require('fs').readFileSync('capacitor.config.json', 'utf8'))"
+      - name: Check app shell files
+        run: |
+          test -f shadoweb/index.html
+          test -f shadoweb/manifest.webmanifest
+          test -f shadoweb/sw.js
+          test -f shadoweb/address.js
+          test -f shadoweb/contracts.js
+          test -f shadoweb/bridge.js
+          test -f shadoweb/gate.js
+          test -f shadoweb/connectors.js
+          test -f shadoweb/plugin-manager.js
+          test -f shadoweb/knowledge.js
+          test -f shadoweb/audit.js
