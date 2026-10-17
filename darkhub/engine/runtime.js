@@ -36,6 +36,14 @@ export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>n
   }
   function listApps() { return read().apps.sort((a,b)=>(a.priority||99)-(b.priority||99)||a.name.localeCompare(b.name,"pt-BR")); }
   function getApp(id) { return listApps().find(app=>app.id===id)||null; }
+  function registerApp(input={}) {
+    const data=read(), id=text(input.id,"Identificador do app",80).toLowerCase();
+    if(!/^[a-z0-9][a-z0-9-]{1,79}$/.test(id)) throw new TypeError("Use um ID técnico simples, por exemplo dark-commerce.");
+    if(data.apps.some(app=>app.id===id)) throw new Error("Já existe um app ou módulo com esse identificador.");
+    const kind=input.kind==="module"?"module":"app";
+    const app={id,name:text(input.name,"Nome do app",100),kind,status:"Planejado",version:validVersion(input.version||"0.1.0"),priority:Number.isFinite(input.priority)?Math.max(1,Math.min(999,input.priority)):data.apps.length+1,description:text(input.description,"Descrição",500),route:id,connection:"standalone",createdAt:now(),updatedAt:now()};
+    data.apps.push(app);write(data);return clone(app);
+  }
   function updateApp(id, patch={}) {
     const data=read(), index=data.apps.findIndex(app=>app.id===id);
     if(index<0) throw new Error("Aplicativo ou módulo não encontrado.");
@@ -90,6 +98,6 @@ export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>n
     const apps=[...clone(BASE_APPS).filter(app=>!payload.apps.some(item=>item?.id===app.id)),...payload.apps.map(app=>({...app,kind:baseIds.has(app.id)?BASE_APPS.find(base=>base.id===app.id).kind:app.kind}))];
     return write({schema:SCHEMA,apps,drafts:clone(payload.drafts),releases:clone(payload.releases),connections:clone(payload.connections)});
   }
-  return Object.freeze({schema:SCHEMA,storageKey:STORAGE_KEY,statuses:[...STATUSES],listApps,getApp,updateApp,createDraft,updateDraft,finalizeDraft,registerConnection,exportState,importState});
+  return Object.freeze({schema:SCHEMA,storageKey:STORAGE_KEY,statuses:[...STATUSES],listApps,getApp,registerApp,updateApp,createDraft,updateDraft,finalizeDraft,registerConnection,exportState,importState});
 }
 export { SCHEMA as DARKHUB_SCHEMA, STORAGE_KEY as DARKHUB_STORAGE_KEY, BASE_APPS as DARKHUB_BASE_APPS };
