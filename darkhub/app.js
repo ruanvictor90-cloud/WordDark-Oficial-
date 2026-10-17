@@ -4,6 +4,16 @@ const runtime=createDarkHubRuntime();
 const orchestrator=createDarkHubOrchestrator({runtime});
 const $=id=>document.getElementById(id);
 const views=["home","create","panel","module"];
+function moveWriteFormsToCreate(){
+ const target=$("create"),before=$("draft-form");
+ [["capability-form","Cadastrar capacidade"],["task-form","Organizar tarefas"]].forEach(([id,title])=>{
+  const form=$(id);if(!form||!target||!before)return;
+  const section=document.createElement("section");section.className="section";
+  const heading=document.createElement("h2");heading.textContent=title;
+  section.appendChild(heading);section.appendChild(form);target.insertBefore(section,before);
+ });
+}
+moveWriteFormsToCreate();
 function showView(id){views.forEach(view=>$(view).hidden=view!==id);window.scrollTo({top:0,behavior:"smooth"});if(id==="home")renderHome();if(id==="create")renderCreate();if(id==="panel")renderPanel();}
 document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>showView(button.dataset.view)));
 function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -22,7 +32,10 @@ function openApp(id){
  $("module-body").innerHTML='<article class="row-card"><strong>Módulo registrado</strong><p>As funções serão adicionadas quando este setor entrar no escopo de desenvolvimento.</p></article>';
 }
 function renderCreate(){
- const apps=runtime.listApps();$("draft-app").innerHTML=apps.map(a=>'<option value="'+esc(a.id)+'">'+esc(a.name)+(a.kind==="module"?" · módulo":"")+'</option>').join("");
+ const apps=runtime.listApps();
+ const appOptions=apps.map(a=>'<option value="'+esc(a.id)+'">'+esc(a.name)+(a.kind==="module"?" · módulo":"")+'</option>').join("");
+ $("capability-app").innerHTML=appOptions;
+ $("task-app").innerHTML=appOptions;$("draft-app").innerHTML=apps.map(a=>'<option value="'+esc(a.id)+'">'+esc(a.name)+(a.kind==="module"?" · módulo":"")+'</option>').join("");
  const data=runtime.exportState();
  $("draft-list").innerHTML=data.drafts.length?data.drafts.slice().reverse().map(d=>{const app=runtime.getApp(d.appId);return '<article class="row-card"><strong>'+esc(d.title)+'</strong><p>'+esc(app?.name||d.appId)+' · '+esc(d.summary)+'</p><span class="meta">'+esc(d.status)+' · '+esc(d.createdAt)+'</span><div>'+["Em revisão","Validado","Cancelado"].map(status=>'<button data-draft-status="'+esc(d.id)+'" data-status="'+status+'" '+(d.status==="Finalizado"||d.status==="Cancelado"?"disabled":"")+'>'+status+'</button>').join("")+'<button data-finalize="'+esc(d.id)+'" '+(d.status!=="Validado"?"disabled":"")+'>Finalizar versão</button></div></article>';}).join(""):'<article class="row-card"><strong>Nenhuma alteração registrada</strong><p>Crie uma tarefa de desenvolvimento para começar a organizar a próxima atualização.</p></article>';
  document.querySelectorAll("[data-draft-status]").forEach(b=>b.addEventListener("click",()=>{runtime.updateDraft(b.dataset.draftStatus,{status:b.dataset.status});renderCreate();}));
