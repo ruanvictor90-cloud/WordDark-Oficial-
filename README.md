@@ -75,3 +75,17 @@ npm test
 ## Operação comercial inicial
 
 O roteiro prático para iniciar um primeiro serviço pago com execução e entrega manuais está em [`COMMERCIAL-FIRST-SALE.md`](./COMMERCIAL-FIRST-SALE.md). Ele distingue os recursos locais já utilizáveis das integrações que ainda exigem backend e validação real.
+
+
+## Arquitetura canônica darkHub — 17/10/2026
+
+- O aplicativo central chama-se **darkHub** e sua base está em `darkhub/`.
+- **WordDark Hub permanece um módulo interno do darkHub**. Não deve ser distribuído nem apresentado como o APK principal do WordDark.
+- O **APK WordDark será independente**, desenvolvido e finalizado em outra etapa. A comunicação futura entre WordDark Hub e o APK WordDark deverá usar contrato versionado, autenticação, autorização e sincronização explícita; por enquanto é apenas planejada.
+- **Shadoweb é o foco atual**: aplicativo próprio e independente. O darkHub registra e acompanha seu desenvolvimento, mas não absorve seu código nem é requisito para a navegação básica.
+- O motor do darkHub fica em `darkhub/engine/runtime.js`; interface, fila de alterações, registro de versões, conexões futuras e backup são separados por responsabilidade.
+- A base web é instalável como PWA. A configuração inicial de Capacitor aponta para `darkhub/`, preparando o invólucro Android. Um APK só deve ser considerado produzido depois de instalar dependências, compilar, assinar e testar no aparelho.
+- A finalização no motor cria um registro de versão para teste; não afirma que houve compilação, assinatura, publicação ou conexão remota.
+- O diretório legado `hub/` é mantido para preservar a implementação histórica do WordDark Hub durante a migração. Não o tratar como definição da arquitetura final nem apagar até confirmar que nenhuma referência ativa depende dele.
+
+Teste específico do motor: `node darkhub/engine/runtime.test.js`. Suíte completa: `npm test`.
