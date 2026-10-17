@@ -44,3 +44,8 @@ html[data-profile="general"]{--purple:#f1d18a;--purple-2:#d1a64f;--line-bright:#
 #consumer-app-list .connection-body{display:flex;flex-direction:column;align-items:flex-start;gap:8px;min-width:0}
 #consumer-app-list .connection-body p{margin:0}
 #consumer-app-list .pending,#consumer-app-list .active-status{overflow-wrap:anywhere}
+
+
+/* Identidade visual unificada: o mesmo símbolo é usado no cabeçalho, ícone e splash. */
+.brand-mark{overflow:hidden}
+.brand-mark .brand-symbol{display:block;width:29px;height:29px;object-fit:contain}
