@@ -1,0 +1,26 @@
+import assert from "node:assert/strict";
+import {createDarkHubRuntime,DARKHUB_BASE_APPS,DARKHUB_SCHEMA} from "./runtime.js";
+function memoryStorage(){const map=new Map();return {getItem:key=>map.get(key)||null,setItem:(key,value)=>map.set(key,value),removeItem:key=>map.delete(key)};}
+const storage=memoryStorage();let n=0;
+const engine=createDarkHubRuntime({storage,now:()=> "2026-10-17T00:00:00.000Z",idFactory:()=> "test-"+(++n),eventTarget:null});
+assert.equal(DARKHUB_SCHEMA,"darkhub-runtime-v1");
+assert.deepEqual(engine.listApps().map(a=>a.id),DARKHUB_BASE_APPS.map(a=>a.id));
+assert.equal(engine.getApp("worddark-hub").kind,"module");
+assert.throws(()=>engine.updateApp("worddark-hub",{kind:"app"}),/módulo interno/);
+const draft=engine.createDraft({appId:"shadoweb",title:"Finalizar navegação",summary:"Teste"});
+assert.equal(draft.status,"Em criação");
+assert.throws(()=>engine.finalizeDraft(draft.id,{version:"0.1.0"}),/validada/);
+engine.updateDraft(draft.id,{status:"Validado"});
+const release=engine.finalizeDraft(draft.id,{version:"0.2.0",notes:"Primeira versão de teste"});
+assert.equal(release.version,"0.2.0");
+assert.equal(release.status,"Preparado para teste");
+assert.throws(()=>engine.updateApp("shadoweb",{version:"v2"}),/semântica/);
+engine.updateApp("shadoweb",{version:"0.2.0",status:"Em revisão"});
+assert.equal(engine.getApp("shadoweb").version,"0.2.0");
+engine.registerConnection({id:"worddark-apk",name:"WordDark APK",target:"Futuro app WordDark"});
+assert.equal(engine.exportState().connections[0].status,"planned");
+const restored=createDarkHubRuntime({storage:memoryStorage(),now:()=> "later",idFactory:()=> "other",eventTarget:null});
+restored.importState(engine.exportState());
+assert.equal(restored.getApp("worddark-hub").kind,"module");
+assert.equal(restored.exportState().releases.length,1);
+console.log("darkHub runtime tests passed");
