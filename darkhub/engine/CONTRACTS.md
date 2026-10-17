@@ -6,6 +6,7 @@ darkHub é o plano de controle do ecossistema: registra apps e módulos, mantém
 ## Componentes
 - `runtime.js`: catálogo local de apps, alterações, releases e conexões futuras.
 - `orchestrator.js`: registro de capacidades, fila de tarefas, transições de estado, mensagens e indicadores.
+- `../contracts/ecosystem-contract-v1.schema.json`: contratos versionados para manifestos de apps, capacidades e envelopes de mensagens.
 - `app.js`: interface; deve chamar os motores em vez de duplicar regras de negócio.
 - `runtime.test.js` e `orchestrator.test.js`: testes automatizados.
 - `manifest.webmanifest` e `sw.js`: shell instalável/cache local.
