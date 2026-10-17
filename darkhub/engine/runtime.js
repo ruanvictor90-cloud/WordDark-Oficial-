@@ -13,7 +13,7 @@ const text = (value, field, max=180) => {
 };
 function validVersion(value) {
   const version=text(value,"Versão",32);
-  if(!/^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) throw new TypeError("Use versão semântica, por exemplo 0.1.0.");
+  if(!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) throw new TypeError("Use versão semântica, por exemplo 0.1.0.");
   return version;
 }
 export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>new Date().toISOString(), idFactory=()=>globalThis.crypto?.randomUUID?.()||("dh-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)), eventTarget=globalThis.window}={}) {
@@ -72,7 +72,7 @@ export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>n
     const app=data.apps.find(item=>item.id===draft.appId);
     if(!app) throw new Error("Aplicativo associado não encontrado.");
     const release={id:String(idFactory()),appId:app.id,version:validVersion(version||app.version),draftId:draft.id,notes:String(notes).trim().slice(0,1000),status:"Preparado para teste",createdAt:now()};
-    data.releases.push(release); draft.status="Finalizado"; draft.updatedAt=now(); write(data); return clone(release);
+    data.releases.push(release); app.version=release.version; app.status="Pronto para teste"; app.updatedAt=now(); draft.status="Finalizado"; draft.updatedAt=now(); write(data); return clone(release);
   }
   function registerConnection(input={}) {
     const data=read(), id=text(input.id,"Identificador da conexão",100);
