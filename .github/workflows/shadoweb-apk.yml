@@ -44,7 +44,7 @@ jobs:
           mkdir -p shadoweb-build assets
           cp -R shadoweb/. shadoweb-build/
           npx esbuild shadoweb/app.js --bundle --format=esm --outfile=shadoweb-build/app.js
-          node --input-type=module -e "import sharp from 'sharp'; await sharp('shadoweb/icon.svg').resize(1024,1024).png().toFile('assets/icon.png'); await sharp('shadoweb/splash.svg').resize(2732,2732,{fit:'contain',background:'#0b0711'}).png().toFile('assets/splash.png');"
+          node --input-type=module -e "import sharp from 'sharp'; await sharp('shadoweb/icon.svg').resize(1024,1024).png().toFile('assets/icon.png'); await sharp('shadoweb/splash.svg').resize(2732,2732,{fit:'contain',background:'#080611'}).png().toFile('assets/splash.png');"
           npx capacitor-assets generate --android
       - name: Add Android shell and sync web app
         run: |
