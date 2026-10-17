@@ -1,0 +1,11 @@
+{
+  "appId": "com.worddark.darkhub",
+  "appName": "darkHub",
+  "webDir": "darkhub",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
