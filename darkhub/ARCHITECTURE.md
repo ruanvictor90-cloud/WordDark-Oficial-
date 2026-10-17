@@ -1,0 +1,29 @@
+# darkHub — arquitetura fechada para a primeira versão APK
+
+## Responsabilidade
+darkHub é o aplicativo central privado de criação, organização, testes e acompanhamento do ecossistema. Esta pasta representa o app darkHub. O antigo diretório `hub/` contém a implementação histórica da interface chamada WordDark Hub; ela não deve ser tratada como o APK principal do WordDark.
+
+## Regra WordDark Hub
+WordDark Hub permanece como **módulo interno do darkHub**. O APK WordDark será um aplicativo separado, desenvolvido em outra etapa. A ligação entre eles será futura, por contrato versionado, autenticação, autorização e sincronização explícita. Não embutir credenciais nem declarar conexão ativa antes de existir backend e teste de ponta a ponta.
+
+## Aplicativo prioritário: Shadoweb
+Shadoweb é um app independente e o foco atual de desenvolvimento. darkHub registra seu estado e as alterações, mas não absorve seu código, não o executa como se fosse um APK dentro do próprio processo e não deve ser necessário para a navegação básica do Shadoweb.
+
+## Camadas
+- `app.js`: apresentação e navegação.
+- `engine/runtime.js`: motor local de apps, alterações, releases, conexões futuras e backup.
+- `manifest.webmanifest`, `sw.js`, `icon.svg`: experiência instalável e cache do shell.
+- Persistência atual: armazenamento local versionado (`darkhub.runtime.v1`); não é sincronização multi-dispositivo.
+- `engine/runtime.test.js`: testes de contrato e fluxo.
+
+## Fluxo de alteração
+Criar → Em revisão → Validado → Finalizar versão → Preparado para teste. Finalização é bloqueada até a alteração estar validada. Gerar um registro de release não significa que o APK foi compilado, assinado ou publicado.
+
+## Empacotamento Android
+A pasta é uma base web instalável e preparada para um invólucro Android. Para produzir um APK nativo distribuível, o próximo passo técnico é configurar Capacitor (ou um wrapper Android equivalente), definir applicationId, SDK e assinatura, executar build e instalar/testar no aparelho. Não versionar chaves de assinatura, tokens ou segredos no repositório. GitHub Pages/PWA por si só não gera um APK Android nativo.
+
+## Limites de segurança
+- Os dados atuais são locais ao dispositivo/perfil do navegador.
+- O backup JSON exportado pode conter metadados internos; deve ser guardado com cuidado.
+- Sem backend autenticado, conexões externas ficam como planejadas/desativadas.
+- Releases são registros locais; não substituem testes, compilação, assinatura nem distribuição.
