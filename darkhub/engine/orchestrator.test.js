@@ -28,6 +28,6 @@ const restored=createDarkHubOrchestrator({storage:memoryStorage(),now,idFactory}
 restored.importState(backup);
 assert.equal(restored.listCapabilities().length,1);
 assert.equal(restored.listTasks().length,2);
-assert.throws(()=>hub.registerCapability({appId:"shadoweb",id:"unsafe",name:"Externo",description:"Sem permissão",permission:"external"}),/perm/i);
-assert.throws(()=>hub.setCapabilityStatus(cap.fullId,"enabled"),/perm/i);
+const external=hub.registerCapability({appId:"shadoweb",id:"remote.fetch",name:"Buscar serviço externo",description:"Acesso a um serviço remoto",permission:"external"});
+assert.throws(()=>hub.setCapabilityStatus(external.fullId,"enabled"),/permissão aprovada/);
 console.log("darkHub orchestrator tests passed");
