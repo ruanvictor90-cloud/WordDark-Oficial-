@@ -2,15 +2,18 @@
   "id": "./",
   "name": "Shadoweb",
   "short_name": "Shadoweb",
-  "description": "Navegador independente e mundo conectado de aplicativos e serviços.",
+  "description": "Shadoweb — seu navegador e mundo conectado, com navegação, serviços e conexões sob seu controle.",
   "lang": "pt-BR",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0b0711",
-  "theme_color": "#0b0711",
-  "categories": ["productivity", "utilities"],
+  "background_color": "#080611",
+  "theme_color": "#080611",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "./icon.svg",
