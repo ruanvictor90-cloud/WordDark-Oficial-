@@ -10,16 +10,13 @@
   "orientation": "portrait-primary",
   "background_color": "#0b0711",
   "theme_color": "#0b0711",
-  "categories": [
-    "productivity",
-    "utilities"
-  ],
+  "categories": ["productivity", "utilities"],
   "icons": [
     {
       "src": "./icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
