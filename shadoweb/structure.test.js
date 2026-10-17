@@ -38,3 +38,13 @@ test("navigation accepts HTTPS and blocks local/private targets even with explic
   assert.equal(isLocalHost("172.20.0.1"),true);
   assert.equal(isLocalHost("example.com"),false);
 });
+
+test("Shadoweb visual identity stays consistent across header, PWA and Android assets",()=>{
+  const brand=read("brand-mark.svg"), icon=read("icon.svg"), splash=read("splash.svg"), manifest=JSON.parse(read("manifest.webmanifest"));
+  assert.match(html,/src="\.\/brand-mark\.svg"/);
+  assert.match(brand,/#d0a8ff/i); assert.match(brand,/#87e2b8/i);
+  assert.match(icon,/#0b0711/i); assert.match(icon,/#d0a8ff/i); assert.match(icon,/#87e2b8/i);
+  assert.match(splash,/SHADOWEB/); assert.match(splash,/#0b0711/i);
+  assert.equal(manifest.name,"Shadoweb");
+  assert.equal(manifest.icons[0].src,"./icon.svg");
+});
