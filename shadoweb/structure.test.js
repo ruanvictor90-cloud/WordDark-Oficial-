@@ -42,9 +42,9 @@ test("navigation accepts HTTPS and blocks local/private targets even with explic
 test("Shadoweb visual identity stays consistent across header, PWA and Android assets",()=>{
   const brand=read("brand-mark.svg"), icon=read("icon.svg"), splash=read("splash.svg"), manifest=JSON.parse(read("manifest.webmanifest"));
   assert.match(html,/src="\.\/brand-mark\.svg"/);
-  assert.match(brand,/#d0a8ff/i); assert.match(brand,/#87e2b8/i);
-  assert.match(icon,/#0b0711/i); assert.match(icon,/#d0a8ff/i); assert.match(icon,/#87e2b8/i);
-  assert.match(splash,/SHADOWEB/); assert.match(splash,/#0b0711/i);
+  assert.match(brand,/#8b5cf6|#7c3aed/i); assert.match(brand,/#34d399/i);
+  assert.match(icon,/#080611/i); assert.match(icon,/#8b5cf6|#7c3aed/i); assert.match(icon,/#34d399/i);
+  assert.match(splash,/SHADO<tspan fill="#8b5cf6">WEB<\/tspan>/); assert.match(splash,/#080611/i);
   assert.equal(manifest.name,"Shadoweb");
-  assert.equal(manifest.icons[0].src,"./icon.svg");
+  assert.equal(manifest.icons[0].src,"./icon.svg");\n  assert.match(css,/--purple:#8b5cf6/); assert.match(css,/--green:#34d399/);
 });
