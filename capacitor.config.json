@@ -8,6 +8,13 @@
   "plugins": {
     "Browser": {
       "presentationStyle": "popover"
+    },
+    "SplashScreen": {
+      "launchShowDuration": 1100,
+      "launchAutoHide": true,
+      "backgroundColor": "#0b0711",
+      "androidScaleType": "CENTER_INSIDE",
+      "showSpinner": false
     }
   }
 }
