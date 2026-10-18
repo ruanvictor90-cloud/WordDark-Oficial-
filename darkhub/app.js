@@ -7,6 +7,7 @@ const orchestrator=createDarkHubOrchestrator({runtime});
 const shadow=createShadowAssistant({runtime,orchestrator});
 const workspace=createDarkHubWorkspace({runtime});
 let activeWorkspacePath="";
+let loadedWorkspaceKey="";
 const $=id=>document.getElementById(id);
 const views=["home","create","panel","module","shadow"];
 function moveWriteFormsToCreate(){
@@ -54,7 +55,7 @@ function downloadJson(name,value){
  const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function workspaceFeedback(message){$("workspace-feedback").textContent=message;}
-function renderWorkspace({loadEditor=true}={}){
+function renderWorkspace({loadEditor=true,force=false}={}){
  const projectSelect=$("workspace-project"),fileSelect=$("workspace-file");
  if(!projectSelect||!fileSelect)return;
  const priorProject=projectSelect.value,priorPath=activeWorkspacePath;
@@ -65,7 +66,8 @@ function renderWorkspace({loadEditor=true}={}){
  fileSelect.innerHTML=files.map(f=>'<option value="'+esc(f.path)+'">'+esc(f.path)+' · r'+f.revision+'</option>').join("");
  if(files.some(f=>f.path===priorPath))fileSelect.value=priorPath;
  activeWorkspacePath=fileSelect.value||"";
- if(loadEditor){const file=activeWorkspacePath?workspace.getFile(appId,activeWorkspacePath):null;$("workspace-editor").value=file?.content||"";}
+ const nextKey=appId+"::"+activeWorkspacePath;
+ if(loadEditor&&(force||nextKey!==loadedWorkspaceKey)){const file=activeWorkspacePath?workspace.getFile(appId,activeWorkspacePath):null;$("workspace-editor").value=file?.content||"";loadedWorkspaceKey=nextKey;}
  const snapshots=workspace.listSnapshots(appId);
  $("workspace-snapshots").innerHTML=snapshots.length?snapshots.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.label)+' · '+esc(s.createdAt)+' · '+s.fileCount+' arquivo(s)</option>').join(""):'<option value="">Nenhuma versão salva</option>';
  $("workspace-save").disabled=!activeWorkspacePath;
@@ -94,11 +96,11 @@ $("workspace-load").addEventListener("click",()=>{try{activeWorkspacePath=$("wor
 $("workspace-new").addEventListener("click",()=>{try{const appId=$("workspace-project").value,path=$("workspace-new-path").value;workspace.createFile(appId,path,"");activeWorkspacePath=path;$("workspace-new-path").value="";renderWorkspace();workspaceFeedback("Arquivo criado. Edite o conteúdo e salve.");$("workspace-editor").focus();}catch(e){workspaceFeedback(e.message);}});
 $("workspace-save").addEventListener("click",()=>{try{const {appId,path}=selectedWorkspaceFile();workspace.saveFile(appId,path,$("workspace-editor").value);renderWorkspace({loadEditor:false});workspaceFeedback("Arquivo salvo localmente. Rev. "+workspace.getFile(appId,path).revision+".");}catch(e){workspaceFeedback(e.message);}});
 $("workspace-snapshot").addEventListener("click",()=>{try{const appId=$("workspace-project").value,path=$("workspace-file").value;if(path)workspace.saveFile(appId,path,$("workspace-editor").value);const snapshot=workspace.createSnapshot(appId,"Ponto de restauração "+new Date().toLocaleString("pt-BR"));renderWorkspace({loadEditor:false});workspaceFeedback("Ponto de restauração criado com "+snapshot.fileCount+" arquivo(s).");}catch(e){workspaceFeedback(e.message);}});
-$("workspace-restore").addEventListener("click",()=>{try{const id=$("workspace-snapshots").value;if(!id)throw new Error("Selecione uma versão salva.");const result=workspace.restoreSnapshot(id);activeWorkspacePath=result.files[0]?.path||"";renderWorkspace();workspaceFeedback("Versão restaurada. Revise os arquivos antes de continuar.");}catch(e){workspaceFeedback(e.message);}});
+$("workspace-restore").addEventListener("click",()=>{try{const id=$("workspace-snapshots").value;if(!id)throw new Error("Selecione uma versão salva.");const result=workspace.restoreSnapshot(id);activeWorkspacePath=result.files[0]?.path||"";renderWorkspace({force:true});workspaceFeedback("Versão restaurada. Revise os arquivos antes de continuar.");}catch(e){workspaceFeedback(e.message);}});
 $("workspace-export").addEventListener("click",()=>{try{const appId=$("workspace-project").value,path=$("workspace-file").value;if(path)workspace.saveFile(appId,path,$("workspace-editor").value);const app=runtime.getApp(appId);downloadJson("darkhub-"+app.id+"-project.json",workspace.exportProject(appId));workspaceFeedback("Pacote de projeto exportado. Guarde o JSON para transferir os arquivos.");}catch(e){workspaceFeedback(e.message);}});
 $("workspace-import").addEventListener("change",async event=>{try{const file=event.target.files?.[0];if(!file)return;if(file.size>5000000)throw new Error("O pacote excede 5 MB.");const bundle=JSON.parse(await file.text());workspace.importProject(bundle);activeWorkspacePath="";renderWorkspace();workspaceFeedback("Projeto importado. Confira os arquivos antes de continuar.");}catch(e){workspaceFeedback("Importação não concluída: "+e.message);}finally{event.target.value="";}});
 $("workspace-preview").addEventListener("click",()=>{try{const {appId,path}=selectedWorkspaceFile();const file=workspace.getFile(appId,path);if(!path.toLowerCase().endsWith(".html"))throw new Error("A prévia funciona apenas com arquivos .html nesta etapa.");const html=$("workspace-editor").value;$("workspace-preview-frame").srcdoc=html;workspaceFeedback("Prévia aberta em quadro isolado. Recursos de rede e publicação não são conectados.");}catch(e){workspaceFeedback(e.message);}});
-$("register-app-form").addEventListener("submit",event=>{event.preventDefault();try{const app=runtime.registerApp({id:$("register-app-id").value,name:$("register-app-name").value,kind:$("register-app-kind").value,description:$("register-app-description").value,version:$("register-app-version").value});$("register-app-feedback").textContent=app.name+" foi adicionado ao catálogo."; $("register-app-id").value="";$("register-app-name").value="";$("register-app-description").value="";renderCreate();renderHome();}catch(e){$("register-app-feedback").textContent=e.message;}});
+$("register-app-form").addEventListener("submit",event=>{event.preventDefault();try{const app=runtime.registerApp({id:$("register-app-id").value,name:$("register-app-name").value,kind:$("register-app-kind").value,description:$("register-app-description").value,version:$("register-app-version").value});$("register-app-feedback").textContent=app.name+" foi adicionado ao catálogo."; $("register-app-id").value="";$("register-app-name").value="";$("register-app-description").value="";renderCreate();renderWorkspace({force:true});renderHome();}catch(e){$("register-app-feedback").textContent=e.message;}});
 $("draft-form").addEventListener("submit",event=>{event.preventDefault();try{runtime.createDraft({appId:$("draft-app").value,title:$("draft-title").value,summary:$("draft-summary").value});$("draft-title").value="";$("draft-summary").value="";$("draft-feedback").textContent="Alteração registrada.";renderCreate();}catch(e){$("draft-feedback").textContent=e.message;}});
 $("shadow-open").addEventListener("click",()=>showView("shadow"));
 $("shadow-request-form").addEventListener("submit",event=>{
