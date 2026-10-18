@@ -47,8 +47,8 @@ function taskButtons(task){
  return (actions[task.state]||[]).map(([state,label])=>'<button data-task-id="'+esc(task.id)+'" data-task-state="'+state+'">'+label+'</button>').join("");
 }
 function renderPanel(){
- $("panel-apps").innerHTML=runtime.listApps().map(app=>'<article class="row-card"><strong>'+esc(app.name)+'</strong><p>'+esc(app.description)+'</p><span class="meta">'+esc(app.kind==="module"?"Módulo interno":"APK independente")+' · v'+esc(app.version)+' · '+esc(app.status)+'</span><label class="meta">Estado operacional<select data-app-status="'+esc(app.id)+'">'+runtime.statuses.map(s=>'<option '+(s===app.status?"selected":"")+'>'+esc(s)+'</option>').join("")+'</select></label></article>').join("");
- document.querySelectorAll("[data-app-status]").forEach(select=>select.addEventListener("change",()=>{runtime.updateApp(select.dataset.appStatus,{status:select.value});renderPanel();}));
+ $("panel-apps").innerHTML=runtime.listApps().map(app=>'<article class="row-card"><strong>'+esc(app.name)+'</strong><p>'+esc(app.description)+'</p><span class="meta">'+esc(app.kind==="module"?"Módulo interno":"APK independente")+' · v'+esc(app.version)+' · '+esc(app.status)+'</span><span class="meta">Estado operacional: somente leitura</span></article>').join("");
+
  const ops=orchestrator.dashboard();
  $("orchestrator-metrics").innerHTML='<div class="overview-card"><strong>'+ops.capabilities+'</strong><small>Capacidades catalogadas</small></div><div class="overview-card"><strong>'+ops.enabledCapabilities+'</strong><small>Capacidades habilitadas</small></div><div class="overview-card"><strong>'+ops.queuedTasks+'</strong><small>Tarefas abertas</small></div><div class="overview-card"><strong>'+ops.unreadMessages+'</strong><small>Eventos não lidos</small></div>';
  $("capability-app").innerHTML=runtime.listApps().map(app=>'<option value="'+esc(app.id)+'">'+esc(app.name)+(app.kind==="module"?" · módulo":"")+'</option>').join("");
