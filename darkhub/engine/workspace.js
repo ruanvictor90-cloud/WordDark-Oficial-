@@ -34,6 +34,12 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   const data=read(),p=ensureProject(appId,data),file=p.files.find(f=>f.path===clean);if(!file)throw new Error("Arquivo não encontrado. Crie o arquivo antes de salvar.");
   if(file.content!==content){file.content=content;file.revision++;file.updatedAt=now();p.updatedAt=now();write(data);}return clone(file);
  }
+ function renameFile(appId,oldPath,newPath){
+  const from=cleanPath(oldPath),to=cleanPath(newPath),data=read(),p=data.projects[appId];if(!p)throw new Error("Projeto sem arquivos.");
+  const file=p.files.find(f=>f.path===from);if(!file)throw new Error("Arquivo não encontrado.");
+  if(from!==to&&p.files.some(f=>f.path===to))throw new Error("Já existe um arquivo nesse caminho.");
+  file.path=to;file.revision++;file.updatedAt=now();p.updatedAt=now();write(data);return clone(file);
+ }
  function deleteFile(appId,path){
   const clean=cleanPath(path),data=read(),p=data.projects[appId];if(!p)throw new Error("Projeto sem arquivos.");
   const i=p.files.findIndex(f=>f.path===clean);if(i<0)throw new Error("Arquivo não encontrado.");
@@ -81,6 +87,6 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   write(data);return {appId:bundle.app.id,fileCount:files.length};
  }
  function exportState(){return {...read(),exportedAt:now()};}
- return Object.freeze({schema:SCHEMA,listProjects,listFiles,getFile,createFile,saveFile,deleteFile,createSnapshot,listSnapshots,restoreSnapshot,exportProject,importProject,exportState});
+ return Object.freeze({schema:SCHEMA,listProjects,listFiles,getFile,createFile,saveFile,renameFile,deleteFile,createSnapshot,listSnapshots,restoreSnapshot,exportProject,importProject,exportState});
 }
 export {SCHEMA as WORKSPACE_SCHEMA,KEY as WORKSPACE_STORAGE_KEY};
