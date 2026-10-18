@@ -50,10 +50,12 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   p.files.splice(i,1);p.updatedAt=now();write(data);return true;
  }
  function createSnapshot(appId,label="Ponto de restauração"){
-  const data=read(),p=ensureProject(appId,data);const snapshot={id:String(idFactory()),appId,label:required(label,"Nome da versão",120),createdAt:now(),files:clone(p.files)};
-  data.snapshots.push(snapshot);write(data);return {...snapshot,files:undefined,fileCount:snapshot.files.length};
- }
- function listSnapshots(appId){return read().snapshots.filter(s=>s.appId===appId).map(s=>({id:s.id,appId:s.appId,label:s.label,createdAt:s.createdAt,fileCount:s.files.length})).reverse();}
+   const data=read(),p=ensureProject(appId,data);const snapshot={id:String(idFactory()),appId,label:required(label,"Nome da versão",120),createdAt:now(),files:clone(p.files)};
+   const projectSnapshots=data.snapshots.filter(item=>item.appId===appId).sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)));
+   while(projectSnapshots.length>=MAX_SNAPSHOTS_PER_PROJECT){const oldest=projectSnapshots.shift();data.snapshots=data.snapshots.filter(item=>item.id!==oldest.id);}
+   data.snapshots.push(snapshot);write(data);return {...snapshot,files:undefined,fileCount:snapshot.files.length};
+  }
+  function listSnapshots(appId){return read().snapshots.filter(s=>s.appId===appId).map(s=>({id:s.id,appId:s.appId,label:s.label,createdAt:s.createdAt,fileCount:s.files.length})).reverse();}
  function restoreSnapshot(id){
   const data=read(),snapshot=data.snapshots.find(s=>s.id===id);if(!snapshot)throw new Error("Ponto de restauração não encontrado.");
   const p=ensureProject(snapshot.appId,data);p.files=clone(snapshot.files).map(f=>({...f,revision:(f.revision||1)+1,updatedAt:now()}));p.updatedAt=now();write(data);return {appId:snapshot.appId,files:clone(p.files),restoredAt:p.updatedAt};
@@ -64,8 +66,9 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   for(const file of files){
    if(paths.has(file.path))errors.push("Caminho duplicado: "+file.path);paths.add(file.path);
    if(typeof file.content!=="string")errors.push("Conteúdo inválido: "+file.path);
-   if(file.content.length>200000)errors.push("Arquivo acima de 200 KB: "+file.path);
-   totalBytes+=file.content.length;
+   const size=typeof file.content==="string"?byteLength(file.content):0;
+   if(size>MAX_FILE_BYTES)errors.push("Arquivo acima de 200 KB: "+file.path);
+   totalBytes+=size;
    if(/(?:^|\/)(?:\.env|secrets?\.(?:json|txt)|credentials?\.(?:json|txt))$/i.test(file.path))warnings.push("Confira se o arquivo contém segredos: "+file.path);
   }
   if(!files.length)errors.push("O projeto ainda não possui arquivos.");
