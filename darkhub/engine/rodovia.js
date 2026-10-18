@@ -90,7 +90,8 @@ export function createDarkHubRodovia({
   now = () => new Date().toISOString(),
   idFactory = () => "road-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8),
   maxPayloadBytes = DEFAULT_MAX_PAYLOAD_BYTES,
-  maxEvents = 2000
+  maxEvents = 2000,
+  storage = globalThis.localStorage
 } = {}) {
   const routes = new Map();
   const endpoints = new Map();
