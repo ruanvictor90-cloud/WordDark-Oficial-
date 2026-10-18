@@ -4,7 +4,7 @@ const clone=value=>JSON.parse(JSON.stringify(value));
 const required=(value,label,max=180)=>{if(typeof value!=="string"||!value.trim())throw new TypeError(label+" é obrigatório.");return value.trim().slice(0,max);};
 function cleanPath(value){
  const path=required(value,"Caminho do arquivo",180).replace(/\\/g,"/");
- if(path.startsWith("/")||path.split("/").some(part=>!part||part==="."||part===".."||part.startsWith(".")))throw new TypeError("Use um caminho relativo simples, sem segmentos ocultos, '.' ou '..'.");
+ if(path.startsWith("/")||path.split("/").some(part=>!part||part==="."||part===".."||part.toLowerCase()===".git"))throw new TypeError("Use um caminho relativo sem travessia de diretório nem acesso à pasta interna .git.");
  if(!/^[a-zA-Z0-9_@.-]+(?:\/[a-zA-Z0-9_@.-]+)*$/.test(path))throw new TypeError("Caminho contém caracteres não permitidos.");
  if(!/\.[a-zA-Z0-9]{1,12}$/.test(path))throw new TypeError("Informe a extensão do arquivo, por exemplo src/main.js.");
  return path;
