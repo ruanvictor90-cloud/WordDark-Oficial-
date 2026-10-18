@@ -32,3 +32,7 @@
 .file-import-label input{font-size:12px}
 .workspace-section .muted{font-size:12px;line-height:1.5}
 @media(max-width:420px){.workspace-toolbar,.workspace-new-file,.workspace-actions{flex-wrap:wrap}.workspace-toolbar label,.workspace-new-file label,.workspace-actions>*{flex-basis:100%}.workspace-preview-frame{height:260px}}
+
+
+.workspace-file-actions{display:flex;gap:5px;flex-wrap:wrap}
+.workspace-file-actions button{flex:1;min-width:70px;padding-inline:8px;font-size:11px}
