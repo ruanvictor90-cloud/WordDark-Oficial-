@@ -10,7 +10,7 @@ const byteLength = value => {
   return unescape(encodeURIComponent(value)).length;
 };
 
-const normalizeCapability = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").trim();
+const normalizeCapability = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
 /**
  * Adapt the original WordDark Central catalog and the current darkHub
