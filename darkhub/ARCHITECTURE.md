@@ -27,3 +27,12 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 - O backup JSON exportado pode conter metadados internos; deve ser guardado com cuidado.
 - Sem backend autenticado, conexões externas ficam como planejadas/desativadas.
 - Releases são registros locais; não substituem testes, compilação, assinatura nem distribuição.
+
+## Shadow — assistente e gestor do ecossistema
+- `engine/shadow.js` é a camada de controle do Shadow; não é, por si só, um modelo de linguagem.
+- A primeira implementação funciona sem custo: recebe solicitações localmente, registra estado e, após aprovação explícita, transforma o pedido em tarefa na fila do orquestrador.
+- Nenhuma solicitação aprovada executa código, chama serviços externos, altera arquivos ou publica releases automaticamente.
+- Limites iniciais: rede e APIs pagas desativadas, execução autônoma desativada, aprovação humana obrigatória e estado guardado no armazenamento local.
+- O contrato permite conectar futuramente um adaptador de IA gratuito ou pago sem reescrever a interface nem a fila. Credenciais devem ficar em backend/secret store seguro; nunca no JavaScript distribuído ao cliente.
+- Antes de ativar ferramentas reais, cada conector precisará de permissões específicas, validação de entradas, registro de auditoria, limite de escopo e testes. Publicação e ações destrutivas exigirão confirmação separada.
+- O botão fino "Abrir Shadow" é a entrada da área do assistente; a interface completa será evoluída sem mudar o contrato de controle.
