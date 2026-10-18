@@ -38,3 +38,4 @@
 .workspace-file-actions button{flex:1;min-width:70px;padding-inline:8px;font-size:11px}
 
 .app-icon-image{object-fit:cover;padding:0;background:#100b17;border:1px solid #8057a466;}
+.preview-banner{margin:8px 0 0;padding:9px 12px;border:1px solid #8865b5;border-radius:12px;background:#21152f;color:#e5d2ff;text-align:center;font-size:10px;font-weight:800;letter-spacing:.08em;}
