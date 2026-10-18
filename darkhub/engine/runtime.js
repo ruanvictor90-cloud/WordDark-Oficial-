@@ -16,6 +16,13 @@ function validVersion(value) {
   if(!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) throw new TypeError("Use versão semântica, por exemplo 0.1.0.");
   return version;
 }
+function validIconDataUrl(value) {
+  if(value==null||value==="")return null;
+  if(typeof value!=="string"||value.length>250000||!/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(value)) {
+    throw new TypeError("Use um logo PNG, JPG ou WebP local de até 180 KB.");
+  }
+  return value;
+}
 export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>new Date().toISOString(), idFactory=()=>globalThis.crypto?.randomUUID?.()||("dh-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8)), eventTarget=globalThis.window}={}) {
   let memory=null;
   function read() {
@@ -41,7 +48,7 @@ export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>n
     if(!/^[a-z0-9][a-z0-9-]{1,79}$/.test(id)) throw new TypeError("Use um ID técnico simples, por exemplo dark-commerce.");
     if(data.apps.some(app=>app.id===id)) throw new Error("Já existe um app ou módulo com esse identificador.");
     const kind=input.kind==="module"?"module":"app";
-    const app={id,name:text(input.name,"Nome do app",100),kind,status:"Planejado",version:validVersion(input.version||"0.1.0"),priority:Number.isFinite(input.priority)?Math.max(1,Math.min(999,input.priority)):data.apps.length+1,description:text(input.description,"Descrição",500),route:id,connection:"standalone",createdAt:now(),updatedAt:now()};
+    const app={id,name:text(input.name,"Nome do app",100),kind,status:"Planejado",version:validVersion(input.version||"0.1.0"),priority:Number.isFinite(input.priority)?Math.max(1,Math.min(999,input.priority)):data.apps.length+1,description:text(input.description,"Descrição",500),iconDataUrl:validIconDataUrl(input.iconDataUrl),route:id,connection:"standalone",createdAt:now(),updatedAt:now()};
     data.apps.push(app);write(data);return clone(app);
   }
   function updateApp(id, patch={}) {
