@@ -26,7 +26,7 @@ jobs:
       - name: Checkout darkHub development line
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name == 'main' && 'feature/darkhub-native-foundation' || github.ref_name }}
+          ref: feature/darkhub-native-foundation
           path: darkhub-src
       - name: Assemble Pages site
         shell: bash
