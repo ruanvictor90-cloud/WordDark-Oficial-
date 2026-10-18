@@ -1,0 +1,36 @@
+import assert from "node:assert/strict";
+import { createDarkHubRuntime } from "./runtime.js";
+import { createDarkHubOrchestrator } from "./orchestrator.js";
+import { createShadowAssistant, SHADOW_SCHEMA } from "./shadow.js";
+function memoryStorage() {
+  const map = new Map();
+  return { getItem: key => map.get(key) || null, setItem: (key, value) => map.set(key, value) };
+}
+const storage = memoryStorage();
+let n = 0;
+const now = () => "2026-10-18T00:00:00.000Z";
+const idFactory = () => "shadow-test-" + (++n);
+const runtime = createDarkHubRuntime({ storage, now, idFactory, eventTarget: null });
+const orchestrator = createDarkHubOrchestrator({ storage, now, idFactory, runtime });
+const shadow = createShadowAssistant({ storage, now, idFactory, runtime, orchestrator });
+assert.equal(shadow.schema, SHADOW_SCHEMA);
+assert.equal(shadow.status().providerConnected, false);
+assert.equal(shadow.status().networkEnabled, false);
+assert.equal(shadow.status().paidApisEnabled, false);
+assert.equal(shadow.status().automaticExecution, false);
+assert.throws(() => shadow.submitRequest({ appId: "missing", prompt: "Criar app" }), /cadastrado/);
+const request = shadow.submitRequest({ appId: "shadoweb", prompt: "Revisar a arquitetura de navegação" });
+assert.equal(request.status, "pending");
+assert.equal(orchestrator.listTasks().length, 0);
+assert.throws(() => shadow.approveRequest("missing"), /não encontrada/);
+const approved = shadow.approveRequest(request.id);
+assert.equal(approved.request.status, "approved");
+assert.equal(approved.task.state, "queued");
+assert.equal(orchestrator.listTasks().length, 1);
+assert.equal(shadow.status().automaticExecution, false);
+const second = shadow.submitRequest({ appId: "worddark-hub", prompt: "Preparar o contrato de integração" });
+assert.equal(shadow.rejectRequest(second.id).status, "rejected");
+assert.equal(shadow.listRequests().length, 2);
+const restored = createShadowAssistant({ storage, now, idFactory, runtime, orchestrator });
+assert.equal(restored.listRequests().length, 2);
+console.log("darkHub Shadow control-plane tests passed");
