@@ -299,6 +299,7 @@ export function createDarkHubRodovia({
     send,
     listRoutes: () => [...routes.values()].map(clone),
     listEvents: ({ requestId, limit = 200 } = {}) => events.filter(event => !requestId || event.requestId === requestId).slice(-Math.max(0, Math.min(1000, limit))).map(clone),
+    exportState: () => ({ schema: SCHEMA, requests: readRequests().requests, routes: [...routes.values()].map(clone), events: events.map(clone), exportedAt: now(), note: "Rotas e eventos são dados de diagnóstico desta sessão; endpoints executáveis não são exportados." }),
     getStatus: () => ({ name: "Rodovia", schema: SCHEMA, status: "LOCAL", routes: routes.size, endpoints: endpoints.size, events: events.length, maxEvents }),
     clearTrace: () => { events.splice(0, events.length); }
   });
