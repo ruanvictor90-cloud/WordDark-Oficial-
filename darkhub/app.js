@@ -33,7 +33,7 @@ moveWriteFormsToCreate();
 function showView(id){views.forEach(view=>$(view).hidden=view!==id);window.scrollTo({top:0,behavior:"smooth"});if(id==="home")renderHome();if(id==="create"){renderCreate();renderWorkspace();}if(id==="panel")renderPanel();if(id==="shadow")renderShadow();}
 document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>showView(button.dataset.view)));
 function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function appCard(app){return '<button class="app-card" data-open-app="'+esc(app.id)+'"><span class="app-icon">'+esc(app.name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase())+'</span><span><strong>'+esc(app.name)+'</strong><small>'+esc(app.kind==="module"?"Módulo interno":"Aplicativo independente")+' · '+esc(app.version)+'</small><small>'+esc(app.status)+'</small></span></button>';}
+function appCard(app){const icon=app.iconDataUrl?'<img class="app-icon app-icon-image" src="'+esc(app.iconDataUrl)+'" alt="" loading="lazy">':'<span class="app-icon">'+esc(app.name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase())+'</span>';return '<button class="app-card" data-open-app="'+esc(app.id)+'">'+icon+'<span><strong>'+esc(app.name)+'</strong><small>'+esc(app.kind==="module"?"Módulo interno":"Aplicativo independente")+' · '+esc(app.version)+'</small><small>'+esc(app.status)+'</small></span></button>';}
 function renderHome(){
  const apps=runtime.listApps(),ops=orchestrator.dashboard(),drafts=runtime.exportState().drafts;
  $("app-drawer").innerHTML=apps.map(appCard).join("");$("app-count").textContent=String(apps.length);
@@ -117,7 +117,22 @@ $("workspace-preview").addEventListener("click",()=>{try{const {appId,path}=sele
 $("workspace-validate").addEventListener("click",()=>{try{const appId=$("workspace-project").value,path=$("workspace-file").value;if(path)workspace.saveFile(appId,path,$("workspace-editor").value);const result=workspace.validateProject(appId);const lines=[result.valid?"Validação estrutural aprovada.":"Validação encontrou bloqueios.",...result.errors.map(x=>"ERRO: "+x),...result.warnings.map(x=>"AVISO: "+x)];workspaceFeedback(lines.join(" "));renderWorkspace({loadEditor:false});}catch(e){workspaceFeedback(e.message);}});
 $("workspace-package").addEventListener("click",()=>{try{const appId=$("workspace-project").value,path=$("workspace-file").value;if(path)workspace.saveFile(appId,path,$("workspace-editor").value);const bundle=workspace.preparePackage(appId,"Pacote preparado "+new Date().toLocaleString("pt-BR"));const app=runtime.getApp(appId);downloadJson("darkhub-"+app.id+"-prepared-package.json",bundle);renderWorkspace({loadEditor:false});workspaceFeedback("Pacote preparado e exportado para revisão. Ainda não foi publicado nem enviado ao GitHub.");}catch(e){workspaceFeedback(e.message);}});
 
-$("register-app-form").addEventListener("submit",event=>{event.preventDefault();try{const app=runtime.registerApp({id:$("register-app-id").value,name:$("register-app-name").value,kind:$("register-app-kind").value,description:$("register-app-description").value,version:$("register-app-version").value});$("register-app-feedback").textContent=app.name+" foi adicionado ao catálogo."; $("register-app-id").value="";$("register-app-name").value="";$("register-app-description").value="";renderCreate();renderWorkspace({force:true});renderHome();}catch(e){$("register-app-feedback").textContent=e.message;}});
+$("register-app-form").addEventListener("submit",async event=>{
+ event.preventDefault();
+ try{
+  const logoFile=$("register-app-logo").files?.[0];
+  let iconDataUrl=null;
+  if(logoFile){
+   if(logoFile.size>180000)throw new Error("O logo deve ter até 180 KB.");
+   if(!["image/png","image/jpeg","image/webp"].includes(logoFile.type))throw new Error("Use um logo PNG, JPG ou WebP.");
+   iconDataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(new Error("Não foi possível ler o arquivo do logo."));reader.readAsDataURL(logoFile);});
+  }
+  const app=runtime.registerApp({id:$("register-app-id").value,name:$("register-app-name").value,kind:$("register-app-kind").value,description:$("register-app-description").value,version:$("register-app-version").value,iconDataUrl});
+  $("register-app-feedback").textContent=app.name+" foi adicionado ao catálogo.";
+  $("register-app-id").value="";$("register-app-name").value="";$("register-app-description").value="";$("register-app-logo").value="";
+  renderCreate();renderWorkspace({force:true});renderHome();
+ }catch(e){$("register-app-feedback").textContent=e.message;}
+});
 $("draft-form").addEventListener("submit",event=>{event.preventDefault();try{runtime.createDraft({appId:$("draft-app").value,title:$("draft-title").value,summary:$("draft-summary").value});$("draft-title").value="";$("draft-summary").value="";$("draft-feedback").textContent="Alteração registrada.";renderCreate();}catch(e){$("draft-feedback").textContent=e.message;}});
 /* Shadow remains available from the menu; it is not a third home action. */
 $("shadow-request-form").addEventListener("submit",event=>{
