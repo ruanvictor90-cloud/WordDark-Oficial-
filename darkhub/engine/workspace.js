@@ -48,6 +48,28 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   const data=read(),snapshot=data.snapshots.find(s=>s.id===id);if(!snapshot)throw new Error("Ponto de restauração não encontrado.");
   const p=ensureProject(snapshot.appId,data);p.files=clone(snapshot.files).map(f=>({...f,revision:(f.revision||1)+1,updatedAt:now()}));p.updatedAt=now();write(data);return {appId:snapshot.appId,files:clone(p.files),restoredAt:p.updatedAt};
  }
+ function validateProject(appId){
+  const app=runtime.getApp(appId);if(!app)throw new Error("Projeto não encontrado.");
+  const files=listFiles(appId),errors=[],warnings=[],paths=new Set();let totalBytes=0;
+  for(const file of files){
+   if(paths.has(file.path))errors.push("Caminho duplicado: "+file.path);paths.add(file.path);
+   if(typeof file.content!=="string")errors.push("Conteúdo inválido: "+file.path);
+   if(file.content.length>200000)errors.push("Arquivo acima de 200 KB: "+file.path);
+   totalBytes+=file.content.length;
+   if(/(?:^|\/)(?:\.env|secrets?\.(?:json|txt)|credentials?\.(?:json|txt))$/i.test(file.path))warnings.push("Confira se o arquivo contém segredos: "+file.path);
+  }
+  if(!files.length)errors.push("O projeto ainda não possui arquivos.");
+  if(files.length>100)errors.push("O projeto ultrapassa o limite de 100 arquivos.");
+  if(totalBytes>2000000)errors.push("O projeto ultrapassa o limite total de 2 MB de texto.");
+  if(!files.some(f=>/^(?:index\.html|src\/main\.(?:js|ts)|package\.json)$/i.test(f.path)))warnings.push("Não foi encontrado um ponto de entrada comum (index.html, src/main.js/ts ou package.json).");
+  if(!files.some(f=>/(?:^|\/)(?:.*\.)?(?:test|spec)\.[cm]?[jt]sx?$/i.test(f.path)))warnings.push("Nenhum arquivo de teste foi identificado; a validação automatizada ainda precisa ser executada fora do editor.");
+  return {appId,projectName:app.name,valid:errors.length===0,files:files.length,totalCharacters:totalBytes,errors,warnings,checkedAt:now()};
+ }
+ function preparePackage(appId,label="Pacote preparado para revisão"){
+  const validation=validateProject(appId);if(!validation.valid)throw new Error("Não é possível preparar o pacote: "+validation.errors.join(" "));
+  const snapshot=createSnapshot(appId,label);
+  return {schema:SCHEMA,validation,snapshot,project:exportProject(appId),preparedAt:now(),published:false,note:"Pacote local preparado. Não foi enviado a um repositório nem publicado."};
+ }
  function exportProject(appId){const app=runtime.getApp(appId);if(!app)throw new Error("Projeto não encontrado.");const data=read(),p=data.projects[appId]||{appId,createdAt:now(),updatedAt:now(),files:[]};return {schema:SCHEMA,app:{id:app.id,name:app.name,version:app.version},project:clone(p),snapshots:clone(data.snapshots.filter(s=>s.appId===appId)),exportedAt:now()};}
  function importProject(bundle){
   if(!bundle||bundle.schema!==SCHEMA||!bundle.app||typeof bundle.app.id!=="string"||!bundle.project||bundle.project.appId!==bundle.app.id||!Array.isArray(bundle.project.files))throw new TypeError("Pacote de projeto inválido.");
