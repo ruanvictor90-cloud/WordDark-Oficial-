@@ -71,7 +71,7 @@ export function createDarkHubRodovia({
       routeId: required(source?.routeId, "routeId", 120),
       origin: required(source?.origin, "origin", 120),
       destination: required(source?.destination, "destination", 120),
-      service: source?.service === "*" ? "*" : required(source?.service, "service", 120),
+      service: source?.service === undefined || source?.service === "*" ? "*" : required(source.service, "service", 120),
       status: source?.status || "ACTIVE"
     };
     if (!["ACTIVE", "SUSPENDED", "REVOKED"].includes(route.status)) throw new TypeError("Status de rota inválido.");
