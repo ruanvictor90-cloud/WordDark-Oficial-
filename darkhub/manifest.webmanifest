@@ -1,0 +1,13 @@
+{
+  "name":"darkHub",
+  "short_name":"darkHub",
+  "description":"Central de criação, versões, testes e operação do ecossistema.",
+  "lang":"pt-BR",
+  "start_url":"./index.html",
+  "scope":"./",
+  "display":"standalone",
+  "orientation":"portrait-primary",
+  "background_color":"#0a0710",
+  "theme_color":"#0a0710",
+  "icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://worddark.example/contracts/ecosystem-v1.json",
+  "title": "darkHub Ecosystem Contract v1",
+  "description": "Versioned envelope and app/capability metadata contracts. This schema does not itself establish a network connection or authenticate a sender.",
+  "oneOf": [
+    { "$ref": "#/$defs/appManifest" },
+    { "$ref": "#/$defs/capabilityManifest" },
+    { "$ref": "#/$defs/messageEnvelope" }
+  ],
+  "$defs": {
+    "appManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractVersion", "appId", "name", "kind", "appVersion", "description", "capabilities"],
+      "properties": {
+        "contractVersion": { "const": "1.0" },
+        "appId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,79}$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "kind": { "enum": ["app", "module"] },
+        "appVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "description": { "type": "string", "maxLength": 500 },
+        "capabilities": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,79}$" }, "uniqueItems": true },
+        "connectionMode": { "enum": ["standalone", "optional", "required"] }
+      }
+    },
+    "capabilityManifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractVersion", "appId", "capabilityId", "name", "description", "permission", "capabilityVersion"],
+      "properties": {
+        "contractVersion": { "const": "1.0" },
+        "appId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,79}$" },
+        "capabilityId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,79}$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 600 },
+        "permission": { "enum": ["local-only", "external", "approved"] },
+        "capabilityVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
+        "inputSchema": { "type": "object" },
+        "outputSchema": { "type": "object" }
+      }
+    },
+    "messageEnvelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contractVersion", "messageId", "type", "sourceAppId", "createdAt", "payload"],
+      "properties": {
+        "contractVersion": { "const": "1.0" },
+        "messageId": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "type": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)+$" },
+        "sourceAppId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,79}$" },
+        "targetAppId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,79}$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "correlationId": { "type": "string", "maxLength": 160 },
+        "payload": { "type": "object" }
+      }
+    }
+  }
+}
