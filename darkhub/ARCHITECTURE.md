@@ -35,7 +35,7 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 - Limites iniciais: rede e APIs pagas desativadas, execução autônoma desativada, aprovação humana obrigatória e estado guardado no armazenamento local.
 - O contrato permite conectar futuramente um adaptador de IA gratuito ou pago sem reescrever a interface nem a fila. Credenciais devem ficar em backend/secret store seguro; nunca no JavaScript distribuído ao cliente.
 - Antes de ativar ferramentas reais, cada conector precisará de permissões específicas, validação de entradas, registro de auditoria, limite de escopo e testes. Publicação e ações destrutivas exigirão confirmação separada.
-- O botão fino "Abrir Shadow" é a entrada da área do assistente; a interface completa será evoluída sem mudar o contrato de controle.
+- Shadow fica acessível pelo menu e não ocupa uma terceira ação principal na tela inicial. A implementação atual é uma base de planejamento local, não um assistente de IA conectado.
 
 ## Criação e gestão de código — workspace local
 - `engine/workspace.js` mantém um workspace por aplicativo cadastrado, separado do catálogo e do orquestrador.
@@ -45,6 +45,7 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 - A prévia HTML roda em iframe sandbox sem acesso à origem do darkHub, com política de conteúdo que bloqueia conexões externas e formulários. Não é um executor geral nem substitui testes automatizados.
 - Validação atual é estrutural: limites, caminhos, entrada comum e alertas de arquivos de segredo/testes. Não afirma que o código compila ou funciona.
 - "Preparar pacote" salva um ponto de restauração, exporta o projeto e cria um manifesto versionado com app/versão, ID do snapshot, resultado da validação estrutural e lista de arquivos/revisões. Isso melhora a rastreabilidade, mas não publica no GitHub nem cria um APK.
+- A exportação geral reúne runtime, orquestrador, Shadow, workspace e estado da Rodovia num JSON local. A restauração integral desse pacote ainda não está disponível; não anunciar o arquivo como backup restaurável até essa função existir.
 - Persistência continua local ao navegador/dispositivo. Para colaboração e publicação remota, a próxima etapa será um adaptador versionado para GitHub e CI; tokens de escrita nunca devem ficar no JavaScript do cliente.
 
 
