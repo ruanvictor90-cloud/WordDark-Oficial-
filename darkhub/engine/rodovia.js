@@ -95,7 +95,68 @@ export function createDarkHubRodovia({
   const routes = new Map();
   const endpoints = new Map();
   const events = [];
-  const seenMessages = new Set();\n  let requestMemory = { schema: SCHEMA, requests: [] };\n\n  function readRequests() {\n    try {\n      const raw = storage?.getItem(REQUESTS_KEY);\n      if (!raw) return clone(requestMemory);\n      const saved = JSON.parse(raw);\n      if (saved?.schema !== SCHEMA || !Array.isArray(saved.requests)) throw new Error("invalid request store");\n      requestMemory = saved;\n      return clone(saved);\n    } catch { return clone(requestMemory); }\n  }\n\n  function writeRequests(data) {\n    requestMemory = clone(data);\n    try { storage?.setItem(REQUESTS_KEY, JSON.stringify(data)); } catch {}\n    return clone(data);\n  }\n\n  function createRequest(input = {}) {\n    const origin = required(input.origin, "origin", 120);\n    const capability = required(input.capability, "capability", 160);\n    const description = typeof input.description === "string" ? input.description.trim().slice(0, 1200) : "";\n    const requestId = required(input.requestId || "req-" + idFactory(), "requestId", 120);\n    const data = readRequests();\n    if (data.requests.some(item => item.requestId === requestId)) throw new Error("Já existe um requerimento com esse identificador.");\n    const request = { requestId, origin, capability, description, priority: ["low", "normal", "high", "urgent"].includes(input.priority) ? input.priority : "normal", state: "received", destination: null, createdAt: now(), updatedAt: now(), history: [{ state: "received", at: now(), note: "Requerimento recebido pela Rodovia." }] };\n    data.requests.push(request);\n    record({ kind: "REQUEST_CREATED", requestId, origin, capability, state: request.state });\n    writeRequests(data);\n    return clone(request);\n  }\n\n  function transitionRequest(requestId, nextState, { note = "" } = {}) {\n    if (!REQUEST_STATES.includes(nextState)) throw new TypeError("Estado do requerimento inválido.");\n    const data = readRequests();\n    const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));\n    if (!request) throw new Error("Requerimento não encontrado.");\n    if (!(REQUEST_TRANSITIONS[request.state] || []).includes(nextState)) throw new Error("Transição não permitida: " + request.state + " → " + nextState + ".");\n    request.state = nextState;\n    request.updatedAt = now();\n    request.history.push({ state: nextState, at: now(), note: String(note).slice(0, 240) });\n    record({ kind: "REQUEST_STATE_CHANGED", requestId, state: nextState });\n    writeRequests(data);\n    return clone(request);\n  }\n\n  function resolveRequest(requestId, catalog) {\n    const data = readRequests();\n    const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));\n    if (!request) throw new Error("Requerimento não encontrado.");\n    if (request.state !== "received" && request.state !== "needs-creation") throw new Error("Só é possível resolver requerimentos recém-recebidos ou encaminhados para criação.");\n    const result = resolveRodoviaCapability(request, catalog);\n    request.destination = result.destination;\n    request.state = result.status === "routed" ? "awaiting-approval" : "needs-creation";\n    request.updatedAt = now();\n    request.history.push({ state: request.state, at: now(), note: result.message });\n    record({ kind: "REQUEST_RESOLVED", requestId, destination: request.destination, state: request.state });\n    writeRequests(data);\n    return { request: clone(request), resolution: result };\n  }
+  const seenMessages = new Set();
+  let requestMemory = { schema: SCHEMA, requests: [] };
+
+  function readRequests() {
+    try {
+      const raw = storage?.getItem(REQUESTS_KEY);
+      if (!raw) return clone(requestMemory);
+      const saved = JSON.parse(raw);
+      if (saved?.schema !== SCHEMA || !Array.isArray(saved.requests)) throw new Error("invalid request store");
+      requestMemory = saved;
+      return clone(saved);
+    } catch { return clone(requestMemory); }
+  }
+
+  function writeRequests(data) {
+    requestMemory = clone(data);
+    try { storage?.setItem(REQUESTS_KEY, JSON.stringify(data)); } catch {}
+    return clone(data);
+  }
+
+  function createRequest(input = {}) {
+    const origin = required(input.origin, "origin", 120);
+    const capability = required(input.capability, "capability", 160);
+    const description = typeof input.description === "string" ? input.description.trim().slice(0, 1200) : "";
+    const requestId = required(input.requestId || "req-" + idFactory(), "requestId", 120);
+    const data = readRequests();
+    if (data.requests.some(item => item.requestId === requestId)) throw new Error("Já existe um requerimento com esse identificador.");
+    const request = { requestId, origin, capability, description, priority: ["low", "normal", "high", "urgent"].includes(input.priority) ? input.priority : "normal", state: "received", destination: null, createdAt: now(), updatedAt: now(), history: [{ state: "received", at: now(), note: "Requerimento recebido pela Rodovia." }] };
+    data.requests.push(request);
+    record({ kind: "REQUEST_CREATED", requestId, origin, capability, state: request.state });
+    writeRequests(data);
+    return clone(request);
+  }
+
+  function transitionRequest(requestId, nextState, { note = "" } = {}) {
+    if (!REQUEST_STATES.includes(nextState)) throw new TypeError("Estado do requerimento inválido.");
+    const data = readRequests();
+    const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));
+    if (!request) throw new Error("Requerimento não encontrado.");
+    if (!(REQUEST_TRANSITIONS[request.state] || []).includes(nextState)) throw new Error("Transição não permitida: " + request.state + " → " + nextState + ".");
+    request.state = nextState;
+    request.updatedAt = now();
+    request.history.push({ state: nextState, at: now(), note: String(note).slice(0, 240) });
+    record({ kind: "REQUEST_STATE_CHANGED", requestId, state: nextState });
+    writeRequests(data);
+    return clone(request);
+  }
+
+  function resolveRequest(requestId, catalog) {
+    const data = readRequests();
+    const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));
+    if (!request) throw new Error("Requerimento não encontrado.");
+    if (request.state !== "received" && request.state !== "needs-creation") throw new Error("Só é possível resolver requerimentos recém-recebidos ou encaminhados para criação.");
+    const result = resolveRodoviaCapability(request, catalog);
+    request.destination = result.destination;
+    request.state = result.status === "routed" ? "awaiting-approval" : "needs-creation";
+    request.updatedAt = now();
+    request.history.push({ state: request.state, at: now(), note: result.message });
+    record({ kind: "REQUEST_RESOLVED", requestId, destination: request.destination, state: request.state });
+    writeRequests(data);
+    return { request: clone(request), resolution: result };
+  }
 
   function record(event) {
     events.push({ eventId: String(idFactory()), at: now(), ...event });
