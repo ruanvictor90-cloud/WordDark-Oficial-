@@ -36,3 +36,5 @@
 
 .workspace-file-actions{display:flex;gap:5px;flex-wrap:wrap}
 .workspace-file-actions button{flex:1;min-width:70px;padding-inline:8px;font-size:11px}
+
+.app-icon-image{object-fit:cover;padding:0;background:#100b17;border:1px solid #8057a466;}
