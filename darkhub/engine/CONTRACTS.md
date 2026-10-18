@@ -34,8 +34,8 @@ WordDark Hub é um módulo interno do darkHub. O futuro APK WordDark é separado
 - Distinguir sempre “planejado”, “registrado”, “habilitado”, “testado” e “publicado”.
 
 ## Próximos incrementos
-1. Integrar indicadores e fila na UI do darkHub.
-2. Definir manifestos de Shadoweb e WordDark Hub.
-3. Adicionar armazenamento e migração de esquema testados.
-4. Empacotar em Android, instalar e testar em aparelho.
-5. Implementar backend/conectores somente quando os apps locais estiverem estabilizados.
+1. Concluir a revisão visual e confirmar que Criar concentra escrita e Painel permanece informativo.
+2. Fortalecer testes de persistência, exportação e recuperação dos dados locais.
+3. Implementar restauração integral do pacote geral antes de prometer backup restaurável.
+4. Só depois de fechar darkHub, planejar o trabalho separado no WordDark Hub.
+5. Implementar conectores remotos apenas quando houver autenticação, autorização, escopos e testes ponta a ponta.
