@@ -40,12 +40,13 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 ## Criação e gestão de código — workspace local
 - `engine/workspace.js` mantém um workspace por aplicativo cadastrado, separado do catálogo e do orquestrador.
 - A área Criação permite criar, abrir, editar, salvar, renomear e excluir arquivos; caminhos são relativos, travessia de diretório e acesso à pasta interna `.git` são bloqueados; arquivos de configuração como `.gitignore` e `.github/workflows` são permitidos.
-- Limites locais: até 100 arquivos por projeto, 200 KB por arquivo e 2 MB de texto por pacote validado.
+- Limites locais: até 100 arquivos por projeto, 200 KB por arquivo (medidos em bytes UTF-8), 2 MB por projeto e retenção de até 50 snapshots por projeto.
 - Pontos de restauração guardam o conjunto de arquivos e podem ser restaurados. Importação/exportação de projeto usa pacote JSON versionado.
 - A prévia HTML roda em iframe sandbox sem acesso à origem do darkHub, com política de conteúdo que bloqueia conexões externas e formulários. Não é um executor geral nem substitui testes automatizados.
 - Validação atual é estrutural: limites, caminhos, entrada comum e alertas de arquivos de segredo/testes. Não afirma que o código compila ou funciona.
 - "Preparar pacote" salva um ponto de restauração, exporta o projeto e cria um manifesto versionado com app/versão, ID do snapshot, resultado da validação estrutural e lista de arquivos/revisões. Isso melhora a rastreabilidade, mas não publica no GitHub nem cria um APK.
 - A exportação geral reúne runtime, orquestrador, Shadow, workspace e estado da Rodovia num JSON local. A restauração integral desse pacote ainda não está disponível; não anunciar o arquivo como backup restaurável até essa função existir.
+- O workspace aplica limites por bytes UTF-8, verifica também o tamanho total ao importar projetos e mantém até 50 snapshots por projeto para evitar crescimento local ilimitado.
 - Persistência continua local ao navegador/dispositivo. Para colaboração e publicação remota, a próxima etapa será um adaptador versionado para GitHub e CI; tokens de escrita nunca devem ficar no JavaScript do cliente.
 
 
