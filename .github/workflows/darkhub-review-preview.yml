@@ -15,46 +15,47 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}preview/darkhub-review/
     steps:
-      - name: Checkout production source
+      - name: Checkout production repository
         uses: actions/checkout@v4
         with:
           ref: main
           path: repo
-      - name: Checkout current darkHub review branch
+      - name: Checkout currently published darkHub source
+        uses: actions/checkout@v4
+        with:
+          ref: darkhub
+          path: published-darkhub-src
+      - name: Checkout aligned darkHub review branch
         uses: actions/checkout@v4
         with:
           ref: feature/darkhub-native-foundation
           path: darkhub-review-src
-      - name: Assemble existing site plus isolated preview
+      - name: Assemble production site and isolated preview
         run: |
           mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/preview/darkhub-review site/ruan
-          cp -R darkhub-review-src/darkhub/. site/preview/darkhub-review/
+          cp -R published-darkhub-src/ruan/. site/darkhub/
           cp -R repo/hub/. site/hub/
           cp -R repo/worddark/. site/worddark/
-          # Preserve the current published entry-point behavior without importing feature code into production.
+          cp -R darkhub-review-src/darkhub/. site/preview/darkhub-review/
           cat > site/index.html <<'EOF'
           <!doctype html>
           <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=./darkhub/"><title>darkHub</title><script>location.replace('./darkhub/');</script></head><body><p>Abrindo o <a href="./darkhub/">darkHub</a>…</p></body></html>
           EOF
-          cat > site/darkhub/index.html <<'EOF'
-          <!doctype html>
-          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../preview/darkhub-review/"><title>Prévia darkHub</title><script>location.replace('../preview/darkhub-review/');</script></head><body><p>Abrindo a <a href="../preview/darkhub-review/">prévia do darkHub</a>…</p></body></html>
-          EOF
           cat > site/preview/darkhub/index.html <<'EOF'
           <!doctype html>
-          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../darkhub-review/"><title>Prévia darkHub</title><script>location.replace('../darkhub-review/');</script></head><body><p>Abrindo a <a href="../darkhub-review/">prévia do darkHub</a>…</p></body></html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../../darkhub/"><title>darkHub atualizado</title><script>location.replace('../../darkhub/');</script></head><body><p>O darkHub mudou de endereço. <a href="../../darkhub/">Abrir darkHub</a></p></body></html>
           EOF
           cat > site/ruan/index.html <<'EOF'
           <!doctype html>
-          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../preview/darkhub-review/"><title>Prévia darkHub</title><script>location.replace('../preview/darkhub-review/');</script></head><body><p>Abrindo a <a href="../preview/darkhub-review/">prévia do darkHub</a>…</p></body></html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=../darkhub/"><title>darkHub atualizado</title><script>location.replace('../darkhub/');</script></head><body><p>O darkHub mudou de endereço. <a href="../darkhub/">Abrir darkHub</a>…</p></body></html>
           EOF
           touch site/.nojekyll
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Upload review site
+      - name: Upload site with temporary review path
         uses: actions/upload-pages-artifact@v3
         with:
           path: site
-      - name: Deploy review site
+      - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@v4
