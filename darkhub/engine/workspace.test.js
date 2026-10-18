@@ -58,4 +58,8 @@ assert.equal(workspace.getFile(app2.id,"src/main.js").content,"export const answ
 assert.throws(()=>workspace.saveFile(app.id,"missing.js","x"),/não encontrado/);
 assert.equal(workspace.deleteFile(app2.id,"src/main.js"),true);
 assert.equal(workspace.listFiles(app2.id).length,0);
+assert.throws(()=>workspace.createFile(app.id,"src/oversized.js","😀".repeat(50001)),/200 KB/);
+for(let i=0;i<51;i++)workspace.createSnapshot(app.id,"snapshot-"+i);
+assert.equal(workspace.listSnapshots(app.id).length,50);
+assert.ok(workspace.validateProject(app.id).totalBytes>0);
 console.log("darkHub workspace tests passed");
