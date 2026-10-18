@@ -32,4 +32,7 @@ const restored=createDarkHubRuntime({storage:memoryStorage(),now:()=> "later",id
 restored.importState(engine.exportState());
 assert.equal(restored.getApp("worddark-hub").kind,"module");
 assert.equal(restored.exportState().releases.length,1);
+const invalidIconBackup=engine.exportState();
+invalidIconBackup.apps=invalidIconBackup.apps.map(app=>app.id==="dark-commerce"?{...app,iconDataUrl:"https://example.com/logo.png"}:app);
+assert.throws(()=>restored.importState(invalidIconBackup),/logo PNG/);
 console.log("darkHub runtime tests passed");
