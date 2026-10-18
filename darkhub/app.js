@@ -1,9 +1,11 @@
 import { createDarkHubRuntime } from "./engine/runtime.js";
 import { createDarkHubOrchestrator } from "./engine/orchestrator.js";
+import { createShadowAssistant } from "./engine/shadow.js";
 const runtime=createDarkHubRuntime();
 const orchestrator=createDarkHubOrchestrator({runtime});
+const shadow=createShadowAssistant({runtime,orchestrator});
 const $=id=>document.getElementById(id);
-const views=["home","create","panel","module"];
+const views=["home","create","panel","module","shadow"];
 function moveWriteFormsToCreate(){
  const target=$("create"),before=$("draft-form");
  [["capability-form"],["task-form"]].forEach(([id])=>{
@@ -13,14 +15,14 @@ function moveWriteFormsToCreate(){
  });
 }
 moveWriteFormsToCreate();
-function showView(id){views.forEach(view=>$(view).hidden=view!==id);window.scrollTo({top:0,behavior:"smooth"});if(id==="home")renderHome();if(id==="create")renderCreate();if(id==="panel")renderPanel();}
+function showView(id){views.forEach(view=>$(view).hidden=view!==id);window.scrollTo({top:0,behavior:"smooth"});if(id==="home")renderHome();if(id==="create")renderCreate();if(id==="panel")renderPanel();if(id==="shadow")renderShadow();}
 document.querySelectorAll("[data-view]").forEach(button=>button.addEventListener("click",()=>showView(button.dataset.view)));
 function esc(value){return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function appCard(app){return '<button class="app-card" data-open-app="'+esc(app.id)+'"><span class="app-icon">'+esc(app.name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase())+'</span><span><strong>'+esc(app.name)+'</strong><small>'+esc(app.kind==="module"?"Módulo interno":"Aplicativo independente")+' · '+esc(app.version)+'</small><small>'+esc(app.status)+'</small></span></button>';}
 function renderHome(){
  const apps=runtime.listApps(),ops=orchestrator.dashboard(),drafts=runtime.exportState().drafts;
  $("app-drawer").innerHTML=apps.map(appCard).join("");$("app-count").textContent=String(apps.length);
- $("overview").innerHTML='<div class="overview-card"><strong>'+apps.length+'</strong><small>Apps e módulos</small></div><div class="overview-card"><strong>'+ops.capabilities+'</strong><small>Capacidades catalogadas</small></div><div class="overview-card"><strong>'+ops.queuedTasks+'</strong><small>Tarefas em aberto</small></div><div class="overview-card"><strong>'+drafts.filter(d=>d.status!=="Finalizado"&&d.status!=="Cancelado").length+'</strong><small>Alterações em aberto</small></div>';
+ if($("overview")) $("overview").innerHTML='<div class="overview-card"><strong>'+apps.length+'</strong><small>Apps e módulos</small></div><div class="overview-card"><strong>'+ops.capabilities+'</strong><small>Capacidades catalogadas</small></div><div class="overview-card"><strong>'+ops.queuedTasks+'</strong><small>Tarefas em aberto</small></div><div class="overview-card"><strong>'+drafts.filter(d=>d.status!=="Finalizado"&&d.status!=="Cancelado").length+'</strong><small>Alterações em aberto</small></div>';
  document.querySelectorAll("[data-open-app]").forEach(button=>button.addEventListener("click",()=>openApp(button.dataset.openApp)));
 }
 function openApp(id){
@@ -29,6 +31,20 @@ function openApp(id){
  if(id==="shadoweb"){$("module-body").innerHTML='<article class="row-card"><strong>Foco atual: Shadoweb</strong><p>Concluir o navegador como APK independente. O darkHub coordena o plano de trabalho e acompanha o estado, mas não absorve o código nem é requisito para a navegação básica.</p><span class="meta">Próximo foco: navegação, histórico, favoritos, permissões, capacidades e empacotamento Android.</span></article><article class="row-card"><strong>Capacidades e tarefas</strong><p>O Hub pode catalogar capacidades previstas e distribuir tarefas de desenvolvimento. Uma capacidade só é executável quando existir implementação autorizada e testada.</p><button data-go-panel>Ir ao Painel de coordenação</button></article>';document.querySelector("[data-go-panel]").addEventListener("click",()=>showView("panel"));return;}
  if(id==="worddark-hub"){$("module-body").innerHTML='<article class="row-card"><strong>WordDark Hub permanece aqui dentro</strong><p>Este é um módulo interno do darkHub, não o APK WordDark e não um aplicativo independente nesta etapa.</p><p>A conexão com o futuro APK WordDark será criada por contrato versionado, autenticação, permissões e sincronização explícita.</p><span class="meta">Conexão: planejada · Nenhum vínculo remoto ativo</span></article><article class="row-card"><strong>Escopo do módulo</strong><p>Organizar solicitações, tarefas, estados operacionais e preparar os contratos de integração futura.</p><button data-module-task>Adicionar tarefa para o WordDark Hub</button></article>';document.querySelector("[data-module-task]").addEventListener("click",()=>{showView("panel");$("task-app").value="worddark-hub";$("task-title").focus();});return;}
  $("module-body").innerHTML='<article class="row-card"><strong>Módulo registrado</strong><p>As funções serão adicionadas quando este setor entrar no escopo de desenvolvimento.</p></article>';
+}
+function renderShadow(){
+ const state=shadow.status();
+ $("shadow-status").innerHTML='<div class="shadow-status-head"><span class="shadow-status-dot"></span><strong>Base local preparada</strong></div><p>Modo: '+esc(state.mode)+' · Provedor de IA: '+(state.providerConnected?'adaptador configurado':'não conectado')+'</p><div class="shadow-guardrails"><span>Rede externa: desativada</span><span>APIs pagas: desativadas</span><span>Execução automática: desativada</span><span>Aprovação humana: obrigatória</span></div>';
+ $("shadow-project").innerHTML=runtime.listApps().map(app=>'<option value="'+esc(app.id)+'">'+esc(app.name)+(app.kind==="module"?" · módulo":"")+'</option>').join("");
+ const requests=shadow.listRequests();
+ $("shadow-requests").innerHTML=requests.length?requests.map(request=>{
+  const app=runtime.getApp(request.appId);
+  const actions=request.status==="pending"?'<div><button data-shadow-approve="'+esc(request.id)+'">Aprovar e criar tarefa</button><button data-shadow-reject="'+esc(request.id)+'">Recusar</button></div>':"";
+  const task=request.result?.taskId?'<p class="meta">Tarefa criada na fila: '+esc(request.result.taskId)+'</p>':"";
+  return '<article class="row-card"><strong>'+esc(app?.name||request.appId)+' · '+esc(request.status==="pending"?"Aguardando aprovação":request.status==="approved"?"Aprovada":"Recusada")+'</strong><p>'+esc(request.prompt)+'</p><span class="meta">'+esc(request.createdAt)+'</span>'+task+actions+'</article>';
+ }).join(""):'<article class="row-card"><strong>Nenhuma solicitação</strong><p>Registre um pedido para iniciar o fluxo controlado do Shadow.</p></article>';
+ document.querySelectorAll("[data-shadow-approve]").forEach(button=>button.addEventListener("click",()=>{try{shadow.approveRequest(button.dataset.shadowApprove);$("shadow-feedback").textContent="Aprovado: uma tarefa foi adicionada à fila do darkHub. Nenhum código foi executado.";renderShadow();renderPanel();renderHome();}catch(e){$("shadow-feedback").textContent=e.message;}}));
+ document.querySelectorAll("[data-shadow-reject]").forEach(button=>button.addEventListener("click",()=>{try{shadow.rejectRequest(button.dataset.shadowReject);renderShadow();}catch(e){$("shadow-feedback").textContent=e.message;}}));
 }
 function renderCreate(){
  const apps=runtime.listApps();
@@ -42,6 +58,16 @@ function renderCreate(){
 }
 $("register-app-form").addEventListener("submit",event=>{event.preventDefault();try{const app=runtime.registerApp({id:$("register-app-id").value,name:$("register-app-name").value,kind:$("register-app-kind").value,description:$("register-app-description").value,version:$("register-app-version").value});$("register-app-feedback").textContent=app.name+" foi adicionado ao catálogo."; $("register-app-id").value="";$("register-app-name").value="";$("register-app-description").value="";renderCreate();renderHome();}catch(e){$("register-app-feedback").textContent=e.message;}});
 $("draft-form").addEventListener("submit",event=>{event.preventDefault();try{runtime.createDraft({appId:$("draft-app").value,title:$("draft-title").value,summary:$("draft-summary").value});$("draft-title").value="";$("draft-summary").value="";$("draft-feedback").textContent="Alteração registrada.";renderCreate();}catch(e){$("draft-feedback").textContent=e.message;}});
+$("shadow-open").addEventListener("click",()=>showView("shadow"));
+$("shadow-request-form").addEventListener("submit",event=>{
+ event.preventDefault();
+ try{
+  shadow.submitRequest({appId:$("shadow-project").value,prompt:$("shadow-prompt").value});
+  $("shadow-prompt").value="";
+  $("shadow-feedback").textContent="Solicitação registrada localmente. O Shadow ainda não está conectado a um modelo de IA.";
+  renderShadow();
+ }catch(e){$("shadow-feedback").textContent=e.message;}
+});
 function taskButtons(task){
  const actions={queued:[["assigned","Atribuir"],["cancelled","Cancelar"]],assigned:[["running","Iniciar"],["blocked","Bloquear"],["cancelled","Cancelar"]],running:[["done","Concluir"],["blocked","Bloquear"],["cancelled","Cancelar"]],blocked:[["queued","Reabrir"],["cancelled","Cancelar"]],done:[],cancelled:[]};
  return (actions[task.state]||[]).map(([state,label])=>'<button data-task-id="'+esc(task.id)+'" data-task-state="'+state+'">'+label+'</button>').join("");
