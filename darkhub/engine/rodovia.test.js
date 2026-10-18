@@ -27,6 +27,31 @@ assert.equal(resolveRodoviaCapability({ capability: "food:cafe", requestId: "q-c
   capabilities: [{ fullId: "food:café", appId: "food", id: "café", name: "Café", status: "enabled" }]
 }).status, "routed");
 
+
+function memoryStorage() {
+  const values = new Map();
+  return { getItem: key => values.has(key) ? values.get(key) : null, setItem: (key, value) => values.set(key, value) };
+}
+const requestStorage = memoryStorage();
+const requestRoad = createDarkHubRodovia({ now, idFactory, storage: requestStorage });
+const createdRequest = requestRoad.createRequest({ requestId: "req-1", origin: "darkhub", capability: "shadoweb:browser.open", description: "Abrir um ambiente de navegador." });
+assert.equal(createdRequest.state, "received");
+assert.throws(() => requestRoad.createRequest({ requestId: "req-1", origin: "darkhub", capability: "duplicado" }), /Já existe/);
+const resolvedRequest = requestRoad.resolveRequest("req-1", { capabilities: [{ fullId: "shadoweb:browser.open", appId: "shadoweb", id: "browser.open", status: "enabled" }] });
+assert.equal(resolvedRequest.request.state, "awaiting-approval");
+assert.equal(resolvedRequest.request.destination, "shadoweb");
+assert.throws(() => requestRoad.transitionRequest("req-1", "completed"), /Transição não permitida/);
+requestRoad.transitionRequest("req-1", "ready", { note: "Aprovado manualmente para teste." });
+requestRoad.transitionRequest("req-1", "in-transit");
+requestRoad.transitionRequest("req-1", "delivered");
+requestRoad.transitionRequest("req-1", "completed", { note: "Concluído." });
+assert.equal(requestRoad.listRequests({ state: "completed" })[0].requestId, "req-1");
+const restoredRoad = createDarkHubRodovia({ now, idFactory, storage: requestStorage });
+assert.equal(restoredRoad.listRequests()[0].state, "completed");
+const missingRequest = requestRoad.createRequest({ requestId: "req-2", origin: "darkhub", capability: "capability.missing" });
+assert.equal(requestRoad.resolveRequest("req-2", { capabilities: [] }).request.state, "needs-creation");
+assert.equal(requestRoad.transitionRequest("req-2", "received").state, "received");
+
 let received;
 road.registerEndpoint("app-b", message => { received = message; return { accepted: true }; });
 const delivered = await road.send({ messageId: "m1", requestId: "q1", origin: "app-a", destination: "app-b", service: "catalog.read", payload: { item: "test" } });
