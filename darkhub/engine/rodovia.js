@@ -145,7 +145,7 @@ export function createDarkHubRodovia({
   }
 
   function linkRequestProject(requestId, { projectId, snapshotId = null } = {}) {
-    const data = read();
+    const data = readRequests();
     const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));
     if (!request) throw new Error("Requerimento não encontrado.");
     request.projectId = required(projectId, "projectId", 160);
@@ -161,7 +161,7 @@ export function createDarkHubRodovia({
     if (!validation || typeof validation !== "object" || typeof validation.valid !== "boolean") {
       throw new TypeError("Resultado de validação estrutural inválido.");
     }
-    const data = read();
+    const data = readRequests();
     const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));
     if (!request) throw new Error("Requerimento não encontrado.");
     if (!request.projectId) throw new Error("Vincule um projeto antes de registrar a validação.");
