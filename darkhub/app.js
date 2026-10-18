@@ -3,6 +3,7 @@ import { createDarkHubOrchestrator } from "./engine/orchestrator.js";
 import { createShadowAssistant } from "./engine/shadow.js";
 import { createDarkHubWorkspace } from "./engine/workspace.js";
 import { createDarkHubRodovia } from "./engine/rodovia.js";
+import { createDarkHubBackup } from "./engine/backup.js";
 const runtime=createDarkHubRuntime();
 const orchestrator=createDarkHubOrchestrator({runtime});
 const shadow=createShadowAssistant({runtime,orchestrator});
@@ -14,11 +15,19 @@ const $=id=>document.getElementById(id);
 const views=["home","create","panel","module","shadow"];
 function moveWriteFormsToCreate(){
  const target=$("create"),before=$("draft-form");
- [["capability-form"],["task-form"]].forEach(([id])=>{
+ [["capability-form","Registrar capacidade"],["task-form","Distribuir tarefa"]].forEach(([id,title])=>{
   const form=$(id);if(!form||!target||!before)return;
-  const section=form.closest(".section");
-  if(section)target.insertBefore(section,before);
+  const section=document.createElement("section");section.className="section create-tool";
+  const heading=document.createElement("h2");heading.textContent=title;
+  section.append(heading,form);target.insertBefore(section,before);
  });
+ const backupButton=$("export-backup"),backupFeedback=$("backup-feedback");
+ if(backupButton&&backupFeedback&&target&&before){
+  const section=document.createElement("section");section.className="section create-tool";
+  const heading=document.createElement("h2");heading.textContent="Dados locais";
+  const note=document.createElement("p");note.className="muted";note.textContent="Exporte um arquivo JSON com o estado local do darkHub para guardar fora do aplicativo.";
+  section.append(heading,note,backupButton,backupFeedback);target.insertBefore(section,before);
+ }
 }
 moveWriteFormsToCreate();
 function showView(id){views.forEach(view=>$(view).hidden=view!==id);window.scrollTo({top:0,behavior:"smooth"});if(id==="home")renderHome();if(id==="create"){renderCreate();renderWorkspace();}if(id==="panel")renderPanel();if(id==="shadow")renderShadow();}
@@ -110,7 +119,7 @@ $("workspace-package").addEventListener("click",()=>{try{const appId=$("workspac
 
 $("register-app-form").addEventListener("submit",event=>{event.preventDefault();try{const app=runtime.registerApp({id:$("register-app-id").value,name:$("register-app-name").value,kind:$("register-app-kind").value,description:$("register-app-description").value,version:$("register-app-version").value});$("register-app-feedback").textContent=app.name+" foi adicionado ao catálogo."; $("register-app-id").value="";$("register-app-name").value="";$("register-app-description").value="";renderCreate();renderWorkspace({force:true});renderHome();}catch(e){$("register-app-feedback").textContent=e.message;}});
 $("draft-form").addEventListener("submit",event=>{event.preventDefault();try{runtime.createDraft({appId:$("draft-app").value,title:$("draft-title").value,summary:$("draft-summary").value});$("draft-title").value="";$("draft-summary").value="";$("draft-feedback").textContent="Alteração registrada.";renderCreate();}catch(e){$("draft-feedback").textContent=e.message;}});
-$("shadow-open").addEventListener("click",()=>showView("shadow"));
+/* Shadow remains available from the menu; it is not a third home action. */
 $("shadow-request-form").addEventListener("submit",event=>{
  event.preventDefault();
  try{
@@ -146,7 +155,7 @@ function renderPanel(){
 $("capability-form").addEventListener("submit",event=>{event.preventDefault();try{orchestrator.registerCapability({appId:$("capability-app").value,id:$("capability-id").value,name:$("capability-name").value,description:$("capability-description").value,permission:$("capability-permission").value});$("capability-feedback").textContent="Capacidade registrada. O catálogo descreve a função; não significa que exista um executor ativo."; $("capability-id").value="";$("capability-name").value="";$("capability-description").value="";renderPanel();renderHome();}catch(e){$("capability-feedback").textContent=e.message;}});
 $("task-form").addEventListener("submit",event=>{event.preventDefault();try{orchestrator.createTask({appId:$("task-app").value,title:$("task-title").value,description:$("task-description").value,priority:$("task-priority").value});$("task-title").value="";$("task-description").value="";$("task-feedback").textContent="Tarefa adicionada à fila do darkHub.";renderPanel();}catch(e){$("task-feedback").textContent=e.message;}});
 $("road-request-form").addEventListener("submit",event=>{event.preventDefault();try{const request=rodovia.createRequest({origin:"darkHub",capability:$("road-request-capability").value,description:$("road-request-description").value,priority:$("road-request-priority").value});const catalog={capabilities:orchestrator.listCapabilities()};const resolved=rodovia.resolveRequest(request.requestId,catalog);$("road-request-feedback").textContent=resolved.request.state==="awaiting-approval"?"Requerimento registrado e localizado no catálogo. Aguardando aprovação manual; nenhuma operação foi executada.":"Requerimento registrado para análise/criação. Nenhum destino ativo foi encontrado."; $("road-request-capability").value="";$("road-request-description").value="";renderPanel();}catch(e){$("road-request-feedback").textContent=e.message;}});
-$("export-backup").addEventListener("click",()=>{const bundle={darkHub:runtime.exportState(),orchestrator:orchestrator.exportState()};const blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="darkhub-ecosystem-backup.json";a.click();URL.revokeObjectURL(url);$("backup-feedback").textContent="Backup local do catálogo e do motor de coordenação exportado.";});
+$("export-backup").addEventListener("click",()=>{try{const bundle=createDarkHubBackup({runtime,orchestrator,shadow,workspace,rodovia});downloadJson("darkhub-dados-locais.json",bundle);$("backup-feedback").textContent="Exportação concluída: catálogo, coordenação, Shadow, workspace e Rodovia incluídos. A restauração integral deste arquivo ainda não está disponível na interface."; }catch(error){$("backup-feedback").textContent="Não foi possível exportar: "+error.message;}});
 const menuDrawer=$("menu-drawer"),menuScrim=$("menu-scrim"),appsDrawer=$("apps-drawer"),drawerScrim=$("drawer-scrim"),alertPanel=$("alert-panel");
 function closeMenu(){menuDrawer.hidden=true;menuScrim.hidden=true;$("menu-open").setAttribute("aria-expanded","false");}
 function closeApps(){appsDrawer.hidden=true;drawerScrim.hidden=true;appsDrawer.setAttribute("aria-hidden","true");$("apps-open").setAttribute("aria-expanded","false");}
