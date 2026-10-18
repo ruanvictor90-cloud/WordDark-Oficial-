@@ -80,7 +80,7 @@ export function validateMessage(message, { maxPayloadBytes = DEFAULT_MAX_PAYLOAD
 
 /**
  * Rodovia is the shared transport and trace layer. It does not authorize
- * business actions, choose capabilities, or execute destination logic.
+ * business actions or execute destination logic. Capability lookup only reads the central catalog.
  * Route registration is a transport allow-list, not an access grant.
  */
 export function createDarkHubRodovia({
