@@ -1,4 +1,4 @@
-const CACHE="darkhub-shell-v10";
+const CACHE="darkhub-shell-v11";
 const CORE=["./","./index.html","./app.css","./app.js","./engine/runtime.js","./engine/orchestrator.js","./engine/shadow.js","./engine/workspace.js","./engine/rodovia.js","./engine/backup.js","./manifest.webmanifest","./icon.svg"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith("darkhub-shell-")&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
