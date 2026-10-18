@@ -20,3 +20,15 @@
 .shadow-status p{margin:8px 0;color:var(--muted);font-size:12px}
 .shadow-guardrails{display:flex;flex-wrap:wrap;gap:6px}
 .shadow-guardrails span{padding:5px 8px;border:1px solid #44304f;border-radius:8px;color:#d7c4e9;background:#1c1327;font-size:10px}
+
+
+.workspace-panel{gap:12px}
+.workspace-toolbar,.workspace-new-file,.workspace-actions,.workspace-preview-head{display:flex;align-items:end;gap:8px}
+.workspace-toolbar label,.workspace-new-file label{flex:1;min-width:0}
+.workspace-actions>*{flex:1;min-width:0}
+.workspace-editor,.workspace-panel textarea{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;line-height:1.55;tab-size:2;white-space:pre;overflow:auto;min-height:220px}
+.workspace-preview-head{justify-content:space-between;align-items:center}
+.workspace-preview-frame{display:block;width:100%;height:320px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.file-import-label input{font-size:12px}
+.workspace-section .muted{font-size:12px;line-height:1.5}
+@media(max-width:420px){.workspace-toolbar,.workspace-new-file,.workspace-actions{flex-wrap:wrap}.workspace-toolbar label,.workspace-new-file label,.workspace-actions>*{flex-basis:100%}.workspace-preview-frame{height:260px}}
