@@ -1,7 +1,7 @@
 name: Publish darkHub on its own line
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "feature/darkhub-native-foundation"]
   workflow_run:
     workflows: ["darkHub engine checks"]
     types: [completed]
@@ -26,15 +26,19 @@ jobs:
         with:
           ref: main
           path: repo
-      - name: Checkout standalone darkHub line
+      - name: Checkout selected darkHub line
         uses: actions/checkout@v4
         with:
-          ref: darkhub
+          ref: ${{ github.ref_name == 'main' && 'darkhub' || github.ref_name }}
           path: darkhub-src
       - name: Publish current apps and redirect old entry points
         run: |
           mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/ruan
-          cp -R darkhub-src/ruan/. site/darkhub/
+          if [ -d darkhub-src/darkhub ]; then
+            cp -R darkhub-src/darkhub/. site/darkhub/
+          else
+            cp -R darkhub-src/ruan/. site/darkhub/
+          fi
           cp -R repo/hub/. site/hub/
           cp -R repo/worddark/. site/worddark/
           cat > site/index.html <<'EOF'
@@ -59,33 +63,3 @@ jobs:
             await Promise.all(clients.map(client => client.navigate(target)));
           })()));
           EOF
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Upload current site
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-      - name: Deploy Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-# Republish the latest darkHub branch interface.
-# Refresh darkHub header logo asset styles.
-
-# Publish the current darkHub lateral menu interface.
-
-# Republish simplified darkHub navigation and logo cache refresh.
-
-# Publish modular darkHub home widgets and their saved layout controls.
-
-# Publish minimal empty Widgets category in darkHub.
-
-# Publish darkHub creation, panel, and shared subpage navigation.
-
-# Publish darkHub previous-page navigation and compact icon tiles.
-
-# Republish fixed darkHub back stack.
-
-# Publish unified purple-black darkHub app logo.
-
-# Republish darkHub with the consolidated development engine.
