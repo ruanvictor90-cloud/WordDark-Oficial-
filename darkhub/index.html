@@ -25,7 +25,7 @@
 <div class="panel workspace-panel">
 <label>Projeto<select id="workspace-project" required></select></label>
 <div class="workspace-toolbar"><label>Arquivo existente<select id="workspace-file" required></select></label><button id="workspace-load" class="secondary" type="button">Abrir</button></div>
-<div class="workspace-new-file"><label>Novo caminho de arquivo<input id="workspace-new-path" maxlength="180" placeholder="src/main.js"></label><button id="workspace-new" class="secondary" type="button">Criar arquivo</button></div>
+<div class="workspace-new-file"><label>Novo caminho de arquivo<input id="workspace-new-path" maxlength="180" placeholder="src/main.js"></label><div class="workspace-file-actions"><button id="workspace-new" class="secondary" type="button">Criar</button><button id="workspace-rename" class="secondary" type="button">Renomear</button><button id="workspace-delete" class="secondary" type="button">Excluir</button></div></div>
 <label>Conteúdo do arquivo<textarea id="workspace-editor" rows="12" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Abra ou crie um arquivo para começar a editar."></textarea></label>
 <div class="workspace-actions"><button id="workspace-save" class="primary" type="button">Salvar arquivo</button><button id="workspace-snapshot" class="secondary" type="button">Criar ponto de restauração</button></div>
 <label>Versões salvas<select id="workspace-snapshots"></select></label>
@@ -58,4 +58,4 @@
 <button id="drawer-scrim" class="drawer-scrim" type="button" aria-label="Fechar gaveta de aplicativos" hidden tabindex="-1"></button>
 <aside id="menu-drawer" class="menu-drawer" hidden><div class="drawer-heading"><div><p class="eyebrow">DARKHUB</p><h2>Menu</h2></div><button id="menu-close" class="icon-button" aria-label="Fechar menu">×</button></div><button data-menu-view="home" class="menu-item">⌂ <span>Início</span></button><button data-menu-view="create" class="menu-item">＋ <span>Criação e finalização</span></button><button data-menu-view="panel" class="menu-item">▦ <span>Painel de informações</span></button><button id="widgets-open" class="menu-item">▤ <span>Widgets</span></button><div id="widgets-panel" class="widgets-panel" hidden><strong>Widgets dos aplicativos</strong><p>O seletor de aplicativos e tamanhos será habilitado quando os widgets de cada app estiverem definidos. Esta área não altera nem cria widgets fictícios.</p></div></aside><div id="menu-scrim" class="menu-scrim" hidden></div>
 <section id="alert-panel" class="alert-panel" hidden><div class="drawer-heading"><div><p class="eyebrow">ESTADO LOCAL</p><h2>Notificações</h2></div><button id="alert-close" class="icon-button" aria-label="Fechar notificações">×</button></div><div id="alert-list"></div></section>
-<script type="module" src="./app.js?v=code-workspace-2"></script></body></html>
+<script type="module" src="./app.js?v=code-workspace-3"></script></body></html>
