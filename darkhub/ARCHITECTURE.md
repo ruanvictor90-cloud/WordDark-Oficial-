@@ -46,3 +46,15 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 - Validação atual é estrutural: limites, caminhos, entrada comum e alertas de arquivos de segredo/testes. Não afirma que o código compila ou funciona.
 - "Preparar pacote" salva um ponto de restauração e exporta o projeto para revisão; não publica no GitHub nem cria um APK.
 - Persistência continua local ao navegador/dispositivo. Para colaboração e publicação remota, a próxima etapa será um adaptador versionado para GitHub e CI; tokens de escrita nunca devem ficar no JavaScript do cliente.
+
+
+## Rodovia — transporte compartilhado do ecossistema
+
+- `engine/rodovia.js` define o envelope de mensagem e a camada de transporte local compartilhada.
+- Todo envio usa `messageId`, `requestId`, origem, destino, serviço, payload e data; `routeId` é associado quando uma rota ativa permite o transporte.
+- A Rodovia mantém lista explícita de rotas e endpoints, valida o tamanho do payload, bloqueia repetição do mesmo `messageId` e registra eventos de entrega/falha sem copiar o payload para a trilha de auditoria.
+- A trilha tem limite configurável e é consultável por `requestId` para rastrear o percurso de uma solicitação e seus resultados.
+- A Rodovia transporta e rastreia; **não concede permissões, não decide regras de negócio e não executa a operação de destino**. O endpoint registrado apenas recebe a mensagem; a decisão de autorizar e a execução permanecem nas camadas responsáveis.
+- A implementação atual é transporte **local no processo**, com rotas e eventos em memória. Ainda não é uma fila distribuída, não sincroniza dispositivos e não fornece persistência durável. Uma futura ponte remota deverá usar autenticação, autorização, contratos versionados, limites, retries/ACK e credenciais mantidas fora do cliente.
+- Os aplicativos devem depender do contrato da Rodovia, não importar diretamente a implementação interna uns dos outros. O catálogo/Central identifica capacidades e destinos; a Rodovia transporta a mensagem pelo caminho permitido.
+- `engine/rodovia.test.js` verifica rotas ativas/suspensas, validação, entrega, falha de endpoint, payload excessivo, duplicidade e rastreabilidade.
