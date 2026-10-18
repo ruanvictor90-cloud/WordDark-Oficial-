@@ -1,46 +1,43 @@
-name: Publish darkHub on its own line
+name: Publish darkHub development preview
 on:
   push:
-    branches: ["main", "feature/darkhub-native-foundation"]
-  workflow_run:
-    workflows: ["darkHub engine checks"]
-    types: [completed]
+    branches:
+      - main
+      - feature/darkhub-native-foundation
   workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
 concurrency:
-  group: pages
+  group: darkhub-pages
   cancel-in-progress: true
 jobs:
   deploy:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}darkhub/
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout site repository
+      - name: Checkout ecosystem content
         uses: actions/checkout@v4
         with:
           ref: main
           path: repo
-      - name: Checkout selected darkHub line
+      - name: Checkout darkHub development line
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name == 'main' && 'darkhub' || github.ref_name }}
+          ref: ${{ github.ref_name == 'main' && 'feature/darkhub-native-foundation' || github.ref_name }}
           path: darkhub-src
-      - name: Publish current apps and redirect old entry points
+      - name: Assemble Pages site
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/ruan
-          if [ -d darkhub-src/darkhub ]; then
-            cp -R darkhub-src/darkhub/. site/darkhub/
-          else
-            cp -R darkhub-src/ruan/. site/darkhub/
-          fi
-          cp -R repo/hub/. site/hub/
-          cp -R repo/worddark/. site/worddark/
+          test -f darkhub-src/darkhub/index.html
+          cp -R darkhub-src/darkhub/. site/darkhub/
+          if [ -d repo/hub ]; then cp -R repo/hub/. site/hub/; fi
+          if [ -d repo/worddark ]; then cp -R repo/worddark/. site/worddark/; fi
           cat > site/index.html <<'EOF'
           <!doctype html>
           <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url=./darkhub/"><title>darkHub</title><script>location.replace('./darkhub/');</script></head><body><p>Abrindo o <a href="./darkhub/">darkHub</a>…</p></body></html>
@@ -63,3 +60,12 @@ jobs:
             await Promise.all(clients.map(client => client.navigate(target)));
           })()));
           EOF
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
