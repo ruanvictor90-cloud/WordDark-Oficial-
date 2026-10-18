@@ -102,7 +102,7 @@ export function createDarkHubRuntime({storage=globalThis.localStorage, now=()=>n
   function importState(payload) {
     if(!payload || payload.schema!==SCHEMA || !Array.isArray(payload.apps) || !Array.isArray(payload.drafts) || !Array.isArray(payload.releases) || !Array.isArray(payload.connections)) throw new TypeError("Backup do darkHub inválido.");
     const baseIds=new Set(BASE_APPS.map(app=>app.id));
-    const apps=[...clone(BASE_APPS).filter(app=>!payload.apps.some(item=>item?.id===app.id)),...payload.apps.map(app=>({...app,kind:baseIds.has(app.id)?BASE_APPS.find(base=>base.id===app.id).kind:app.kind}))];
+    const apps=[...clone(BASE_APPS).filter(app=>!payload.apps.some(item=>item?.id===app.id)),...payload.apps.map(app=>({...app,iconDataUrl:validIconDataUrl(app.iconDataUrl),kind:baseIds.has(app.id)?BASE_APPS.find(base=>base.id===app.id).kind:app.kind}))];
     return write({schema:SCHEMA,apps,drafts:clone(payload.drafts),releases:clone(payload.releases),connections:clone(payload.connections)});
   }
   return Object.freeze({schema:SCHEMA,storageKey:STORAGE_KEY,statuses:[...STATUSES],listApps,getApp,registerApp,updateApp,createDraft,updateDraft,finalizeDraft,registerConnection,exportState,importState});
