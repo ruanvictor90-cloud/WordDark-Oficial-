@@ -1,51 +1,41 @@
-# darkHub — estado de finalização da estrutura
+# darkHub — estado de alinhamento geral
 
-## Papel do darkHub
-O darkHub é a central independente para catalogar aplicativos, organizar alterações, preparar versões e acompanhar o ecossistema. O funcionamento básico de cada APK deve continuar independente do darkHub.
+## Escopo desta etapa
 
-## Camadas
+O trabalho atual está restrito ao darkHub. Não iniciar a implementação do WordDark Hub, não alterar o aplicativo WordDark independente e não gerar APK sem solicitação explícita. O próximo produto só começa depois da revisão visual e da validação desta base.
 
-1. **Interface central** — tela inicial com gaveta dos apps, ação Criar, ação Painel e resumo informativo.
-2. **Runtime do catálogo** — registro de apps/módulos, versão, estado, alterações, releases e exportação/importação local.
-3. **Orquestrador** — catálogo de capacidades, fila de tarefas, transições explícitas e eventos locais.
-4. **Contrato de ecossistema** — esquema versionado para manifestos e envelopes de mensagens.
-5. **Empacotamento Android** — Capacitor e GitHub Actions para gerar APK de debug.
-6. **Conectores futuros** — transporte, autenticação, autorização e sincronização; não são considerados ativos até existirem e serem testados.
+## Camadas revisadas
 
-## Limites que não podem ser confundidos
+1. **Interface e navegação:** início minimalista, identidade roxo/preto, logo central, saudação e busca; ações principais Criar e Painel; navegação inferior Apps e WordDark Hub; Shadow fica no menu para não competir com as ações principais.
+2. **Criar e finalizar:** cadastro de aplicativos, workspace, edição de arquivos, snapshots, importação/exportação de projetos, validação estrutural, preparação de pacote e fila de alterações.
+3. **Painel informativo:** catálogo, métricas, capacidades, tarefas, requerimentos e estado das conexões. Os formulários de escrita são movidos para Criar; listas e métricas permanecem no Painel.
+4. **Runtime:** catálogo local, versões, alterações e releases locais. Uma release registrada não significa compilação, assinatura ou publicação.
+5. **Orquestrador:** catálogo de capacidades, fila de tarefas, estados controlados e política de negar por padrão. Uma tarefa não é executada automaticamente.
+6. **Shadow:** planejamento local, solicitações e aprovação humana; não há modelo de IA conectado, execução de código ou rede externa nesta implementação.
+7. **Workspace:** arquivos locais por aplicativo, limites, snapshots, restauração e pacotes JSON. A validação é estrutural, não substitui compilação nem testes de execução.
+8. **Rodovia:** transporte local no processo, rotas explícitas, envelopes validados, prevenção de duplicidade e trilha de eventos. Ainda não é mensageria remota ou sincronização entre dispositivos.
+9. **Exportação de dados:** o pacote JSON reúne o estado exportável do runtime, orquestrador, Shadow, workspace e Rodovia. A restauração integral desse pacote ainda não está disponível na interface; a importação de projetos JSON permanece separada.
+10. **PWA/cache:** versão do shell atualizada para incluir o módulo de exportação; o cache não é fonte de verdade para os dados do aplicativo.
 
-- **WordDark Hub** é um módulo interno do darkHub; não é o APK WordDark.
-- O **APK WordDark** será independente e poderá conectar-se futuramente ao módulo WordDark Hub por contrato, autenticação, escopos de permissão e sincronização explícita.
-- **Shadoweb** é um app independente e prioridade atual. A navegação básica não pode depender do darkHub.
-- Registrar uma tarefa não executa código de outro APK. Registrar uma capacidade não significa que exista um executor.
-- Estado local no navegador/WebView não é sincronização entre dispositivos nem backup remoto.
-- APK de debug não é release de produção assinado.
+## Limites importantes
 
-## Resultado de compilação verificado
+- WordDark Hub continua sendo um módulo interno planejado do darkHub; não é o APK WordDark.
+- Shadoweb continua um aplicativo independente e não será desenvolvido nesta etapa.
+- Persistência é local ao perfil/dispositivo; não há sincronização remota, fila distribuída nem backup remoto.
+- Rotas e endpoints executáveis não são recriados pela exportação. Credenciais nunca devem ser armazenadas no JavaScript do cliente.
+- Não gerar APK durante esta revisão.
 
-- Workflow: `darkHub Android APK`
-- Run: [39013193879](https://github.com/ruanvictor90-cloud/WordDark-Oficial-/actions/runs/39013193879)
-- Resultado: **success**
-- Artefato: `darkhub-debug-apk` (ZIP contendo `app-debug.apk`)
-- SHA-256 do ZIP: `e73b659d784204cbea65e3d8a587bf2c3e5b660680f7f317864cb52dab52321b`
-- Artefato temporário do Actions: expira em 7 dias; guardar uma cópia local antes do vencimento.
+## Validação
 
-## Checklist antes de considerar a etapa pronta para uso
+- Testes automatizados de runtime, orquestrador, Shadow, workspace e Rodovia.
+- Teste dedicado para o pacote de exportação local.
+- CI e verificação de segurança devem passar no commit final desta revisão.
+- Ainda é necessária revisão visual no aparelho/navegador para confirmar navegação, acessibilidade, teclado e persistência.
 
-- [x] Runtime e orquestrador com testes automatizados.
-- [x] Política padrão de negar capacidades externas sem aprovação explícita.
-- [x] Contrato versionado de manifestos e mensagens.
-- [x] Build de APK Android debug concluído no GitHub Actions.
-- [ ] Instalar no Android real e validar abertura, navegação, teclado, retorno e rotação.
-- [ ] Validar persistência depois de fechar e reabrir o app; testar exportação e importação de backup.
-- [ ] Conferir experiência mobile e acessibilidade de todos os fluxos.
-- [ ] Implementar comunicação real somente quando houver contrato, transporte, autenticação, autorização e testes ponta a ponta.
-- [ ] Preparar assinatura de release separadamente; nunca embutir chaves no repositório.
+## Critérios para encerrar
 
-## Próxima ordem de trabalho
-
-1. Validar o APK no dispositivo Android e corrigir apenas falhas reproduzíveis.
-2. Fechar a separação entre **Criar** (ações de escrita) e **Painel** (visão informativa), sem espalhar controles de cadastro pelo painel.
-3. Fortalecer testes de persistência, importação e exportação.
-4. Seguir com Shadoweb como app independente.
-5. Só depois desenhar e testar conectores reais entre APKs.
+- [ ] CI e verificação de segurança do commit final aprovados.
+- [ ] Revisar o início, Criar, Painel, gaveta Apps, menu, notificações, Shadow e prévia de HTML.
+- [ ] Confirmar que Painel é informativo e os formulários de escrita ficam em Criar.
+- [ ] Confirmar limites da exportação e evitar afirmar que existe restauração integral.
+- [ ] Não iniciar WordDark Hub nem gerar APK até nova solicitação.
