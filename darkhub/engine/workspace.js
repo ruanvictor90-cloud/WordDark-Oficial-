@@ -74,7 +74,17 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
  function preparePackage(appId,label="Pacote preparado para revisão"){
   const validation=validateProject(appId);if(!validation.valid)throw new Error("Não é possível preparar o pacote: "+validation.errors.join(" "));
   const snapshot=createSnapshot(appId,label);
-  return {schema:SCHEMA,validation,snapshot,project:exportProject(appId),preparedAt:now(),published:false,note:"Pacote local preparado. Não foi enviado a um repositório nem publicado."};
+  const project = exportProject(appId);
+  const manifest = {
+   schema:"darkhub-package-manifest-v1",
+   appId,
+   appVersion:project.app.version,
+   snapshotId:snapshot.id,
+   preparedAt:now(),
+   validation:{kind:"structural",valid:validation.valid,checkedAt:validation.checkedAt,errors:clone(validation.errors),warnings:clone(validation.warnings)},
+   files:listFiles(appId).map(file=>({path:file.path,revision:file.revision,characters:file.content.length}))
+  };
+  return {schema:SCHEMA,validation,snapshot,manifest,project,preparedAt:manifest.preparedAt,published:false,approvalRequired:true,note:"Pacote local preparado para revisão. A validação é estrutural; não confirma compilação ou execução. Não foi enviado a um repositório nem publicado."};
  }
  function exportProject(appId){const app=runtime.getApp(appId);if(!app)throw new Error("Projeto não encontrado.");const data=read(),p=data.projects[appId]||{appId,createdAt:now(),updatedAt:now(),files:[]};return {schema:SCHEMA,app:{id:app.id,name:app.name,version:app.version},project:clone(p),snapshots:clone(data.snapshots.filter(s=>s.appId===appId)),exportedAt:now()};}
  function importProject(bundle){
