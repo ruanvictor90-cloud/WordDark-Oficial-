@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - feature/darkhub-native-foundation
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,13 +23,20 @@ jobs:
         with:
           ref: main
           path: repo
+      - name: Checkout review branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          path: repo-preview
       - name: Assemble Pages site
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/ruan
+          mkdir -p site/darkhub site/hub site/worddark site/preview/darkhub site/preview/darkhub-review site/ruan
           test -f repo/darkhub/index.html
           cp -R repo/darkhub/. site/darkhub/
+          test -f repo-preview/darkhub/index.html
+          cp -R repo-preview/darkhub/. site/preview/darkhub-review/
           if [ -d repo/hub ]; then cp -R repo/hub/. site/hub/; fi
           if [ -d repo/worddark ]; then cp -R repo/worddark/. site/worddark/; fi
           cat > site/index.html <<'EOF'
