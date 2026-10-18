@@ -4,7 +4,7 @@ import { createShadowAssistant } from "./engine/shadow.js";
 import { createDarkHubWorkspace } from "./engine/workspace.js";
 import { createDarkHubRodovia } from "./engine/rodovia.js";
 import { createDarkHubBackup } from "./engine/backup.js";
-const isPreview=location.pathname.startsWith("/preview/darkhub-review/");
+const isPreview=location.pathname.includes("/preview/darkhub-review/");
 const appStorage=isPreview?globalThis.sessionStorage:globalThis.localStorage;
 const runtime=createDarkHubRuntime({storage:appStorage});
 const orchestrator=createDarkHubOrchestrator({storage:appStorage,runtime});
