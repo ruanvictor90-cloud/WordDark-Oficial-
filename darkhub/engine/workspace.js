@@ -87,6 +87,6 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   write(data);return {appId:bundle.app.id,fileCount:files.length};
  }
  function exportState(){return {...read(),exportedAt:now()};}
- return Object.freeze({schema:SCHEMA,listProjects,listFiles,getFile,createFile,saveFile,renameFile,deleteFile,createSnapshot,listSnapshots,restoreSnapshot,exportProject,importProject,exportState});
+ return Object.freeze({schema:SCHEMA,listProjects,listFiles,getFile,createFile,saveFile,renameFile,deleteFile,createSnapshot,listSnapshots,restoreSnapshot,validateProject,preparePackage,exportProject,importProject,exportState});
 }
 export {SCHEMA as WORKSPACE_SCHEMA,KEY as WORKSPACE_STORAGE_KEY};
