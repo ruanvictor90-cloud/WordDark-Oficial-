@@ -4,14 +4,17 @@ import { createShadowAssistant } from "./engine/shadow.js";
 import { createDarkHubWorkspace } from "./engine/workspace.js";
 import { createDarkHubRodovia } from "./engine/rodovia.js";
 import { createDarkHubBackup } from "./engine/backup.js";
-const runtime=createDarkHubRuntime();
-const orchestrator=createDarkHubOrchestrator({runtime});
-const shadow=createShadowAssistant({runtime,orchestrator});
-const workspace=createDarkHubWorkspace({runtime});
-const rodovia=createDarkHubRodovia();
+const isPreview=location.pathname.startsWith("/preview/darkhub-review/");
+const appStorage=isPreview?globalThis.sessionStorage:globalThis.localStorage;
+const runtime=createDarkHubRuntime({storage:appStorage});
+const orchestrator=createDarkHubOrchestrator({storage:appStorage,runtime});
+const shadow=createShadowAssistant({storage:appStorage,runtime,orchestrator});
+const workspace=createDarkHubWorkspace({storage:appStorage,runtime});
+const rodovia=createDarkHubRodovia({storage:appStorage});
 let activeWorkspacePath="";
 let loadedWorkspaceKey="";
 const $=id=>document.getElementById(id);
+if(isPreview){const notice=document.createElement("div");notice.className="preview-banner";notice.textContent="PRÉVIA DE REVISÃO · dados temporários desta aba";document.querySelector(".shell")?.prepend(notice);}
 const views=["home","create","panel","module","shadow"];
 function moveWriteFormsToCreate(){
  const target=$("create"),before=$("draft-form");
@@ -186,6 +189,6 @@ $("alerts").addEventListener("click",()=>{const ops=orchestrator.dashboard(),dra
 $("alert-close").addEventListener("click",()=>{alertPanel.hidden=true;$("alerts").setAttribute("aria-expanded","false");});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();closeApps();alertPanel.hidden=true;}});
 window.addEventListener("darkhub:runtime-change",()=>{if(!$("home").hidden)renderHome();});
-if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+if(!isPreview&&"serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 renderHome();
 renderWorkspace();
