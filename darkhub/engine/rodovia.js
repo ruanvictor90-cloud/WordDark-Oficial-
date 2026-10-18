@@ -10,6 +10,39 @@ const byteLength = value => {
   return unescape(encodeURIComponent(value)).length;
 };
 
+const normalizeCapability = value => String(value || "").toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").trim();
+
+/**
+ * Adapt the original WordDark Central catalog and the current darkHub
+ * capability catalog to one lookup contract. A match is routing information,
+ * not authorization to execute the requested action.
+ */
+export function resolveRodoviaCapability(request, catalog) {
+  const capability = required(request?.capability, "capability", 160);
+  const wanted = normalizeCapability(capability);
+  const entries = Array.isArray(catalog?.sectors)
+    ? catalog.sectors.filter(item => item?.status === "active").flatMap(item => (item.capabilities || []).map(name => ({ appId: item.id, id: name, fullId: name, status: "enabled" })))
+    : Array.isArray(catalog?.capabilities) ? catalog.capabilities : [];
+  const match = entries.find(item => item && item.status === "enabled" &&
+    [item.fullId, item.id, item.name].some(value => normalizeCapability(value) === wanted));
+  if (match) {
+    return {
+      status: "routed",
+      requestId: request.requestId || null,
+      destination: match.appId || match.id,
+      capability: match.fullId || match.id || capability,
+      message: "Capacidade ativa encontrada no catálogo central."
+    };
+  }
+  return {
+    status: "needs-creation",
+    requestId: request.requestId || null,
+    destination: "darkhub:creation",
+    capability,
+    message: "Nenhuma capacidade ativa encontrada; encaminhar o requisito para análise de criação."
+  };
+}
+
 export function createRodoviaMessage(source = {}, { now = () => new Date().toISOString(), idFactory = () => "msg-" + Math.random().toString(36).slice(2, 12) } = {}) {
   const message = {
     schema: SCHEMA,
