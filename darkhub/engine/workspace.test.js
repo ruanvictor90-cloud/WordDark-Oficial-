@@ -17,7 +17,9 @@ const file=workspace.createFile(app.id,"src/main.js","export const answer = 42;"
 assert.equal(file.revision,1);
 assert.throws(()=>workspace.createFile(app.id,"src/main.js","duplicado"),/Já existe/);
 const saved=workspace.saveFile(app.id,"src/main.js","export const answer = 43;");
-assert.throws(()=>workspace.renameFile(app.id,"src/main.js","src/main.js"),/Já existe/);
+workspace.createFile(app.id,"src/other.js","");
+assert.throws(()=>workspace.renameFile(app.id,"src/other.js","src/main.js"),/Já existe/);
+workspace.deleteFile(app.id,"src/other.js");
 assert.equal(workspace.renameFile(app.id,"src/main.js","src/renamed.js").path,"src/renamed.js");
 assert.equal(workspace.renameFile(app.id,"src/renamed.js","src/main.js").path,"src/main.js");
 assert.equal(saved.revision,2);
