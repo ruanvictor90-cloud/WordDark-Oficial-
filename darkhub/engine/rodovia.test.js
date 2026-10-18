@@ -11,6 +11,22 @@ assert.equal(validateMessage({}).valid, false);
 assert.throws(() => road.registerRoute({ routeId: "r1", origin: "app-a", destination: "app-b", status: "BROKEN" }), /Status de rota inválido/);
 road.registerRoute({ routeId: "r1", origin: "app-a", destination: "app-b", service: "catalog.read" });
 assert.throws(() => road.registerRoute({ routeId: "r1", origin: "app-a", destination: "app-b", service: "*" }), /Já existe/);
+const catalogResult = resolveRodoviaCapability({ requestId: "q-cap", capability: "browser.open" }, {
+  capabilities: [{ fullId: "shadoweb:browser.open", appId: "shadoweb", id: "browser.open", name: "Abrir navegador", status: "enabled" }]
+});
+assert.equal(catalogResult.status, "routed");
+assert.equal(catalogResult.destination, "shadoweb");
+assert.equal(resolveRodoviaCapability({ capability: "shadoweb:browser.open", requestId: "q-cap-2" }, {
+  capabilities: [{ fullId: "shadoweb:browser.open", appId: "shadoweb", id: "browser.open", name: "Abrir navegador", status: "enabled" }]
+}).status, "routed");
+assert.equal(resolveRodoviaCapability({ capability: "post", requestId: "q-cap-3" }, {
+  sectors: [{ id: "marketing", status: "active", capabilities: ["post"] }]
+}).status, "routed");
+assert.equal(resolveRodoviaCapability({ capability: "missing", requestId: "q-cap-4" }, { capabilities: [] }).destination, "darkhub:creation");
+assert.equal(resolveRodoviaCapability({ capability: "food:cafe", requestId: "q-cap-5" }, {
+  capabilities: [{ fullId: "food:café", appId: "food", id: "café", name: "Café", status: "enabled" }]
+}).status, "routed");
+
 let received;
 road.registerEndpoint("app-b", message => { received = message; return { accepted: true }; });
 const delivered = await road.send({ messageId: "m1", requestId: "q1", origin: "app-a", destination: "app-b", service: "catalog.read", payload: { item: "test" } });
