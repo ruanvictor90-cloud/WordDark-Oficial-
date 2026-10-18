@@ -123,7 +123,7 @@ export function createDarkHubRodovia({
     const requestId = required(input.requestId || "req-" + idFactory(), "requestId", 120);
     const data = readRequests();
     if (data.requests.some(item => item.requestId === requestId)) throw new Error("Já existe um requerimento com esse identificador.");
-    const request = { requestId, origin, capability, description, priority: ["low", "normal", "high", "urgent"].includes(input.priority) ? input.priority : "normal", state: "received", destination: null, createdAt: now(), updatedAt: now(), history: [{ state: "received", at: now(), note: "Requerimento recebido pela Rodovia." }] };
+    const request = { requestId, origin, capability, description, priority: ["low", "normal", "high", "urgent"].includes(input.priority) ? input.priority : "normal", state: "received", destination: null, projectId: null, snapshotId: null, validation: null, createdAt: now(), updatedAt: now(), history: [{ state: "received", at: now(), note: "Requerimento recebido pela Rodovia." }] };
     data.requests.push(request);
     record({ kind: "REQUEST_CREATED", requestId, origin, capability, state: request.state });
     writeRequests(data);
@@ -140,6 +140,41 @@ export function createDarkHubRodovia({
     request.updatedAt = now();
     request.history.push({ state: nextState, at: now(), note: String(note).slice(0, 240) });
     record({ kind: "REQUEST_STATE_CHANGED", requestId, state: nextState });
+    writeRequests(data);
+    return clone(request);
+  }
+
+  function linkRequestProject(requestId, { projectId, snapshotId = null } = {}) {
+    const data = read();
+    const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));
+    if (!request) throw new Error("Requerimento não encontrado.");
+    request.projectId = required(projectId, "projectId", 160);
+    request.snapshotId = snapshotId == null || snapshotId === "" ? null : required(snapshotId, "snapshotId", 160);
+    request.updatedAt = now();
+    request.history.push({ state: request.state, at: now(), note: "Vínculo de projeto/versão atualizado: " + request.projectId + (request.snapshotId ? " · versão " + request.snapshotId : "") });
+    record({ kind: "REQUEST_PROJECT_LINKED", requestId, projectId: request.projectId, snapshotId: request.snapshotId });
+    writeRequests(data);
+    return clone(request);
+  }
+
+  function recordRequestValidation(requestId, validation) {
+    if (!validation || typeof validation !== "object" || typeof validation.valid !== "boolean") {
+      throw new TypeError("Resultado de validação estrutural inválido.");
+    }
+    const data = read();
+    const request = data.requests.find(item => item.requestId === required(requestId, "requestId", 120));
+    if (!request) throw new Error("Requerimento não encontrado.");
+    if (!request.projectId) throw new Error("Vincule um projeto antes de registrar a validação.");
+    request.validation = {
+      valid: validation.valid,
+      checkedAt: typeof validation.checkedAt === "string" ? validation.checkedAt : now(),
+      errors: Array.isArray(validation.errors) ? validation.errors.map(value => String(value).slice(0, 240)).slice(0, 50) : [],
+      warnings: Array.isArray(validation.warnings) ? validation.warnings.map(value => String(value).slice(0, 240)).slice(0, 50) : [],
+      kind: "structural"
+    };
+    request.updatedAt = now();
+    request.history.push({ state: request.state, at: now(), note: "Validação estrutural registrada: " + (validation.valid ? "aprovada" : "com bloqueios") + ". Não equivale a compilação ou teste de execução." });
+    record({ kind: "REQUEST_VALIDATION_RECORDED", requestId, projectId: request.projectId, valid: validation.valid });
     writeRequests(data);
     return clone(request);
   }
@@ -257,6 +292,8 @@ export function createDarkHubRodovia({
     registerEndpoint,
     createRequest,
     transitionRequest,
+    linkRequestProject,
+    recordRequestValidation,
     resolveRequest,
     listRequests: ({ state, limit = 200 } = {}) => readRequests().requests.filter(item => !state || item.state === state).slice(-Math.max(0, Math.min(1000, limit))).reverse().map(clone),
     send,
