@@ -52,6 +52,7 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 
 - `engine/rodovia.js` define o envelope de mensagem e a camada de transporte local compartilhada.
 - Todo envio usa `messageId`, `requestId`, origem, destino, serviço, payload e data; `routeId` é associado quando uma rota ativa permite o transporte.
+- A Rodovia adapta o catálogo da Central para localizar capacidades ativas por identificador/nome; se não encontrar uma capacidade, devolve o requisito para a área de criação sem fingir que existe executor.
 - A Rodovia mantém lista explícita de rotas e endpoints, valida o tamanho do payload, bloqueia repetição do mesmo `messageId` e registra eventos de entrega/falha sem copiar o payload para a trilha de auditoria.
 - A trilha tem limite configurável e é consultável por `requestId` para rastrear o percurso de uma solicitação e seus resultados.
 - A Rodovia transporta e rastreia; **não concede permissões, não decide regras de negócio e não executa a operação de destino**. O endpoint registrado apenas recebe a mensagem; a decisão de autorizar e a execução permanecem nas camadas responsáveis.
