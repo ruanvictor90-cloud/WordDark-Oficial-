@@ -6,8 +6,8 @@ darkHub é o aplicativo central privado de criação, organização, testes e ac
 ## Regra WordDark Hub
 WordDark Hub permanece como **módulo interno do darkHub**. O APK WordDark será um aplicativo separado, desenvolvido em outra etapa. A ligação entre eles será futura, por contrato versionado, autenticação, autorização e sincronização explícita. Não embutir credenciais nem declarar conexão ativa antes de existir backend e teste de ponta a ponta.
 
-## Aplicativo prioritário: Shadoweb
-Shadoweb é um app independente e o foco atual de desenvolvimento. darkHub registra seu estado e as alterações, mas não absorve seu código, não o executa como se fosse um APK dentro do próprio processo e não deve ser necessário para a navegação básica do Shadoweb.
+## Escopo atual: finalizar darkHub
+A etapa atual trabalha somente no darkHub: estrutura de criação, workspace, validação local, preparação de versões, painel e Rodovia. O WordDark Hub será trabalhado depois que esta etapa for concluída; Shadoweb permanece fora do escopo de implementação atual. Não iniciar a compilação ou geração de APK sem solicitação explícita.
 
 ## Camadas
 - `app.js`: apresentação e navegação.
@@ -44,7 +44,7 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 - Pontos de restauração guardam o conjunto de arquivos e podem ser restaurados. Importação/exportação de projeto usa pacote JSON versionado.
 - A prévia HTML roda em iframe sandbox sem acesso à origem do darkHub, com política de conteúdo que bloqueia conexões externas e formulários. Não é um executor geral nem substitui testes automatizados.
 - Validação atual é estrutural: limites, caminhos, entrada comum e alertas de arquivos de segredo/testes. Não afirma que o código compila ou funciona.
-- "Preparar pacote" salva um ponto de restauração e exporta o projeto para revisão; não publica no GitHub nem cria um APK.
+- "Preparar pacote" salva um ponto de restauração, exporta o projeto e cria um manifesto versionado com app/versão, ID do snapshot, resultado da validação estrutural e lista de arquivos/revisões. Isso melhora a rastreabilidade, mas não publica no GitHub nem cria um APK.
 - Persistência continua local ao navegador/dispositivo. Para colaboração e publicação remota, a próxima etapa será um adaptador versionado para GitHub e CI; tokens de escrita nunca devem ficar no JavaScript do cliente.
 
 
@@ -57,6 +57,8 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 - A trilha tem limite configurável e é consultável por `requestId` para rastrear o percurso de uma solicitação e seus resultados.
 - A Rodovia mantém um registro local de requerimentos com estados permitidos (`received`, `needs-creation`, `awaiting-approval`, `ready`, `in-transit`, `delivered`, `completed`, `blocked`, `failed`, `cancelled`) e histórico de transições. O registro usa armazenamento local quando disponível e fallback em memória; ainda não é sincronização remota nem uma fila durável entre dispositivos.
 - O painel do darkHub permite registrar um requisito, consultar o catálogo local e visualizar seu estado. Encontrar uma capacidade apenas leva o requerimento a `awaiting-approval`; não concede autorização nem executa a operação.
+- Um requerimento pode ser associado a um projeto e a um snapshot/versão do workspace. Também pode guardar o resultado da validação estrutural (data, erros e avisos limitados), mantendo trilha entre necessidade, projeto e versão revisada. O vínculo precisa ser informado pela camada responsável; a Rodovia não inventa nem verifica a existência do projeto.
+- O manifesto do pacote é um registro de revisão local. Validação estrutural aprovada não significa que os testes automatizados foram executados, que o código compila, nem que uma publicação está autorizada.
 - A Rodovia transporta e rastreia; **não concede permissões, não decide regras de negócio e não executa a operação de destino**. O endpoint registrado apenas recebe a mensagem; a decisão de autorizar e a execução permanecem nas camadas responsáveis.
 - A implementação atual é transporte **local no processo**, com rotas e eventos em memória. Ainda não é uma fila distribuída, não sincroniza dispositivos e não fornece persistência durável. Uma futura ponte remota deverá usar autenticação, autorização, contratos versionados, limites, retries/ACK e credenciais mantidas fora do cliente.
 - Os aplicativos devem depender do contrato da Rodovia, não importar diretamente a implementação interna uns dos outros. O catálogo/Central identifica capacidades e destinos; a Rodovia transporta a mensagem pelo caminho permitido.
