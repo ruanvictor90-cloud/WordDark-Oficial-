@@ -39,10 +39,10 @@ A pasta é uma base web instalável e preparada para um invólucro Android. Para
 
 ## Criação e gestão de código — workspace local
 - `engine/workspace.js` mantém um workspace por aplicativo cadastrado, separado do catálogo e do orquestrador.
-- A área Criação permite criar, abrir, editar, salvar, renomear e excluir arquivos; caminhos são relativos, segmentos ocultos e travessia de diretório são bloqueados.
+- A área Criação permite criar, abrir, editar, salvar, renomear e excluir arquivos; caminhos são relativos, travessia de diretório e acesso à pasta interna `.git` são bloqueados; arquivos de configuração como `.gitignore` e `.github/workflows` são permitidos.
 - Limites locais: até 100 arquivos por projeto, 200 KB por arquivo e 2 MB de texto por pacote validado.
 - Pontos de restauração guardam o conjunto de arquivos e podem ser restaurados. Importação/exportação de projeto usa pacote JSON versionado.
-- A prévia HTML roda em iframe sandbox sem acesso à origem do darkHub. Não é um executor geral nem substitui testes automatizados.
+- A prévia HTML roda em iframe sandbox sem acesso à origem do darkHub, com política de conteúdo que bloqueia conexões externas e formulários. Não é um executor geral nem substitui testes automatizados.
 - Validação atual é estrutural: limites, caminhos, entrada comum e alertas de arquivos de segredo/testes. Não afirma que o código compila ou funciona.
 - "Preparar pacote" salva um ponto de restauração e exporta o projeto para revisão; não publica no GitHub nem cria um APK.
 - Persistência continua local ao navegador/dispositivo. Para colaboração e publicação remota, a próxima etapa será um adaptador versionado para GitHub e CI; tokens de escrita nunca devem ficar no JavaScript do cliente.
