@@ -1,6 +1,10 @@
 const SCHEMA="darkhub-workspace-v1";
 const KEY="darkhub.workspace.v1";
 const clone=value=>JSON.parse(JSON.stringify(value));
+const byteLength=value=>new TextEncoder().encode(value).length;
+const MAX_FILE_BYTES=200000;
+const MAX_PROJECT_BYTES=2000000;
+const MAX_SNAPSHOTS_PER_PROJECT=50;
 const required=(value,label,max=180)=>{if(typeof value!=="string"||!value.trim())throw new TypeError(label+" é obrigatório.");return value.trim().slice(0,max);};
 function cleanPath(value){
  const path=required(value,"Caminho do arquivo",180).replace(/\\/g,"/");
@@ -24,13 +28,13 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
  function listFiles(appId){const p=read().projects[appId];return p?clone(p.files).sort((a,b)=>a.path.localeCompare(b.path)):[];}
  function getFile(appId,path){const clean=cleanPath(path),p=read().projects[appId];return p?clone(p.files.find(f=>f.path===clean)||null):null;}
  function createFile(appId,path,content=""){
-  const clean=cleanPath(path);if(typeof content!=="string")throw new TypeError("Conteúdo precisa ser texto.");if(content.length>200000)throw new RangeError("Arquivo excede o limite local de 200 KB.");
+  const clean=cleanPath(path);if(typeof content!=="string")throw new TypeError("Conteúdo precisa ser texto.");if(byteLength(content)>MAX_FILE_BYTES)throw new RangeError("Arquivo excede o limite local de 200 KB.");
   const data=read(),p=ensureProject(appId,data);if(p.files.some(f=>f.path===clean))throw new Error("Já existe um arquivo nesse caminho.");
   if(p.files.length>=100)throw new RangeError("Limite local de 100 arquivos por projeto atingido.");
   const file={id:String(idFactory()),path:clean,content,revision:1,createdAt:now(),updatedAt:now()};p.files.push(file);p.updatedAt=now();write(data);return clone(file);
  }
  function saveFile(appId,path,content){
-  const clean=cleanPath(path);if(typeof content!=="string")throw new TypeError("Conteúdo precisa ser texto.");if(content.length>200000)throw new RangeError("Arquivo excede o limite local de 200 KB.");
+  const clean=cleanPath(path);if(typeof content!=="string")throw new TypeError("Conteúdo precisa ser texto.");if(byteLength(content)>MAX_FILE_BYTES)throw new RangeError("Arquivo excede o limite local de 200 KB.");
   const data=read(),p=ensureProject(appId,data),file=p.files.find(f=>f.path===clean);if(!file)throw new Error("Arquivo não encontrado. Crie o arquivo antes de salvar.");
   if(file.content!==content){file.content=content;file.revision++;file.updatedAt=now();p.updatedAt=now();write(data);}return clone(file);
  }
@@ -66,10 +70,10 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   }
   if(!files.length)errors.push("O projeto ainda não possui arquivos.");
   if(files.length>100)errors.push("O projeto ultrapassa o limite de 100 arquivos.");
-  if(totalBytes>2000000)errors.push("O projeto ultrapassa o limite total de 2 MB de texto.");
+  if(totalBytes>MAX_PROJECT_BYTES)errors.push("O projeto ultrapassa o limite total de 2 MB.");
   if(!files.some(f=>/^(?:index\.html|src\/main\.(?:js|ts)|package\.json)$/i.test(f.path)))warnings.push("Não foi encontrado um ponto de entrada comum (index.html, src/main.js/ts ou package.json).");
   if(!files.some(f=>/(?:^|\/)(?:.*\.)?(?:test|spec)\.[cm]?[jt]sx?$/i.test(f.path)))warnings.push("Nenhum arquivo de teste foi identificado; a validação automatizada ainda precisa ser executada fora do editor.");
-  return {appId,projectName:app.name,valid:errors.length===0,files:files.length,totalCharacters:totalBytes,errors,warnings,checkedAt:now()};
+  return {appId,projectName:app.name,valid:errors.length===0,files:files.length,totalBytes,errors,warnings,checkedAt:now()};
  }
  function preparePackage(appId,label="Pacote preparado para revisão"){
   const validation=validateProject(appId);if(!validation.valid)throw new Error("Não é possível preparar o pacote: "+validation.errors.join(" "));
@@ -91,10 +95,36 @@ export function createDarkHubWorkspace({storage=globalThis.localStorage,now=()=>
   if(!bundle||bundle.schema!==SCHEMA||!bundle.app||typeof bundle.app.id!=="string"||!bundle.project||bundle.project.appId!==bundle.app.id||!Array.isArray(bundle.project.files))throw new TypeError("Pacote de projeto inválido.");
   if(!runtime.getApp(bundle.app.id))throw new Error("Registre o aplicativo no catálogo antes de importar seus arquivos.");
   if(bundle.project.files.length>100)throw new RangeError("O projeto excede 100 arquivos.");
-  const seen=new Set();const files=bundle.project.files.map(f=>{const path=cleanPath(f.path);if(seen.has(path))throw new Error("O pacote contém caminhos duplicados.");seen.add(path);if(typeof f.content!=="string"||f.content.length>200000)throw new TypeError("Conteúdo de arquivo inválido ou acima de 200 KB.");return {id:String(idFactory()),path,content:f.content,revision:1,createdAt:now(),updatedAt:now()};});
-  const data=read();data.projects[bundle.app.id]={appId:bundle.app.id,createdAt:now(),updatedAt:now(),files};data.snapshots=data.snapshots.filter(s=>s.appId!==bundle.app.id);
-  if(Array.isArray(bundle.snapshots))for(const s of bundle.snapshots){if(s.appId===bundle.app.id&&Array.isArray(s.files)){if(s.files.length>100)throw new RangeError("Uma versão importada excede 100 arquivos.");const seenSnapshotPaths=new Set();const snapshotFiles=s.files.map(f=>{const path=cleanPath(f.path);if(seenSnapshotPaths.has(path))throw new Error("Uma versão importada contém caminhos duplicados.");seenSnapshotPaths.add(path);if(typeof f.content!=="string"||f.content.length>200000)throw new TypeError("Conteúdo inválido em uma versão importada.");return {...f,path};});data.snapshots.push({...clone(s),id:String(idFactory()),files:snapshotFiles});}}
-  write(data);return {appId:bundle.app.id,fileCount:files.length};
+  const seen=new Set();
+  const files=bundle.project.files.map(f=>{
+   const path=cleanPath(f.path);
+   if(seen.has(path))throw new Error("O pacote contém caminhos duplicados.");
+   seen.add(path);
+   if(typeof f.content!=="string"||byteLength(f.content)>MAX_FILE_BYTES)throw new TypeError("Conteúdo de arquivo inválido ou acima de 200 KB.");
+   return {id:String(idFactory()),path,content:f.content,revision:1,createdAt:now(),updatedAt:now()};
+  });
+  if(files.reduce((sum,file)=>sum+byteLength(file.content),0)>MAX_PROJECT_BYTES)throw new RangeError("O projeto importado ultrapassa o limite total de 2 MB.");
+  const importedSnapshots=[];
+  if(Array.isArray(bundle.snapshots))for(const snapshot of bundle.snapshots){
+   if(snapshot.appId!==bundle.app.id||!Array.isArray(snapshot.files))continue;
+   if(snapshot.files.length>100)throw new RangeError("Uma versão importada excede 100 arquivos.");
+   const seenPaths=new Set();
+   const snapshotFiles=snapshot.files.map(file=>{
+    const path=cleanPath(file.path);
+    if(seenPaths.has(path))throw new Error("Uma versão importada contém caminhos duplicados.");
+    seenPaths.add(path);
+    if(typeof file.content!=="string"||byteLength(file.content)>MAX_FILE_BYTES)throw new TypeError("Conteúdo inválido em uma versão importada.");
+    return {...file,path};
+   });
+   if(snapshotFiles.reduce((sum,file)=>sum+byteLength(file.content),0)>MAX_PROJECT_BYTES)throw new RangeError("Uma versão importada ultrapassa o limite total de 2 MB.");
+   importedSnapshots.push({...clone(snapshot),id:String(idFactory()),files:snapshotFiles});
+  }
+  const data=read();
+  data.projects[bundle.app.id]={appId:bundle.app.id,createdAt:now(),updatedAt:now(),files};
+  data.snapshots=data.snapshots.filter(snapshot=>snapshot.appId!==bundle.app.id);
+  data.snapshots.push(...importedSnapshots.slice(-MAX_SNAPSHOTS_PER_PROJECT));
+  write(data);
+  return {appId:bundle.app.id,fileCount:files.length,snapshotCount:Math.min(importedSnapshots.length,MAX_SNAPSHOTS_PER_PROJECT)};
  }
  function exportState(){return {...read(),exportedAt:now()};}
  return Object.freeze({schema:SCHEMA,listProjects,listFiles,getFile,createFile,saveFile,renameFile,deleteFile,createSnapshot,listSnapshots,restoreSnapshot,validateProject,preparePackage,exportProject,importProject,exportState});
