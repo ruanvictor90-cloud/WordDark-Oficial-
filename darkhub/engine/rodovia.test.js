@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { createDarkHubRodovia, createRodoviaMessage, validateMessage } from "./rodovia.js";
+import { createDarkHubRodovia, createRodoviaMessage, validateMessage, resolveRodoviaCapability } from "./rodovia.js";
 
 let seq = 0;
 const now = () => "2026-10-18T00:00:00.000Z";
