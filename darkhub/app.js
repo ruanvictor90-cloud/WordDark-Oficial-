@@ -6,11 +6,10 @@ const $=id=>document.getElementById(id);
 const views=["home","create","panel","module"];
 function moveWriteFormsToCreate(){
  const target=$("create"),before=$("draft-form");
- [["capability-form","Cadastrar capacidade"],["task-form","Organizar tarefas"]].forEach(([id,title])=>{
+ [["capability-form"],["task-form"]].forEach(([id])=>{
   const form=$(id);if(!form||!target||!before)return;
-  const section=document.createElement("section");section.className="section";
-  const heading=document.createElement("h2");heading.textContent=title;
-  section.appendChild(heading);section.appendChild(form);target.insertBefore(section,before);
+  const section=form.closest(".section");
+  if(section)target.insertBefore(section,before);
  });
 }
 moveWriteFormsToCreate();
@@ -66,8 +65,20 @@ function renderPanel(){
 $("capability-form").addEventListener("submit",event=>{event.preventDefault();try{orchestrator.registerCapability({appId:$("capability-app").value,id:$("capability-id").value,name:$("capability-name").value,description:$("capability-description").value,permission:$("capability-permission").value});$("capability-feedback").textContent="Capacidade registrada. O catálogo descreve a função; não significa que exista um executor ativo."; $("capability-id").value="";$("capability-name").value="";$("capability-description").value="";renderPanel();renderHome();}catch(e){$("capability-feedback").textContent=e.message;}});
 $("task-form").addEventListener("submit",event=>{event.preventDefault();try{orchestrator.createTask({appId:$("task-app").value,title:$("task-title").value,description:$("task-description").value,priority:$("task-priority").value});$("task-title").value="";$("task-description").value="";$("task-feedback").textContent="Tarefa adicionada à fila do darkHub.";renderPanel();}catch(e){$("task-feedback").textContent=e.message;}});
 $("export-backup").addEventListener("click",()=>{const bundle={darkHub:runtime.exportState(),orchestrator:orchestrator.exportState()};const blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="darkhub-ecosystem-backup.json";a.click();URL.revokeObjectURL(url);$("backup-feedback").textContent="Backup local do catálogo e do motor de coordenação exportado.";});
-$("menu-open").addEventListener("click",()=>showView("home"));
-$("alerts").addEventListener("click",()=>{const ops=orchestrator.dashboard(),drafts=runtime.exportState().drafts.filter(d=>d.status!=="Finalizado"&&d.status!=="Cancelado").length;alert(ops.unreadMessages+" evento(s) não lido(s), "+ops.queuedTasks+" tarefa(s) em aberto e "+drafts+" alteração(ões) em aberto.");});
+const menuDrawer=$("menu-drawer"),menuScrim=$("menu-scrim"),appsDrawer=$("apps-drawer"),drawerScrim=$("drawer-scrim"),alertPanel=$("alert-panel");
+function closeMenu(){menuDrawer.hidden=true;menuScrim.hidden=true;$("menu-open").setAttribute("aria-expanded","false");}
+function closeApps(){appsDrawer.hidden=true;drawerScrim.hidden=true;appsDrawer.setAttribute("aria-hidden","true");$("apps-open").setAttribute("aria-expanded","false");}
+$("menu-open").addEventListener("click",()=>{const opening=menuDrawer.hidden;menuDrawer.hidden=!opening;menuScrim.hidden=!opening;$("menu-open").setAttribute("aria-expanded",String(opening));});
+$("menu-close").addEventListener("click",closeMenu);menuScrim.addEventListener("click",closeMenu);
+document.querySelectorAll("[data-menu-view]").forEach(b=>b.addEventListener("click",()=>{closeMenu();showView(b.dataset.menuView);}));
+$("widgets-open").addEventListener("click",()=>{$("widgets-panel").hidden=!$("widgets-panel").hidden;});
+$("apps-open").addEventListener("click",()=>{const opening=appsDrawer.hidden;appsDrawer.hidden=!opening;drawerScrim.hidden=!opening;appsDrawer.setAttribute("aria-hidden",String(!opening));$("apps-open").setAttribute("aria-expanded",String(opening));if(opening)renderHome();});
+$("apps-close").addEventListener("click",closeApps);drawerScrim.addEventListener("click",closeApps);
+$("worddark-open").addEventListener("click",()=>{closeApps();openApp("worddark-hub");});
+$("hub-search").addEventListener("submit",event=>{event.preventDefault();const q=$("hub-search-input").value.trim().toLowerCase();if(!q){$("search-feedback").hidden=false;$("search-feedback").textContent="Digite o nome de um aplicativo para buscar.";return;}const found=runtime.listApps().find(a=>(a.name+" "+a.id).toLowerCase().includes(q));if(found){$("search-feedback").hidden=true;openApp(found.id);}else{$("search-feedback").hidden=false;$("search-feedback").textContent="Nenhum aplicativo encontrado com esse nome.";}});
+$("alerts").addEventListener("click",()=>{const ops=orchestrator.dashboard(),drafts=runtime.exportState().drafts.filter(d=>d.status!=="Finalizado"&&d.status!=="Cancelado").length;const open=alertPanel.hidden;alertPanel.hidden=!open;$("alerts").setAttribute("aria-expanded",String(open));$("alert-list").innerHTML='<article class="row-card"><strong>'+ops.unreadMessages+' evento(s) não lido(s)</strong><p>'+ops.queuedTasks+' tarefa(s) em aberto e '+drafts+' alteração(ões) em aberto.</p><button id="alert-go-panel">Abrir Painel</button></article>';const go=$("alert-go-panel");if(go)go.addEventListener("click",()=>{alertPanel.hidden=true;showView("panel");});});
+$("alert-close").addEventListener("click",()=>{alertPanel.hidden=true;$("alerts").setAttribute("aria-expanded","false");});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();closeApps();alertPanel.hidden=true;}});
 window.addEventListener("darkhub:runtime-change",()=>{if(!$("home").hidden)renderHome();});
 if("serviceWorker" in navigator&&location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
 renderHome();
