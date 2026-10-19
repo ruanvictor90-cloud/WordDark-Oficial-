@@ -6,7 +6,7 @@
 
 - Linha limpa de arquitetura: `ecossistema`.
 - Snapshot preservado do estado anterior: `legado-arquivado-2026-10-19`.
-- Branch principal preexistente: `main`, preservada sem alteração nesta reorganização.
+- Branch principal: `main`, destinada a acompanhar a linha limpa por avanço controlado. O estado antigo está preservado separadamente na branch de arquivo.
 
 ## O que significa arquivar
 
@@ -25,7 +25,7 @@ O legado fica preservado para consulta e recuperação, mas deixa de ser fonte a
 
 A branch `ecossistema` deve conter somente documentação arquitetural. Não deve incluir aplicações antigas, interfaces antigas, motores antigos ou fluxos de publicação preexistentes.
 
-A existência de código na branch de legado ou na branch principal não indica que esse código foi integrado, aprovado ou está pronto para produção na nova linha.
+A branch `main` deve acompanhar o estado documental/código aprovado de `ecossistema`; a branch de arquivo permanece separada. Nenhuma das branches, por si só, comprova que algo foi publicado ou está pronto para produção.
 
 ## Regra de segurança
 
