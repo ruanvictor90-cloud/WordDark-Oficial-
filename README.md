@@ -41,6 +41,9 @@ Construir sistemas independentes que se comuniquem por contratos, permissões e 
 14. `docs/14-FLUXOS-DE-PONTA-A-PONTA.md` — cenários completos, bloqueios e recuperação.
 15. `docs/15-REGISTRO-DE-DECISOES-E-PENDENCIAS.md` — decisões, propostas e perguntas abertas.
 16. `docs/16-DADOS-ESTADOS-E-EVIDENCIAS.md` — propriedade de dados, estados e evidências.
+17. `docs/17-MATRIZ-DE-RISCO-E-APROVACAO.md` — níveis de risco, autorizações e limites de autonomia.
+18. `docs/18-ESTRATEGIA-DE-AMBIENTES-E-VERSOES.md` — ambientes, versionamento, implantação e retorno.
+19. `docs/19-REVISAO-DE-CONSISTENCIA-ARQUITETURAL.md` — invariantes, riscos de interpretação e pendências para a aprovação.
 
 ## Schemas legíveis por máquina
 
@@ -60,4 +63,4 @@ Antes de implementar um recurso, registrar domínio responsável, objetivo, entr
 
 ## Estado da planta
 
-Os documentos 09–16 ampliam o mapa, o ciclo de soluções, as fichas funcionais, os motores, os fluxos, o registro de decisões e o modelo de dados. A planta ainda exige revisão cruzada, resolução de pendências críticas e aprovação explícita do escopo inicial. Não iniciar motores ou aplicativos antes desse portão.
+Os documentos 09–19 ampliam o mapa, o ciclo de soluções, as fichas funcionais, os motores, os fluxos, os dados, a política de aprovação, a estratégia de versões e a primeira revisão de consistência. A planta ainda exige validação detalhada dos schemas, resolução das pendências que afetam o escopo inicial e aprovação explícita do portão. Não iniciar motores ou aplicativos antes desse portão.
