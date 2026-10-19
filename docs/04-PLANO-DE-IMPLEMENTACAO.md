@@ -7,9 +7,9 @@
 - Preservar o estado antigo em uma referência identificada como legado.
 - Manter a branch `ecossistema` separada e sem interfaces/motores antigos.
 - Registrar decisões arquiteturais antes de escrever código de aplicação.
-- Não substituir a branch principal nem publicar a nova linha automaticamente.
+- Manter a branch principal sincronizada com a linha limpa somente por avanço controlado; não publicar a nova linha automaticamente.
 
-**Conclusão:** legado recuperável e nova linha contendo somente a especificação inicial.
+**Conclusão:** legado recuperável; main e ecossistema devem conter a linha limpa documentada, sem publicar automaticamente.
 
 ## Fase 1 — Especificação e inventário
 
