@@ -31,6 +31,14 @@ Construir um ecossistema de aplicativos independentes, capazes de se comunicar p
 7. `docs/07-ENTRADA-DE-CLIENTES-E-CONTRATOS.md`
 8. `docs/08-MODULOS-E-CONTRATOS-DO-NUCLEO.md`
 
+## Contratos legiveis por maquina
+
+- `schemas/need.schema.json`: estrutura validavel de uma necessidade.
+- `schemas/capability.schema.json`: declaracao de capacidade de uma entidade.
+- `schemas/operation.schema.json`: envelope validavel de operacao.
+
+Esses schemas foram criados como primeira base de validacao; ainda precisam de testes de comportamento e nao representam um motor de execucao implementado.
+
 ## Princípio do WordDark
 
 O WordDark nasce sem empresas, fábricas ou clientes operacionais pré-cadastrados, mas com as capacidades fundamentais para registrar necessidades, cadastrar entidades, validar contratos, gerir permissões, coordenar operações, exigir aprovações, auditar resultados e tratar falhas. Novas capacidades entram como módulos com contratos, testes e critérios próprios.
