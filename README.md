@@ -29,6 +29,7 @@ Construir um ecossistema de aplicativos independentes, capazes de se comunicar p
 5. `docs/05-LIMITE-DO-LEGADO.md`
 6. `docs/06-WORDDARK-NASCIMENTO-ZERO.md`
 7. `docs/07-ENTRADA-DE-CLIENTES-E-CONTRATOS.md`
+8. `docs/08-MODULOS-E-CONTRATOS-DO-NUCLEO.md`
 
 ## Princípio do WordDark
 
