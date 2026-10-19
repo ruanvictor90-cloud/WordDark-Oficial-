@@ -44,6 +44,7 @@ Construir sistemas independentes que se comuniquem por contratos, permissões e 
 17. `docs/17-MATRIZ-DE-RISCO-E-APROVACAO.md` — níveis de risco, autorizações e limites de autonomia.
 18. `docs/18-ESTRATEGIA-DE-AMBIENTES-E-VERSOES.md` — ambientes, versionamento, implantação e retorno.
 19. `docs/19-REVISAO-DE-CONSISTENCIA-ARQUITETURAL.md` — invariantes, riscos de interpretação e pendências para a aprovação.
+20. `docs/20-MATRIZ-DE-TESTES-E-ACEITE.md` — cenários positivos/negativos, critérios de aceite e evidências exigidas.
 
 ## Schemas legíveis por máquina
 
@@ -63,4 +64,4 @@ Antes de implementar um recurso, registrar domínio responsável, objetivo, entr
 
 ## Estado da planta
 
-Os documentos 09–19 ampliam o mapa, o ciclo de soluções, as fichas funcionais, os motores, os fluxos, os dados, a política de aprovação, a estratégia de versões e a primeira revisão de consistência. A planta ainda exige validação detalhada dos schemas, resolução das pendências que afetam o escopo inicial e aprovação explícita do portão. Não iniciar motores ou aplicativos antes desse portão.
+Os documentos 09–20 ampliam o mapa, o ciclo de soluções, as fichas funcionais, os motores, os fluxos, os dados, a política de aprovação, a estratégia de versões, a revisão de consistência e a matriz de testes. A planta ainda exige execução futura dos testes, resolução das pendências que afetam o escopo inicial e aprovação explícita do portão. Não iniciar motores ou aplicativos antes desse portão.
