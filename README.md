@@ -1,77 +1,35 @@
-# WordDark Oficial — versão consolidada em construção
+# ECOSSISTEMA — Linha oficial de desenvolvimento
 
-Este repositório contém a versão atual dos aplicativos **Ruan**, **WordDark Hub** e **WordDark**, além dos motores e setores que serão conectados progressivamente.
+**Estado:** arquitetura em definição; nenhum aplicativo novo foi implementado nesta linha ainda.  
+**Data de início:** 2026-10-19.
 
-## Regra principal desta versão
+## Regra de origem
 
-**Manter o aplicativo simples e os setores brutos; não integrar módulos antigos só porque eles já existem no repositório.**
+A branch `ecossistema` é a linha limpa de planejamento e desenvolvimento futuro. Ela começa apenas com a documentação arquitetural. Não contém as interfaces, os motores ou os aplicativos legados.
 
-A interface atual é a fonte do que está exposto nesta versão. Os motores e módulos detalhados são reutilizáveis, mas só entram no fluxo ativo quando forem conectados e testados explicitamente.
+O estado anterior foi preservado na branch `legado-arquivado-2026-10-19`. A branch `main` não foi apagada nem alterada por esta reorganização.
 
-## Aplicativos atuais
+## Visão
 
-### Ruan — privado e independente
-- Central pessoal com gaveta global de aplicativos.
-- Pessoal: Financeiro e Tarefas.
-- Shadow: área separada, com protótipo DarkEye.
-- WordDark Hub: entrada para o ambiente WordDark.
-- Ruan não faz parte do mundo interno do WordDark. Não há compartilhamento automático de dados nem autoridade do WordDark sobre Ruan.
+Construir um ecossistema de aplicativos independentes, capazes de se comunicar por contratos explícitos, permissões e resultados verificáveis.
 
-### WordDark Hub
-- Central do Hub: Pedidos e Em execução.
-- Teste: entrada compacta para testar o mundo ou setores.
-- WordDark: entrada para o aplicativo principal do mundo.
+- **darkHub:** central pessoal, supervisão e coordenação do ecossistema.
+- **WordDark Hub:** área de gestão do mundo empresarial, acessível dentro do darkHub, mas com código e domínio próprios.
+- **Shadow:** assistente de inteligência, planejamento e execução autorizada.
+- **Shadoweb:** navegador, pesquisa e conectividade com recursos internos e externos.
+- **WordDark:** ecossistema empresarial independente, organizado em WordDark, Céu e Terra.
+- **Outros apps:** aplicações especializadas, cada uma com escopo próprio.
 
-### WordDark — mundo operacional
-- **WordDark:** coordenação, gerenciamento e infraestrutura.
-- **Céu:** Dark Factory e Central Social.
-- **Terra:** Empresa social e Empresa comercial.
-- Aplicativos centrais visíveis nesta versão: Central, Darkbank, Central de conexão, Automação, Biblioteca, Escola do Mundo, Governança, Segurança e Teste.
-- Dark Factory mantém as entradas Em criação e Biblioteca, com categorias de mídia.
-- Central Social mantém Gestor de redes sociais, Gestor de marketing digital e Gestor de projetos.
-- Darkbank mantém Financeiro, Cofre e Investimentos. Os fundos do Cofre pertencem ao WordDark; não existe uma área financeira do Ruan dentro dele.
+## Documentos oficiais
 
-SucoCast, SucoGeek, SucoComed e SucoFactor são perfis externos de canais de teste/operação, não setores internos nem a raiz da arquitetura.
+1. `docs/01-ARQUITETURA-GERAL.md`
+2. `docs/02-CONTRATOS-E-COMUNICACAO.md`
+3. `docs/03-SEGURANCA-E-MUDANCAS.md`
+4. `docs/04-PLANO-DE-IMPLEMENTACAO.md`
+5. `docs/05-LIMITE-DO-LEGADO.md`
 
-## Fonte canônica do runtime
+## Regra para qualquer novo trabalho
 
-- Core: `worddark/runtime/world/core/`
-- Céu: `worddark/runtime/world/sky/`
-- Terra: `worddark/runtime/world/earth/`
-- Interface WordDark: `worddark/app/`
-- Hub: `hub/`
-- Ruan: `ruan/`
+Antes de implementar um recurso, registrar: domínio responsável, objetivo, entradas, saídas, dados que possui, permissões, dependências, testes e critério de conclusão.
 
-O Core coordena contratos e operações; Céu e Terra mantêm responsabilidades próprias. A interface e os motores ainda não devem ser considerados totalmente integrados apenas porque coexistem no repositório.
-
-## Código legado e módulos futuros
-
-- `worddark/core-central/` é uma implementação anterior e está fora do caminho ativo e da suíte padrão de testes.
-- Outras implementações detalhadas podem permanecer no repositório para reaproveitamento, mas não devem ser conectadas automaticamente à versão atual.
-- Nenhum código legado deve criar um segundo Core, adicionar telas não definidas ou ligar integrações reais por conta própria.
-
-## Limites atuais
-
-- As interfaces usam armazenamento local do navegador em várias áreas.
-- Não há sincronização central garantida entre dispositivos.
-- Conectores, publicação automática, pagamentos e movimentações bancárias reais não são considerados ativos sem integração de backend e evidência de execução.
-- TEST deve usar simulação. PROD exige autorização explícita, credenciais seguras, auditoria e possibilidade de interrupção.
-- Os impostos no Darkbank são estimativas configuráveis, não apuração tributária.
-
-## Desenvolvimento
-
-- `main`: produção publicada.
-- `develop`: criação.
-- `staging`: integração e testes.
-
-Antes de considerar uma mudança concluída, executar `npm test` e revisar o comportamento no navegador. A publicação do GitHub Pages deve ser verificada separadamente.
-
-## Testes
-
-```bash
-npm test
-```
-
-## Operação comercial inicial
-
-O roteiro prático para iniciar um primeiro serviço pago com execução e entrega manuais está em [`COMMERCIAL-FIRST-SALE.md`](./COMMERCIAL-FIRST-SALE.md). Ele distingue os recursos locais já utilizáveis das integrações que ainda exigem backend e validação real.
+Não copiar código ou interfaces legadas para esta linha sem análise explícita, decisão registrada e revisão de segurança/arquitetura.
