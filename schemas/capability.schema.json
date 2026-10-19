@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://worddark.example/schemas/capability.schema.json",
+  "title": "WordDark Capability",
+  "description": "A declared capability offered by a registered entity. Activation requires separate validation and approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "capability_id", "provider_entity_id", "purpose", "input_schema_ref", "output_schema_ref", "permissions_required", "risk_class", "dependencies", "availability_state", "version"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "capability_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "provider_entity_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "purpose": { "type": "string", "minLength": 1, "maxLength": 3000 },
+    "input_schema_ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "output_schema_ref": { "type": "string", "minLength": 1, "maxLength": 500 },
+    "permissions_required": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 200 }, "uniqueItems": true, "maxItems": 100 },
+    "risk_class": { "enum": ["low", "moderate", "high", "critical", "unassessed"] },
+    "dependencies": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 128 }, "uniqueItems": true, "maxItems": 100 },
+    "availability_state": { "enum": ["draft", "submitted", "validating", "testing", "pending_approval", "active", "suspended", "failed", "retiring", "retired"] },
+    "test_evidence_refs": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 500 }, "maxItems": 100 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "cost_notes": { "type": "string", "maxLength": 2000 }
+  }
+}
